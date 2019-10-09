@@ -1,0 +1,161 @@
+# Change log of the R package 'chronosphere'
+
+## [0.1.0 (build 23)]  - 2019-10-09 (Adam)
+### Changed
+- Server location, publicity of files and repository structure. 
+
+## [0.1.0 (build 22)]  - 2019-10-08 (Adam)
+### Added
+- The multiextract() function. 
+
+### Changed
+- The climate_velocity() was renamed to the much shorter 'vocc()'
+- The remote server variable is now called 'csph', shorter than chronosphere.
+
+## [0.1.0 (build 21)]  - 2019-09-7 (Adam)
+### Changed
+- package name changed from 'earthhist' to 'chronosphere'
+
+## [0.0.1 (build 20)]  - 2019-09-25 (Adam)
+### Changed
+- remote server variable place
+
+## [0.0.1 (build 19)]  - 2019-09-25 (Adam)
+### Added
+- enumerate argument to the reconstruct()-matrix method, for different age vectorization
+
+## [0.0.1 (build 18)]  - 2019-09-24 (Adam)
+### Added
+- chunk argument to reconstruct()-matrix-method, limiting the number of points to be reconstrcuted in one go
+
+### Changed
+- Wrapped the gplates_reconstruct_points() function in IteratedPointReconstruction() to iteratively query points, thus evading error with too long URL
+
+## [0.0.1 (build 17)]  - 2019-09-19 (Adam)
+### Changed
+- tiny bug fix in fetch()
+
+## [0.0.1 (build 16)]  - 2019-08-14 (Adam)
+### Added
+- versions to the layer names for better robustness
+
+### Changed
+- remote server location to FAU/cnidaria
+- datadir arg of fetch() is redone, archives are saved
+- ages of 'sst' variable in 'earthhist' are rounded to 5s
+
+## [0.0.1 (build 15)]  - 2019-08-09 (Adam)
+### Added
+- the datadir argument for fetch() and for dataindex()
+- some test examples for RasterArray-subset method
+
+## [0.0.1 (build 14)]  - 2019-07-25 (Nussaibah)
+### Changed
+- fetch() bug fixed.
+
+## [0.0.1 (build 13)]  - 2019-07-25 (Adam)
+### Changed
+- fetch() bug fix, one line did not do its job, the other one, truncated the output, 
+messing up the order of the layers, leading to misalignment between RasterArray proxy indices and layer names
+- test examples changed for DEM
+
+## [0.0.1 (build 12)]  - 2019-07-25 (Adam)
+### Added
+- reconstruct() wrapper function for all gplates web serviced based functions
+- verbose argument for the reconstruction internals
+
+## [0.0.1 (build 11)]  - 2019-07-24 (Nussaibah)
+### Added
+- the gplates_reconstruct_polygon() was added for gplates reconstructions. 
+
+### Changed
+- fetch() age correction
+
+## [0.0.1 (build 10)]  - 2019-07-23 (Nussaibah)
+### Added
+- the gplates_reconstruct_points(), gplates_reconstruct_coastlines(), gplates_reconstruct_static_polygons() was added for gplates reconstructions. 
+
+## [0.0.1 (build 9)]  - 2019-07-21 (Adam)
+### Added
+- the matchtime() function was added for matching series of maps with a predefined time scale.
+
+## [0.0.1 (build 8)]  - 2019-07-20 (Adam)
+### Added
+- unit testing framework established specific example for fetch()
+- resample() and crop() methods added for RasterArray
+
+## [0.0.1 (build 7)]  - 2019-07-19/2 (Adam)
+### Added
+- first version registry
+- 'paleoatlas' variable
+- mapplot() function
+- jpeg suggested package
+
+### Changed
+- remote server file structure
+- earthhist_map dataset to "paleomap" 
+
+
+## [0.0.1 (build 6)]  - 2019-07-19 (Adam) 
+### Added
+- first version of the fetch function
+- layers() function to show the names of the individual RasterLayers. Does the same as names(<RasterStack>). 
+
+### Changed
+- names() method of the RasterArray outputs index names
+
+
+## [0.0.1 (build 4)]  - 2019-07-15 (Adam) 
+### Added
+- Change log (/inst/NEWS)
+
+
+=======
+# Change log of the R package 'earthhist'
+
+## [0.0.1 (build 11)]  - 2019-07-23 (Adam)
+### Added
+- the dataindex() function to fetch data registry from the remote server
+- resolution variable in the remote server archives and layer file names
+- additional variables to the registry table
+- the prec and temp variables are added to the remote server
+- raster package is now a dependency rather than import
+
+### Changed
+- paleoatlas dataset resolution increased to original 0.1
+
+
+## [0.0.1 (build 9)]  - 2019-07-21 (Adam)
+### Added
+- the matchtime() function was added for matching series of maps with a predefined time scale.
+
+## [0.0.1 (build 8)]  - 2019-07-20 (Adam)
+### Added
+- unit testing framework established specific example for fetch()
+- resample() and crop() methods added for RasterArray
+
+## [0.0.1 (build 7)]  - 2019-07-19/2 (Adam)
+### Added
+- first version registry
+- 'paleoatlas' variable
+- mapplot() function
+- jpeg suggested package
+
+### Changed
+- remote server file structure
+- earthhist_map dataset to "paleomap" 
+
+
+## [0.0.1 (build 6)]  - 2019-07-19 (Adam) 
+### Added
+- first version of the fetch function
+- layers() function to show the names of the individual RasterLayers. Does the same as names(<RasterStack>). 
+
+### Changed
+- names() method of the RasterArray outputs index names
+
+
+## [0.0.1 (build 4)]  - 2019-07-15 (Adam) 
+### Added
+- Change log (/inst/NEWS)
+

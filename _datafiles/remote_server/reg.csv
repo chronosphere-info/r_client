@@ -1,0 +1,4 @@
+name,dat,var,res,ver,author,distributor,rotation,proj4string,date,comment
+Digital Elevation model,paleomap,dem,1,20190719,Scotese,csph,PALEOMAP,proj,date,
+Paleorasters,paleomap,paleoatlas,0.1,20160419v3,Scotese,csph,PALEOMAP,proj,date,"Caradocian map omitted, same date as Darriwillian"
+Paleorasters,paleomap,paleoatlas,0.5,20160419v3,csph,csph,PALEOMAP,proj,date,Resampled from 0.1

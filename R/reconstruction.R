@@ -1,0 +1,438 @@
+###########################################################################
+# Front-end wrapper function
+
+
+#' Reconstruct geographic features
+#' 
+#' Reconstruct the geographic locations from present day coordinates and spatial objects back to their paleo-positions. 
+#' Each location will be assigned a plate id and moved back in time using the chosen reconstruction model.
+#' 
+#' Adapted from GPlates Web Service (need to find out how to reference them)
+#' 
+#' @param x are the features to be reconstructed. Can be a vector with longitude and latitude representing
+#' a single point or a matrix/dataframe with the first column as longitude and second column as latitude, or a SpatialPolygonsDataFrame class object. 
+#' The character strings \code{"plates"} and \code{"coastlines"} return static plates and rotated present-day coastlines, respectively.
+#' @param age (\code{numeric})is the age in Ma at which the points will be reconstructed
+#' @param model (\code{character}) is the reconstruction model. The default is \code{"PALEOMAP"}. Add more details about additional models here...
+#' @param reverse (\code{logical}) the flag to control the direction of reconstruction. If \code{reverse = TRUE}, the function will 
+#' calculate the present-day coordinates of the given paleo-coordinates.
+#' @param listout (\code{logical})If multiple ages are given, the output can be returned as a \code{list} if \code{listout = TRUE}.
+#' @param verbose (\code{logical}) Should url calls be printed?
+#' @examples
+#' # simple matrices
+#'  reconstruct(matrix(95, 54, nrow=1), 140)
+#'  
+#'  xy <-cbind(long=c(95,142), lat=c(54, -33))
+#'  reconstruct(xy, 140)
+#'
+#' # coastlines/plates
+#'  reconstruct("coastlines", 140)
+#'  reconstruct("plates", 139)
+#'  
+#' @rdname reconstruct
+#' @exportMethod reconstruct
+setGeneric("reconstruct", function(x,...) standardGeneric("reconstruct"))
+
+
+
+# have to use long function definitions for documentation.
+#' @param enumerate (\code{logical}) Should be all coordinate/age combinations be enumerated and reconstructed (set to \code{TRUE} by default)? \code{FALSE} is applicable only if the number of rows in \code{x} is equal to the number elementes in \code{age}. Then a point will be reconstructed to the age that has the same index in \code{age} as the row of the coordinates in \code{x}. List output is not available in this case. 
+#' @param chunk (\code{numeric}) Single integer, the number of coordinates that will be queried from the GPlates in a single go. 
+#' @rdname reconstruct
+setMethod(
+  "reconstruct", 
+  signature="matrix", 
+  function(x,age, model="PALEOMAP", reverse=FALSE, listout=TRUE, verbose=TRUE, enumerate=TRUE, chunk=200){
+   
+    # CHeck long lat!
+
+    # depending on length
+    if(length(age)>1){
+     
+      # base condition of enumerate=FALSE
+        if(!enumerate & length(age)!=nrow(x)){
+            enumerate <- TRUE
+            warning("Enumerating coordinate-age combinations. \n enumerate = FALSE is possible only if the number of coordinates matches the number of ages.")
+      } 
+
+      # if the function is allowed to enumerate
+      if(enumerate){
+        # depending on output
+        if(listout){
+          container<- list()
+       
+        # 3d matrix
+        }else{
+          container <- array(NA, dim=c(length(age), dim(x)))
+        }
+  
+        # iterate over ages
+        for(i in 1:length(age)){
+          fresh <- IteratedPointReconstruction(coords=x, chunk=chunk, age=age[i], model=model, reverse=reverse, verbose=verbose)
+  
+          # list
+          if(listout){
+            container[[i]] <- fresh
+          # 3d matrix
+          }else{
+            container[i,,] <- fresh
+          }
+        }
+  
+        # name the  output
+        # list
+        if(listout){
+          names(container) <- age
+        # matrix
+        }else{
+          dimnames(container) <- c(list(age), dimnames(fresh))
+        }
+
+      # used vectorized age implementation, no enumeration
+      }else{
+        # empty container
+        container <- x
+        container[]<-NA
+
+        # reconstruction is performance-capped, for loop should be enough
+        ageLevs <- unique(age)
+
+        # for all different age values
+        for(i in 1:length(ageLevs)){
+          # which rows apply
+          index <- which(ageLevs[i]==age)
+          current <- x[index,]
+          # do reconstruction and store
+          container[index,] <- IteratedPointReconstruction(coords=current, chunk=chunk, age=ageLevs[i], model=model, reverse=reverse, verbose=verbose)
+        }
+      }
+
+    # single target
+    }else{
+      container <- IteratedPointReconstruction(coords=x, chunk=chunk, age=age, model=model, reverse=reverse, verbose=verbose)
+    }
+
+    # and return
+    return(container)
+  } 
+)
+
+
+setMethod(
+  "reconstruct", 
+  signature="data.frame", 
+  function(x,... ){
+    reconstruct(as.matrix(x), ...)
+})
+
+
+setMethod(
+  "reconstruct", 
+  signature="numeric", 
+  function(x,... ){
+    if(length(x)==2) reconstruct(matrix(x, nrow=1), ...) else stop("Only 2 element vectors are allowed!")
+})
+
+#' @rdname reconstruct
+setMethod(
+  "reconstruct", 
+  signature="character", 
+  function(x,age, model="PALEOMAP", listout=TRUE, verbose=TRUE){
+    # vectorized
+    if(length(age)>1){
+      
+      # list
+      if(listout){
+        container<- list()
+      # SpArray to be
+      }else{
+        stop("Noooo, not yet!")
+      }
+      # iterate over ages
+      for(i in 1:length(age)){
+        # what is needed?
+        if(x=="coastlines"){
+          feature <- gplates_reconstruct_coastlines(age=age[i], model=model, verbose=verbose)
+        }
+
+        if(x=="plates"){
+          feature <- gplates_reconstruct_static_polygons(age=age[i], model=model, verbose=verbose)
+        }
+
+        # save it
+        container[[i]] <- feature
+      }
+      # list output
+      if(listout){
+       names(container) <- age
+      }
+
+    # single entry
+    }else{
+      # what do you want?
+      if(x=="coastlines"){
+        container <- gplates_reconstruct_coastlines(age=age, model=model, verbose=verbose)
+      }
+
+      if(x=="plates"){
+        container <- gplates_reconstruct_static_polygons(age=age, model=model, verbose=verbose)
+      }
+    }
+    # return container
+    return(container)
+  } 
+)
+
+
+#' @rdname reconstruct
+setMethod(
+  "reconstruct",
+  "SpatialPolygonsDataFrame", 
+  function(x, age, model="PALEOMAP", listout=TRUE, verbose=TRUE){
+    # vectorized implementation
+    if(length(age)>1){
+      # list output
+      if(listout){
+        container <- list()
+
+      # SpArray
+      }else{
+        stop("Nooo, not yet!")  
+      }
+
+      # iterate
+      for(i in 1:length(age)){
+        container[[i]] <- gplates_reconstruct_polygon(sp=x, age=age[i], model=model, verbose=verbose)
+      }
+
+      # list output
+      if(listout){
+        names(container) <- age
+      }
+
+    # single entry
+    }else{
+      container <- gplates_reconstruct_polygon(sp=x, age, model=model, verbose=verbose)
+    }
+
+    return(container)
+
+  }
+)
+
+
+# correcting the point recontstruction problem, wrapper around the point reconstruction funciton
+IteratedPointReconstruction <- function(coords,age, chunk=200, model="PALEOMAP", reverse=FALSE, verbose=TRUE){
+  # number of coordinates
+  coordNum <- nrow(coords)
+  
+  # do only when the number of coordinates is large enough
+  if(coordNum>chunk){
+    # batch number
+    moreIndex <- rep(1:ceiling(coordNum/chunk), each=chunk)
+    index<-moreIndex[1:coordNum]
+    
+    # new container
+    newCoords <- matrix(NA, ncol=2, nrow=coordNum)
+    colnames(newCoords) <- colnames(coords)
+    rownames(newCoords) <- rownames(coords)
+
+    # the number of batches 
+    maxIndex <- max(index)
+   
+    # iterate - for() is easier, performance impact unlikely
+    for(i in 1:maxIndex){
+      # index of batch number
+      bIndex <- index==i
+  
+      # current batch 
+      current <- coords[bIndex,]
+
+      # do the reconstruction
+      tryCatch({
+          iterRes <- gplates_reconstruct_points(current, age=age, model=model, reverse=reverse, verbose=verbose)
+        },
+        error=function(cond){
+          stop("Query URL is too long. Round coordinates or decrease chunk size.")
+        }
+      ) 
+
+      
+      # store
+      newCoords[bIndex,] <- iterRes
+    }
+
+  # save some time by skipping this
+  }else{
+    tryCatch({
+      newCoords <- gplates_reconstruct_points(coords, age=age, model=model, reverse=reverse, verbose=verbose)
+    }, error=function(cond){
+          stop("Query URL is too long. Round coordinates or decrease chunk size.")
+       }
+    )
+
+  }
+
+  return(newCoords)
+
+}
+
+
+###########################################################################
+# GPlates Web Service internals:
+
+#' Reconstruct points
+#' 
+#' Reconstruct the geographic locations from present day coordinates back to their paleo-positions. 
+#' Each location will be assigned a plate id and moved back in time using the chosen reconstruction model.
+#' 
+#' Adapted from GPlates Web Service (need to find out how to reference them)
+#' 
+#' @param coords are the coordinates to be reconstructed. Can be a vector with longitude and latitude representing
+#' a single point or a matrix/dataframe with the first column as longitude and second column as latitude
+#' @param age is the age in Ma at which the points will be reconstructed
+#' @param  model is the reconstruction model. The default is "PALEOMAP". Add more details about additional models here
+#' @param reverse the flag to control the direction of reconstruction. If reverse = TRUE, the function will 
+#' calculate the present-day coordinates of the given paleo-coordinates.
+#' @param verbose Should the function output urls?
+#'
+#'@return matrix with longitude and latitude  
+#' 
+#' @examples
+#' gplates_reconstruct_points(c(95, 54), 140)
+#' 
+#' xy <-cbind(long=c(95,142), lat=c(54, -33))
+#' gplates_reconstruct_points(xy, 140)
+gplates_reconstruct_points <- function(coords,age, model="PALEOMAP", reverse=FALSE, verbose=TRUE){
+  
+  url <- 'https://gws.gplates.org/reconstruct/reconstruct_points/'
+  
+  #multiple points, as matrix or dataframe
+  if(is.matrix(coords) | is.data.frame(coords)){
+    coords <- toString(as.vector(t(coords)))
+  }
+  
+  #single points as vector
+  if(is.vector(coords)){ 
+    coords <- toString(coords)
+  }
+  
+  #spatial points or spatial points data frame
+  if ((attr(regexpr("SpatialPoints", class(coords)),"match.length") > 0)){
+    coords <- toString(t(coordinates(coords)))
+  }
+  
+  #fetch data
+  query <- sprintf('?points=%s&time=%d&model=%s',gsub(" ", "", coords),age, model)
+  
+  # for reconstruction of present day coordinates from paleocoordinates
+  if (reverse == TRUE){
+    query <- paste0(query, "&reverse")
+    cols <- c("long", "lat")
+  } else cols <- c("paleolong", "paleolat")
+  
+  fullrequest <- sprintf(paste0(url,query, "&return_null_points"))
+  
+  if(verbose) cat("Extracting coordinates from:", fullrequest, "\n")
+  rawdata <- readLines(fullrequest, warn="F") 
+  
+  #if null
+  rawdata <- gsub("null", "[[-9999, -9999]]", rawdata)
+  
+  #extract coordinates
+  rcoords <- matrix(as.numeric(unlist(regmatches(rawdata, gregexpr("-?[[:digit:]]+\\.*[[:digit:]]+", rawdata)))), ncol=2, byrow = TRUE)
+  rcoords[rcoords == -9999] <- NA #replace na values
+  
+  colnames(rcoords) <- cols
+  return(rcoords)
+}
+
+#' Reconstruct coastlines
+#' Retrieve reconstructed coastline polygons for defined ages
+#' 
+#' @param age is the age in Ma at which the points will be reconstructed
+#' @param  model is the reconstruction model. The default is "PALEOMAP". Add more details about additional models here
+#' @param verbose Should the function output urls?
+#'@return SpatialPolygonsDataFrame
+#'
+#'@examples
+#' gplates_reconstruct_coastlines(140)
+gplates_reconstruct_coastlines <- function(age, model="PALEOMAP", verbose=TRUE){
+  
+  #download and save data
+  url <- 'http://gws.gplates.org/reconstruct/coastlines/'
+  query <- sprintf('?time=%d&model=%s', age, model)
+  
+  fullrequest <- sprintf(paste0(url,query))
+  if(verbose) cat("Getting data from:", fullrequest, "\n")
+
+  r <- readLines(fullrequest, warn=FALSE)
+  
+  #read data
+  dat <- rgdal::readOGR(r, "OGRGeoJSON", verbose = F)
+  
+  return(dat)
+}
+
+#' reconstruct static polygons
+#' 
+#' Retrieve reconstructed static polygons for defined ages
+#' 
+#' @param age is the age in Ma at which the points will be reconstructed
+#' @param  model is the reconstruction model. The default is "PALEOMAP". Add more details about additional models here
+#' @param verbose Should the function output urls?
+#' 
+#'@return SpatialPolygonsDataFrame
+#'
+#'@examples
+#' gplates_reconstruct_static_polygons(140)
+#' 
+gplates_reconstruct_static_polygons <- function(age, model="PALEOMAP", verbose=TRUE){
+  
+  #download and save data
+  url <- 'http://gws.gplates.org/reconstruct/static_polygons/'
+  query <- sprintf('?time=%d&model=%s',age, model)
+  
+  fullrequest <- sprintf(paste0(url,query))
+  if(verbose) cat("Getting data from:", fullrequest, "\n")
+  
+  r <- readLines(fullrequest, warn=FALSE)
+  
+  #read data
+  dat <- rgdal::readOGR(r, "OGRGeoJSON", verbose = F)
+  
+  return(dat)
+}
+
+#' reconstructing polygons
+#' 
+#' @param sp is a SpatialPolygonsDataFrame
+#' @param verbose Should the function output urls?
+#' 
+gplates_reconstruct_polygon <- function(sp, age, model="PALEOMAP", verbose=TRUE){
+  
+  url = 'https://gws.gplates.org/reconstruct/reconstruct_feature_collection/'
+  
+  #extract coordinates
+  polys = attr(sp,'polygons')
+  npolys = length(polys)
+  for (i in 1:npolys){
+    poly = polys[[i]]
+    polys2 = attr(poly,'Polygons')
+    npolys2 = length(polys2)
+    for (j in 1:npolys2){
+      #do stuff with these values
+      coords = sp::coordinates(polys2[[j]])
+    }
+  }
+  
+  js <- paste(apply(coords, 1, function (x) paste(x, collapse=",")), collapse="],[")
+  
+  fullrequest = sprintf('%s?feature_collection={"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[%s]]]},"properties":{}}]}&time=%d&model=%s',url,js, age, model)
+  if(verbose) cat("Reconstructing polygon from:",  fullrequest, "\n")
+  rawdata <- readLines(fullrequest, warn="F") 
+  
+  rpoly <- rgdal::readOGR(rawdata, "OGRGeoJSON", verbose = F)
+  
+  return(rpoly)
+}
