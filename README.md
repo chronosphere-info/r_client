@@ -5,7 +5,7 @@ Earth System History Variables
 
 The purpose of the 'chronospere' package is to facilitate spatially explicit analyses of deep time paleoenvironmental/paleoecological research. 
 
-The project is developed under the umbrella of the DFG Research Unit TERSANE2 (For 2332) in collaboration with Christopher Scotese and Paul Valdes. The package will serve as a gateway to deep-time global climate model results and plate tectonic/paleonvironmental reconstructions. It also implements query functions to the GPlates Web Service allowing users to reconstruct coordinates without leaving the R environment. 
+The project is developed under the umbrella of the DFG Research Unit TERSANE2 (For 2332) in collaboration with Christopher Scotese and Paul Valdes. The package will serve as a gateway to deep time global climate model results and plate tectonic/paleonvironmental reconstructions. It also implements query functions to the GPlates Web Service allowing users to reconstruct coordinates without leaving the R environment. 
 
 This is a beta version. Much of the functionality is not yet available and data acces is restricted to publicly available datasets. 
 
