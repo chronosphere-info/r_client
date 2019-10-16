@@ -13,24 +13,16 @@ This is a beta version. Much of the functionality is not yet available and data 
 
 ## Install method A.
 
-Open R and type: 
+Open R and type in: 
 ```r
-install.packages("devtools")
+install.packages("https://github.com/adamkocsis/chronosphere/raw/master/_archive/source/chronosphere_0.1.0-23.tar.gz", repos=NULL)
 ```
 
-Then you can install the package with:
-```r
-devtools::install_github("adamkocsis/chronosphere")
-```
 ## Install method B. 
 
-Download the latest package archive with:
-
-https://github.com/adamkocsis/chronosphere/raw/master/_archive/source/chronosphere_0.1.0-23.tar.gz
-
-Save it somewhere, and then run 
+Alternatively, you can install the package with the 'devtools' package directly from GitHub:
 ```r
-install.packages("<yourpath>chronosphere_0.1.0-23.tar.gz", repos=NULL)
+devtools::install_github("adamkocsis/chronosphere")
 ```
 
 ## After install
