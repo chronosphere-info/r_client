@@ -1,5 +1,9 @@
 # Change log of the R package 'chronosphere'
 
+## [0.1.0 (build 24)]  - 2019-10-16 (Adam)
+### Changed
+- Minor fix to reconstruct() function.
+
 ## [0.1.0 (build 23)]  - 2019-10-09 (Adam)
 ### Changed
 - Server location, publicity of files and repository structure. 

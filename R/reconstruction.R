@@ -46,6 +46,9 @@ setMethod(
    
     # CHeck long lat!
 
+
+    if(!is.numeric(age)) age <- as.numeric(age)
+
     # depending on length
     if(length(age)>1){
      
