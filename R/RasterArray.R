@@ -11,7 +11,7 @@ setClassUnion("arrayORmatrixORvector", c("vector", "matrix", "array"))
 #' 
 #' The class has two slots:
 #' stack: RasterStack, the actual data.
-#' index: A proxy object that represents the organization of the layers. 
+#' proxy: A proxy object that represents the organization of the layers. 
 #' 
 #' Currently the following methods are implemented - documentation will come later:
 #' 
@@ -49,8 +49,8 @@ setClassUnion("arrayORmatrixORvector", c("vector", "matrix", "array"))
 #' The plot method will be directed with the proxy object. 
 #' 
 #' @param stack A \code{RasterStack} class object.
-#' @param index A \code{vector}, \code{matrix} or \code{array} type object. Includes either the indices of layers in the stack, or their names.
-#' @param dim A \code{numeric} vector. Same as for \code{array}, creates \code{index} procedurally.
+#' @param proxy A \code{vector}, \code{matrix} or \code{array} type object. Includes either the indices of layers in the stack, or their names.
+#' @param dim A \code{numeric} vector. Same as for \code{array}, creates \code{proxy} procedurally.
 #' @examples
 #' # data import
 #'	library(raster) - maybe we should attach this automatically
@@ -148,8 +148,8 @@ setMethod("initialize",signature="RasterArray",
 		}else{
 			if(nlayers(x)==prod(index)){
 				.Object@stack<- stack
-				proxy <- array(1:nlayers(x), dim=index)
-				.Object@index<- proxy
+				index <- array(1:nlayers(x), dim=dim)
+				.Object@index<- index
 			}
 
 		}
@@ -183,16 +183,33 @@ setMethod(
 
 			# drop to a single RasterLayer
 			if(length(fetchIndex)==1 & drop==TRUE){
-				x<- x@stack[[fetchIndex]]
+				# if it is NA
+				if(is.na(fetchIndex)){
+					x<-NA
+				}else{
+					x<- x@stack[[fetchIndex]]
+				}
+				
 
 			# keep using RasterArray
 			}else{
+				# separate the NAs
+				bNA <- is.na(fetchIndex)
+				if(any(bNA)){
+					validFetch <- fetchIndex[!bNA]
+				}else{
+					validFetch <- fetchIndex
+				}
+
 				# get the relevant layers
-				x@stack <- x@stack[[fetchIndex, drop=FALSE]]
+				x@stack <- x@stack[[validFetch, drop=FALSE]]
 
 				# rewrite the index 
 				x@index<- originIndex
-				x@index[] <- 1:length(x@index)
+
+				# if the proxy was numeric, it should be reset
+				x@index[!bNA] <- 1:raster::nlayers(x@stack)
+
 				return(x)
 			}		
 	}
@@ -255,8 +272,7 @@ setMethod(
 		        cat("- dimensions   : ", paste(adim, collapse=", "), 
 		            "  (vector)\n", 
 		            sep = "")
-		         cat("- names      : ", paste(allName, collapse=", "), "\n", 
-		            sep = "")
+		      
 		    }else{
 		    	allName<- dimnames(object)
 		    	if(length(allName)==2){
@@ -268,14 +284,19 @@ setMethod(
 			            "  (nrow, ncol, ...)\n", 
 			            sep = "")
 			    }
-		    	for(i in 1:length(allName)){
-					if(i==1) cat("- rownames    : ", paste(allName[[i]], collapse=", "), "\n", sep = "")
-					if(i==2) cat("- colnames    : ", paste(allName[[i]], collapse=", "), "\n", sep = "")
-					if(i>2) cat(paste("- Dim", i, " names", sep=""), "  : ", paste(allName[[i]], collapse=", "), "\n", sep = "")
-		    	}
+		#    	for(i in 1:length(allName)){
+		#			if(i==1) cat("- rownames    : ", paste(allName[[i]], collapse=", "), "\n", sep = "")
+		#			if(i==2) cat("- colnames    : ", paste(allName[[i]], collapse=", "), "\n", sep = "")
+		#			if(i>2) cat(paste("- Dim", i, " names", sep=""), "  : ", paste(allName[[i]], collapse=", "), "\n", sep = "")
+		#    	}
+				
 
 		    	  
 		    }
+		    cat("- num. layers    : ", nlayers(object), "\n", 
+		        sep = "")
+		    cat("- proxy:\n ")
+		    print(proxy(object))
 		   
 	    }
 	    cat("\n")
@@ -289,7 +310,7 @@ setMethod(
 setMethod(
 	"length",
 	signature="RasterArray",
-	function(x) length(x@stack)
+	function(x) length(x@index)
 )
 
 #' @exportMethod ncell
@@ -317,7 +338,7 @@ setMethod(
 setMethod(
 	"rownames",
 	signature="RasterArray",
-	function(x) colnames(x@rownames)
+	function(x) rownames(x@index)
 )
 
 #' @exportMethod names
@@ -346,6 +367,21 @@ setMethod(
 	function(x){
 		# returns the layer names
 		names(x@stack)
+
+	} 
+)
+
+
+#' @exportMethod nvalues
+setGeneric("nvalues", function(x,...) standardGeneric("nvalues"))
+
+
+setMethod(
+	"nvalues", 
+	signature="RasterArray", 
+	function(x){
+		# returns the layer names
+		length(x@stack)
 
 	} 
 )
@@ -463,6 +499,31 @@ setMethod(
 		}
 	} 
 )
+
+
+#' The proxy of a RasterArray or SpArray object
+#' 
+#' This function extracts the @index slot of a RasterArray or SpArray-class object
+#' 
+#' @param x (\code{RasterArray} or \code{SpArray}) focal object.
+#' @export
+setGeneric("proxy", function(x,...) standardGeneric("proxy"))
+setMethod(
+	"proxy",
+	signature="RasterArray",
+	function(x){
+		ind <- x@index
+		
+		# only NAs are present
+		if(any(!is.na(ind))){
+			if(!is.null(names(x@stack))) ind[]<- names(x@stack)[ind]
+		}
+		
+		return(ind)
+	}
+
+)
+
 
 ####################################################################
 # Changing methods

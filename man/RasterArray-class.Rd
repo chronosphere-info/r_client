@@ -8,9 +8,9 @@
 \arguments{
 \item{stack}{A \code{RasterStack} class object.}
 
-\item{index}{A \code{vector}, \code{matrix} or \code{array} type object. Includes either the indices of layers in the stack, or their names.}
+\item{proxy}{A \code{vector}, \code{matrix} or \code{array} type object. Includes either the indices of layers in the stack, or their names.}
 
-\item{dim}{A \code{numeric} vector. Same as for \code{array}, creates \code{index} procedurally.}
+\item{dim}{A \code{numeric} vector. Same as for \code{array}, creates \code{proxy} procedurally.}
 }
 \description{
 Array template for RasterLayers
@@ -20,7 +20,7 @@ The class implements structures to organize RasterLayers that have the same dime
 
 The class has two slots:
 stack: RasterStack, the actual data.
-index: A proxy object that represents the organization of the layers.
+proxy: A proxy object that represents the organization of the layers.
 
 Currently the following methods are implemented - documentation will come later:
 

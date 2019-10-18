@@ -1,5 +1,14 @@
 # Change log of the R package 'chronosphere'
 
+## [0.1.0 (build 25)]  - 2019-10-19 (Adam)
+### Added
+- The proxy() and nvalues() S4 generic and method for RasterArrays.
+
+### Changed
+- the show method of RasterArrays now shows the proxy object and the number of layers
+- Fixed bug of the rownames method of RasterArrays
+- The length() method of RasterLayers now returns the length of the proxy object. Use nvalues to get the number of values in the stack. 
+
 ## [0.1.0 (build 24)]  - 2019-10-16 (Adam)
 ### Changed
 - Minor fix to reconstruct() function.
