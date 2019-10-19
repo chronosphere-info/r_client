@@ -1,6 +1,13 @@
 # Change log of the R package 'chronosphere'
 
-## [0.1.0 (build 25)]  - 2019-10-19 (Adam)
+## [0.1.1 (build 26)]  - 2019-10-19 (Adam)
+### Added
+- The cbind() method for the RasterArrays... a nightmare.
+- RasterArray support for missing values.
+- The newbounds() utility function. 
+
+
+## [0.1.0 (build 25)]  - 2019-10-18 (Adam)
 ### Added
 - The proxy() and nvalues() S4 generic and method for RasterArrays.
 

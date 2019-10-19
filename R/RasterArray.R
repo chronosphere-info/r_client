@@ -506,7 +506,7 @@ setMethod(
 #' This function extracts the @index slot of a RasterArray or SpArray-class object
 #' 
 #' @param x (\code{RasterArray} or \code{SpArray}) focal object.
-#' @export
+#' @exportMethod proxy
 setGeneric("proxy", function(x,...) standardGeneric("proxy"))
 setMethod(
 	"proxy",
@@ -523,6 +523,121 @@ setMethod(
 	}
 
 )
+
+#' @export cbind.RasterArray
+cbind.RasterArray<-function(..., deparse.level=1){
+		listArg <- list(...)
+		finRA <- listArg[[1]]
+		for(i in 2:length(listArg)){
+			finRA<-cbind2(finRA, listArg[[i]], deparse.level=deparse.level)
+		}
+		return(finRA)
+	}
+
+setMethod("cbind2", c("RasterArray","RasterArray"),
+function(x,y, deparse.level=1){
+#	deparse.level<-1
+	# x's names
+	if(is.null(dim(x@index))){
+		xnames <- names(x)
+	}else{
+		xnames <- rownames(x)
+	}
+
+	# y's names
+	if(is.null(dim(y@index))){
+		ynames <- names(y)
+	}else{
+		ynames <- rownames(y)
+	}
+	
+	# Raster properties doesn't match then these should not be in the same array!!!
+	origColsX <- colnames(x)
+	origColsY <- colnames(y)
+
+	# this needs soxme work
+	if(deparse.level==1){
+		# get call
+		theCall<- as.list(sys.call(which=1))
+		if(is.null(origColsX)){
+			colsX <- as.character(theCall[[2]])
+		}else{
+			colsX <- origColsX
+		}
+		if(is.null(origColsY)){
+			colsY <- as.character(theCall[[3]])
+		}else{
+			colsY <- origColsY
+		}
+
+		# the names of the arguments
+		theNames <- c(colsX, colsY)
+	}
+
+	# in case the names do not match
+	needForce <- FALSE
+	if(length(xnames)!=length(ynames)){
+		needForce <- TRUE
+	}else{
+		if(sum(xnames == ynames)!=length(xnames)){
+			needForce <- TRUE
+		}
+	}
+
+	if(needForce){	
+		
+		# create a uniform order
+		allNames <- unique(c(xnames, ynames))
+		# try to sort numerically first
+		suppressWarnings(tempor <- as.numeric(allNames))
+		if(any(is.na(tempor))){
+			jointNames <- sort(allNames)
+		}else{
+			jointNames <- as.character(sort(tempor))
+		}
+		
+		if(length(dim(x))==1){
+			newX <- x[jointNames]
+			names(newX@index) <- jointNames
+		}else{
+			newX<-x
+			newX@index <- newbounds(x@index, rows=jointNames)
+		}
+		
+		if(length(dim(y))==1){
+			newY <- y[jointNames]
+			names(newY@index) <- jointNames
+		}else{
+			newY<-y
+			newY@index <- newbounds(y@index, rows=jointNames)
+		}
+		x<-newX
+		y<-newY
+		warning("The arguments have different rownames, rows are forced to match.", call.=FALSE)
+		
+	}
+
+	# create a new stack
+	newstack<- stack(x@stack, y@stack)
+
+	# the index
+	# stacks of ycontinue after the stacks of x
+		offset <- nlayers(x)
+		y@index<-y@index+offset
+	
+	# create index object
+		newindex <- cbind(x@index, y@index)
+
+	# and the column names
+	if(deparse.level==1) colnames(newindex) <- theNames
+
+	
+	# reconstruct the RasterArray
+	newRA<- RasterArray(stack=newstack, index=newindex)
+
+	return(newRA)
+
+})
 
 
 ####################################################################
