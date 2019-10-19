@@ -524,6 +524,15 @@ setMethod(
 
 )
 
+#' S3-type method for RasterArray allowing View() to work.
+#' @export
+as.data.frame.RasterArray<- function(from, to="data.frame"){
+	df <- as.data.frame(proxy(from))
+	if(ncol(df)==1) colnames(df) <- "X0"
+	return(df)
+}
+
+
 #' @export cbind.RasterArray
 cbind.RasterArray<-function(..., deparse.level=1){
 		listArg <- list(...)
@@ -640,6 +649,128 @@ function(x,y, deparse.level=1){
 })
 
 
+#' @export rbind.RasterArray
+rbind.RasterArray<-function(..., deparse.level=1){
+		listArg <- list(...)
+		finRA <- listArg[[1]]
+		for(i in 2:length(listArg)){
+			finRA<-rbind2(finRA, listArg[[i]], deparse.level=deparse.level)
+		}
+		return(finRA)
+	}
+
+
+setMethod("rbind2", c("RasterArray","RasterArray"),
+function(x,y, deparse.level=1){
+#	deparse.level<-1
+	# x's names
+	if(is.null(dim(x@index))){
+		xnames <- names(x)
+	}else{
+		xnames <- colnames(x)
+	}
+
+	# y's names
+	if(is.null(dim(y@index))){
+		ynames <- names(y)
+	}else{
+		ynames <- colnames(y)
+	}
+	
+	# Raster properties doesn't match then these should not be in the same array!!!
+	origRowsX <- rownames(x)
+	origRowsY <- rownames(y)
+
+	# this needs soxme work
+	if(deparse.level==1){
+		# get call
+		theCall<- as.list(sys.call(which=1))
+		if(is.null(origRowsX)){
+			rowsX <- as.character(theCall[[2]])
+		}else{
+			rowsX <- origRowsX
+		}
+		if(is.null(origRowsY)){
+			rowsY <- as.character(theCall[[3]])
+		}else{
+			rowsY <- origRowsY
+		}
+
+		# the names of the arguments
+		theNames <- c(rowsX, rowsY)
+	}
+
+	# in case the names do not match
+	needForce <- FALSE
+	if(length(xnames)!=length(ynames)){
+		needForce <- TRUE
+	}else{
+		if(sum(xnames == ynames)!=length(xnames)){
+			needForce <- TRUE
+		}
+	}
+
+	if(needForce){	
+		
+		# create a uniform order
+		allNames <- unique(c(xnames, ynames))
+		# try to sort numerically first
+		suppressWarnings(tempor <- as.numeric(allNames))
+		if(any(is.na(tempor))){
+			jointNames <- sort(allNames)
+		}else{
+			jointNames <- as.character(sort(tempor))
+		}
+		
+		if(length(dim(x))==1){
+			newX <- x[jointNames]
+			names(newX@index) <- jointNames
+		}else{
+			newX<-x
+			newX@index <- newbounds(x@index, cols=jointNames)
+		}
+		
+		if(length(dim(y))==1){
+			newY <- y[jointNames]
+			names(newY@index) <- jointNames
+		}else{
+			newY<-y
+			newY@index <- newbounds(y@index, cols=jointNames)
+		}
+		x<-newX
+		y<-newY
+		warning("The arguments have different colnames, columns are forced to match.", call.=FALSE)
+		
+	}
+
+	# create a new stack
+	newstack<- stack(x@stack, y@stack)
+
+	# the index
+	# stacks of ycontinue after the stacks of x
+		offset <- nlayers(x)
+		y@index<-y@index+offset
+	
+	# create index object
+		newindex <- rbind(x@index, y@index)
+
+	# reorder the stack!
+		stackIndex<- as.numeric(newindex)
+		stackIndex<-stackIndex[!is.na(stackIndex)]
+		newstack <- newstack[[stackIndex]]
+		newindex[!is.na(newindex)] <- 1:raster::nlayers(newstack)
+
+	# and the column names
+	if(deparse.level==1) rownames(newindex) <- theNames
+
+	
+	# reconstruct the RasterArray
+	newRA<- RasterArray(stack=newstack, index=newindex)
+
+	return(newRA)
+
+})
+
 ####################################################################
 # Changing methods
 
@@ -663,6 +794,23 @@ setMethod(
 	}
 )
 
-# aggregate
 
-# disaggregate
+#' @exportMethod aggregate
+setMethod(
+	"aggregate",
+	signature=c("RasterArray"),
+	function(x,...){
+		x@stack <- stack(aggregate(x@stack,...))
+		return(x)
+	}
+)
+
+#' @exportMethod disaggregate
+setMethod(
+	"disaggregate",
+	signature=c("RasterArray"),
+	function(x,...){
+		x@stack <- stack(disaggregate(x@stack,...))
+		return(x)
+	}
+)

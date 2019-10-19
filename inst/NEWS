@@ -1,11 +1,17 @@
 # Change log of the R package 'chronosphere'
 
+
+## [0.1.2 (build 27)]  - 2019-10-20 (Adam)
+### Added
+- as.data.frame S3 method for RasterArray making the View() function work
+- the rbind() method for RasterArrays
+- the aggregate() and disaggregate() methods for RasterArrays
+
 ## [0.1.1 (build 26)]  - 2019-10-19 (Adam)
 ### Added
 - The cbind() method for the RasterArrays... a nightmare.
 - RasterArray support for missing values.
 - The newbounds() utility function. 
-
 
 ## [0.1.0 (build 25)]  - 2019-10-18 (Adam)
 ### Added
