@@ -224,12 +224,59 @@ setMethod(
 	}
 )
 
-#' @exportMethod [[
+
+#' Replace RasterLayers in a RasterArray object
+#' @param x \code{RasterArray} object.
+#' @param value A \code{RasterLayer} or \code{RasterArray} object.
+#' 
+#' @examples
+#' # an example
+#' @exportMethod "[<-"
+setReplaceMethod(
+	"[", 
+	signature(x="RasterArray", value="RasterLayer"),
+	definition=function(x,i,j,..., value){
+		# fetch the index
+		indDim <- dim(x@index)
+
+		# one dim case
+		if(is.null(indDim) | length(indDim)==1){
+			theIndex <- x@index[i]
+		}
+		# multi- dim case
+		if(length(indDim)>=2){
+			theIndex <- x@index[i,j,...]
+		}
+		
+		x@stack[[theIndex]] <- value
+		return(x)
+	}
+)
+
+
+
+#' @exportMethod "[["
 setMethod(
 	"[[", 
 	signature(x="RasterArray"),
 	function(x,i,drop=TRUE){
 		x@stack[[i, drop=drop]]
+	}
+)
+
+#' Replace RasterLayers in a RasterArray object
+#' @param x \code{RasterArray} object.
+#' @param value \code{character} vector.
+#' 
+#' @examples
+#' # an example
+#' @exportMethod "[[<-"
+setReplaceMethod(
+	"[[", 
+	signature(x="RasterArray"),
+	function(x,i, value){
+		x@stack[[i]] <- value
+		return(x)
 	}
 )
 
@@ -327,6 +374,16 @@ setMethod(
 	function(x) nlayers(x@stack)
 )
 
+
+#' Column names of two-dimensional RasterArray or SpArray
+#' 
+#' Get or set the column names of two-dimensional RasterArray or SpArray objects 
+#' @param x \code{RasterArray} or \code{SpArray} object.
+#' @param value \code{character} vector.
+#' 
+#' @examples
+#' # an example
+#' @rdname colnames
 #' @exportMethod colnames
 setMethod(
 	"colnames",
@@ -334,6 +391,29 @@ setMethod(
 	function(x) colnames(x@index)
 )
 
+#' @rdname colnames
+#' @exportMethod "colnames<-"
+setReplaceMethod(
+	"colnames",
+	signature="RasterArray",
+	definition=function(x,  value){
+		# not defined for matrices or higher
+		if(is.null(colnames(x))) stop("The RasterArray proxy is not a 2D matrix.")
+		colnames(x@index) <- value 
+		return(x)
+})
+
+
+
+#' Row names of two-dimensional RasterArray or SpArray objects
+#' 
+#' Get or set the row names of two-dimensional RasterArray or SpArray objects  
+#' @param x \code{RasterArray} or \code{SpArray} object.
+#' @param value \code{character} vector.
+#' 
+#' @examples
+#' # an example
+#' @rdname rownames
 #' @exportMethod rownames
 setMethod(
 	"rownames",
@@ -341,6 +421,27 @@ setMethod(
 	function(x) rownames(x@index)
 )
 
+#' @rdname rownames
+#' @exportMethod "rownames<-"
+setReplaceMethod(
+	"rownames",
+	signature="RasterArray",
+	definition=function(x,  value){
+		# not defined for matrices or higher
+		if(is.null(rownames(x))) stop("The RasterArray proxy is not a 2D matrix.")
+		rownames(x@index) <- value 
+		return(x)
+})
+
+#' Names of one-dimensional RasterArray or SpArray objects.
+#' 
+#' Get or set the names of one-dimensional RasterArray or SpArray objects 
+#' @param x \code{RasterArray} or \code{SpArray} object.
+#' @param value \code{character} vector.
+#' 
+#' @examples
+#' # an example
+#' @rdname names
 #' @exportMethod names
 setMethod(
 	"names",
@@ -350,12 +451,46 @@ setMethod(
 	}
 )
 
+#' @rdname names
+#' @exportMethod "names<-"
+setReplaceMethod(
+	"names",
+	signature="RasterArray",
+	definition=function(x,  value){
+		# not defined for matrices or higher
+		if(is.null(names(x))) stop("The object has no names.")
+		names(x@index) <- value 
+		return(x)
+})
+
+#' Names of multidimensional RasterArray or SpArray objects.
+#' 
+#' Get or set the dimnames of multidimensional RasterArray or SpArray objects 
+#' @param x \code{RasterArray} or \code{SpArray} object.
+#' @param value \code{character} vector.
+#' 
+#' @examples
+#' # an example
+#' @rdname dimnames
 #' @exportMethod dimnames
 setMethod(
 	"dimnames",
 	signature="RasterArray",
 	function(x) dimnames(x@index)
 )
+
+#' @rdname dimnames
+#' @exportMethod "dimnames<-"
+setReplaceMethod(
+	"dimnames",
+	signature="RasterArray",
+	definition=function(x,  value){
+		# not defined for matrices or higher
+		if(is.null(dimnames(x))) stop("One-dimensional RasterArrays have no dimnames.")
+		dimnames(x@index) <- value 
+		return(x)
+})
+
 
 #' @exportMethod layers
 setGeneric("layers", function(x,...) standardGeneric("layers"))
