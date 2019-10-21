@@ -264,18 +264,18 @@ fetch <- function(dat, var, res=1, ver=NULL, datadir=NULL){
 				names(scot) <- paste(varAge[order(ageNum)][i], c("R", "G", "B"), sep="_")
 				
 				# add them to list
-				listForm[[(i-1)*3+1]]<- scot[[1]]
-				listForm[[(i-1)*3+2]]<- scot[[2]]
-				listForm[[(i-1)*3+3]]<- scot[[3]]
+				listForm[[i]]<- scot[[1]]
+				listForm[[i+length(all)]]<- scot[[2]]
+				listForm[[i+length(all)*2]]<- scot[[3]]
 
 				# add the projections
-				listForm[[(i-1)*3+1]]@crs@projargs<-"+proj=longlat"
-				listForm[[(i-1)*3+2]]@crs@projargs<-"+proj=longlat"
-				listForm[[(i-1)*3+3]]@crs@projargs<-"+proj=longlat"
+				listForm[[i]]@crs@projargs<-"+proj=longlat"
+				listForm[[i+length(all)]]@crs@projargs<-"+proj=longlat"
+				listForm[[i+length(all)*2]]@crs@projargs<-"+proj=longlat"
 			}
 		  
 			# the proxy object structure of the RasterArray
-			ind <- matrix(1:length(listForm), ncol=3, byrow=TRUE)
+			ind <- matrix(1:length(listForm), ncol=3, byrow=FALSE)
 			colnames(ind) <- c("paleoatlas_R", "paleoatlas_G", "paleoatlas_B")
 			rownames(ind) <-  as.character(sort(ageNum))
 		}

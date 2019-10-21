@@ -225,6 +225,45 @@ setMethod(
 )
 
 
+#' @exportMethod "[<-"
+setReplaceMethod(
+	"[", 
+	signature(x="RasterArray", value="logical"),
+	definition=function(x,i,j,..., value){
+		# fetch the index
+		indDim <- dim(x@index)
+
+		if(sum(is.na(value))!=length(value)) stop("Invalid replacement type.")
+		if(is.null(indDim) | length(indDim)==1){
+			if(length(i)!=length(value) & length(value)!=1) stop("Invalid replacement length.")
+			theIndex <- x@index[i]
+			x@index[i] <- NA
+
+		}
+		
+		# multi- dim case
+		if(length(indDim)>=2){
+			theIndex <- x@index[i,j,...]
+			x@index[i,j,...] <- NA
+		}
+
+		# ensure flat index
+
+		# rebuild the stack
+		origInd<- 1:nlayers(x@stack)
+		keepOrig <- origInd[!origInd%in%theIndex]
+		
+		# omit unwanted layers
+		x@stack <- x@stack[[keepOrig]]
+		
+		# constrain order again
+		x@index<- defragment(x@index)
+
+		return(x)
+		
+	}
+)
+
 #' Replace RasterLayers in a RasterArray object
 #' @param x \code{RasterArray} object.
 #' @param value A \code{RasterLayer} or \code{RasterArray} object.
@@ -252,7 +291,6 @@ setReplaceMethod(
 		return(x)
 	}
 )
-
 
 
 #' @exportMethod "[["
@@ -949,3 +987,12 @@ setMethod(
 		return(x)
 	}
 )
+
+
+
+# function to defragment the matrix
+defragment <- function(x){
+	b <- is.na(x)
+	x[!b] <- 1:sum(!b)
+	return(x)
+}
