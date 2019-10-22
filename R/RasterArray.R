@@ -264,6 +264,8 @@ setReplaceMethod(
 	}
 )
 
+
+
 #' Replace RasterLayers in a RasterArray object
 #' @param x \code{RasterArray} object.
 #' @param value A \code{RasterLayer} or \code{RasterArray} object.
@@ -277,17 +279,123 @@ setReplaceMethod(
 	definition=function(x,i,j,..., value){
 		# fetch the index
 		indDim <- dim(x@index)
-
+		
 		# one dim case
 		if(is.null(indDim) | length(indDim)==1){
+			# pointer to the stack to be replaced
 			theIndex <- x@index[i]
+
+			# separte the index based on NA
+			bIndNA <- is.na(theIndex)
+			
+			# if at least one layer stack is not there
+			if(any(bIndNA)){
+				# usef for the addition
+				newI <- i[bIndNA]
+
+				# prepare the new index vector
+				tempIndex <- x@index
+				tempIndex[newI]<- -1
+				tempIndex <- defragment(tempIndex)
+
+				# where are the old layers in the new stack
+				oldInNew <- tempIndex[!is.na(x@index)]
+				# the index of the new layers
+				totallyNew <- tempIndex[newI]
+				# add to the rest
+				newInd <- c(oldInNew, totallyNew)
+
+				# use this to reorder
+				tempInd2 <- rep(NA, length(newInd))
+				tempInd2[newInd]<- 1:length(newInd)
+				
+				# add the new layer to the stack
+				newStack <- stack(x@stack, value[[rep(1, length(totallyNew))]])
+
+				# the reorderd stack
+				x@stack <- newStack[[tempInd2]]
+				x@index <- tempIndex
+			}
+			if(any(!bIndNA)){
+				# restart the process, now with the new index vector
+				theIndex <- x@index[i]
+				replaceIndex <- theIndex[!bIndNA]
+			
+				# simply replace the layers in the stack...
+				allVals <- 1:nlayers(x@stack)
+				origVals <- allVals[!allVals%in%replaceIndex]
+			
+				# create a reorderer vector
+				newInd <-c(origVals, replaceIndex)
+				tempInd2 <- rep(NA, length(newInd))
+				tempInd2[newInd] <-  1:length(tempInd2)
+				
+				# put the additional elements to the stack
+				newStack <- stack(x@stack[[origVals]], value[[rep(1, length(replaceIndex))]])
+				
+				# reorder to correct
+				x@stack <- newStack[[tempInd2]]
+			}
 		}
 		# multi- dim case
 		if(length(indDim)>=2){
 			theIndex <- x@index[i,j,...]
+			
+			# separte the index based on NA
+			bIndNA <- is.na(theIndex)
+			
+			if(any(bIndNA)){
+				fullInd <- 1:length(x@index)
+				dim(fullInd) <- dim(x@index)
+				newIJ <- fullInd[i,j,...]
+				newIJ<- newIJ[bIndNA]
+
+				# prepare the index vector
+				tempIndex <- x@index
+				tempIndex[newIJ]<- -1
+				tempIndex <- defragment(tempIndex)
+
+				# where are the old layers in the new stack
+				oldInNew <- tempIndex[!is.na(x@index)]
+				# add the index at the end
+				totallyNew <- tempIndex[newIJ]
+				newInd <- c(oldInNew, totallyNew)
+
+				# use this to reorder
+				tempInd2 <- rep(NA, length(newInd))
+				tempInd2[newInd]<- 1:length(newInd)
+				
+				# add the new layer to the stack
+				newStack <- stack(x@stack, value[[rep(1, length(totallyNew))]])
+
+				# the reorderd stack
+				x@stack <- newStack[[tempInd2]]
+				x@index <- tempIndex
+			}
+			if(any(!bIndNA)){
+				# restart the process, now with the new index vector
+				theIndex <- x@index[i,j,...]
+				replaceIndex <- theIndex[!bIndNA]
+			
+				# simply replace the layers in the stack...
+				allVals <- 1:nlayers(x@stack)
+				origVals <- allVals[!allVals%in%replaceIndex]
+			
+				# create a reorderer vector
+				newInd <-c(origVals, replaceIndex)
+				tempInd2 <- rep(NA, length(newInd))
+				tempInd2[newInd] <-  1:length(tempInd2)
+				
+				# put the additional elements to the stack
+				newStack <- stack(x@stack[[origVals]], value[[rep(1, length(replaceIndex))]])
+				
+				# reorder to correct
+				x@stack <- newStack[[tempInd2]]
+			
+			}
+
 		}
-		
-		x@stack[[theIndex]] <- value
+
 		return(x)
 	}
 )

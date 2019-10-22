@@ -1,6 +1,10 @@
 # Change log of the R package 'chronosphere'
 
-## [0.1.3 (build 29)]  - 2019-10-21 (Adam)
+## [0.1.3 (build 30)]  - 2019-10-23 (Adam)
+### Changed
+- Fixed bug with NAs for the RasterArray[<- RasterLayer replacement method
+
+## [0.1.3 (build 29)]  - 2019-10-22 (Adam)
 ### Added
 - replacement method for RasterArray, (logical) NA insertion
 
