@@ -1097,6 +1097,80 @@ setMethod(
 )
 
 
+#' Extraction of values from multiple RasterLayers in a RasterArray object
+#' 
+#' The function takes a set of time-dependent coordinates and extracts the value they point to from associted RasterLayers in a RasterArray.
+#' 
+#' @param x (\code{matrix} or \code{data.frame}). The data table containing the coordinates and (optionally) 
+#' 	the indices or names of the associated \code{RasterLayer}s in \code{y}.
+#' @param y (\code{RasterArray}). A set of \code{RasterLayers} that are associated with the rows of \code{x}.
+#' @param by (\code{character} or \code{vector}) The link between \code{x} and \code{y}. If \code{by} is a \code{character}
+#' string then it is expected to be column of \code{x} and should contain the \code{names} or the indices of the
+#' associated \code{RasterLayer}s in \code{y}. If it is a \code{vector} its length should match the number of rows in \code{x}
+#' and it will be used as if it were a column of \code{x}.
+#' @param lng (\code{character}) A column of \code{x} that includes the paleolongitudes.
+#' @param lat (\code{character}) A column of \code{x} that includes the paleolatitudes.
+#' @param force (\code{character}) If set to \code{"numeric"} the \code{by} argument or the column it points to will be converted to
+#' numeric values, and y will be subsetted with \code{numeric} subscripts of the \code{y} \code{RasterArray}. If set to character, the by column (or vector) will be
+#' forced to \code{character} values and will be used as character subscripts.
+#' @exportMethod extract
+setMethod(
+	"extract", 
+	signature=c(x="RasterArray", y="data.frame"), 
+	definition=function(x, y, by, lng="plng", lat="plat", force=NULL){
+	
+	# defense
+#	if(!is.data.frame(y) & !is.matrix(y)) stop("The argument y has to be a data.frame or matrix.")
+#	if(class(x)!="RasterArray") stop("The argument x has to be a one dimensional RasterArray.")
+
+	# column that contains which map the coordinate belongs to
+	if(is.character(by)){
+		if(!by%in%colnames(y)) stop("The argument by has to be a column of y. ")
+		interactor <- y[, by]
+	# separate vector
+	}else{
+		if(is.vector(by) & (length(by)==nrow(y))){
+			interactor <- by
+		}else{
+			stop("Invalid by argument.")
+		}
+	}
+	
+	# force subscript type
+	if(!is.null(force)){
+		if(force=="numeric"){
+			interactor <- as.numeric(as.character(interactor))
+		}
+		if(force=="character"){
+			interactor <- as.character(interactor)
+		}
+	}
+
+	# iterate by
+	doFor <- sort(unique(interactor))
+
+	# coordinates
+	coords <- y[, c(lng, lat)]
+
+	# storage
+	vals <- rep(NA, nrow(y))
+
+	for(i in 1:length(doFor)){
+		bThis<- doFor[i]==interactor
+
+		# select the appropriate RasterLayer
+		thisLayer <- x[doFor[i]]
+
+		# extract values from raster
+		vals[bThis] <- raster::extract(thisLayer, coords[bThis, ])
+	}
+	names(vals) <- rownames(y)
+	return(vals)
+
+})
+
+
+
 
 # function to defragment the matrix
 defragment <- function(x){
