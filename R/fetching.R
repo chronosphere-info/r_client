@@ -70,7 +70,7 @@ dataindex <- function(datadir=NULL){
 #' Version 2.
 #' @param dat The dataset to get variables from.
 #' @param var Vector of variable names to get.
-#' @param res The resolution of the layers.
+#' @param res The resolution of the layers. This has to be the same for all layers.
 #' @param ver The version of the variable. Defaults to \code{NULL}, which will download the latest available version. We have to create a data table, which should be part of the package. This has to be searched for valid argument combinations. Right this is just a folder with a date.
 #' @param datadir Directory where downloaded files are kept. Individual layers will be looked up from the directory if this is given, and will be downloaded if they are not found. The default \code{NULL} option will download data to a temporary directory that exists only until the R session ends.
 #' @examples
@@ -97,7 +97,7 @@ fetch <- function(dat, var, res=1, ver=NULL, datadir=NULL){
 		
 		# some do, but some are missing
 		warning(paste("The variable(s) '",paste(var[!present],collapse="', '"), "' do not exist at \nthe given resolution and are omitted.",  sep=""))
-		var<-var[!present]
+		var<-var[present]
 	}
 
 
@@ -120,7 +120,7 @@ fetch <- function(dat, var, res=1, ver=NULL, datadir=NULL){
 		}
 		# if this passes, then the variables will be checked during the loop
 	}
-
+	varObj <-list()
 	# for all the variables
 	for(j in 1:length(var)){
 		# current version - NA to use default
@@ -141,7 +141,7 @@ fetch <- function(dat, var, res=1, ver=NULL, datadir=NULL){
 		
 		# Check whether download is required or not
 		# the name of the res_variable_ver-specific archive
-		archive<- paste(resChar,"_",  var[j],"_", version[j], ".zip", sep="")
+		archive<- paste(resChar,"_",  var[j],"_", version, ".zip", sep="")
 
 		# we need a temporary directory to store the extracted files until the end of the session
 		tempd <- tempdir()
@@ -173,7 +173,7 @@ fetch <- function(dat, var, res=1, ver=NULL, datadir=NULL){
 			if(is.null(userpwd)){
 				download.file(paste(remote, dat,"/",  res,"/", var[j], "/", archive,  sep = ""),temp, mode="wb")
 			}else{
-				download.file(paste("ftp://", userpwd, "@",remote, dat,"/",  res,"/", var[j], "/", res,"_",  var[j],"_", version[j], ".zip",  sep = ""),temp, mode="wb")
+				download.file(paste("ftp://", userpwd, "@",remote, dat,"/",  res,"/", var[j], "/", res,"_",  var[j],"_", version, ".zip",  sep = ""),temp, mode="wb")
 			}
 			
 		
@@ -281,13 +281,25 @@ fetch <- function(dat, var, res=1, ver=NULL, datadir=NULL){
 		}
 		
 		# RasterArray
-		varObj <- RasterArray(stack=raster::stack(listForm), index=ind)
+		varObj[[j]] <- RasterArray(stack=raster::stack(listForm), index=ind)
 	
 		# 'get rid of' temporary directory
 		unlink(tempd)
 	}
+
+	# output - irst varialbe
+	final <- varObj[[1]]
 	
-	# make RasterArray
-	return(varObj)
+	# are there more?
+	if(length(var)!=1){
+		for(j in 2:length(var)){
+			nex <- varObj[[j]]
+			final<- cbind(final, nex)
+		}
+		colnames(final) <- var
+	}
+
+	return(final)
+	
 }
 

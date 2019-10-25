@@ -11,7 +11,7 @@ fetch(dat, var, res = 1, ver = NULL, datadir = NULL)
 
 \item{var}{Vector of variable names to get.}
 
-\item{res}{The resolution of the layers.}
+\item{res}{The resolution of the layers. This has to be the same for all layers.}
 
 \item{ver}{The version of the variable. Defaults to \code{NULL}, which will download the latest available version. We have to create a data table, which should be part of the package. This has to be searched for valid argument combinations. Right this is just a folder with a date.}
 
