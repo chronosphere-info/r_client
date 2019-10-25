@@ -3,6 +3,9 @@
 ### Added
 - fetch() now supports two dimensional RasterArrays.
 
+### Changed
+- fixed bug of cbind() and rbind() methods rof RasterArrays.
+
 ## [0.1.3 (build 32)]  - 2019-10-25 (Adam)
 ### Changed
 - extract() can now accept 2 dimensional RasterArrays

@@ -848,7 +848,7 @@ function(x,y, deparse.level=1){
 	# this needs soxme work
 	if(deparse.level==1){
 		# get call
-		theCall<- as.list(sys.call(which=1))
+		theCall<- as.list(sys.call(which=-1))
 		if(is.null(origColsX)){
 			colsX <- as.character(theCall[[2]])
 		}else{
@@ -965,7 +965,7 @@ function(x,y, deparse.level=1){
 	# this needs soxme work
 	if(deparse.level==1){
 		# get call
-		theCall<- as.list(sys.call(which=1))
+		theCall<- as.list(sys.call(which=-1))
 		if(is.null(origRowsX)){
 			rowsX <- as.character(theCall[[2]])
 		}else{

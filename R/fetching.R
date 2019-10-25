@@ -294,7 +294,7 @@ fetch <- function(dat, var, res=1, ver=NULL, datadir=NULL){
 	if(length(var)!=1){
 		for(j in 2:length(var)){
 			nex <- varObj[[j]]
-			final<- cbind(final, nex)
+			final<- cbind2(final, nex)
 		}
 		colnames(final) <- var
 	}
