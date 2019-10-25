@@ -1,5 +1,5 @@
 # remote server 
-remote <- "https://www.cnidaria.nat.fau.de/tersane/public/public/"
+remote <- "https://www.cnidaria.nat.fau.de/tersane/public/chronosphere/"
 userpwd <- NULL
 
 #' Download a database extract from \code{chronosphere} remote server
