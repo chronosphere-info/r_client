@@ -1,12 +1,12 @@
 Package: chronosphere
 Type: Package
 Title: chronosphere: Earth System History Variables
-Version: 0.1.3-34
+Version: 0.1.3-35
 Author: Adam T. Kocsis, Nussaibah Raja-Schoob
 Maintainer: Adam T. Kocsis <adam.t.kocsis@gmail.com>
 Description: Retrieval of paleoenvironmental variables and coordinate reconstruction.
 License: CC BY 4.0
-Date: 2019-10-25
+Date: 2019-10-31
 BugReports: https://github.com/adamkocsis/chronosphere/issues
 Encoding: UTF-8
 LazyData: false
@@ -14,7 +14,6 @@ Depends:
     R (>= 3.5.0), 
     raster
 Imports: 
-	reticulate,
 	ncdf4
 NeedsCompilation: no
 RoxygenNote: 6.1.1

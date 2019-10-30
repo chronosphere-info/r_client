@@ -1,5 +1,17 @@
 # Change log of the R package 'chronosphere'
 
+## [0.1.3 (build 35)]  - 2019-10-31 (Adam)
+### Added
+- the 'gradinv' color ramp object
+- default colors of the mapplot() function
+
+### Removed
+- dependency on the reticulate package
+
+### Changed
+- bug fix with the cbind() and rbind() methods of RasterArrays
+- the mapplot() function is reorganized to a proper S4 generic and methods
+
 ## [0.1.3 (build 34)]  - 2019-10-25 (Adam)
 ### Changed
 - remote server location changed to the likely final

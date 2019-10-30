@@ -1,24 +1,43 @@
-#' Pseudo generic function to plot maps of different object classes
+#' Wrapper function to plot maps of different classes
 #' 
-#' This function plots the different paleo
+#' This function plots Raster and sp-type objects.
 #' 
 #' @param x Object to be plotted 
 #' @param legend (\code{logical}) Triggers whether the legend of a RasterLayer would be plotted.
-#' @export
-mapplot<-function(x,legend=FALSE, ...){
-	if(class(x)=="RasterLayer"){
-		raster::plot(x,legend=legend, ...)
-	}
-	if(class(x)=="RasterStack"){
-		raster::plotRGB(x,...)
-	}
+#' @param col \code{character} Color or color scheme of the plot. 
+#' @rdname mapplot
+#' @exportMethod mapplot
+setGeneric("mapplot", function(x,...) standardGeneric("mapplot"))
 
-	if(class(x)=="RasterArray"){
-		raster::plotRGB(x@stack,...)
+#' @rdname mapplot
+setMethod("mapplot", signature="RasterLayer", 
+	definition = function(x, legend=FALSE, col=gradinv(255),...){
+		raster::plot(x,legend=legend, col=col, ...)
 	}
+)
 
-
-	if(class(x)=="SpatialPolygonsDataFrame" | class(x)=="SpatialPolygons"){
-		sp::plot(x,...)
+#' @rdname mapplot
+setMethod("mapplot", signature="RasterStack", 
+	definition = function(x, col=gradinv(255),  ...){
+		raster::plotRGB(x,col=col, ...)
 	}
-}
+)
+
+#' @rdname mapplot
+setMethod("mapplot", signature="RasterArray", 
+	definition = function(x, col=gradinv(255),  ...){
+		raster::plotRGB(x@stack,col=col, ...)
+	}
+)
+
+setMethod("mapplot", signature="SpatialPolygonsDataFrame", 
+	definition = function(x, col="#71351d", ...){
+		sp::plot(x, col=col,...)
+	}
+)
+
+setMethod("mapplot", signature="SpatialPolygons", 
+	definition = function(x, col="#71351d",  ...){
+		sp::plot(x, col=col,...)
+	}
+)

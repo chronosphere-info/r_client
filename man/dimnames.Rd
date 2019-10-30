@@ -3,12 +3,12 @@
 \docType{methods}
 \name{dimnames,RasterArray-method}
 \alias{dimnames,RasterArray-method}
-\alias{dimnames<-,RasterArray,ANY-method}
+\alias{dimnames<-,RasterArray-method}
 \title{Names of multidimensional RasterArray or SpArray objects.}
 \usage{
 \S4method{dimnames}{RasterArray}(x)
 
-\S4method{dimnames}{RasterArray,ANY}(x) <- value
+\S4method{dimnames}{RasterArray}(x) <- value
 }
 \arguments{
 \item{x}{\code{RasterArray} or \code{SpArray} object.}

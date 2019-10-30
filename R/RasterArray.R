@@ -819,7 +819,7 @@ cbind.RasterArray<-function(..., deparse.level=1){
 		listArg <- list(...)
 		finRA <- listArg[[1]]
 		for(i in 2:length(listArg)){
-			finRA<-cbind2(finRA, listArg[[i]], deparse.level=deparse.level)
+			finRA<-cbind2(finRA, listArg[[i]])
 		}
 		return(finRA)
 	}
@@ -845,23 +845,45 @@ function(x,y, deparse.level=1){
 	origColsX <- colnames(x)
 	origColsY <- colnames(y)
 
+
 	# this needs soxme work
-	if(deparse.level==1){
-		# get call
-		theCall<- as.list(sys.call(which=-1))
+	if(deparse.level!=0){
+		# get call (symbol)
+		callSymb <<- sys.call(which=deparse.level)
+		# make a dummy to avoid errors...
+		if(length(callSymb)<3) callSymb <- rep(NA, 3)
+
 		if(is.null(origColsX)){
-			colsX <- as.character(theCall[[2]])
+			xSymb <- callSymb[[2]]
+			if(is.symbol(xSymb)){
+				colsX <-deparse(xSymb)
+			}else{
+				colsX<-NA
+			}
+			
 		}else{
 			colsX <- origColsX
 		}
 		if(is.null(origColsY)){
-			colsY <- as.character(theCall[[3]])
+			ySymb <- callSymb[[3]]
+			if(is.symbol(ySymb)){
+				colsY <- deparse(ySymb)
+			}else{
+				colsY<- NA
+			}
+			
 		}else{
 			colsY <- origColsY
 		}
 
 		# the names of the arguments
 		theNames <- c(colsX, colsY)
+
+		# delete colnames if they are only NAs
+		if(!any(!is.na(theNames))) theNames <- NULL
+
+	}else{
+		theNames <- NULL
 	}
 
 	# in case the names do not match
@@ -917,9 +939,10 @@ function(x,y, deparse.level=1){
 	
 	# create index object
 		newindex <- cbind(x@index, y@index)
+		
 
 	# and the column names
-	if(deparse.level==1) colnames(newindex) <- theNames
+	colnames(newindex) <- theNames
 
 	
 	# reconstruct the RasterArray
@@ -935,7 +958,7 @@ rbind.RasterArray<-function(..., deparse.level=1){
 		listArg <- list(...)
 		finRA <- listArg[[1]]
 		for(i in 2:length(listArg)){
-			finRA<-rbind2(finRA, listArg[[i]], deparse.level=deparse.level)
+			finRA<-rbind2(finRA, listArg[[i]])
 		}
 		return(finRA)
 	}
@@ -963,22 +986,42 @@ function(x,y, deparse.level=1){
 	origRowsY <- rownames(y)
 
 	# this needs soxme work
-	if(deparse.level==1){
-		# get call
-		theCall<- as.list(sys.call(which=-1))
+	if(deparse.level!=0){
+		# get call (symbol)
+		callSymb <<- sys.call(which=deparse.level)
+		# make a dummy to avoid errors...
+		if(length(callSymb)<3) callSymb <- rep(NA, 3)
+
 		if(is.null(origRowsX)){
-			rowsX <- as.character(theCall[[2]])
+			xSymb <- callSymb[[2]]
+			if(is.symbol(xSymb)){
+				rowsX <-deparse(xSymb)
+			}else{
+				rowsX<-NA
+			}
 		}else{
 			rowsX <- origRowsX
 		}
+
 		if(is.null(origRowsY)){
-			rowsY <- as.character(theCall[[3]])
+			ySymb <- callSymb[[3]]
+			if(is.symbol(ySymb)){
+				rowsY <-deparse(ySymb)
+			}else{
+				rowsY<-NA
+			}
 		}else{
 			rowsY <- origRowsY
 		}
 
 		# the names of the arguments
 		theNames <- c(rowsX, rowsY)
+
+		# delete colnames if they are only NAs
+		if(!any(!is.na(theNames))) theNames <- NULL
+
+	}else{
+		theNames <- NULL
 	}
 
 	# in case the names do not match
@@ -1042,7 +1085,7 @@ function(x,y, deparse.level=1){
 		newindex[!is.na(newindex)] <- 1:raster::nlayers(newstack)
 
 	# and the column names
-	if(deparse.level==1) rownames(newindex) <- theNames
+	rownames(newindex) <- theNames
 
 	
 	# reconstruct the RasterArray
