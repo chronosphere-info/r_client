@@ -1,7 +1,7 @@
 # chronosphere
 Earth System History Variables
 
-(Ádám T. Kocsis and Nussaibah Raja-Schoob)
+(Ádám T. Kocsis and Nussaïbah B. Raja)
 
 The purpose of the 'chronospere' package is to facilitate spatially explicit analyses of deep time paleoenvironmental/paleoecological research. 
 
