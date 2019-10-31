@@ -15,7 +15,7 @@ This is a beta version. Much of the functionality is not yet available and data 
 
 Open R and paste in: 
 ```r
-install.packages("https://github.com/adamkocsis/chronosphere/raw/master/_archive/source/chronosphere_0.1.3-35.tar.gz", repos=NULL, type="source")
+install.packages("https://github.com/adamkocsis/chronosphere/raw/master/_archive/source/chronosphere_0.1.4-36.tar.gz", repos=NULL, type="source")
 ```
 
 ## Install method B. 

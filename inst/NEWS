@@ -1,5 +1,13 @@
 # Change log of the R package 'chronosphere'
 
+## [0.1.4 (build 36)]  - 2019-10-31 (Adam)
+### Added
+- the cellStats() S4 method of RasterArrays
+- the summary() S4 method of RasterArrays
+
+### Removed
+- rates of climate change
+
 ## [0.1.3 (build 35)]  - 2019-10-31 (Adam)
 ### Added
 - the 'gradinv' color ramp object
