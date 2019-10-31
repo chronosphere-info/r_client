@@ -849,7 +849,7 @@ function(x,y, deparse.level=1){
 	# this needs soxme work
 	if(deparse.level!=0){
 		# get call (symbol)
-		callSymb <<- sys.call(which=deparse.level)
+		callSymb <- sys.call(which=deparse.level)
 		# make a dummy to avoid errors...
 		if(length(callSymb)<3) callSymb <- rep(NA, 3)
 
@@ -988,7 +988,7 @@ function(x,y, deparse.level=1){
 	# this needs soxme work
 	if(deparse.level!=0){
 		# get call (symbol)
-		callSymb <<- sys.call(which=deparse.level)
+		callSymb <- sys.call(which=deparse.level)
 		# make a dummy to avoid errors...
 		if(length(callSymb)<3) callSymb <- rep(NA, 3)
 
