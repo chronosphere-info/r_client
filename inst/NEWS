@@ -1,5 +1,15 @@
 # Change log of the R package 'chronosphere'
 
+## [0.1.5 (build 37)]  - 2019-11-02 (Adam)
+### Added
+- c() methods for RasterArrays.
+- The ProjectRaster() function for RasterArrays.
+- coercion methods for Raster* objects to RasterArrays
+
+### Changed
+- fixed bug with the mapplot function.
+- R script file structure.
+
 ## [0.1.4 (build 36)]  - 2019-10-31 (Adam)
 ### Added
 - the cellStats() S4 method of RasterArrays
