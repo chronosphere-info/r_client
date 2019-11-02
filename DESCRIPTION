@@ -1,12 +1,12 @@
 Package: chronosphere
 Type: Package
-Title: chronosphere: Earth System History Variables
-Version: 0.1.3-35
-Author: Adam T. Kocsis, Nussaibah Raja-Schoob
+Title: chronosphere: Earth system history variables
+Version: 0.1.5-37
+Author: Adam T. Kocsis, Nussaibah B. Raja
 Maintainer: Adam T. Kocsis <adam.t.kocsis@gmail.com>
-Description: Retrieval of paleoenvironmental variables and coordinate reconstruction.
+Description: The purpose of the 'chronosphere' project is to facilitate spatially explicit analyses of paleoenvironmental/paleoecological research. The package serves as a gateway to plate tectonic reconstructions and deep time global climate model results. Paleonvironmental data stored on a remote server can be downloaded and imported directly to the R environment. Query functions to the GPlates Web Service allow users to reconstruct coordinates, static plates, and Spatial objects. A wrapper class 'RasterArray' is implemented around the 'RasterLayer' class, allowing the organization of spatially explicit data in n-dimensional arrays of rasters. The project is developed under the umbrella of the DFG Research Unit TERSANE2 (For 2332) in collaboration with Christopher Scotese (PaleoMAP project, University of Chicago) and Paul Valdes (GCM simulations, University of Bristol).
 License: CC BY 4.0
-Date: 2019-10-31
+Date: 2019-11-02
 BugReports: https://github.com/adamkocsis/chronosphere/issues
 Encoding: UTF-8
 LazyData: false

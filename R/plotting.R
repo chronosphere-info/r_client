@@ -12,7 +12,13 @@ setGeneric("mapplot", function(x,...) standardGeneric("mapplot"))
 #' @rdname mapplot
 setMethod("mapplot", signature="RasterLayer", 
 	definition = function(x, legend=FALSE, col=gradinv(255),...){
-		raster::plot(x,legend=legend, col=col, ...)
+		if(length(col)==1){
+			if(col=="terrain"){
+				raster::plot(x,legend=legend, col=col, ...)
+			}
+		}else{
+			raster::plot(x,legend=legend, col=col, ...)
+		}
 	}
 )
 
