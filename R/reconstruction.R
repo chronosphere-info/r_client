@@ -1,19 +1,35 @@
 ###########################################################################
 # Front-end wrapper function
-
-
 #' Reconstruct geographic features
 #' 
 #' Reconstruct the geographic locations from present day coordinates and spatial objects back to their paleo-positions. 
 #' Each location will be assigned a plate id and moved back in time using the chosen reconstruction model.
 #' 
-#' Adapted from GPlates Web Service (need to find out how to reference them)
+#' The available reconstruction models are:
+#' \itemize{
+#'   \item "SETON2012" (Seton et al., 2012) for coastlines and plate polygons.
+#'   \item "MULLER2016" (Muller et al., 2016) for coastlines and plate polygons.
+#'   \item "GOLONKA" (Wright et al. 2013) for coastlines only. 
+#'   \item "PALEOMAP" for coastlines and plate polygons. 
+#'   \item "MATTHEWS2016" (Matthews et al., 2016) for coastlines and plate polygons. 
+#' }
+#' 
+#' The \code{reconstruct()} function uses the GPlates Web Service: \url{https://gws.gplates.org/}
+#' 
+#' @section References:
+#' Matthews, K. J., Maloney, K. T., Zahirovic, S., Williams, S. E., Seton, M., & Müller, R. D. (2016). Global plate boundary evolution and kinematics since the late Paleozoic. Global and Planetary Change, 146, 226–250. https://doi.org/10.1016/j.gloplacha.2016.10.002
+#' \cr
+#' \cr Müller, R. D., Seton, M., Zahirovic, S., Williams, S. E., Matthews, K. J., Wright, N. M., … Cannon, J. (2016). Ocean Basin Evolution and Global-Scale Plate Reorganization Events Since Pangea Breakup. Annual Review of Earth and Planetary Sciences, 44(1), 107–138. https://doi.org/10.1146/annurev-earth-060115-012211
+#' \cr
+#' \cr Seton, M., Müller, R. D., Zahirovic, S., Gaina, C., Torsvik, T., Shephard, G., … Chandler, M. (2012). Global continental and ocean basin reconstructions since 200Ma. Earth-Science Reviews, 113(3–4), 212–270. https://doi.org/10.1016/j.earscirev.2012.03.002
+#' \cr
+#' \cr Wright, N., Zahirovic, S., Müller, R. D., & Seton, M. (2013). Towards community-driven paleogeographic reconstructions: integrating open-access paleogeographic and paleobiology data with plate tectonics. Biogeosciences, 10(3), 1529–1541. https://doi.org/10.5194/bg-10-1529-2013
 #' 
 #' @param x are the features to be reconstructed. Can be a vector with longitude and latitude representing
 #' a single point or a matrix/dataframe with the first column as longitude and second column as latitude, or a SpatialPolygonsDataFrame class object. 
 #' The character strings \code{"plates"} and \code{"coastlines"} return static plates and rotated present-day coastlines, respectively.
 #' @param age (\code{numeric})is the age in Ma at which the points will be reconstructed
-#' @param model (\code{character}) is the reconstruction model. The default is \code{"PALEOMAP"}. Add more details about additional models here...
+#' @param model (\code{character}) is the reconstruction model. The default is \code{"PALEOMAP"}. See details for available models.
 #' @param reverse (\code{logical}) the flag to control the direction of reconstruction. If \code{reverse = TRUE}, the function will 
 #' calculate the present-day coordinates of the given paleo-coordinates.
 #' @param listout (\code{logical})If multiple ages are given, the output can be returned as a \code{list} if \code{listout = TRUE}.
@@ -29,11 +45,11 @@
 #'  reconstruct("coastlines", 140)
 #'  reconstruct("plates", 139)
 #'  
+
+#'
 #' @rdname reconstruct
 #' @exportMethod reconstruct
 setGeneric("reconstruct", function(x,...) standardGeneric("reconstruct"))
-
-
 
 # have to use long function definitions for documentation.
 #' @param enumerate (\code{logical}) Should be all coordinate/age combinations be enumerated and reconstructed (set to \code{TRUE} by default)? \code{FALSE} is applicable only if the number of rows in \code{x} is equal to the number elementes in \code{age}. Then a point will be reconstructed to the age that has the same index in \code{age} as the row of the coordinates in \code{x}. List output is not available in this case. 
