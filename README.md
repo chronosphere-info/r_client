@@ -1,6 +1,7 @@
-# chronosphere
+# chronosphere [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3525482.svg)](https://doi.org/10.5281/zenodo.3525482)
 Earth System History Variables
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3525482.svg)](https://doi.org/10.5281/zenodo.3525482)
+
+
 
 (Ádám T. Kocsis and Nussaïbah B. Raja)
 
