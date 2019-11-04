@@ -50,7 +50,7 @@ The available reconstruction models are:
   \item "SETON2012" (Seton et al., 2012) for coastlines and plate polygons.
   \item "MULLER2016" (Muller et al., 2016) for coastlines and plate polygons.
   \item "GOLONKA" (Wright et al. 2013) for coastlines only. 
-  \item "PALEOMAP" for coastlines and plate polygons. 
+  \item "PALEOMAP" (Scotese and Wright, 2018) for coastlines and plate polygons. 
   \item "MATTHEWS2016" (Matthews et al., 2016) for coastlines and plate polygons. 
 }
 
@@ -61,6 +61,8 @@ The \code{reconstruct()} function uses the GPlates Web Service: \url{https://gws
 Matthews, K. J., Maloney, K. T., Zahirovic, S., Williams, S. E., Seton, M., & Müller, R. D. (2016). Global plate boundary evolution and kinematics since the late Paleozoic. Global and Planetary Change, 146, 226–250. https://doi.org/10.1016/j.gloplacha.2016.10.002
 \cr
 \cr Müller, R. D., Seton, M., Zahirovic, S., Williams, S. E., Matthews, K. J., Wright, N. M., … Cannon, J. (2016). Ocean Basin Evolution and Global-Scale Plate Reorganization Events Since Pangea Breakup. Annual Review of Earth and Planetary Sciences, 44(1), 107–138. https://doi.org/10.1146/annurev-earth-060115-012211
+\cr
+\cr Scotese, C., & Wright, N. M. (2018). PALEOMAP Paleodigital Elevation Models (PaleoDEMS) for the Phanerozoic PALEOMAP Project. Retrieved from https://www.earthbyte.org/paleodem-resource-scotese-and-wright-2018/
 \cr
 \cr Seton, M., Müller, R. D., Zahirovic, S., Gaina, C., Torsvik, T., Shephard, G., … Chandler, M. (2012). Global continental and ocean basin reconstructions since 200Ma. Earth-Science Reviews, 113(3–4), 212–270. https://doi.org/10.1016/j.earscirev.2012.03.002
 \cr
