@@ -4,7 +4,7 @@
 #'
 #' @format A RasterArray with 10 layers.
 #' @source Chris Scotese
-"dems"
+"demo"
 
 
 #' Colour gradient ramps for default plotting 
