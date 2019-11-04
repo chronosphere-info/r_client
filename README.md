@@ -1,5 +1,6 @@
 # chronosphere
 Earth System History Variables
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3525482.svg)](https://doi.org/10.5281/zenodo.3525482)
 
 (Ádám T. Kocsis and Nussaïbah B. Raja)
 
@@ -37,4 +38,7 @@ library(chronosphere)
 # Usage
 
 Run dataindex() to see the publicly available variables. 
+
+# Cite as
+Kocsis, Ádám T. & Raja, Nussaïbah B. (2019). chronosphere: Earth system history variables (pre-release) (Version 0.1.5). Zenodo. http://doi.org/10.5281/zenodo.3525482
 
