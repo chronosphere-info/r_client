@@ -22,7 +22,7 @@ mapplot(x, ...)
 
 \item{legend}{(\code{logical}) Triggers whether the legend of a RasterLayer would be plotted.}
 
-\item{col}{\code{character} Color or color scheme of the plot.}
+\item{col}{\code{character} Color or color scheme of the plot. See \code{?ramps} for available palettes.}
 }
 \description{
 This function plots Raster and sp-type objects.

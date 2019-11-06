@@ -1,5 +1,11 @@
 # Change log of the R package 'chronosphere'
 
+## [0.1.6 (build 39)]  - 2019-11-06 
+### Added
+- colour palettes added
+- colour palettes implemented for RasterArrays
+
+
 ## [0.1.5 (build 38)]  - 2019-11-06
 ### Added
 - is.na() method for RasterArrays.
