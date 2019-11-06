@@ -9,7 +9,7 @@ ProjectRaster(from, ...)
 \arguments{
 \item{from}{A \code{RasterArray} object to project.}
 
-\item{...}{Arguments passed to the projectRaster function.}
+\item{...}{Arguments passed to the projectRaster() function.}
 }
 \description{
 The uppercase first letter is temporary until the a proper S4 generic of the function is implemented in the \code{raster} package.

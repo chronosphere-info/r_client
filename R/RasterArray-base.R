@@ -341,3 +341,21 @@ extendDim <- function(proxy, vals2d, newdim=1){
 	
 	return(endObj)
 }
+
+
+#' Positions of missing values in a RasterArray object
+#' 
+#' The function behaves similar to the regular \code{is.na()} function applied to the proxy object of a \code{RasterArray}.
+#' 
+#' @param x A \code{RasterArray} class object.
+#' 
+#' @examples
+#' data(demo)
+#' demo[2] <- NA
+#' is.na(demo)
+#' 
+#' @export
+is.na.RasterArray<-function(x){
+	is.na(proxy(x))
+}
+

@@ -110,6 +110,24 @@ setMethod("c2", signature=c("RasterLayer", "logical"),
 	}
 )
 
+# raster::mask() depends on similar structure. 
+setMethod("c2", c("RasterLayer", "list"),
+	function(x,y){
+		ind <- c(list(x), y)
+
+		callSymb <- sys.call(which=-3)
+		if(is.symbol(callSymb[[2]])){
+			names(ind)[1] <- deparse(callSymb[[2]])
+		}
+
+		if(is.symbol(callSymb[[3]])){
+			names(ind)[2] <- deparse(callSymb[[3]])
+		}
+
+		return(ind)
+
+	}
+)
 
 # adding NAs to the arrays
 setMethod("c2", signature=c("RasterArray", "logical"), 

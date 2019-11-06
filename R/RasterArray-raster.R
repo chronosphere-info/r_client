@@ -227,10 +227,168 @@ setMethod("summary",
 #' 
 #' @param from A \code{RasterArray} object to project.
 #' 
-#' @param ... Arguments passed to the projectRaster function.
+#' @param ... Arguments passed to the projectRaster() function.
 #' 
 #' @export
 ProjectRaster <- function(from, ...){
 	from@stack <- raster::stack(raster::projectRaster(from=from@stack, ...))
 	return(from)
 }
+
+
+
+
+#' Methods to mask RasterArray objects, or to mask with them
+#' 
+#' Additional functions to \code{\link[raster]{mask}} generic function involving the \code{\link{RasterArray}} class. The following methods are implemented:
+#' 
+#' 
+#' RasterArray masked with RasterLayer: every RasterLayer in the stack masked.
+#' 
+#' 
+#' RasterArray masked with another RasterArray: one-to-one match between RasterLayers.
+#' 
+#' 
+#' RasterArray masked with RasterStack: one-to-one match between RasterLayers.
+#' 
+#' 
+#' RasterArray masked with Spatial: all layers masked with an Sp object
+#' 
+#' 
+#' RasterArray masked with Spatial: all layers masked with an Sp object
+#' 
+#' 
+#' RasterLayer masked with RasterArray: layer is masked out iteratively with every member of RasterArray.
+#' 
+#'
+#' @param x Raster* object
+#' @param mask Raster* object or a Spatial* object
+#' @param filename character. Optional output filename (only if x is a RasterLayer and RasterStackBrick)
+#' @param inverse logical. If \code{TRUE}, areas on mask that are _not_ the \code{maskvalue} are masked
+#' @param maskvalue numeric. The value in \code{mask} that indicates the cells of \code{x} that should become \code{updatevalue (default = NA)}
+#' @param updatevalue numeric. The value that cells of \code{x} should become if they are not covered by \code{mask} (and not \code{NA})
+#' @param updateNA logical. If \code{TRUE}, \code{NA} values outside the masked area are also updated to the \code{updatevalue} (only relevant if the \code{updatevalue} is not \code{NA}.
+#' @param ... additional arguments as in \code{\link[raster]{writeRaster}}. 
+#' 
+#' @examples
+#' data(demo)
+#' 
+#' # land
+#' lands <- demo
+#' for(i in 1:length(lands)){
+#'   values(lands[i])[values(lands[i])<0] <- NA
+#'   values(lands[i])[!is.na(values(lands[i]))] <- 1
+#' }
+#' 
+#' # land topographies
+#' landTopo<- mask(demo, lands)
+#' 
+#' @rdname mask-RasterArray-methods
+#' @exportMethod mask
+setMethod(
+	"mask", 
+	c("RasterArray", "RasterLayer"),
+	definition=function(x, mask, inverse=FALSE, maskvalue=NA, updatevalue=NA, updateNA=FALSE, ...){
+		x@stack <- raster::stack(
+			raster::mask(x@stack, mask=mask, inverse=inverse, maskvalue=maskvalue, 
+				updatevalue=updatevalue, updateNA=updateNA, ...)
+		)
+		return(x)
+
+	}
+)
+
+
+#' @rdname mask-RasterArray-methods
+setMethod(
+	"mask", 
+	c("RasterArray", "RasterArray"),
+	definition=function(x, mask, inverse=FALSE, maskvalue=NA, updatevalue=NA,  updateNA=FALSE, ...){
+		if(!identical(dim(x), dim(mask))) stop("The dimensions of x and mask has to be the same.")
+
+		oneMiss <- !(is.na(x@index) | is.na(mask@index))
+		# subset the two stacks accordingly
+			xStack <- x@stack[[x@index[oneMiss]]]
+			maskStack <- mask@stack[[mask@index[oneMiss]]]
+
+		# then execute masking with the stack
+		newStack <- raster::stack(
+			raster::mask(xStack, mask=maskStack, inverse=inverse, maskvalue=maskvalue, 
+				updatevalue=updatevalue, updateNA=updateNA, ...)
+		)
+
+		# then create the final object
+			# copy
+			newInd <- x@index
+			# insert NAs
+			newInd[!oneMiss] <- NA
+			newInd[oneMiss] <- 1:raster::nlayers(newStack)
+
+		# class constructor
+		RasterArray(index=newInd, stack=newStack)
+	}
+)
+
+#' @rdname mask-RasterArray-methods
+setMethod(
+	"mask", 
+	c("RasterArray", "Spatial"),
+	definition=function(x, mask, inverse=FALSE, updatevalue=NA,  updateNA=FALSE, ...){
+		x@stack <- raster::stack(
+			raster::mask(x@stack, mask=mask, inverse=inverse, 
+				updatevalue=updatevalue, updateNA=updateNA, ...)
+		)
+		return(x)
+	}
+)
+#' @rdname mask-RasterArray-methods
+setMethod(
+	"mask", 
+	c("RasterArray", "RasterStackBrick"),
+	definition=function(x, mask, inverse=FALSE, maskvalue=NA, updatevalue=NA,  updateNA=FALSE, ...){
+		if(!identical(nlayers(x), raster::nlayers(mask))) stop("x (RasterArray) and mask (RasterStackBrick) should have the same number of layers.")
+		x@stack <- raster::stack(
+			raster::mask(x@stack, mask=mask, inverse=inverse, maskvalue=maskvalue, 
+				updatevalue=updatevalue, updateNA=updateNA, ...)
+		)
+		return(x)
+	}
+)
+
+#' @rdname mask-RasterArray-methods
+setMethod(
+	"mask", 
+	c("RasterLayer", "RasterArray"),
+	definition=function(x, mask, filename="", inverse=FALSE, maskvalue=NA, updatevalue=NA,  updateNA=FALSE, ...){
+		# copy object
+		y <- mask
+
+		# do the masking
+		y@stack <- raster::stack(
+			raster::mask(x, mask=mask@stack, inverse=inverse, maskvalue=maskvalue, filename=filename, 
+				updatevalue=updatevalue, updateNA=updateNA, ...)
+		)
+		# name the new layers
+		names(y@stack) <- paste("masked",names(mask@stack), sep="_")
+
+		return(y)
+	}
+)
+
+
+#' @rdname mask-RasterArray-methods
+setMethod(
+	"mask", 
+	c("RasterStackBrick", "RasterArray"),
+	definition=function(x, mask, filename="", inverse=FALSE, maskvalue=NA, updatevalue=NA,  updateNA=FALSE, ...){
+		if(!identical(nlayers(x), raster::nlayers(mask))) stop("x (RasterStackBrick) and mask (RasterArray) should have the same number of layers.")
+		# copy object
+		y <- mask
+
+		y@stack <- raster::stack(
+			raster::mask(x, mask=mask@stack, inverse=inverse, maskvalue=maskvalue, filename=filename,
+				updatevalue=updatevalue, updateNA=updateNA, ...)
+		)
+		return(y)
+	}
+)
