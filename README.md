@@ -1,7 +1,5 @@
-# chronosphere [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3525482.svg)](https://doi.org/10.5281/zenodo.3525482)
+# chronosphere [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3530703.svg)](https://doi.org/10.5281/zenodo.3530703)
 Earth System History Variables
-
-
 
 (Ádám T. Kocsis and Nussaïbah B. Raja)
 
@@ -9,7 +7,7 @@ The purpose of the 'chronosphere' package is to facilitate spatially explicit an
 
 The project is developed under the umbrella of the DFG Research Unit TERSANE2 (For 2332) in collaboration with Christopher Scotese and Paul Valdes. The package will serve as a gateway to deep time global climate model results and plate tectonic/paleonvironmental reconstructions. It also implements query functions to the GPlates Web Service allowing users to reconstruct coordinates without leaving the R environment. 
 
-This is a beta version. Much of the functionality is not yet available/perfect and data acces is restricted to publicly available datasets. 
+This is a beta version. Much of the functionality is not yet available/perfect and data access is restricted to publicly available datasets only. 
 
 See the blog entry below for an example application:
 https://www.evolv-ed.net/post/chronosphere-paleomap/chronosphere-paleomap/
