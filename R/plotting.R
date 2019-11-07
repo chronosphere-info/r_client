@@ -11,7 +11,7 @@ setGeneric("mapplot", function(x,...) standardGeneric("mapplot"))
 
 #' @rdname mapplot
 setMethod("mapplot", signature="RasterLayer", 
-	definition = function(x, legend=FALSE, col=gradinv(255),...){
+	definition = function(x, col=gradinv(255), legend=FALSE, ...){
 		if(length(col)==1){
 			if(col %in% c("ocean", "gradinv", "terra", "coldhot", "drywet", "wet")){
 				raster::plot(x,legend=legend, col=eval(parse(text = col))(255), ...)

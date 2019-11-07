@@ -10,7 +10,7 @@
 \usage{
 mapplot(x, ...)
 
-\S4method{mapplot}{RasterLayer}(x, legend = FALSE, col = gradinv(255),
+\S4method{mapplot}{RasterLayer}(x, col = gradinv(255), legend = FALSE,
   ...)
 
 \S4method{mapplot}{RasterStack}(x, col = gradinv(255), ...)
@@ -20,9 +20,9 @@ mapplot(x, ...)
 \arguments{
 \item{x}{Object to be plotted}
 
-\item{legend}{(\code{logical}) Triggers whether the legend of a RasterLayer would be plotted.}
-
 \item{col}{\code{character} Color or color scheme of the plot. See \code{?ramps} for available palettes.}
+
+\item{legend}{(\code{logical}) Triggers whether the legend of a RasterLayer would be plotted.}
 }
 \description{
 This function plots Raster and sp-type objects.

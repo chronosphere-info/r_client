@@ -381,7 +381,7 @@ setMethod(
 	"mask", 
 	c("RasterStackBrick", "RasterArray"),
 	definition=function(x, mask, filename="", inverse=FALSE, maskvalue=NA, updatevalue=NA,  updateNA=FALSE, ...){
-		if(!identical(nlayers(x), raster::nlayers(mask))) stop("x (RasterStackBrick) and mask (RasterArray) should have the same number of layers.")
+		if(!identical(raster::nlayers(x), nlayers(mask))) stop("x (RasterStackBrick) and mask (RasterArray) should have the same number of layers.")
 		# copy object
 		y <- mask
 

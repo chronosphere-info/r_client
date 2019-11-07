@@ -1,5 +1,4 @@
 # make sure to include
-library(raster)
 library(chronosphere)
 library(testthat)
 

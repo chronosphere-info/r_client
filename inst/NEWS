@@ -1,5 +1,13 @@
 # Change log of the R package 'chronosphere'
 
+## [0.1.6 (build 40)]  - 2019-11-07 
+### Added
+- the rangelocator() function
+
+### Changed
+- argument order of mapplot()
+
+
 ## [0.1.6 (build 39)]  - 2019-11-06 
 ### Added
 - colour palettes added
@@ -13,6 +21,7 @@
 - c() method for signature ("RasterArray", "list"), otherwise the raster::compareRaster() and functions building on that would not work.
 - mask() methods for RasterArrays
 
+
 ## [0.1.5 (build 37)]  - 2019-11-02 
 ### Added
 - c() methods for RasterArrays.
@@ -23,6 +32,7 @@
 - fixed bug with the mapplot function.
 - R script file structure.
 
+
 ## [0.1.4 (build 36)]  - 2019-10-31 
 ### Added
 - the cellStats() S4 method of RasterArrays
@@ -30,6 +40,7 @@
 
 ### Removed
 - rates of climate change
+
 
 ## [0.1.3 (build 35)]  - 2019-10-31 
 ### Added
@@ -43,10 +54,12 @@
 - bug fix with the cbind() and rbind() methods of RasterArrays
 - the mapplot() function is reorganized to a proper S4 generic and methods
 
+
 ## [0.1.3 (build 34)]  - 2019-10-25 
 ### Changed
 - remote server location changed to the likely final
 "https://www.cnidaria.nat.fau.de/tersane/public/chronosphere/"
+
 
 ## [0.1.3 (build 33)]  - 2019-10-25 
 ### Added
@@ -55,17 +68,21 @@
 ### Changed
 - fixed bug of cbind() and rbind() methods rof RasterArrays.
 
+
 ## [0.1.3 (build 32)]  - 2019-10-25 
 ### Changed
 - extract() can now accept 2 dimensional RasterArrays
+
 
 ## [0.1.3 (build 31)]  - 2019-10-24 
 ### Changed
 - the multiextract() function is now an extract() method defined for RasterArrays
 
+
 ## [0.1.3 (build 30)]  - 2019-10-23 
 ### Changed
 - Fixed bug with NAs for the RasterArray[<- RasterLayer replacement method
+
 
 ## [0.1.3 (build 29)]  - 2019-10-22 
 ### Added
@@ -77,11 +94,13 @@
 ### Known issues
 - replacement method for RasterArray, RasterLayer not yet work for NA filling!
 
+
 ## [0.1.3 (build 28)]  - 2019-10-21 
 ### Added
 - replacement methods for the RasterArray-specific colnames(), rownames(), names and dimnames()
 - replacement method for RasterArray elements with [[
 - replacement method for RasterArray elements with [ and a single RasterLayer
+
 
 ## [0.1.2 (build 27)]  - 2019-10-20 
 ### Added
@@ -89,11 +108,13 @@
 - the rbind() method for RasterArrays
 - the aggregate() and disaggregate() methods for RasterArrays
 
+
 ## [0.1.1 (build 26)]  - 2019-10-19 
 ### Added
 - The cbind() method for the RasterArrays... a nightmare.
 - RasterArray support for missing values.
 - The newbounds() utility function. 
+
 
 ## [0.1.0 (build 25)]  - 2019-10-18 
 ### Added
@@ -104,13 +125,16 @@
 - Fixed bug of the rownames method of RasterArrays
 - The length() method of RasterLayers now returns the length of the proxy object. Use nvalues to get the number of values in the stack. 
 
+
 ## [0.1.0 (build 24)]  - 2019-10-16 
 ### Changed
 - Minor fix to reconstruct() function.
 
+
 ## [0.1.0 (build 23)]  - 2019-10-09 
 ### Changed
 - Server location, publicity of files and repository structure. 
+
 
 ## [0.1.0 (build 22)]  - 2019-10-08 
 ### Added
@@ -120,17 +144,21 @@
 - The climate_velocity() was renamed to the much shorter 'vocc()'
 - The remote server variable is now called 'csph', shorter than chronosphere.
 
+
 ## [0.1.0 (build 21)]  - 2019-09-7 
 ### Changed
 - package name changed from 'earthhist' to 'chronosphere'
+
 
 ## [0.0.1 (build 20)]  - 2019-09-25 
 ### Changed
 - remote server variable place
 
+
 ## [0.0.1 (build 19)]  - 2019-09-25 
 ### Added
 - enumerate argument to the reconstruct()-matrix method, for different age vectorization
+
 
 ## [0.0.1 (build 18)]  - 2019-09-24 
 ### Added
@@ -139,9 +167,11 @@
 ### Changed
 - Wrapped the gplates_reconstruct_points() function in IteratedPointReconstruction() to iteratively query points, thus evading error with too long URL
 
+
 ## [0.0.1 (build 17)]  - 2019-09-19 
 ### Changed
 - tiny bug fix in fetch()
+
 
 ## [0.0.1 (build 16)]  - 2019-08-14 
 ### Added
@@ -152,14 +182,17 @@
 - datadir arg of fetch() is redone, archives are saved
 - ages of 'sst' variable in 'earthhist' are rounded to 5s
 
+
 ## [0.0.1 (build 15)]  - 2019-08-09 
 ### Added
 - the datadir argument for fetch() and for dataindex()
 - some test examples for RasterArray-subset method
 
+
 ## [0.0.1 (build 14)]  - 2019-07-25 
 ### Changed
 - fetch() bug fixed.
+
 
 ## [0.0.1 (build 13)]  - 2019-07-25 
 ### Changed
@@ -167,10 +200,12 @@
 messing up the order of the layers, leading to misalignment between RasterArray proxy indices and layer names
 - test examples changed for DEM
 
+
 ## [0.0.1 (build 12)]  - 2019-07-25 
 ### Added
 - reconstruct() wrapper function for all gplates web serviced based functions
 - verbose argument for the reconstruction internals
+
 
 ## [0.0.1 (build 11)]  - 2019-07-24 
 ### Added
@@ -179,18 +214,22 @@ messing up the order of the layers, leading to misalignment between RasterArray 
 ### Changed
 - fetch() age correction
 
+
 ## [0.0.1 (build 10)]  - 2019-07-23 
 ### Added
 - the gplates_reconstruct_points(), gplates_reconstruct_coastlines(), gplates_reconstruct_static_polygons() was added for gplates reconstructions. 
+
 
 ## [0.0.1 (build 9)]  - 2019-07-21 
 ### Added
 - the matchtime() function was added for matching series of maps with a predefined time scale.
 
+
 ## [0.0.1 (build 8)]  - 2019-07-20 
 ### Added
 - unit testing framework established specific example for fetch()
 - resample() and crop() methods added for RasterArray
+
 
 ## [0.0.1 (build 7)]  - 2019-07-19/2 
 ### Added
@@ -237,10 +276,12 @@ messing up the order of the layers, leading to misalignment between RasterArray 
 ### Added
 - the matchtime() function was added for matching series of maps with a predefined time scale.
 
+
 ## [0.0.1 (build 8)]  - 2019-07-20 
 ### Added
 - unit testing framework established specific example for fetch()
 - resample() and crop() methods added for RasterArray
+
 
 ## [0.0.1 (build 7)]  - 2019-07-19/2 
 ### Added
