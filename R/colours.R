@@ -31,11 +31,10 @@ gradinv <- grDevices::colorRampPalette(c("#33358a", "#76acce", "#fff99a",  "#e22
 #' @rdname ramps
 #' 
 #' @export 
-ocean <- colorRampPalette(c("#000000","#000209","#000413","#00061E",
-                            "#000728","#000932","#002650","#00426E",
-                            "#005E8C","#007AAA","#0096C8","#22A9C2",
-                            "#45BCBB","#67CFB5","#8AE2AE","#ACF6A8",
-                            "#BCF8B9","#CBF9CA","#DBFBDC","#EBFDED"))
+ocean <- colorRampPalette(c("#131328FF","#060717FF","#232243FF","#2F2D5DFF",
+                            "#383771FF","#3B4284FF","#40549EFF","#416EB0FF",
+                            "#4782B9FF","#5899C0FF","#6FB2CAFF","#8AC8D4FF",
+                            "#A4D6DCFF","#BCE4E6FF","#DDF5F6FF"))
 
 #' colour ramp: terra
 #' @rdname ramps
