@@ -1,5 +1,8 @@
-"name","dat","var","res","ver","author","rotation","proj4string","date","type","public","reference","comment","X"
-"Digital Elevation model","paleomap","dem",1,"20190719","Scotese","PALEOMAP","proj","date","raster",TRUE,NA,"",NA
-"Paleorasters","paleomap","paleoatlas",0.1,"20160419v3","Scotese","PALEOMAP","proj","date","raster",TRUE,NA,"Caradocian map omitted, same date as Darriwillian",NA
-"Paleorasters","paleomap","paleoatlas",0.5,"20160419v3","csph","PALEOMAP","proj","date","raster",TRUE,NA,"Resampled from 0.1",NA
-"Paleobiology Database","pbdb","",NA,"20191108","PBDB","GPLATES","","2019-11-08","data.frame",TRUE,NA,"",NA
+"name","dat","var","res","ver","author","rotation","proj4string","date","type","format","separator","public","citation","comment","X"
+"Digital Elevation model","paleomap","dem","1","20190719","Scotese","PALEOMAP","proj","date","raster","","",TRUE,"","",""
+"Paleorasters","paleomap","paleoatlas","0.1","20160419v3","Scotese","PALEOMAP","proj","date","raster","","",TRUE,"","Caradocian map omitted, same date as Darriwillian",""
+"Paleorasters","paleomap","paleoatlas","0.5","20160419v3","csph","PALEOMAP","proj","date","raster","","",TRUE,"","Resampled from 0.1",""
+"Paleobiology Database","pbdb","","","20191108","PBDB","GPLATES","","20191108","data.frame","rds","",TRUE,"Please remember to acknowledge the Paleobiology Database in your publication.","",""
+"Continent Fragmentation index of Zaffos et al. 2017","timeseries","contfrag","","zaffos_et_al_2017","Zaffos et al.","","","","data.frame","csv","comma",TRUE,"Zaffos"," A."," Finnegan"
+NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
