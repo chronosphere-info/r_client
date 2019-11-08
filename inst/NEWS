@@ -1,5 +1,11 @@
 # Change log of the R package 'chronosphere'
 
+## [0.1.7 (build 41)]  - 2019-11-08 
+### Added
+- support for data.frame -type download and new data
+- The verbose argument of the dataindex() and fetch() functions
+
+
 ## [0.1.6 (build 40)]  - 2019-11-07 
 ### Added
 - the rangelocator() function

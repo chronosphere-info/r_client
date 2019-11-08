@@ -4,10 +4,12 @@
 \alias{dataindex}
 \title{Download a database extract from \code{chronosphere} remote server}
 \usage{
-dataindex(datadir = NULL)
+dataindex(datadir = NULL, verbose = FALSE)
 }
 \arguments{
 \item{datadir}{Directory where the downloaded file 'reg.csv' file is kept. Individual layers will be looked up from the directory if this is given, and will be downloaded if they are not found. The default \code{NULL} option will download data to a temporary directory that exists only until the R session ends.}
+
+\item{verbose}{Should console feedback during download be displayed?}
 }
 \description{
 The function will download a list of available data from the data repository

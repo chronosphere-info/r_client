@@ -2,20 +2,23 @@
 % Please edit documentation in R/fetching.R
 \name{fetch}
 \alias{fetch}
-\title{Data layer fetching}
+\title{Data fetching}
 \usage{
-fetch(dat, var, res = 1, ver = NULL, datadir = NULL)
+fetch(dat, var = NULL, ver = NULL, res = 1, datadir = NULL,
+  verbose = FALSE)
 }
 \arguments{
 \item{dat}{The dataset to get variables from.}
 
 \item{var}{Vector of variable names to get.}
 
-\item{res}{The resolution of the layers. This has to be the same for all layers.}
-
 \item{ver}{The version of the variable. Defaults to \code{NULL}, which will download the latest available version. We have to create a data table, which should be part of the package. This has to be searched for valid argument combinations. Right this is just a folder with a date.}
 
+\item{res}{The resolution of raster layers. This has to be the same for all RasterLayers that make up the variable.}
+
 \item{datadir}{Directory where downloaded files are kept. Individual layers will be looked up from the directory if this is given, and will be downloaded if they are not found. The default \code{NULL} option will download data to a temporary directory that exists only until the R session ends.}
+
+\item{verbose}{Should console feedback during download be displayed?}
 }
 \description{
 Function to download and attach variables in the \code{chronosphere} package

@@ -10,8 +10,9 @@ userpwd <- NULL
 #' 
 #' @param datadir Directory where the downloaded file 'reg.csv' file is kept. Individual layers will be looked up from the directory if this is given, and will be downloaded if they are not found. The default \code{NULL} option will download data to a temporary directory that exists only until the R session ends.
 #'
+#' @param verbose Should console feedback during download be displayed?
 #' @export
-dataindex <- function(datadir=NULL){
+dataindex <- function(datadir=NULL, verbose=FALSE){
 		
 	# if it does not exist in datadir, then 
 	# by default, download the file
@@ -46,9 +47,9 @@ dataindex <- function(datadir=NULL){
 	if(download){
 		# do the download
 		if(is.null(userpwd)){
-			download.file(paste(remote, "reg.csv", sep = ""),temp, mode="wb")
+			download.file(paste(remote, "reg.csv", sep = ""),temp, mode="wb", quiet=!verbose)
 		}else{
-			download.file(paste("ftp://", userpwd, "@",remote, "reg.csv", sep = ""),temp, mode="wb")
+			download.file(paste("ftp://", userpwd, "@",remote, "reg.csv", sep = ""),temp, mode="wb", quiet=!verbose)
 		}	
 		
 		# and set return value
@@ -62,7 +63,7 @@ dataindex <- function(datadir=NULL){
 	return(ret)
 }
 
-#' Data layer fetching
+#' Data fetching
 #' 
 #' Function to download and attach variables in the \code{chronosphere} package
 #' 
@@ -70,36 +71,179 @@ dataindex <- function(datadir=NULL){
 #' Version 2.
 #' @param dat The dataset to get variables from.
 #' @param var Vector of variable names to get.
-#' @param res The resolution of the layers. This has to be the same for all layers.
+#' @param res The resolution of raster layers. This has to be the same for all RasterLayers that make up the variable.
 #' @param ver The version of the variable. Defaults to \code{NULL}, which will download the latest available version. We have to create a data table, which should be part of the package. This has to be searched for valid argument combinations. Right this is just a folder with a date.
 #' @param datadir Directory where downloaded files are kept. Individual layers will be looked up from the directory if this is given, and will be downloaded if they are not found. The default \code{NULL} option will download data to a temporary directory that exists only until the R session ends.
+#' @param verbose Should console feedback during download be displayed?
 #' @examples
 #' 	a <- fetch(dat="paleomap", var="dem")
 #' 	b <- fetch(dat="paleomap", var="paleoatlas", res=0.1)
 #' @export
-fetch <- function(dat, var, res=1, ver=NULL, datadir=NULL){
+fetch <- function(dat, var=NULL, ver=NULL, res=1, datadir=NULL, verbose=FALSE){
 	# get the remote server data, or read it from hard drive!
-	register <- dataindex(datadir=datadir)
-
+	register <- dataindex(datadir=datadir, verbose=verbose)
+	
 	# the data have to use the same resolution!!!
-	if(length(res)>1) stop("Only one resolution can be used in a single download call.")
+	if(length(dat)>1) stop("Only one dataset can be accessed in a single download call.")
 
-	# and select that part
-	register <- register[register[, "res"]==res, , drop=FALSE]
-
+	# subset registry to dataset
+	bDat <- register$dat==dat
+	
+	if(any(bDat)){
+		register <- register[bDat, ]
+	}else{
+		stop(paste("The dataset '", dat, "' does not exist." , sep=""))
+	}
+	
 	# if one of the variables do not exist, then omit it
 	present <- var%in%register$var
 
 	# stop if not present
 	if(any(!present)){
-		if(length(present)==1) stop("Variable does not exist at the given resolution.")
-		if(sum(present)==0) stop("No given variables exist at the given resolution.")
+		if(length(present)==1) stop(paste("Variable '", var, "' does not exist.", sep=""))
+		if(sum(present)==0) stop("The variables do not exist.")
 		
 		# some do, but some are missing
-		warning(paste("The variable(s) '",paste(var[!present],collapse="', '"), "' do not exist at \nthe given resolution and are omitted.",  sep=""))
+		warning(paste("The variable(s) '",paste(var[!present],collapse="', '"), "' do not exist at and is/are omitted.",  sep=""))
 		var<-var[present]
 	}
 
+	# check whether the types are compatible
+	if(!is.null(var)) bVar <- register$var%in%var else bVar <- rep(T, nrow(register))
+
+	# which variable is which type?
+	varType <- unique(register$type[bVar])
+	
+	# only one variable type is allowed!
+	if(length(varType)>1){
+		ret <- register[bVar, c("var", "type")]
+		print(ret)
+		stop("You can only download one variable type in a single download call.\nRepeat download with one type.")
+	}
+
+	# subset the register to only look for var-specific part
+	if(!is.null(var)){
+		register <- register[which(register$var==var),]
+	}
+	
+
+	# method dispatch
+	if(varType=="raster"){
+		final <- fetchRaster(dat=dat, var=var, ver=ver, res=res, datadir=datadir, register=register, verbose=verbose)
+	}
+
+	if(varType=="data.frame"){
+		# check for non-related input
+		if(res!=1) warning("Argument 'res' is ignored for data.frame fetching.")
+		final <- fetchDF(dat=dat, var=var, ver=ver, datadir=datadir, register=register, verbose=verbose)
+	}
+	
+	return(final)
+	
+}
+
+# data.frame-specific submodule of fetch()
+fetchDF <- function(dat, var, ver, datadir, register, verbose=TRUE){
+	# unlikely to have multiple variables
+	if(length(var)>1) stop("Only one data.frame type variable can be downloaded.")
+	
+	# check structure database, whether the given verison is alright
+	if(is.null(var)){
+		varReg <- register
+		varName <- NULL
+		varPath <- NULL
+	}else{
+		varReg<- register[register[,"var"]==var, ,drop=FALSE]
+		varName <- paste(var, "_", sep="")
+		varPath <- paste(var, "/", sep="")
+	}
+
+
+	# no version number given for the variable
+	if(is.null(ver)){
+		# select latest version 
+		ver <- varReg[order(varReg[,"ver"], decreasing=TRUE)==1,"ver"]
+	
+	# version number is given 
+	}else{
+		if(!any(ver==varReg[, "ver"])) stop(paste("Invalid variable version for ", var, sep=""))
+	}
+	
+	# formatting
+	format<-unique(varReg$format)
+	
+	# the name of the res_variable_ver-specific archive
+	archive<- paste(dat, "_", varName, ver, ".", format, sep="")
+	
+	
+	# save the data for later?	 
+	if(!is.null(datadir)){
+		
+		#check whether the data need to be downloaded or not. 
+		all<-list.files(datadir)
+		
+		# target
+		pathToFile<- file.path(datadir, archive)
+			
+		# is the archive not downloaded?
+		# do a download
+		if(!any(all==archive)){
+			# download archive
+			if(is.null(userpwd)){
+				download.file(paste(remote, dat,"/",  varPath, archive,  sep = ""),pathToFile, mode="wb",quiet=!verbose)
+			}else{
+				download.file(paste("ftp://", userpwd, "@",remote, dat,"/",  varPath, archive,  sep = ""),pathToFile, mode="wb",quiet=!verbose)
+			}
+		}
+
+	# must download
+	}else{
+		
+		# temporary files
+		temp <- tempfile()
+	
+		# download archive
+		if(is.null(userpwd)){
+			download.file(paste(remote, dat,"/",  varPath, archive,  sep = ""),temp, mode="wb",quiet=!verbose)
+		}else{
+			download.file(paste("ftp://", userpwd, "@",remote, dat,"/",  varPath, archive,  sep = ""),temp, mode="wb",quiet=!verbose)
+		}
+
+		pathToFile<-temp
+	}
+	
+	# read the file in
+	if(format=="rds"){
+		# read in the file
+		if(verbose) cat("Reading downloaded file.\n")
+		final <- readRDS(pathToFile)
+	}
+
+	if(format=="csv"){
+		separator <- unique(varReg$separator)
+		if(separator=="comma") sep <- ","
+		if(separator=="semicolon") sep <- ";"
+		final <- read.csv(pathToFile, header=TRUE, sep=sep, stringsAsFactors=FALSE)
+	}
+	return(final)
+}
+
+
+# Raster-specific submodule of fetch()
+fetchRaster <- function(dat, var, res=1, ver=NULL, datadir=NULL, register=register, verbose=TRUE){
+
+	# the data have to use the same resolution!!!
+	if(length(res)>1) stop("Only one resolution can be used in a single download call.")
+
+	# subset the register to the resolution of interest
+	register <- register[register[, "res"]==res, , drop=FALSE] 
+
+	# check whether resolution is there, before the download
+	for(j in 1:length(var)){
+		if(sum(register[,"var"]==var[j])==0){
+			stop(paste("The variable '", var[j], "' does not exist at the desired resolution (", res, "). ", sep=""))
+		}
+	}
 
 	# resolution variable for files
 	resChar<-gsub("\\.","p", as.character(res))
@@ -158,7 +302,13 @@ fetch <- function(dat, var, res=1, ver=NULL, datadir=NULL){
 			# is the archive not downloaded?
 			# do a download
 			if(!any(all==archive)){
-				download.file(paste(remote, dat,"/",  res,"/", var[j], "/", archive,  sep = ""),pathToArchive, mode="wb")
+
+				# download archive
+				if(is.null(userpwd)){
+					download.file(paste(remote, dat,"/",  res,"/", var[j], "/", archive,  sep = ""),pathToArchive, mode="wb", quiet=!verbose)
+				}else{
+					download.file(paste("ftp://", userpwd, "@",remote, dat,"/",  res,"/", var[j], "/", res,"_",  var[j],"_", version, ".zip",  sep = ""),pathToArchive, mode="wb", quiet=!verbose)
+				}
 			}
 
 			# and unzip to a temporary directory
@@ -171,9 +321,9 @@ fetch <- function(dat, var, res=1, ver=NULL, datadir=NULL){
 		
 			# download archive
 			if(is.null(userpwd)){
-				download.file(paste(remote, dat,"/",  res,"/", var[j], "/", archive,  sep = ""),temp, mode="wb")
+				download.file(paste(remote, dat,"/",  res,"/", var[j], "/", archive,  sep = ""),temp, mode="wb", quiet=!verbose)
 			}else{
-				download.file(paste("ftp://", userpwd, "@",remote, dat,"/",  res,"/", var[j], "/", res,"_",  var[j],"_", version, ".zip",  sep = ""),temp, mode="wb")
+				download.file(paste("ftp://", userpwd, "@",remote, dat,"/",  res,"/", var[j], "/", res,"_",  var[j],"_", version, ".zip",  sep = ""),temp, mode="wb", quiet=!verbose)
 			}
 			
 		
@@ -300,6 +450,4 @@ fetch <- function(dat, var, res=1, ver=NULL, datadir=NULL){
 	}
 
 	return(final)
-	
 }
-
