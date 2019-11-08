@@ -4,5 +4,3 @@
 "Paleorasters","paleomap","paleoatlas","0.5","20160419v3","csph","PALEOMAP","proj","date","raster","","",TRUE,"","Resampled from 0.1",""
 "Paleobiology Database","pbdb","","","20191108","PBDB","GPLATES","","20191108","data.frame","rds","",TRUE,"Please remember to acknowledge the Paleobiology Database in your publication.","",""
 "Continent Fragmentation index of Zaffos et al. 2017","timeseries","contfrag","","zaffos_et_al_2017","Zaffos et al.","","","","data.frame","csv","comma",TRUE,"Zaffos"," A."," Finnegan"
-NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
-NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
