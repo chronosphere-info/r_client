@@ -1,4 +1,5 @@
-name,dat,var,res,ver,author,distributor,rotation,proj4string,date,comment
-Digital Elevation model,paleomap,dem,1,20190719,Scotese,csph,PALEOMAP,proj,date,
-Paleorasters,paleomap,paleoatlas,0.1,20160419v3,Scotese,csph,PALEOMAP,proj,date,"Caradocian map omitted, same date as Darriwillian"
-Paleorasters,paleomap,paleoatlas,0.5,20160419v3,csph,csph,PALEOMAP,proj,date,Resampled from 0.1
+"name","dat","var","res","ver","author","rotation","proj4string","date","type","public","reference","comment","X"
+"Digital Elevation model","paleomap","dem",1,"20190719","Scotese","PALEOMAP","proj","date","raster",TRUE,NA,"",NA
+"Paleorasters","paleomap","paleoatlas",0.1,"20160419v3","Scotese","PALEOMAP","proj","date","raster",TRUE,NA,"Caradocian map omitted, same date as Darriwillian",NA
+"Paleorasters","paleomap","paleoatlas",0.5,"20160419v3","csph","PALEOMAP","proj","date","raster",TRUE,NA,"Resampled from 0.1",NA
+"Paleobiology Database","pbdb","",NA,"20191108","PBDB","GPLATES","","2019-11-08","data.frame",TRUE,NA,"",NA
