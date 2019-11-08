@@ -5,5 +5,5 @@
 "Paleobiology Database","pbdb","","","20191108","PBDB","GPLATES","","20191108","data.frame","rds","",TRUE,"Please remember to acknowledge the Paleobiology Database in your publication.","",""
 "Continent Fragmentation index of Zaffos et al. 2017","timeseries","contfrag","","zaffos_et_al_2017","Zaffos et al.","","","","data.frame","csv","comma",TRUE,"Zaffos, A., Finnegan, S., & Peters, S. E. (2017). Plate tectonic regulation of global marine animal diversity. Proceedings of the National Academy of Sciences, 114(22), 5653–5658. https://doi.org/10.1073/pnas.1702297114
 ","",""
-"J.J. Sepkoski's genus level compendium ","sepkoski","genera","","2002_kiessling","Sepkoski","","","2002","data.frame","csv","comma",TRUE,"Sepkoski"," J. J."," Jablonski"
+"J.J. Sepkoski's genus level compendium ","sepkoski","genera","","2002_kiessling","Sepkoski","","","2002","data.frame","csv","semicolon",TRUE,"Sepkoski"," J. J."," Jablonski"
 NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
