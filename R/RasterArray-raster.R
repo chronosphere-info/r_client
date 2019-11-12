@@ -392,3 +392,69 @@ setMethod(
 		return(y)
 	}
 )
+
+#' Calculate method for the RasterArray object
+#' 
+#' Calculate values for a new RasterLayer/RasterArray object from another RasterArray object, using a formula. 
+#' 
+#' The method is an extension of the \code{\link[raster]{calc}} function. The strucuture expressed as the RasterArray's dimensions allows the calculations to be iterated for different margins of the array, similarly to the \code{apply} function, controlled by the \code{margin} argument.
+#' 
+#' @param x A RasterArray class object.
+#' 
+#' @param fun function to be applied.
+#' 
+#' @param margin The \code{MARGIN} parameter of the \code{apply} function.
+#' 
+#' @param na.rm Remove NA values, if supported by 'fun' (only relevant when summarizing a multilayer Raster object into a RasterLayer)
+#' 
+#' @param forcefun logical. Force calc to not use fun with apply; for use with ambiguous functions and for debugging (see Details)
+#' 
+#' @param forceapply logical. Force calc to use fun with apply; for use with ambiguous functions and for debugging (see Details)
+#' 
+#' @examples
+#' data(demo)
+#' 
+#' d2 <- cbind(demo, demo)
+#' double <- calc(d2, margin=1, fun=sum)
+#' 
+#' @exportMethod calc
+setMethod(
+	"calc", 
+	c(x="RasterArray",fun="function"), 
+	function(x, fun, margin=NULL, na.rm=NULL, forcefun=FALSE, forceapply=FALSE){
+		# completely inherit from rasterstack
+		if(is.null(margin) | length(dim(x))==1){
+			if(is.null(na.rm)){
+				ret <- raster::calc(x=x@stack, fun=fun,  forcefun=forcefun, forceapply=forceapply)
+			}else{
+				ret <- raster::calc(x=x@stack, fun=fun,  na.rm=na.rm, forcefun=forcefun, forceapply=forceapply)
+			}
+		# margin passed to underlying tapply
+		}else{
+			if(is.null(na.rm)){
+				retList <- apply(proxy(x), margin, function(y){
+					# get relevant layers in the stack
+					raster::calc(x=x@stack[[y]], fun=fun,  forcefun=forcefun, forceapply=forceapply)
+				})
+
+				# ANOTHER APPLY LOOP CAN BE USED TO DEFINE TARGET OBJECT WITH HIGHER DIMENSIONS.
+				# FIRST, EXPERIMENT WITH 3d RASTERARRAYS.  THEN DEVELOP APPLY. 
+
+			}else{
+				retList <- apply(proxy(x), margin, function(y){
+					# get relevant layers in the stack
+					raster::calc(x=x@stack[[y]], fun=fun,  na.rm=na.rm, forcefun=forcefun, forceapply=forceapply)
+				})
+			}
+
+			# create a new RasterArray from the list of Layers
+			newStack <- raster::stack(retList)
+			ind <- 1:raster::nlayers(newStack)
+			names(ind) <- names(retList)
+			ret <- RasterArray(newStack, ind)
+		
+		}
+
+		return(ret)
+	}
+)

@@ -5,7 +5,7 @@
 \title{Data fetching}
 \usage{
 fetch(dat, var = NULL, ver = NULL, res = 1, datadir = NULL,
-  verbose = FALSE)
+  verbose = TRUE)
 }
 \arguments{
 \item{dat}{The dataset to get variables from.}

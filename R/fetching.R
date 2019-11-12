@@ -79,7 +79,7 @@ dataindex <- function(datadir=NULL, verbose=FALSE){
 #' 	a <- fetch(dat="paleomap", var="dem")
 #' 	b <- fetch(dat="paleomap", var="paleoatlas", res=0.1)
 #' @export
-fetch <- function(dat, var=NULL, ver=NULL, res=1, datadir=NULL, verbose=FALSE){
+fetch <- function(dat, var=NULL, ver=NULL, res=1, datadir=NULL, verbose=TRUE){
 	# get the remote server data, or read it from hard drive!
 	register <- dataindex(datadir=datadir, verbose=verbose)
 	
@@ -123,7 +123,7 @@ fetch <- function(dat, var=NULL, ver=NULL, res=1, datadir=NULL, verbose=FALSE){
 
 	# subset the register to only look for var-specific part
 	if(!is.null(var)){
-		register <- register[which(register$var==var),]
+		register <- register[which(register$var%in%var),]
 	}
 	
 
