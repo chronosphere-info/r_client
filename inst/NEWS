@@ -7,6 +7,7 @@
 - the t() method for RasterArrays
 - bug fix for the fetch() function
 
+
 ## [0.1.7 (build 42)]  - 2019-11-12 
 ### Added
 - calc() method for 1-2 dim RasterArrays
