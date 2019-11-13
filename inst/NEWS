@@ -1,5 +1,12 @@
 # Change log of the R package 'chronosphere'
 
+
+## [0.1.7 (build 43)]  - 2019-11-13 
+### Added
+- warning for calc() method when margin is multidimensional.
+- the t() method for RasterArrays
+- bug fix for the fetch() function
+
 ## [0.1.7 (build 42)]  - 2019-11-12 
 ### Added
 - calc() method for 1-2 dim RasterArrays

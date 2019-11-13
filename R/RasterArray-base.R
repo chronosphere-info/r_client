@@ -359,3 +359,40 @@ is.na.RasterArray<-function(x){
 	is.na(proxy(x))
 }
 
+
+
+#' Transpose a RasterArray object
+#' 
+#' @examples
+#' data(demo)
+#' t(demo)
+#' @param x A RasterArray class object. 
+#' 
+#' @exportMethod t
+setMethod(
+	"t", 
+	"RasterArray", 
+	function(x){
+		if(length(dim(x))>2) stop("RasterArray is not a matrix. ")
+
+		# transpose index
+		tIndex<- t(x@index)
+		vIndex <- as.numeric(tIndex)
+
+		# ordering
+		vIndna <- vIndex[!is.na(vIndex)]
+
+		# reorder the stack
+		x@stack <- x@stack[[vIndna]]
+
+		# refill the index
+		tIndex[!is.na(tIndex)] <- 1:raster::nlayers(x@stack)
+
+		# replace the index
+		x@index <- tIndex
+
+		return(x)
+
+	}
+)
+

@@ -422,6 +422,11 @@ setMethod(
 	"calc", 
 	c(x="RasterArray",fun="function"), 
 	function(x, fun, margin=NULL, na.rm=NULL, forcefun=FALSE, forceapply=FALSE){
+		if(!is.null(margin)) if(length(margin)>1){
+			warning("Multidimensional margin is not yet implemented.\nThe 'margin' argument is forced to NULL.")
+			margin <- NULL
+		}
+
 		# completely inherit from rasterstack
 		if(is.null(margin) | length(dim(x))==1){
 			if(is.null(na.rm)){
@@ -429,7 +434,7 @@ setMethod(
 			}else{
 				ret <- raster::calc(x=x@stack, fun=fun,  na.rm=na.rm, forcefun=forcefun, forceapply=forceapply)
 			}
-		# margin passed to underlying tapply
+		# margin passed to underlying apply
 		}else{
 			if(is.null(na.rm)){
 				retList <- apply(proxy(x), margin, function(y){
