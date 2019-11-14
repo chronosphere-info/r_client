@@ -40,6 +40,7 @@
 #' # simple matrices
 #'  reconstruct(matrix(95, 54, nrow=1), 140)
 #'  
+#'  # points reconstruction
 #'  xy <-cbind(long=c(95,142), lat=c(54, -33))
 #'  reconstruct(xy, 140)
 #'
