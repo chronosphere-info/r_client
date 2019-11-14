@@ -46,14 +46,16 @@ setMethod("mapplot", signature="RasterArray",
 	}
 )
 
+#' @rdname mapplot
 setMethod("mapplot", signature="SpatialPolygonsDataFrame", 
-	definition = function(x, col="#71351d", ...){
+	definition = function(x, col="lightgrey", ...){
 		sp::plot(x, col=col,...)
 	}
 )
 
+#' @rdname mapplot
 setMethod("mapplot", signature="SpatialPolygons", 
-	definition = function(x, col="#71351d",  ...){
+	definition = function(x, col="lightgrey",  ...){
 		sp::plot(x, col=col,...)
 	}
 )
