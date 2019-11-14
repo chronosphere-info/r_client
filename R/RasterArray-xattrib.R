@@ -104,7 +104,7 @@ setReplaceMethod(
 	signature="RasterArray",
 	definition=function(x,  value){
 		# not defined for matrices or higher
-		if(is.null(names(x))) stop("The object has no names.")
+		if(is.null(names(x))) names(x@index) <- rep(NA, length(x@index))
 		names(x@index) <- value 
 		return(x)
 })

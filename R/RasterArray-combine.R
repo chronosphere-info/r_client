@@ -1,67 +1,87 @@
 # Functions to combine items that result in a RasterArray
 
 ###############################################################################
-# c()
+# combine()
 
 
 #' Combine RasterLayers and one-dimensional RasterArrays
 #'
 #' Methods sequences that start with an NA do not yet work. 
-#' @rdname c-methods
+#' @rdname combine
+#' @param x \code{RasterLayer} or \code{RasterArray} objects to combine.
+#' @examples
+#' data(demo)
+#' a <- combine(demo[1], demo[2])
 #' @export 
-c.RasterLayer<- function(...){
-	listArg <- list(...)
-	finRA <- listArg[[1]]
-	# store the system call
-	callSymb <- sys.call(which=-1)
+setGeneric("combine", function(x,...) standardGeneric("combine"))
 
-	# run loop only if it is more than 1
-	if(length(listArg)!=1){
-		for(i in 2:length(listArg)){
-			elem <- listArg[[i]]
-			# name of the first will be taken care of by c2
-			finRA<-c2(finRA, elem)
-			# try to overwrite the name - necessary for multiple combinations
-			if(class(elem)=="RasterLayer"){
-				if(is.symbol(callSymb[[i+1]])){
-					names(finRA)[length(finRA)] <- deparse(callSymb[[i+1]])
-				}else{
-					names(finRA)[length(finRA)] <- NA
+
+#' @rdname combine
+setMethod(
+	"combine",
+	"RasterLayer",
+
+	#c.RasterLayer<- 
+	function(x, ...){
+		listArg <- list(...)
+		finRA <- x
+		# store the system call
+		callSymb <- sys.call(which=-1)
+	
+		# run loop only if it is more than 1
+		if(length(listArg)!=0){
+			for(i in 1:length(listArg)){
+				elem <- listArg[[i]]
+				# name of the first will be taken care of by c2
+				finRA<-c2(finRA, elem)
+				# try to overwrite the name - necessary for multiple combinations
+				if(class(elem)=="RasterLayer"){
+					if(is.symbol(callSymb[[i+2]])){
+						names(finRA)[length(finRA)] <- deparse(callSymb[[i+2]])
+					}else{
+						names(finRA)[length(finRA)] <- NA
+					}
 				}
 			}
 		}
+	
+		return(finRA)
 	}
-
-	return(finRA)
-}
+)
 
 
-#' @rdname c-methods
+#' @rdname combine
 #' @export 
-c.RasterArray<-function(...){
-	listArg <- list(...)
-	finRA <- listArg[[1]]
-	# store the system call
-	callSymb <- sys.call(which=-1)
+setMethod(
+	"combine",
+	"RasterArray",
 
-	# run loop only if it is more than 1
-	if(length(listArg)!=1){
-		for(i in 2:length(listArg)){
-			elem <- listArg[[i]]
-			# name of the first will be taken care of by c2
-			finRA<-c2(finRA, elem)
-			# try to overwrite the name - necessary for multiple combinations
-			if(class(elem)=="RasterLayer"){
-				if(is.symbol(callSymb[[i+1]])){
-					names(finRA)[length(finRA)] <- deparse(callSymb[[i+1]])
-				}else{
-					names(finRA)[length(finRA)] <- NA
+	#c.RasterArray<-
+	function(x, ...){
+		listArg <- list(...)
+		finRA <- x
+		# store the system call
+		callSymb <- sys.call(which=-1)
+	
+		# run loop only if it is more than 1
+		if(length(listArg)!=0){
+			for(i in 1:length(listArg)){
+				elem <- listArg[[i]]
+				# name of the first will be taken care of by c2
+				finRA<-c2(finRA, elem)
+				# try to overwrite the name - necessary for multiple combinations
+				if(class(elem)=="RasterLayer"){
+					if(is.symbol(callSymb[[i+2]])){
+						names(finRA)[length(finRA)] <- deparse(callSymb[[i+2]])
+					}else{
+						names(finRA)[length(finRA)] <- NA
+					}
 				}
 			}
 		}
+		return(finRA)
 	}
-	return(finRA)
-}
+)
 
 ################################################################
 # Internals for c- methods
@@ -128,6 +148,27 @@ setMethod("c2", c("RasterLayer", "list"),
 
 	}
 )
+
+
+# if somebody wants to do this, than that really wants a list instead
+setMethod("c2", c("RasterArray", "list"),
+	function(x,y){
+		ind <- c(as.list(x), y)
+
+#		callSymb <- sys.call(which=-3)
+#		if(is.symbol(callSymb[[2]])){
+#			names(ind)[1] <- deparse(callSymb[[2]])
+#		}
+#
+#		if(is.symbol(callSymb[[3]])){
+#			names(ind)[2] <- deparse(callSymb[[3]])
+#		}
+
+		return(ind)
+
+	}
+)
+
 
 # adding NAs to the arrays
 setMethod("c2", signature=c("RasterArray", "logical"), 

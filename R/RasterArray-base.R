@@ -396,3 +396,6 @@ setMethod(
 	}
 )
 
+setMethod("as.list","RasterArray", function(x,...){
+	as.list(x@stack)
+})

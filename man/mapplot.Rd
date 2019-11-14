@@ -6,6 +6,8 @@
 \alias{mapplot,RasterLayer-method}
 \alias{mapplot,RasterStack-method}
 \alias{mapplot,RasterArray-method}
+\alias{mapplot,SpatialPolygonsDataFrame-method}
+\alias{mapplot,SpatialPolygons-method}
 \title{Wrapper function to plot maps of different classes}
 \usage{
 mapplot(x, ...)
@@ -16,6 +18,10 @@ mapplot(x, ...)
 \S4method{mapplot}{RasterStack}(x, col = gradinv(255), ...)
 
 \S4method{mapplot}{RasterArray}(x, col = gradinv(255), ...)
+
+\S4method{mapplot}{SpatialPolygonsDataFrame}(x, col = "lightgrey", ...)
+
+\S4method{mapplot}{SpatialPolygons}(x, col = "lightgrey", ...)
 }
 \arguments{
 \item{x}{Object to be plotted}
