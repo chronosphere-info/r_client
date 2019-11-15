@@ -4,6 +4,8 @@
 ### Added
 - The function groups Arith, Compare, Math, Math2, Summary are added for RasterArrays, inheriting from RasterStacks.
 - as.list
+- minor updates to documentation
+- default colour added to mapplot() of SpObjects
 
 ### Changed 
 - The c() method for the RasterArrays is renamed to combine() due avoid compatibility issues
