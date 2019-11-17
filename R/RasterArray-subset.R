@@ -88,7 +88,7 @@ setReplaceMethod(
 		# fetch the index
 		indDim <- dim(x@index)
 
-		sysCall <<- sys.call(which=-1)
+		sysCall <- sys.call(which=-1)
 
 		if(sum(is.na(value))!=length(value)) stop("Invalid replacement type.")
 		if(is.null(indDim) | length(indDim)==1){
