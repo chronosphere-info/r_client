@@ -221,6 +221,11 @@ setMethod("summary",
 	}
 )
 
+
+ProjectRaster <- function(from, ...){
+	
+}
+
 #' Project a RasterArray object
 #'
 #' The uppercase first letter is temporary until the a proper S4 generic of the function is implemented in the \code{raster} package.
@@ -229,11 +234,17 @@ setMethod("summary",
 #' 
 #' @param ... Arguments passed to the projectRaster() function.
 #' 
-#' @export
-ProjectRaster <- function(from, ...){
-	from@stack <- raster::stack(raster::projectRaster(from=from@stack, ...))
-	return(from)
-}
+#' @exportMethod projectRaster
+setGeneric("projectRaster", def=raster::projectRaster)
+
+setMethod("projectRaster", "RasterArray", 
+	function(from, to, res, crs, method="bilinear", 
+             alignOnly=FALSE, over=FALSE){
+		from@stack <- raster::stack(raster::projectRaster(from=from@stack, to=to, res=res, 
+			crs=crs, method=method, alignOnly=alignOnly, over=over))
+		return(from)
+	}
+)
 
 
 

@@ -396,6 +396,58 @@ setMethod(
 	}
 )
 
+#' @exportMethod as.list
 setMethod("as.list","RasterArray", function(x,...){
 	as.list(x@stack)
 })
+
+
+#' Apply-type iterator for RasterArrays
+#' 
+#' The function implements the apply-type iterators for the RasterArray class. Output values are constrained to RasterArrays, whenever possible. 
+#' Not yet implemented for multidimensional MARGINs.
+#' @examples
+#' # not yet
+#' a<- cbind(demo, demo)
+#' @rdname apply-methods
+#' @exportMethod apply
+setGeneric("apply", def=base::apply)
+
+#' @rdname apply-methods
+setMethod("apply", "RasterArray",
+	function(X, MARGIN, FUN,...){
+		if(length(dim(X))==1) stop("The 'apply()'' function is not applicable to vector-like RasterArrays.\nUse 'sapply()'' instead.")
+		if(length(MARGIN)>1) stop("Not yet implemented for multidimensinal margins.")
+
+		ret <-apply(X@index, MARGIN, function(y){
+			# get the columns/rows associated with this subset
+			layers <- X[y]
+			# and plug it into the supplied function
+			FUN(layers)
+		})
+
+		# draft of the apply output structure
+		struct <- apply(X@index, MARGIN, function(y) 1)
+
+		# if this output is a rasterlayer make an exception!
+		if(is.list(ret)){
+			classOfItems <- unlist(lapply(ret, function(y) class(y)!="RasterLayer"))
+			if(sum(unique(classOfItems))==0){
+				bNA <- is.na(classOfItems)
+
+				# transform this to a rasterArray
+				newStack <- raster::stack(ret[!bNA])
+				# index
+				struct[!bNA] <- 1:sum(!bNA)
+				names(struct) <- names(ret)
+
+				ret <- RasterArray(newStack, struct)
+
+			}
+		}
+
+		return(ret)
+	}
+)
+
+

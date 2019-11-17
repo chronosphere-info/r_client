@@ -1,5 +1,11 @@
 # Change log of the R package 'chronosphere'
 
+## [0.1.10 (build 46)]  - 2019-11-17 
+### Changed
+- raster::projectRaster()-transformed to generic, RasterArray projection function is now: projectRaster() instead of ProjectRaster()
+- solved bug with subset method of RasterArrays RA[1] returns first layer instead of wrong first row.
+- solved same bug with setReplacement [<- method
+
 ## [0.1.9 (build 45)]  - 2019-11-15 
 ### Added
 - mapplot() for RasterArrays implemented

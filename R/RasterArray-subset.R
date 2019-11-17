@@ -5,7 +5,7 @@
 setMethod(
 	"subset", 
 	signature(x="RasterArray"), 
-	function(x, i,j, ..., drop=TRUE, filename=""){
+	function(x, i,j, ...,oneDim=FALSE, drop=TRUE, filename=""){
 			# fetch the index
 			indDim <- dim(x@index)
 
@@ -16,7 +16,13 @@ setMethod(
 
 			# two dim case
 			if(length(indDim)>=2){
-				originIndex <-x@index[i,j,...]
+				# multidimensional subscript
+				if(!oneDim){
+					originIndex <-x@index[i,j,...]
+				# one dimensional subscript
+				}else{
+					originIndex<-x@index[i, drop=TRUE]
+				}
 			}
 		
 			# constrain one dimension
@@ -62,7 +68,14 @@ setMethod(
 	"[",
 	signature(x="RasterArray", i="ANY", j="ANY"),
 	definition=function(x,i,j,..., drop=TRUE){
-		subset(x,i,j,..., drop=drop)
+		sysCall <- sys.call(which=-1)
+
+		oneDim<-FALSE
+		if(length(sysCall)==3){
+			oneDim <- TRUE
+		}
+		subset(x,i,j,..., oneDim=oneDim, drop=drop)
+		
 	}
 )
 
@@ -75,6 +88,8 @@ setReplaceMethod(
 		# fetch the index
 		indDim <- dim(x@index)
 
+		sysCall <<- sys.call(which=-1)
+
 		if(sum(is.na(value))!=length(value)) stop("Invalid replacement type.")
 		if(is.null(indDim) | length(indDim)==1){
 			if(length(i)!=length(value) & length(value)!=1) stop("Invalid replacement length.")
@@ -85,8 +100,14 @@ setReplaceMethod(
 		
 		# multi- dim case
 		if(length(indDim)>=2){
-			theIndex <- x@index[i,j,...]
-			x@index[i,j,...] <- NA
+			# one dimensinoal 
+			if(length(sysCall)==4){
+				theIndex <- x@index[i]
+				x@index[i] <- NA
+			}else{
+				theIndex <- x@index[i,j,...]
+				x@index[i,j,...] <- NA
+			}
 		}
 
 		# ensure flat index

@@ -210,7 +210,7 @@ setMethod("mapplot", signature="RasterArray",
           }
 )
 
-mapplot(demo)
+
 #' @rdname mapplot
 setMethod("mapplot", signature="SpatialPolygonsDataFrame", 
 	definition = function(x, col="lightgrey", ...){

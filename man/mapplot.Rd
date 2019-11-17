@@ -12,12 +12,14 @@
 \usage{
 mapplot(x, ...)
 
-\S4method{mapplot}{RasterLayer}(x, col = gradinv(255), legend = FALSE,
-  ...)
+\S4method{mapplot}{RasterLayer}(x, col = gradinv(255), axes = FALSE,
+  box = FALSE, legend = FALSE, legend.title = NULL, ...)
 
 \S4method{mapplot}{RasterStack}(x, col = gradinv(255), ...)
 
-\S4method{mapplot}{RasterArray}(x, col = gradinv(255), ...)
+\S4method{mapplot}{RasterArray}(x, col = gradinv(255), rgb = FALSE,
+  legend = FALSE, axes = FALSE, box = FALSE, ask = TRUE,
+  nplots = 6, legend.title = NULL, plot.title = NULL, ...)
 
 \S4method{mapplot}{SpatialPolygonsDataFrame}(x, col = "lightgrey", ...)
 
