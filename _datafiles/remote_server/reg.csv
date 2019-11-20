@@ -1,8 +1,3 @@
-"�..name","dat","var","res","ver","author","rotation","proj4string","date","type","format","separator","public","citation","comment","X"
-"Digital Elevation model","paleomap","dem",1,"20190719","Scotese","PALEOMAP","proj","date","raster","","",TRUE,"Scotese, C. R. Wright, N. (2018). PALEOMAP Paleodigital Elevation Models (PaleoDEMS) for the Phanerozoic. URL: https://www.earthbyte.org/paleodem-resource-scotese-and-wright-2018/","",""
-"Paleorasters","paleomap","paleoatlas",0.1,"20160419v3","Scotese","PALEOMAP","proj","date","raster","","",TRUE,"","\"Caradocian map omitted"," same date as Darriwillian\""
-"Paleorasters","paleomap","paleoatlas",0.5,"20160419v3","csph","PALEOMAP","proj","date","raster","","",TRUE,"","Resampled from 0.1",""
-"Paleobiology Database","pbdb","",NA,"20191108","PBDB","GPLATES","","20191108","data.frame","rds","",TRUE,"Please remember to acknowledge the Paleobiology Database (http://paleobiodb.org) in your publication.","",""
-"Continent Fragmentation index of Zaffos et al. 2017","timeseries","fragment",NA,"zaffos_et_al_2017","Zaffos et al.","","","","data.frame","csv","comma",TRUE,"Zaffos, A., Finnegan, S., & Peters, S. E. (2017). Plate tectonic regulation of global marine animal diversity. Proceedings of the National Academy of Sciences, 114(22), 5653–5658. https://doi.org/10.1073/pnas.1702297114","",""
-"J.J. Sepkoski's genus level compendium ","sepkoski","genera",NA,"2002_kiessling","Sepkoski","","","2002","data.frame","csv","semicolon",TRUE,"Sepkoski, J. J., Jablonski, D. & Foote, M. (2002). Sepkoski’s Genus Compendium—Editors Introduction & Timescale. no.363 (2002). ","","Numeric stratigraphic entries added by Wolfgang Kiessling"
-"The PaleoReefs Database","pared","public",NA,"20191118","","","","20191118","data.frame","csv","comma",TRUE,"Kiessling, W., & Flügel, E. (2002). Paleoreefs—A Database on Phanerozoic Reefs. In Phanerozoic Reef Patterns: Vol. Phanerozoic Reef Patterns (pp. 77–92).","",""
+version https://git-lfs.github.com/spec/v1
+oid sha256:3057752feeac19f6ef410666405c42d6764744349b9842917b8135ecb8c1719d
+size 1971

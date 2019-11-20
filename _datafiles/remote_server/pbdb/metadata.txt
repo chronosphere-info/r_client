@@ -1,16 +1,3 @@
-"Data Provider","The Paleobiology Database"
-"Data Source","The Paleobiology Database"
-"Data License","Creative Commons CC-BY"
-"License URL","http://creativecommons.org/licenses/by/4.0/"
-"Documentation URL","http://paleobiodb.org/data1.2/occs/list_doc.html"
-"Data URL","http://paleobiodb.org/data1.2/occs/list.csv?datainfo&rowcount&interval=Ediacaran,Holocene&show=class,classext,genus,subgenus,abund,coll,coords,loc,paleoloc,strat,stratext,lith,env,ref,crmod,timebins,timecompare"
-"Access Time","Fri 2019-11-08 10:00:11 GMT"
-"Title","PBDB Data Service"
-"Parameters:"
-"","interval","Ediacaran,Holocene"
-"","timerule","major"
-"","taxon_status","all"
-"","show","class,classext,genus,subgenus,abund,coll,coords,loc,paleoloc,strat,stratext,lith,env,ref,crmod,timebins,timecompare"
-"Elapsed Time","154"
-"Records Found","1426122"
-"Records Returned","1426122"
+version https://git-lfs.github.com/spec/v1
+oid sha256:b1b076d113643158f2cbf687250078cd444adea8279e51196dec375321dc89c8
+size 852
