@@ -137,10 +137,106 @@ fetch <- function(dat, var=NULL, ver=NULL, res=1, datadir=NULL, verbose=TRUE){
 		if(res!=1) warning("Argument 'res' is ignored for data.frame fetching.")
 		final <- fetchDF(dat=dat, var=var, ver=ver, datadir=datadir, register=register, verbose=verbose)
 	}
+
+	if(varType=="platemodel"){
+		# check for non-related input
+		if(res!=1) warning("Argument 'res' is ignored for plate model fetching.")
+		final <- fetchModel(dat=dat, var=var, ver=ver, datadir=datadir, register=register, verbose=verbose)
+	}
 	
 	return(final)
 	
 }
+
+fetchModel <- function(dat, var, ver, datadir, register, verbose=TRUE){
+	# unlikely to have multiple variables
+	if(length(var)>1) stop("Only one data.frame type variable can be downloaded.")
+	
+	# check structure database, whether the given verison is alright
+	if(is.null(var)){
+		varReg <- register
+		varName <- NULL
+		varPath <- NULL
+	}else{
+		varReg<- register[register[,"var"]==var, ,drop=FALSE]
+		varName <- paste(var, "_", sep="")
+		varPath <- paste(var, "/", sep="")
+	}
+
+	# no version number given for the variable
+	if(is.null(ver)){
+		# select latest version 
+		ver <- varReg[order(varReg[,"date"], decreasing=TRUE)==1,"ver"]
+	
+	# version number is given 
+	}else{
+		if(!any(ver==varReg[, "ver"])) stop(paste("Invalid variable version for ", var, sep=""))
+	}
+	
+	# formatting
+	format<-unique(varReg$format)
+	
+	# the name of the res_variable_ver-specific archive
+	dir <- paste(dat, "_", varName, ver,  sep="")
+	archive<- paste(dir, ".zip", sep="")
+	
+	# we need a temporary directory to store the extracted files until the end of the session
+	tempd <- tempdir()
+
+	# save the data for later?	 
+	if(!is.null(datadir)){
+		
+		#check whether the data need to be downloaded or not. 
+		all<-list.files(datadir)
+		
+		# target
+		pathToFile<- file.path(datadir, archive)
+			
+		# is the archive not downloaded?
+		# do a download
+		if(!any(all==archive)){
+			# download archive
+			if(is.null(userpwd)){
+				download.file(paste(remote, dat,"/",  varPath, archive,  sep = ""),pathToFile, mode="wb",quiet=!verbose)
+			}else{
+				download.file(paste("ftp://", userpwd, "@",remote, dat,"/",  varPath, archive,  sep = ""),pathToFile, mode="wb",quiet=!verbose)
+			}
+		}
+		# unzip it in temporary directory
+			unzip(pathToFile, exdir=tempd)
+		
+
+	# must download
+	}else{
+		
+		# temporary files
+		temp <- tempfile()
+	
+		# download archive
+		if(is.null(userpwd)){
+			download.file(paste(remote, dat,"/",  varPath,archive,  sep = ""),temp, mode="wb",quiet=!verbose)
+		}else{
+			download.file(paste("ftp://", userpwd, "@",remote, dat,"/",  varPath, archive,  sep = ""),temp, mode="wb",quiet=!verbose)
+		}
+
+		pathToFile<-file.path(temp, dir)
+
+		# unzip it in temporary directory
+		unzip(temp, exdir=tempd)
+		
+		# get rid of the archive
+		unlink(temp)
+	}
+	
+	# read the file in
+	if(format=="mod"){
+		# read in the file
+		final <- platemodel(paste(tempd, "/",dir, "/", dir, ".", format, sep=""))
+	}
+
+	return(final)
+}
+
 
 # data.frame-specific submodule of fetch()
 fetchDF <- function(dat, var, ver, datadir, register, verbose=TRUE){
@@ -451,3 +547,4 @@ fetchRaster <- function(dat, var, res=1, ver=NULL, datadir=NULL, register=regist
 
 	return(final)
 }
+

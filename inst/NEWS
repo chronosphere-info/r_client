@@ -1,5 +1,11 @@
 # Change log of the R package 'chronosphere'
 
+## [0.1.11 (build 47)]  - 2019-11-20 
+### Added
+- plate tectonic model class as a preparation for GPlates-based coordinate reconstruction
+- utility functions
+- the PaleoReefs database
+
 ## [0.1.10 (build 46)]  - 2019-11-17 
 ### Changed
 - raster::projectRaster()-transformed to generic, RasterArray projection function is now: projectRaster() instead of ProjectRaster()
