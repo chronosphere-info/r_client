@@ -13,6 +13,7 @@ platemodel <- setClass("platemodel", slots=list(name="character", rotation="char
 #' @param rotation If \code{path} is \code{NULL}, the path to the rotation file-part of the model.
 #' @param polygons If \code{path} is \code{NULL}, the path to the plate polygon file-part of the model.
 #' @rdname platemodel 
+#' @export platemodel
 setMethod("initialize",signature="platemodel",
 	definition=function(.Object,path=NULL, rotation=NULL, polygons=NULL){
 		if(!is.null(path)){

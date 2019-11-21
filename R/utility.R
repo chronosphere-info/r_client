@@ -45,7 +45,7 @@ newbounds <- function(x, cols=NULL, rows=NULL){
 #' @param ... arguments passed to the \code{\link[graphics]{locator}} fucntion
 # 
 #' @export
-rangelocator <- function(f="p",n=2, round=2,...){
+shaper <- function(f="p",n=2, round=2,...){
 	if(length(round)==1) round <- rep(round,2)
 
 	if(n==2){
@@ -136,9 +136,9 @@ rangelocator <- function(f="p",n=2, round=2,...){
 		if(!is.null(round)) ys<-round(ys, round)
 		for(i in 1:n){
 			if(i!=n){
-				cat(paste("  ", deparse(xs[i]),", ", deparse(xs[i]), ",\n", sep=""))
+				cat(paste("  ", deparse(xs[i]),", ", deparse(ys[i]), ",\n", sep=""))
 			}else{
-				cat(paste("  ", deparse(xs[i]),", ", deparse(xs[i]), "\n", sep=""))
+				cat(paste("  ", deparse(xs[i]),", ", deparse(ys[i]), "\n", sep=""))
 			}
 
 		}

@@ -11,8 +11,8 @@
 reconstruct(x, ...)
 
 \S4method{reconstruct}{matrix}(x, age, model = "PALEOMAP",
-  reverse = FALSE, listout = TRUE, verbose = TRUE,
-  enumerate = TRUE, chunk = 200)
+  listout = TRUE, verbose = FALSE, enumerate = TRUE, chunk = 200,
+  reverse = FALSE, path.gplates = NULL, cleanup = TRUE, dir = NULL)
 
 \S4method{reconstruct}{character}(x, age, model = "PALEOMAP",
   listout = TRUE, verbose = TRUE)
@@ -22,39 +22,50 @@ reconstruct(x, ...)
 }
 \arguments{
 \item{x}{are the features to be reconstructed. Can be a vector with longitude and latitude representing
-a single point or a matrix/dataframe with the first column as longitude and second column as latitude, or a SpatialPolygonsDataFrame class object. 
+a single point or a matrix/dataframe with the first column as longitude and second column as latitude, or a \code{SpatialPolygonsDataFrame} class object. 
 The character strings \code{"plates"} and \code{"coastlines"} return static plates and rotated present-day coastlines, respectively.}
 
 \item{age}{(\code{numeric})is the age in Ma at which the points will be reconstructed}
 
-\item{model}{(\code{character}) is the reconstruction model. The default is \code{"PALEOMAP"}. See details for available models.}
-
-\item{reverse}{(\code{logical}) the flag to control the direction of reconstruction. If \code{reverse = TRUE}, the function will 
-calculate the present-day coordinates of the given paleo-coordinates.}
+\item{model}{(\code{character} or \code{\link{platemodel}}) The  reconstruction model. The class of this argument selects the submodule used for reconstruction, a \code{character} value will invoke the remote reconstruction submodule and will submit \code{x} to the GPlates Web Service. A \code{platemodel} class object will call the local-reconstruction submodule. The default is \code{"PALEOMAP"}. See details for available models.}
 
 \item{listout}{(\code{logical})If multiple ages are given, the output can be returned as a \code{list} if \code{listout = TRUE}.}
 
-\item{verbose}{(\code{logical}) Should url calls be printed?}
+\item{verbose}{(\code{logical}) Should call URLs (remote submodule) or console feedback (local-submodule) be printed?}
 
 \item{enumerate}{(\code{logical}) Should be all coordinate/age combinations be enumerated and reconstructed (set to \code{TRUE} by default)? \code{FALSE} is applicable only if the number of rows in \code{x} is equal to the number elementes in \code{age}. Then a point will be reconstructed to the age that has the same index in \code{age} as the row of the coordinates in \code{x}. List output is not available in this case.}
 
-\item{chunk}{(\code{numeric}) Single integer, the number of coordinates that will be queried from the GPlates in a single go.}
+\item{chunk}{(\code{numeric}) Argument of the remote reconstruction submodule. Single integer, the number of coordinates that will be queried from the GPlates in a single go.}
+
+\item{reverse}{(\code{logical}) Argument of the remote reconstruction submodule. The flag to control the direction of reconstruction. If \code{reverse = TRUE}, the function will 
+calculate the present-day coordinates of the given paleo-coordinates.}
+
+\item{path.gplates}{(\code{character}) Argument of the local reconstruction submodule. In case the GPlates executable file is not found at the coded default location, the full path to the executable (gplates-<ver>.exe on Windows) can be entered here.}
+
+\item{cleanup}{(\code{logical}) Argument of the local reconstruction submodule. Should the temporary files be deleted immediately after reconstructions?}
+
+\item{dir}{(\code{character}) Argument of the local reconstruction submodule. Directory where the temporary files of the reconstruction are stored (defaults to a temporary directory created by R). Remember to toggle \code{cleanup} if you want to see the files.}
 }
 \description{
 Reconstruct the geographic locations from present day coordinates and spatial objects back to their paleo-positions. 
 Each location will be assigned a plate id and moved back in time using the chosen reconstruction model.
 }
 \details{
-The available reconstruction models are:
+The function implements two reconstruction submodules, which are selected with the \code{model} argument:
+
+If \code{model} is a \code{character} entry, then the \code{reconstruct()} function uses the GPlates Web Service (\url{https://gws.gplates.org/}, remote reconstruction submodule).
+The available reconstruction models for this submodule are:
 \itemize{
-  \item "SETON2012" (Seton et al., 2012) for coastlines and plate polygons.
-  \item "MULLER2016" (Muller et al., 2016) for coastlines and plate polygons.
-  \item "GOLONKA" (Wright et al. 2013) for coastlines only. 
-  \item "PALEOMAP" (Scotese and Wright, 2018) for coastlines and plate polygons. 
-  \item "MATTHEWS2016" (Matthews et al., 2016) for coastlines and plate polygons. 
+ \item "SETON2012" (Seton et al., 2012) for coastlines and plate polygons.
+ \item "MULLER2016" (Muller et al., 2016) for coastlines and plate polygons.
+ \item "GOLONKA" (Wright et al. 2013) for coastlines only. 
+ \item "PALEOMAP" (Scotese and Wright, 2018) for coastlines and plate polygons. 
+ \item "MATTHEWS2016" (Matthews et al., 2016) for coastlines and plate polygons. 
 }
 
-The \code{reconstruct()} function uses the GPlates Web Service: \url{https://gws.gplates.org/}
+If \code{model} is a \code{\link{platemodel}} class object, then the function will try to use the GPLates desktop application (\url{https://www.gplates.org/}) to reconstruct the coordinates (local reconstruction submodule).
+Plate models are available in chronosphere with the \code{\link{fetch}} function. See \code{\link{dataindex}} for the available models.
+The function will try to find the main GPlates executable in its default installation directory. If this does not succeed, use \code{path.gplates} to enter the full path to the GPlates executable as a \code{character} string.
 }
 \section{References}{
 
@@ -70,16 +81,21 @@ Matthews, K. J., Maloney, K. T., Zahirovic, S., Williams, S. E., Seton, M., & MÃ
 }
 
 \examples{
+\donttest{
+# With the web service
 # simple matrices
- reconstruct(matrix(95, 54, nrow=1), 140)
- 
- # points reconstruction
- xy <-cbind(long=c(95,142), lat=c(54, -33))
- reconstruct(xy, 140)
+reconstruct(matrix(95, 54, nrow=1), 140)
+
+# points reconstruction
+xy <-cbind(long=c(95,142), lat=c(54, -33))
+reconstruct(xy, 140)
 
 # coastlines/plates
- reconstruct("coastlines", 140)
- reconstruct("plates", 139)
- 
+reconstruct("coastlines", 140)
+reconstruct("plates", 139)
 
+# With GPlates
+ pm <- fetch("paleomap", "model")
+ reconstruct(matrix(95, 54, nrow=1), 140, model=pm)
+ }
 }
