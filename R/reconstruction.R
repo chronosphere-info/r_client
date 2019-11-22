@@ -184,7 +184,7 @@ setMethod(
 setMethod(
 	"reconstruct", 
 	signature="character", 
-	function(x,age, model="PALEOMAP", listout=TRUE, verbose=TRUE){
+	function(x,age, model="PALEOMAP", listout=TRUE, verbose=FALSE,path.gplates=NULL, cleanup=TRUE, dir=NULL){
         if(!any(x==c("plates", "coastlines"))) stop("Invalid 'x' argument.\nThe only valid character input are \"plates\" and \"coastlines\"")
 		# vectorized
 		if(length(age)>1){
@@ -204,7 +204,11 @@ setMethod(
 				}
 
 				if(x=="plates"){
-					feature <- gplates_reconstruct_static_polygons(age=age[i], model=model, verbose=verbose)
+					if(is.character(model)){
+						feature <- gplates_reconstruct_static_polygons(age=age[i], model=model, verbose=verbose)
+					}else{
+						feature <- reconstructGPlates(x="plates", age=age[i], model=model, path.gplates=path.gplates, dir=dir, verbose=verbose, cleanup=cleanup)
+					}
 				}
 
 				# save it
@@ -223,7 +227,11 @@ setMethod(
 			}
 
 			if(x=="plates"){
-				container <- gplates_reconstruct_static_polygons(age=age, model=model, verbose=verbose)
+				if(is.character(model)){
+					container <- gplates_reconstruct_static_polygons(age=age, model=model, verbose=verbose)
+				}else{
+					container <- reconstructGPlates(x="plates", age=age, model=model, path.gplates=path.gplates, dir=dir, verbose=verbose, cleanup=cleanup)
+				}
 			}
 		}
 		# return container
@@ -297,83 +305,110 @@ reconstructGPlates <- function(x, age, model, path.gplates=NULL,dir=NULL, verbos
 			}
 	
 			# C.test whether gplates was detected or not
-					# ask version
-					gplatesTest <- paste(gplatesExecutable, "--v")
-					
-					# default version
-					ver <- NULL
-					
-					# depending on how much the user wants to see
-					if(!verbose){
-							options(show.error.messages = FALSE)
-							try(ver <- system(gplatesTest, intern=TRUE,ignore.stdout = TRUE, 
-									ignore.stderr = TRUE))
-							options(show.error.messages = TRUE)
-					}else{
-							try(ver <- system(gplatesTest, intern=TRUE))
-					}
-					
-					# if gplates is not present:
-					if(is.null(ver)) stop(paste("The GPlates executable\n	\"", gplatesExecutable,"\"\nwas not found.", sep=""))
-	
+				# ask version
+				gplatesTest <- paste(gplatesExecutable, "--v")
+				
+				# default version
+				ver <- NULL
+				
+				# depending on how much the user wants to see
+				if(!verbose){
+						options(show.error.messages = FALSE)
+						try(ver <- system(gplatesTest, intern=TRUE,ignore.stdout = TRUE, 
+								ignore.stderr = TRUE))
+						options(show.error.messages = TRUE)
+				}else{
+						try(ver <- system(gplatesTest, intern=TRUE))
+				}
+				
+				# if gplates is not present:
+				if(is.null(ver)) stop(paste("The GPlates executable\n	\"", gplatesExecutable,"\"\nwas not found.", sep=""))
+
 	
 	# 2. Setup reconstruction environment
-			# folder where files will be executed
-			if(is.null(dir)) tempd <- tempdir() else tempd <- dir
-	
-			# prepare x
-			# create a SpatialPointsDataFrame from long-lat matrix
-			if(class(x)=="matrix" | class(x)=="data.frame"){
-					spPoints<- sp::SpatialPoints(x)
-					spPoints@proj4string <- sp::CRS("+proj=longlat")
-					xTransform <- sp::SpatialPointsDataFrame(spPoints, data=data.frame(a=1:nrow(x)))		
+		# folder where files will be executed
+		if(is.null(dir)) tempd <- tempdir() else tempd <- dir
+
+		# prepare x
+		# create a SpatialPointsDataFrame from long-lat matrix
+		if(class(x)=="matrix" | class(x)=="data.frame"){
+				spPoints<- sp::SpatialPoints(x)
+				spPoints@proj4string <- sp::CRS("+proj=longlat")
+				xTransform <- sp::SpatialPointsDataFrame(spPoints, data=data.frame(a=1:nrow(x)))		
+		}
+		
+		# if originally a SpatialPointsDataFrame
+		if(class(x)=="SpatialPointsDataFrame"){
+				xTransform <- sp::spTransform(x, sp::CRS("+proj=longlat"))
+		}
+
+		# in case stat
+		if(!is.character(x)){
+		# write 'x' as a shapefile
+			layer<- paste(randomString(length=3), age, sep="_")
+			if(verbose) message(paste("Exported data identified as ", layer))
+			pathToFileNoEXT <- paste(tempd, "/", layer,sep="")
+			if(verbose) message("Exporting 'x' as a shapefile.")
+			rgdal::writeOGR(xTransform, dsn=paste(pathToFileNoEXT, ".shp", sep=""), layer=layer, driver="ESRI Shapefile")
+		}else{
+		# feature to reconstruct is the static polygons
+			if(length(x)!=1) stop("Only the 'plates' can be reconstructed with this method.")
+			if(x=="plates"){
+				pathToFileNoEXT <- gsub(".gpml", "",model@polygons)
 			}
-			
-			# if originally a SpatialPointsDataFrame
-			if(class(x)=="SpatialPointsDataFrame"){
-					xTransform <- sp::spTransform(x, sp::CRS("+proj=longlat"))
-			}
-			# write 'x' as a shapefile
-					layer<- paste(randomString(length=3), age, sep="_")
-					if(verbose) message(paste("Exported data identified as ", layer))
-					pathToFileNoEXT <- paste(tempd, "/", layer,sep="")
-					if(verbose) message("Exporting 'x' as a shapefile.")
-					rgdal::writeOGR(xTransform, dsn=paste(pathToFileNoEXT, ".shp", sep=""), layer=layer, driver="ESRI Shapefile")
-	
+		}
 	# 3. Execute GPlates commands
-			# convert to gpml
-					if(verbose) message("Converting shapefile to .gpml.")
-					conversion <- paste(gplatesExecutable, " convert-file-format -l ",pathToFileNoEXT,".shp -e gpml", sep="")
-					system(conversion, ignore.stdout=!verbose,ignore.stderr=!verbose)
-	
-			# do the plate assignment
-					if(verbose) message("Assigning plate IDs to .gpml file.")
-					assignment <- paste(gplatesExecutable, " assign-plate-ids -p ", model@polygons, " -l ",pathToFileNoEXT,".gpml", sep="")
-					system(assignment, ignore.stdout=!verbose,ignore.stderr=!verbose)
-	
-			# do reconstruction
-					if(verbose) message("Reconstructing coordinates.")
-					reconstruction <- paste(gplatesExecutable, " reconstruct -l ",pathToFileNoEXT,".gpml -r ", 
-							model@rotation, " -e shapefile -t ", age, " -o ", pathToFileNoEXT,"_reconstructed", sep="") 
-					system(reconstruction, ignore.stdout=!verbose,ignore.stderr=!verbose)
+		# convert to gpml
+		if(!is.character(x)){
+			if(verbose) message("Converting shapefile to .gpml.")
+			conversion <- paste(gplatesExecutable, " convert-file-format -l ",pathToFileNoEXT,".shp -e gpml", sep="")
+			system(conversion, ignore.stdout=!verbose,ignore.stderr=!verbose)
+		}
+		# do the plate assignment
+		if(!is.character(x)){
+			if(verbose) message("Assigning plate IDs to .gpml file.")
+			assignment <- paste(gplatesExecutable, " assign-plate-ids -p ", model@polygons, " -l ",pathToFileNoEXT,".gpml", sep="")
+			system(assignment, ignore.stdout=!verbose,ignore.stderr=!verbose)
+		}
+		# do reconstruction
+		if(!is.character(x)) if(verbose) message("Reconstructing coordinates.")
+		if(is.character(x)) if(x=="plates") if(verbose) message("Reconstructing plates.")
+			reconstruction <- paste(gplatesExecutable, " reconstruct -l ",pathToFileNoEXT,".gpml -r ", 
+					model@rotation, " -e shapefile -t ", age, " -o ", pathToFileNoEXT,"_reconstructed -w 1", sep="") 
+			system(reconstruction, ignore.stdout=!verbose,ignore.stderr=!verbose)
+
 	# 4. Processing output
-			# reading coordinates
+		# reading coordinates
+		if(!is.character(x)){
 			if(verbose) message("Reading reconstructed coordinates.")
 			somethingDF <- rgdal::readOGR(paste(pathToFileNoEXT,"_reconstructed.shx",	sep=""), verbose=verbose)
-			# transform object back to whatever it was
-			if(class(x)=="matrix" | class(x)=="data.frame"){
-					rotated <- somethingDF@coords
-					rownames(rotated)<-rownames(x)
-			}
-	
-			if(class(x)=="SpatialPointsDataFrame"){
-					rotated <- sp::spTransform(somethingDF, x@proj4string)
-			}
+		} 
+		if(is.character(x)){
+			if(x=="plates") if(verbose) message("Reading plates.")
+			pathToFile <- paste(pathToFileNoEXT,"_reconstructed/", fileFromPath(pathToFileNoEXT),"_reconstructed_polygon.shx", sep="")
+			somethingDF <- rgdal::readOGR(pathToFile, verbose=verbose)
+		}
+		
+		# transform object back to whatever it was
+		if(class(x)=="matrix" | class(x)=="data.frame"){
+			rotated <- somethingDF@coords
+			rownames(rotated)<-rownames(x)
+		}
+
+		if(class(x)=="SpatialPointsDataFrame"){
+			rotated <- sp::spTransform(somethingDF, x@proj4string)
+		}
+
+		if(class(somethingDF)=="SpatialPolygonsDataFrame"){
+			rotated <- somethingDF
+		}
 	# 5. Finish
-	# remove temporary files
-	if(cleanup){		
-			system(paste("rm ",tempd, "/",layer,"*", sep=""))
-	}
+		# remove temporary files
+		if(class(x)!="character"){
+			if(cleanup){		
+				system(paste("rm ",tempd, "/",layer,"*", sep=""))
+			}
+		}
 	return(rotated)
 }
 
