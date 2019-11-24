@@ -246,11 +246,19 @@ setMethod("c2", signature=c("RasterArray", "RasterArray"),
 )
 
 ###############################################################################
-# cbind()
 
-
+#' Combine RasterLayers or RasterArrays by Rows or columns
+#' 
+#' The function takes a sequence of \code{RasterLayer} or \code{RasterArray} class objects and combines them to two dimensional \code{RasterArrays}...
+#' Named objects will be forced together based on \code{names}, \code{colnames} or \code{rownames} attributes, via insertion of \code{NAs}.
+#' 
+#' @examples
+#' # yet to come!
 #' @export cbind.RasterArray
-cbind.RasterArray<-function(..., deparse.level=1){
+#' @S3method cbind RasterArray
+#' @rdname bind-methods
+#cbind.RasterArray<-function(..., deparse.level=1){
+cbind.RasterArray<-function(...){
 		listArg <- list(...)
 		finRA <- listArg[[1]]
 		for(i in 2:length(listArg)){
@@ -392,14 +400,17 @@ function(x,y, deparse.level=1){
 
 
 #' @export rbind.RasterArray
-rbind.RasterArray<-function(..., deparse.level=1){
-		listArg <- list(...)
-		finRA <- listArg[[1]]
-		for(i in 2:length(listArg)){
-			finRA<-rbind2(finRA, listArg[[i]])
-		}
-		return(finRA)
+#' @S3method rbind RasterArray
+#' @rdname bind-methods
+#rbind.RasterArray<-function(..., deparse.level=1){
+rbind.RasterArray<-function(...){
+	listArg <- list(...)
+	finRA <- listArg[[1]]
+	for(i in 2:length(listArg)){
+		finRA<-rbind2(finRA, listArg[[i]])
 	}
+	return(finRA)
+}
 
 
 setMethod("rbind2", c("RasterArray","RasterArray"),

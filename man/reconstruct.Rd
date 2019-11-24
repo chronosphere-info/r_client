@@ -4,6 +4,8 @@
 \name{reconstruct}
 \alias{reconstruct}
 \alias{reconstruct,matrix-method}
+\alias{reconstruct,data.frame-method}
+\alias{reconstruct,numeric-method}
 \alias{reconstruct,character-method}
 \alias{reconstruct,SpatialPolygonsDataFrame-method}
 \title{Reconstruct geographic features}
@@ -14,11 +16,17 @@ reconstruct(x, ...)
   listout = TRUE, verbose = FALSE, enumerate = TRUE, chunk = 200,
   reverse = FALSE, path.gplates = NULL, cleanup = TRUE, dir = NULL)
 
+\S4method{reconstruct}{data.frame}(x, ...)
+
+\S4method{reconstruct}{numeric}(x, ...)
+
 \S4method{reconstruct}{character}(x, age, model = "PALEOMAP",
-  listout = TRUE, verbose = TRUE)
+  listout = TRUE, verbose = FALSE, path.gplates = NULL,
+  cleanup = TRUE, dir = NULL)
 
 \S4method{reconstruct}{SpatialPolygonsDataFrame}(x, age,
-  model = "PALEOMAP", listout = TRUE, verbose = TRUE)
+  model = "PALEOMAP", listout = TRUE, verbose = FALSE,
+  path.gplates = NULL, cleanup = TRUE, dir = NULL)
 }
 \arguments{
 \item{x}{are the features to be reconstructed. Can be a vector with longitude and latitude representing

@@ -86,7 +86,7 @@ setMethod("mapplot", signature="RasterArray",
             
               #edit for plot title
             if (is.null(plot.title)){
-              plot.title <- names(demo)
+              plot.title <- names(x)
             }
              
               if (nvars > 1){

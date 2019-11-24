@@ -137,7 +137,10 @@ setReplaceMethod(
 		return(x)
 })
 
-
+#' Names of RasterArray's Layers in the stack
+#' 
+#' @param x A \code{RasterArray} class object.
+#' 
 #' @exportMethod layers
 setGeneric("layers", function(x,...) standardGeneric("layers"))
 
@@ -152,7 +155,10 @@ setMethod(
 	} 
 )
 
-
+#' The total number of values in a RasterArray object
+#' 
+#' @param x A \code{RasterArray} class object.
+#' 
 #' @exportMethod nvalues
 setGeneric("nvalues", function(x,...) standardGeneric("nvalues"))
 
@@ -167,8 +173,12 @@ setMethod(
 	} 
 )
 
-
-
+#' Dimensions of a RasterLayers in a RasterArray
+#' 
+#' The funcion will return the dimensions RasterLayers
+#' 
+#' @param x A \code{RasterLayer} class object.
+#' 
 #' @exportMethod dimlayer
 setGeneric("dimlayer", function(x,...) standardGeneric("dimlayer"))
 

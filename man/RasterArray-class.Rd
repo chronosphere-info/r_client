@@ -58,10 +58,8 @@ The plot method will be directed with the proxy object.
 }
 \examples{
 # data import
-library(raster) - maybe we should attach this automatically
-library(chronosphere)
-  data(clim)
-  st <-stack(clim)
+  data(demo)
+  st <-demo@stack
 
 # class definition
   # 1d vector of rasters

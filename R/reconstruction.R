@@ -164,7 +164,7 @@ setMethod(
 )
 
 
-
+#' @rdname reconstruct
 setMethod(
 	"reconstruct", 
 	signature="data.frame", 
@@ -172,7 +172,7 @@ setMethod(
 		reconstruct(as.matrix(x), ...)
 })
 
-
+#' @rdname reconstruct
 setMethod(
 	"reconstruct", 
 	signature="numeric", 
@@ -244,7 +244,13 @@ setMethod(
 setMethod(
 	"reconstruct",
 	"SpatialPolygonsDataFrame", 
-	function(x, age, model="PALEOMAP", listout=TRUE, verbose=TRUE){
+	function(x, age, model="PALEOMAP", listout=TRUE, verbose=FALSE,path.gplates=NULL, cleanup=TRUE, dir=NULL){
+		if(!is.na(x@proj4string)){
+			x <- sp::spTransform(x, sp::CRS("+proj=longlat"))
+		}else{
+			x@proj4string <- sp::CRS("+proj=longlat")
+		}
+
 		# vectorized implementation
 		if(length(age)>1){
 			# list output
@@ -258,7 +264,13 @@ setMethod(
 
 			# iterate
 			for(i in 1:length(age)){
-				container[[i]] <- gplates_reconstruct_polygon(sp=x, age=age[i], model=model, verbose=verbose)
+				if(is.character(model)){
+					container[[i]] <- gplates_reconstruct_polygon(sp=x, age=age[i], model=model, verbose=verbose)
+				}else{
+					container[[i]] <- reconstructGPlates(x=x, age=age[i], model=model, path.gplates=path.gplates, dir=dir, verbose=verbose, cleanup=cleanup)
+				}
+				# rotate entry back
+				container[[i]] <- sp::spTransform(container[[i]], x@proj4string)
 			}
 
 			# list output
@@ -268,7 +280,13 @@ setMethod(
 
 		# single entry
 		}else{
-			container <- gplates_reconstruct_polygon(sp=x, age, model=model, verbose=verbose)
+			if(is.character(model)){
+				container <- gplates_reconstruct_polygon(sp=x, age, model=model, verbose=verbose)
+			}else{
+				container <- reconstructGPlates(x=x, age=age, model=model, path.gplates=path.gplates, dir=dir, verbose=verbose, cleanup=cleanup)
+			}
+			container <- sp::spTransform(container, x@proj4string)
+			
 		}
 
 		return(container)
@@ -283,48 +301,66 @@ reconstructGPlates <- function(x, age, model, path.gplates=NULL,dir=NULL, verbos
 	if(! requireNamespace("rgdal", quietly=TRUE)) stop("This method requires the 'rgdal' package to run")
 	
     # 1. FIND GPlates
-			# A. get operating system
-			os <- getOS()
-	
-			# B. should the program look for a default path for gplates?
-			if(is.null(path.gplates)){
-					# depending on the os
-					if(os=="linux"){
-							gplatesExecutable <- "gplates"
-					}
-					if(os=="windows"){
-							gplatesExecutable <- "C:\\Program Files (x86)\\Gplates\\Gplates*\\gplates*.exe"
-					}
-					if(os=="darwin"){
-	
-					}
-	
-			# look for predefined path
-			}else{
-					gplatesExecutable <- path.gplates
-			}
-	
-			# C.test whether gplates was detected or not
-				# ask version
-				gplatesTest <- paste(gplatesExecutable, "--v")
-				
-				# default version
-				ver <- NULL
-				
-				# depending on how much the user wants to see
-				if(!verbose){
-						options(show.error.messages = FALSE)
-						try(ver <- system(gplatesTest, intern=TRUE,ignore.stdout = TRUE, 
-								ignore.stderr = TRUE))
-						options(show.error.messages = TRUE)
-				}else{
-						try(ver <- system(gplatesTest, intern=TRUE))
-				}
-				
-				# if gplates is not present:
-				if(is.null(ver)) stop(paste("The GPlates executable\n	\"", gplatesExecutable,"\"\nwas not found.", sep=""))
+		# A. get operating system
+		os <- getOS()
 
-	
+		# B. should the program look for a default path for gplates?
+		if(is.null(path.gplates)){
+			# depending on the os
+			if(os=="linux"){
+				# the GPlates executable itself
+				gplatesExecutable <- "gplates"
+
+				# what the user would have entered
+				path.gplates <- gplatesExecutable
+
+				# leave the model intact in the namespace (easier debug)
+				rotation <- model@rotation
+				platePolygons <- model@polygons
+
+				# separator character between directories
+				dirSep <- "/"
+
+			}
+			if(os=="windows"){
+				# 1. find GPLATES exectutable if possible
+				# directory and executable
+				gplatesPaths <- winDefaultGPlates()
+				#path to executable
+				path.gplates <- paste(gplatesPaths, collapse="/")
+				# system call to executable
+				gplatesExecutable <- paste("\"", path.gplates, "\"", sep="")
+
+				# 2. replace model paths with \\
+				rotation <- gsub("/","\\\\", model@rotation)
+				platePolygons <- gsub("/","\\\\", model@polygons)
+
+				# characters to include directory 
+				dirSep <- "\\\\"
+
+			}
+			if(os=="darwin"){
+
+			}
+
+		# look for predefined path
+		}else{
+			# separate to form a length 2 vector
+			gplatesExecutable <- path.gplates
+
+			if(os=="windows"){
+				gpExe <- paste(gplatesExecutable, collapse="/")
+				gplatesTest <- paste("\"", gpExe, "\"", " --v", sep="")
+
+			}
+		}
+
+		# C. one moretest whether gplates was detected or not
+			gpTest <- testGPlates(gplatesExecutable, verbose=verbose)
+
+			# if gplates is not present:
+			if(!gpTest) stop(paste("The GPlates executable\n	\"", path.gplates,"\"\nwas not found.", sep=""))
+
 	# 2. Setup reconstruction environment
 		# folder where files will be executed
 		if(is.null(dir)) tempd <- tempdir() else tempd <- dir
@@ -332,14 +368,24 @@ reconstructGPlates <- function(x, age, model, path.gplates=NULL,dir=NULL, verbos
 		# prepare x
 		# create a SpatialPointsDataFrame from long-lat matrix
 		if(class(x)=="matrix" | class(x)=="data.frame"){
-				spPoints<- sp::SpatialPoints(x)
-				spPoints@proj4string <- sp::CRS("+proj=longlat")
-				xTransform <- sp::SpatialPointsDataFrame(spPoints, data=data.frame(a=1:nrow(x)))		
+			spPoints<- sp::SpatialPoints(x)
+			spPoints@proj4string <- sp::CRS("+proj=longlat")
+			xTransform <- sp::SpatialPointsDataFrame(spPoints, data=data.frame(a=1:nrow(x)))		
 		}
 		
 		# if originally a SpatialPointsDataFrame
 		if(class(x)=="SpatialPointsDataFrame"){
+			if(!is.na(x@proj4string)){
 				xTransform <- sp::spTransform(x, sp::CRS("+proj=longlat"))
+			}else{
+				x@proj4string <- sp::CRS("+proj=longlat")
+				xTransform <- x
+			}
+		}
+
+		# if originally a SpatialPointsDataFrame
+		if(class(x)=="SpatialPolygonsDataFrame"){
+			xTransform <- x
 		}
 
 		# in case stat
@@ -354,6 +400,7 @@ reconstructGPlates <- function(x, age, model, path.gplates=NULL,dir=NULL, verbos
 		# feature to reconstruct is the static polygons
 			if(length(x)!=1) stop("Only the 'plates' can be reconstructed with this method.")
 			if(x=="plates"){
+				# use original one - even for windows.
 				pathToFileNoEXT <- gsub(".gpml", "",model@polygons)
 			}
 		}
@@ -367,14 +414,14 @@ reconstructGPlates <- function(x, age, model, path.gplates=NULL,dir=NULL, verbos
 		# do the plate assignment
 		if(!is.character(x)){
 			if(verbose) message("Assigning plate IDs to .gpml file.")
-			assignment <- paste(gplatesExecutable, " assign-plate-ids -p ", model@polygons, " -l ",pathToFileNoEXT,".gpml", sep="")
+			assignment <- paste(gplatesExecutable, " assign-plate-ids -p ", platePolygons, " -l ",pathToFileNoEXT,".gpml", sep="")
 			system(assignment, ignore.stdout=!verbose,ignore.stderr=!verbose)
 		}
 		# do reconstruction
 		if(!is.character(x)) if(verbose) message("Reconstructing coordinates.")
 		if(is.character(x)) if(x=="plates") if(verbose) message("Reconstructing plates.")
 			reconstruction <- paste(gplatesExecutable, " reconstruct -l ",pathToFileNoEXT,".gpml -r ", 
-					model@rotation, " -e shapefile -t ", age, " -o ", pathToFileNoEXT,"_reconstructed -w 1", sep="") 
+					rotation, " -e shapefile -t ", age, " -o ", pathToFileNoEXT,"_reconstructed -w 1", sep="") 
 			system(reconstruction, ignore.stdout=!verbose,ignore.stderr=!verbose)
 
 	# 4. Processing output
@@ -385,7 +432,7 @@ reconstructGPlates <- function(x, age, model, path.gplates=NULL,dir=NULL, verbos
 		} 
 		if(is.character(x)){
 			if(x=="plates") if(verbose) message("Reading plates.")
-			pathToFile <- paste(pathToFileNoEXT,"_reconstructed/", fileFromPath(pathToFileNoEXT),"_reconstructed_polygon.shx", sep="")
+			pathToFile <- paste(pathToFileNoEXT,"_reconstructed",dirSep ,fileFromPath(pathToFileNoEXT),"_reconstructed_polygon.shx", sep="")
 			somethingDF <- rgdal::readOGR(pathToFile, verbose=verbose)
 		}
 		
@@ -395,13 +442,14 @@ reconstructGPlates <- function(x, age, model, path.gplates=NULL,dir=NULL, verbos
 			rownames(rotated)<-rownames(x)
 		}
 
-		if(class(x)=="SpatialPointsDataFrame"){
-			rotated <- sp::spTransform(somethingDF, x@proj4string)
+		if(
+			class(x)=="SpatialPolygonsDataFrame" | 
+			class(x)=="SpatialPointsDataFrame" |
+			class(x)=="character"){
+				rotated <- somethingDF
 		}
 
-		if(class(somethingDF)=="SpatialPolygonsDataFrame"){
-			rotated <- somethingDF
-		}
+
 	# 5. Finish
 		# remove temporary files
 		if(class(x)!="character"){
@@ -410,6 +458,59 @@ reconstructGPlates <- function(x, age, model, path.gplates=NULL,dir=NULL, verbos
 			}
 		}
 	return(rotated)
+}
+
+# function to find Gplates installation directory
+winDefaultGPlates<-function(){
+
+	# default installation path
+	basic <- "C:/Program Files (x86)/GPlates"
+	# enter program files
+	gpver <- list.files(basic)
+
+	found <- grep("GPlates", gpver)
+
+	# grab the latest version
+	if(length(found)>0){
+		pver<- gpver[found[length(found)]]
+	}else{
+		stop("Could not locate GPlates.")
+	}
+
+	# add it 
+	dir <- file.path(basic, gpver)
+
+	# search executable
+	gpfiles <- list.files(dir)
+
+	# grab gplates executable file
+	gplat <- grep("gplat",gpfiles)
+	potExe <- gpfiles[gplat]
+	exe <- potExe[grep("exe",potExe)]
+
+	return(c(dir=dir, exe=exe))
+}
+
+testGPlates<- function(gplatesExecutable, verbose){
+# ask version
+	gplatesTest <- paste(gplatesExecutable, "--v")
+	
+	# "\"C:/Program Files (x86)/GPlates/GPlates 2.1.0/gplates-2.1.0.exe\" --v"
+	# default version
+	ver <- NULL
+	
+	# depending on how much the user wants to see
+	if(!verbose){
+		options(show.error.messages = FALSE)
+		try(ver <- system(gplatesTest, intern=TRUE,ignore.stdout = TRUE, 
+				ignore.stderr = TRUE))
+		options(show.error.messages = TRUE)
+	}else{
+		try(ver <- system(gplatesTest, intern=TRUE))
+	}
+	
+	# if gplates is not present
+	return(!is.null(ver))
 }
 
 

@@ -327,7 +327,8 @@ fetchDF <- function(dat, var, ver, datadir, register, verbose=TRUE){
 
 # Raster-specific submodule of fetch()
 fetchRaster <- function(dat, var, res=1, ver=NULL, datadir=NULL, register=register, verbose=TRUE){
-
+	if(! requireNamespace("ncdf4", quietly=TRUE)) stop("This method requires the 'ncdf4' package to run.")
+	
 	# the data have to use the same resolution!!!
 	if(length(res)>1) stop("Only one resolution can be used in a single download call.")
 

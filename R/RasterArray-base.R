@@ -1,4 +1,12 @@
 #' @import raster
+#' @import sp
+#' @importFrom methods new cbind2 rbind2
+#' @importFrom utils read.csv download.file unzip flush.console
+#' @importFrom graphics par layout
+#' @importFrom grDevices devAskNewPage
+
+
+
 
 # class declaration
 setClassUnion("arrayORmatrixORvector", c("vector", "matrix", "array"))
@@ -53,10 +61,8 @@ setClassUnion("arrayORmatrixORvector", c("vector", "matrix", "array"))
 #' @param dim A \code{numeric} vector. Same as for \code{array}, creates \code{proxy} procedurally.
 #' @examples
 #' # data import
-#'	library(raster) - maybe we should attach this automatically
-#'	library(chronosphere)
-#'   data(clim)
-#'   st <-stack(clim)
+#'   data(demo)
+#'   st <-demo@stack
 #' 
 #' # class definition
 #'   # 1d vector of rasters
@@ -146,9 +152,9 @@ setMethod("initialize",signature="RasterArray",
 			.Object@stack <- stack
 			
 		}else{
-			if(nlayers(x)==prod(index)){
+			if(raster::nlayers(stack)==prod(index, na.rm=T)){
 				.Object@stack<- stack
-				index <- array(1:nlayers(x), dim=dim)
+				index <- array(1:nlayers(stack), dim=dim)
 				.Object@index<- index
 			}
 
@@ -257,10 +263,18 @@ setMethod(
 )
 
 #' S3-type method for RasterArray allowing View(), head() and tail() to work.
-#' @export
-as.data.frame.RasterArray <- function(from, to="data.frame"){
-	df <- as.data.frame(proxy(from))
+#' @exportMethod as.data.frame
+#' @S3method as.data.frame RasterArray
+as.data.frame.RasterArray <- function(x, rownames=NULL, optional=FALSE){
+	df <- as.data.frame(proxy(x))
 	if(ncol(df)==1) colnames(df) <- "X0"
+	if(!is.null(rownames)){
+		rownames(df)<- rownames
+	}
+	if(optional){
+		rownames(df) <- NULL
+		colnames(df) <- NULL
+	}
 	return(df)
 }
 

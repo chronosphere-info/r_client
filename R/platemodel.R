@@ -18,6 +18,9 @@ setMethod("initialize",signature="platemodel",
 	definition=function(.Object,path=NULL, rotation=NULL, polygons=NULL){
 		if(!is.null(path)){
 			fullPath <- normalizePath(path)
+
+			# replace windows like paths with UNIX paths
+			fullPath <- gsub("\\\\","/", fullPath)
 	
 			# get the directory
 			all <- unlist(strsplit(fullPath, "/"))

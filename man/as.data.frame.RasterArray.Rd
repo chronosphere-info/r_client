@@ -4,7 +4,7 @@
 \alias{as.data.frame.RasterArray}
 \title{S3-type method for RasterArray allowing View(), head() and tail() to work.}
 \usage{
-as.data.frame.RasterArray(from, to = "data.frame")
+as.data.frame.RasterArray(x, rownames = NULL, optional = FALSE)
 }
 \description{
 S3-type method for RasterArray allowing View(), head() and tail() to work.
