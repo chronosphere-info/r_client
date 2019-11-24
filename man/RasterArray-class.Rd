@@ -16,7 +16,7 @@
 Array template for RasterLayers
 }
 \details{
-The class implements structures to organize RasterLayers that have the same dimensions. Subsetting rules were defined using the proxy object in the \code{@index} slot. See examples for implementations.
+The class implements structures to organize RasterLayers that have the same dimensions. Subsetting rules were defined using the proxy object in the \code{index} slot. See examples for implementations.
 
 The class has two slots:
 stack: RasterStack, the actual data.
@@ -60,77 +60,8 @@ The plot method will be directed with the proxy object.
 # data import
   data(demo)
   st <-demo@stack
-
-# class definition
-  # 1d vector of rasters
-  ind <- 1:3
-  names(ind) <- names(st)
+  ind <- 1:nlayers(st)
+  names(ind) <- letters[1:length(ind)]
+  ra<- RasterArray(stack=st, index=ind)
   
-  first <- RasterArray(stack=st, index=ind)
-  
-  # 2d matrix of rasters
-  ind2 <- matrix(1:6, ncol=2, nrow=3)
-  rownames(ind2) <- names(st)
-  colnames(ind2) <- c("orig", "plus")
-  stPlus <- st+1
-  
-  second <- RasterArray(stack(st, stPlus), index=ind2)
-  
-  # 3d array of rasters
-  ind3 <- array(1:prod(3,2,4), dim=c(3,2,4), dimnames=list(rownames(ind2), colnames(ind2), letters[1:4]))
-  
-  stA<- second@stack
-  stB<- second@stack+100
-  stC<- second@stack+200
-  stD<- second@stack+300
-  
-  third <- RasterArray(stack(stA, stB,stC,stD), index=ind3)
-
-# example subsetting
-# one dimensional RasterArray
-  # direct application, logical subsetting
-  subset(first, c(TRUE, FALSE, TRUE))
-  
-  # access by index - dropping the structure
-  first[3] 
-
-  # acces by name - dropping strucutre
-  first["X0"]
-  first["X4"]
-  
-  # access by index - no drop
-  first[3, drop=FALSE]
-  # access by name, dropping
-  first["X0", drop=FALSE]
-  first["X4", drop=FALSE]
-
-
-# two dimensional RasterArray
-  second[1] # doesn't work - need fix
-  second[,2] # second column
-  
-  # single element, 
-  second["X0","orig"]
-  second["X0","plus"]
-  
-  # single element, without dropping
-  second["X0","orig", drop=FALSE]
-  second["X0","plus", drop=FALSE]
-  
-  # list type access?
-  second[[1]]
-
-# three dimensional RasterArray
-  third[1] # doesn't work - need fix!
-  
-  # first plane
-  third[,,1]
-  
-  # second plane
-  third[,,2]
-  
-  # first row-plane
-  third[1,,]
-  
-  third[, 2,]
 }

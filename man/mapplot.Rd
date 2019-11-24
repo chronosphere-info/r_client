@@ -28,9 +28,25 @@ mapplot(x, ...)
 \arguments{
 \item{x}{Object to be plotted}
 
+\item{...}{arguments passed to class-specific methods.}
+
 \item{col}{\code{character} Color or color scheme of the plot. See \code{?ramps} for available palettes.}
 
+\item{axes}{\code{logical} Should axes be displayed?}
+
+\item{box}{\code{logical} Should bounding boxes be displayed?}
+
 \item{legend}{(\code{logical}) Triggers whether the legend of a RasterLayer would be plotted.}
+
+\item{legend.title}{write!}
+
+\item{rgb}{write!}
+
+\item{ask}{write!}
+
+\item{nplots}{write!}
+
+\item{plot.title}{write!}
 }
 \description{
 This function plots Raster and sp-type objects.

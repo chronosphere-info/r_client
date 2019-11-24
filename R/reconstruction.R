@@ -1,5 +1,6 @@
 ###########################################################################
 # Front-end wrapper function
+
 #' Reconstruct geographic features
 #' 
 #' Reconstruct the geographic locations from present day coordinates and spatial objects back to their paleo-positions. 
@@ -36,6 +37,7 @@
 #' @param x are the features to be reconstructed. Can be a vector with longitude and latitude representing
 #' a single point or a matrix/dataframe with the first column as longitude and second column as latitude, or a \code{SpatialPolygonsDataFrame} class object. 
 #' The character strings \code{"plates"} and \code{"coastlines"} return static plates and rotated present-day coastlines, respectively.
+#' @param ... arguments passed to class-specific methods.
 #' @param age (\code{numeric})is the age in Ma at which the points will be reconstructed
 #' @param model (\code{character} or \code{\link{platemodel}}) The  reconstruction model. The class of this argument selects the submodule used for reconstruction, a \code{character} value will invoke the remote reconstruction submodule and will submit \code{x} to the GPlates Web Service. A \code{platemodel} class object will call the local-reconstruction submodule. The default is \code{"PALEOMAP"}. See details for available models.
 #' @param reverse (\code{logical}) Argument of the remote reconstruction submodule. The flag to control the direction of reconstruction. If \code{reverse = TRUE}, the function will 
@@ -575,28 +577,28 @@ IteratedPointReconstruction <- function(coords,age, chunk=200, model="PALEOMAP",
 
 
 
-#' Reconstruct points
-#' 
-#' Reconstruct the geographic locations from present day coordinates back to their paleo-positions. 
-#' Each location will be assigned a plate id and moved back in time using the chosen reconstruction model.
-#' 
-#' Adapted from GPlates Web Service (need to find out how to reference them)
-#' 
-#' @param coords are the coordinates to be reconstructed. Can be a vector with longitude and latitude representing
-#' a single point or a matrix/dataframe with the first column as longitude and second column as latitude
-#' @param age is the age in Ma at which the points will be reconstructed
-#' @param	model is the reconstruction model. The default is "PALEOMAP". Add more details about additional models here
-#' @param reverse the flag to control the direction of reconstruction. If reverse = TRUE, the function will 
-#' calculate the present-day coordinates of the given paleo-coordinates.
-#' @param verbose Should the function output urls?
-#'
-#'@return matrix with longitude and latitude	
-#' 
-#' @examples
-#' gplates_reconstruct_points(c(95, 54), 140)
-#' 
-#' xy <-cbind(long=c(95,142), lat=c(54, -33))
-#' gplates_reconstruct_points(xy, 140)
+# Reconstruct points
+# 
+# Reconstruct the geographic locations from present day coordinates back to their paleo-positions. 
+# Each location will be assigned a plate id and moved back in time using the chosen reconstruction model.
+# 
+# Adapted from GPlates Web Service (need to find out how to reference them)
+# 
+# @param coords are the coordinates to be reconstructed. Can be a vector with longitude and latitude representing
+# a single point or a matrix/dataframe with the first column as longitude and second column as latitude
+# @param age is the age in Ma at which the points will be reconstructed
+# @param	model is the reconstruction model. The default is "PALEOMAP". Add more details about additional models here
+# @param reverse the flag to control the direction of reconstruction. If reverse = TRUE, the function will 
+# calculate the present-day coordinates of the given paleo-coordinates.
+# @param verbose Should the function output urls?
+#
+# @return matrix with longitude and latitude	
+# 
+# @examples
+# gplates_reconstruct_points(c(95, 54), 140)
+# 
+# xy <-cbind(long=c(95,142), lat=c(54, -33))
+# gplates_reconstruct_points(xy, 140)
 gplates_reconstruct_points <- function(coords,age, model="PALEOMAP", reverse=FALSE, verbose=TRUE){
 	
 	url <- 'https://gws.gplates.org/reconstruct/reconstruct_points/'
@@ -641,16 +643,13 @@ gplates_reconstruct_points <- function(coords,age, model="PALEOMAP", reverse=FAL
 	return(rcoords)
 }
 
-#' Reconstruct coastlines
-#' Retrieve reconstructed coastline polygons for defined ages
-#' 
-#' @param age is the age in Ma at which the points will be reconstructed
-#' @param	model is the reconstruction model. The default is "PALEOMAP". Add more details about additional models here
-#' @param verbose Should the function output urls?
-#'@return SpatialPolygonsDataFrame
-#'
-#'@examples
-#' gplates_reconstruct_coastlines(140)
+# Reconstruct coastlines
+# Retrieve reconstructed coastline polygons for defined ages
+# 
+# @param age is the age in Ma at which the points will be reconstructed
+# @param model is the reconstruction model. The default is "PALEOMAP". Add more details about additional models here
+# @param verbose Should the function output urls?
+# @return SpatialPolygonsDataFrame
 gplates_reconstruct_coastlines <- function(age, model="PALEOMAP", verbose=TRUE){
 	
 	#download and save data
@@ -668,19 +667,19 @@ gplates_reconstruct_coastlines <- function(age, model="PALEOMAP", verbose=TRUE){
 	return(dat)
 }
 
-#' reconstruct static polygons
-#' 
-#' Retrieve reconstructed static polygons for defined ages
-#' 
-#' @param age is the age in Ma at which the points will be reconstructed
-#' @param	model is the reconstruction model. The default is "PALEOMAP". Add more details about additional models here
-#' @param verbose Should the function output urls?
-#' 
-#'@return SpatialPolygonsDataFrame
-#'
-#'@examples
-#' gplates_reconstruct_static_polygons(140)
-#' 
+#  reconstruct static polygons
+#  
+#  Retrieve reconstructed static polygons for defined ages
+#  
+#  @param age is the age in Ma at which the points will be reconstructed
+#  @param	model is the reconstruction model. The default is "PALEOMAP". Add more details about additional models here
+#  @param verbose Should the function output urls?
+#  
+# @return SpatialPolygonsDataFrame
+# 
+# @examples
+#  gplates_reconstruct_static_polygons(140)
+#  
 gplates_reconstruct_static_polygons <- function(age, model="PALEOMAP", verbose=TRUE){
 	
 	#download and save data
@@ -698,11 +697,11 @@ gplates_reconstruct_static_polygons <- function(age, model="PALEOMAP", verbose=T
 	return(dat)
 }
 
-#' reconstructing polygons
-#' 
-#' @param sp is a SpatialPolygonsDataFrame
-#' @param verbose Should the function output urls?
-#' 
+#  reconstructing polygons
+#  
+#  @param sp is a SpatialPolygonsDataFrame
+#  @param verbose Should the function output urls?
+#  
 gplates_reconstruct_polygon <- function(sp, age, model="PALEOMAP", verbose=TRUE){
 	
 	url = 'https://gws.gplates.org/reconstruct/reconstruct_feature_collection/'

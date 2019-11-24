@@ -21,6 +21,8 @@ matchtime(x, y, ...)
 
 \item{y}{(\code{numeric}) The vector of dates (numeric values) to order to.}
 
+\item{...}{additional arguments passed to class-specific methods.}
+
 \item{index}{(\code{logical}) If this argument is \code{TRUE}, only the indices will be returned that refer to the new order, rather than the reordered \code{x} variable.}
 
 \item{time}{\code{numeric}. Single value referring to that dimension of \code{x} where the time-coding names are (\code{time=1} is the default for RasterArrays in \code{chronosphere}).}

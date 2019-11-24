@@ -10,10 +10,12 @@
 \arguments{
 \item{x}{\code{RasterArray} object.}
 
+\item{i}{subscript of layers to replace.}
+
 \item{value}{\code{character} vector.}
 }
 \description{
-Replace RasterLayers in a RasterArray object
+Double bracket \code{'[['} refers to layers' name in the \code{RasterStack} of the \code{RasterArray}. Use single brackets to replace elements based on their position in the \code{RasterArray}.
 }
 \examples{
 # an example

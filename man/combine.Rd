@@ -14,7 +14,9 @@ combine(x, ...)
 \S4method{combine}{RasterArray}(x, ...)
 }
 \arguments{
-\item{x}{\code{RasterLayer} or \code{RasterArray} objects to combine.}
+\item{x}{\code{RasterLayer} or \code{RasterArray} object to combine.}
+
+\item{...}{additional objects to combine.}
 }
 \description{
 Methods sequences that start with an NA do not yet work.

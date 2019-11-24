@@ -1,5 +1,12 @@
 # Functions that are practically inherited from Raster*
 
+#' Resolution of a RasterArray object
+#' 
+#' The methods are inherited from the \code{RasterStack} class, see \code{\link[raster]{resolution}}. Replacement is not allowed.
+#' 
+#' @param x a \code{RasterArray} class object.
+#' 
+#' @rdname res
 #' @exportMethod xres
 setMethod(
 	"xres",
@@ -18,6 +25,7 @@ setMethod(
 #		} 
 #	)
 
+#' @rdname res
 #' @exportMethod yres
 setMethod(
 	"yres",
@@ -27,6 +35,7 @@ setMethod(
 	} 
 )
 
+#' @rdname res
 #' @exportMethod res
 setMethod(
 	"res",
@@ -36,6 +45,16 @@ setMethod(
 	} 
 )
 
+
+#' Minimum and maximum values in a RasterArray object
+#' 
+#' The method is inherited from the \code{RasterStack} class. Postitions of layers are conserved in the output. (including missing layers)
+#' 
+#' @param x a \code{RasterArray} class object.
+#' @param vec Should the dimensions of the \code{RasterArray} be omitted?
+#' @param ... arguments passed to the \code{\link[raster]{cellStats}} function.
+#' 
+#' @rdname extremeValues
 #' @exportMethod minValue
 setMethod(
 	"minValue",
@@ -52,6 +71,7 @@ setMethod(
 	} 
 )
 
+#' @rdname extremeValues
 #' @exportMethod maxValue
 setMethod(
 	"maxValue",
@@ -69,7 +89,14 @@ setMethod(
 )
 
 
-
+#' Resample a RasterArray object
+#' 
+#' The method is inherited from the \code{RasterStack} class.
+#' 
+#' @param x a \code{RasterArray} class object.
+#' @param y The y argument of the \code{\link[raster]{resample}} function.
+#' @param ... arguments passed to the \code{\link[raster]{resample}} function.
+#' 
 #' @exportMethod resample
 setMethod(
 	"resample",
@@ -80,17 +107,31 @@ setMethod(
 	}
 )
 
+#' Crop a RasterArray object
+#' 
+#' The method is inherited from the \code{RasterStack} class.
+#' 
+#' @param x a \code{RasterArray} class object.
+#' @param y an xtent object, or any object from which an Extent object can be extracted (see Details)
+#' @param ... arguments passed to the \code{\link[raster]{crop}} function.
+#' 
 #' @exportMethod crop
 setMethod(
 	"crop",
 	signature=c("RasterArray"),
 	function(x,y,...){
-		x@stack <- stack(crop(x@stack,y,...))
+		x@stack <- raster::stack(crop(x@stack,y,...))
 		return(x)
 	}
 )
 
-
+#' Aggregate raster cells in a RasterArray object
+#' 
+#' The method is inherited from the \code{RasterStack} class.
+#' 
+#' @param x a \code{RasterArray} class object.
+#' @param ... arguments passed to the \code{\link[raster]{aggregate}} function.
+#' 
 #' @exportMethod aggregate
 setMethod(
 	"aggregate",
@@ -101,6 +142,13 @@ setMethod(
 	}
 )
 
+#' Disaggregate raster cells in a RasterArray object
+#' 
+#' The method is inherited from the \code{RasterStack} class.
+#' 
+#' @param x a \code{RasterArray} class object.
+#' @param ... arguments passed to the \code{\link[raster]{disaggregate}} function.
+#' 
 #' @exportMethod disaggregate
 setMethod(
 	"disaggregate",
@@ -200,17 +248,31 @@ setMethod(
 
 })
 
-
+#' Statistics across cells in a RasterArray object
+#' 
+#' The method is inherited from the \code{RasterStack} class. Postitions of layers are conserved in the output. (including missing layers)
+#' 
+#' @param x a \code{RasterArray} class object.
+#' @param stat A function to be applied.
+#' @param ... arguments passed to the \code{\link[raster]{cellStats}} function.
+#' 
 #' @exportMethod cellStats
 setMethod("cellStats", signature="RasterArray", 
-	definition=function(x, stat){
-		statVect <- raster::cellStats(x@stack, stat=stat)
+	definition=function(x, stat,...){
+		statVect <- raster::cellStats(x@stack, stat=stat,...)
 		endObj<- x@index
 		endObj[!is.na(endObj)] <- statVect
 		return(endObj)
 	}
 )
 
+#' Summary
+#'
+#' Summarizes a \code{RasterArray} class object.
+#' 
+#' The method is inherited from the \code{RasterStack} class. 
+#' 
+#' @param object a \code{RasterArray} class object.
 #' @exportMethod summary
 setMethod("summary", 
 	signature="RasterArray",
@@ -222,21 +284,24 @@ setMethod("summary",
 )
 
 
-ProjectRaster <- function(from, ...){
-	
-}
-
 #' Project a RasterArray object
 #'
-#' The uppercase first letter is temporary until the a proper S4 generic of the function is implemented in the \code{raster} package.
+#' The method implemets the \code{\link[raster]{projectRaster}} function for \code{RasterArray} class objects.
 #' 
-#' @param from A \code{RasterArray} object to project.
-#' 
-#' @param ... Arguments passed to the projectRaster() function.
-#' 
+#' @param from A \code{Raster*} \code{RasterArray} object to project.
+#' @param to \code{Raster*} object with the parameters to which 'from' should be projected
+#' @param res single or (vector of) two numerics. To, optionally, set the output resolution if 'to' is missing
+#' @param crs character or object of class 'CRS'. PROJ.4 description of the coordinate reference system. In projectRaster this is used to set the output CRS if 'to' is missing, or if 'to' has no valid CRS
+#' @param method method used to compute values for the new RasterLayer. Either 'ngb' (nearest neighbor), which is useful for categorical variables, or 'bilinear' (bilinear interpolation; the default value), which is appropriate for continuous variables.
+#' @param alignOnly \code{logical}. Use to or other parameters only to align the output (i.e. same origin and resolution), but use the projected extent from from
+#' @param over \code{logical}. If TRUE wrapping around the date-line is turned off. This can be desirable for global data (to avoid mapping the same areas twice) but it is not desireable in other cases
+#' @param filename \code{character} output filname. Not applicable for RasterArray class objects.
+#' @param ... additional arguments as for \code{\link[raster]{writeRaster}}.
+#' @rdname projectRaster
 #' @exportMethod projectRaster
 setGeneric("projectRaster", def=raster::projectRaster)
 
+#' @rdname projectRaster
 setMethod("projectRaster", "RasterArray", 
 	function(from, to, res, crs, method="bilinear", 
              alignOnly=FALSE, over=FALSE){

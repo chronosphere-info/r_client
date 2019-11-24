@@ -1,11 +1,22 @@
 # Functions to subset and replace items in a RasterArray
 
+#' Subset a RasterArray object
+#' 
+#' Extract subsets of RasterArray class object similarly to a regular array. 
+#' 
+#' @param x \code{RasterArray} object.
+#' @param i subscript of the first dimension(rows) or vector-like subsetting.
+#' @param j subscript of the second dimension (columns).
+#' @param ... subscript of additional dimensions.
+#' @param drop \code{logical} in case the result of subsetting is a single element, should the \code{RasterArray} wrapper be dropped and the element be reduced to a single \code{RasterLayer}?
+#' @param oneDim \code{logical} In case of multidimensional \code{RasterArray}s, setting \code{oneDim} to \code{TRUE} allows the application of one dimensional subscripts.  
+#' 
 # combined
 #' @exportMethod subset
 setMethod(
 	"subset", 
 	signature(x="RasterArray"), 
-	function(x, i,j, ...,oneDim=FALSE, drop=TRUE, filename=""){
+	function(x, i,j, ...,oneDim=FALSE, drop=TRUE){
 			# fetch the index
 			indDim <- dim(x@index)
 
@@ -63,6 +74,26 @@ setMethod(
 	}
 )
 
+#' Indexing to extract subsets of a RasterArray object
+#'
+#' Single bracket \code{'['} refers to indices and names within the \code{RasterArray}. Use double brackets to extract layers based on their names (in the stack).
+#' 
+#' @param x \code{RasterArray} object.
+#' @param i subscript of the first dimension(rows) or vector-like subsetting.
+#' @param j subscript of the second dimension (columns).
+#' @param ... subscript of additional dimensions.
+#' @param drop \code{logical} in case the result of subsetting is a single element, should the \code{RasterArray} wrapper be dropped and the element be reduced to a single \code{RasterLayer}?
+#' @examples
+#' data(demo)
+#' # numeric subsetting
+#' firstThree <- demo[1:3]
+#' # character subsetting
+#' second <- demo["10"]
+#' # logical subsetting
+#' subscript <- rep(FALSE, length(demo))
+#' subscript[2] <- TRUE
+#' second2 <- demo[subscript]
+#' 
 #' @exportMethod [
 setMethod(
 	"[",
@@ -79,7 +110,23 @@ setMethod(
 	}
 )
 
-
+#' Replace layers of a RasterArray object
+#' 
+#' Single bracket \code{'['} refers to indices and names within the \code{RasterArray}. Use double brackets to replace layers based on their names (in the stack).
+#'
+#' @param x \code{RasterArray} object.
+#' @param i subscript of the first dimension(rows) or vector-like subsetting.
+#' @param j subscript of the second dimension (columns).
+#' @param ... subscript of additional dimensions.
+#' @param value A \code{RasterLayer} or \code{RasterArray} object.
+#' @examples
+#' data(demo)
+#' # replace third element with missing value
+#' demo[3] <- NA
+#' # duplicate first element and make it the second too
+#' demo[2] <-demo[1]
+#' 
+#' @rdname replacementSingle
 #' @exportMethod "[<-"
 setReplaceMethod(
 	"[", 
@@ -127,14 +174,7 @@ setReplaceMethod(
 	}
 )
 
-
-
-#' Replace RasterLayers in a RasterArray object
-#' @param x \code{RasterArray} object.
-#' @param value A \code{RasterLayer} or \code{RasterArray} object.
-#' 
-#' @examples
-#' # an example
+#' @rdname replacementSingle
 #' @exportMethod "[<-"
 setReplaceMethod(
 	"[", 
@@ -264,6 +304,14 @@ setReplaceMethod(
 )
 
 
+#' Indexing to extract RasterLayers of a RasterArray object
+#'
+#' Double bracket \code{'[['} refers to layers' name in the \code{RasterStack} of the \code{RasterArray}. Use single brackets to extract elements based on their position in the \code{RasterArray}.
+#' 
+#' @return The function returns either a single \code{RasterLayer}, a \code{RasterStack} or a list of \code{RasterLayers}. 
+#' @param x \code{RasterArray} object.
+#' @param i subscript of the first dimension(rows) or vector-like subsetting.
+#' @param drop \code{logical} should the \code{RasterStack} be dropped and the element be reduced to a single \code{RasterLayer}?
 #' @exportMethod "[["
 setMethod(
 	"[[", 
@@ -274,7 +322,11 @@ setMethod(
 )
 
 #' Replace RasterLayers in a RasterArray object
+#'
+#' Double bracket \code{'[['} refers to layers' name in the \code{RasterStack} of the \code{RasterArray}. Use single brackets to replace elements based on their position in the \code{RasterArray}.
+#' 
 #' @param x \code{RasterArray} object.
+#' @param i subscript of layers to replace.
 #' @param value \code{character} vector.
 #' 
 #' @examples

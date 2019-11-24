@@ -15,7 +15,7 @@ setClassUnion("arrayORmatrixORvector", c("vector", "matrix", "array"))
 #' 
 #' Array template for RasterLayers
 #' 
-#' The class implements structures to organize RasterLayers that have the same dimensions. Subsetting rules were defined using the proxy object in the \code{@index} slot. See examples for implementations.
+#' The class implements structures to organize RasterLayers that have the same dimensions. Subsetting rules were defined using the proxy object in the \code{index} slot. See examples for implementations.
 #' 
 #' The class has two slots:
 #' stack: RasterStack, the actual data.
@@ -63,79 +63,10 @@ setClassUnion("arrayORmatrixORvector", c("vector", "matrix", "array"))
 #' # data import
 #'   data(demo)
 #'   st <-demo@stack
-#' 
-#' # class definition
-#'   # 1d vector of rasters
-#'   ind <- 1:3
-#'   names(ind) <- names(st)
+#'   ind <- 1:nlayers(st)
+#'   names(ind) <- letters[1:length(ind)]
+#'   ra<- RasterArray(stack=st, index=ind)
 #'   
-#'   first <- RasterArray(stack=st, index=ind)
-#'   
-#'   # 2d matrix of rasters
-#'   ind2 <- matrix(1:6, ncol=2, nrow=3)
-#'   rownames(ind2) <- names(st)
-#'   colnames(ind2) <- c("orig", "plus")
-#'   stPlus <- st+1
-#'   
-#'   second <- RasterArray(stack(st, stPlus), index=ind2)
-#'   
-#'   # 3d array of rasters
-#'   ind3 <- array(1:prod(3,2,4), dim=c(3,2,4), dimnames=list(rownames(ind2), colnames(ind2), letters[1:4]))
-#'   
-#'   stA<- second@stack
-#'   stB<- second@stack+100
-#'   stC<- second@stack+200
-#'   stD<- second@stack+300
-#'   
-#'   third <- RasterArray(stack(stA, stB,stC,stD), index=ind3)
-#' 
-#' # example subsetting
-#' # one dimensional RasterArray
-#'   # direct application, logical subsetting
-#'   subset(first, c(TRUE, FALSE, TRUE))
-#'   
-#'   # access by index - dropping the structure
-#'   first[3] 
-#' 
-#'   # acces by name - dropping strucutre
-#'   first["X0"]
-#'   first["X4"]
-#'   
-#'   # access by index - no drop
-#'   first[3, drop=FALSE]
-#'   # access by name, dropping
-#'   first["X0", drop=FALSE]
-#'   first["X4", drop=FALSE]
-#' 
-#' 
-#' # two dimensional RasterArray
-#'   second[1] # doesn't work - need fix
-#'   second[,2] # second column
-#'   
-#'   # single element, 
-#'   second["X0","orig"]
-#'   second["X0","plus"]
-#'   
-#'   # single element, without dropping
-#'   second["X0","orig", drop=FALSE]
-#'   second["X0","plus", drop=FALSE]
-#'   
-#'   # list type access?
-#'   second[[1]]
-#' 
-#' # three dimensional RasterArray
-#'   third[1] # doesn't work - need fix!
-#'   
-#'   # first plane
-#'   third[,,1]
-#'   
-#'   # second plane
-#'   third[,,2]
-#'   
-#'   # first row-plane
-#'   third[1,,]
-#'   
-#'   third[, 2,]
 #' @exportClass RasterArray
 RasterArray <- setClass("RasterArray", slots=list(index="arrayORmatrixORvector", stack="RasterStack"))
 
@@ -238,14 +169,19 @@ setMethod(
 
 
 
-#' The proxy of a RasterArray or SpArray object
+#' The proxy of a RasterArray object
 #' 
-#' This function extracts the @index slot of a RasterArray or SpArray-class object
-#' 
-#' @param x (\code{RasterArray} or \code{SpArray}) focal object.
+#' This function returns an object that symbolizes the structure of layers in the \code{RasterArray}.
+#'
+#' The \code{proxy} method wraps the names of layers in the stack using the \code{index} slot of the \code{RasterArray}.
+#'  
+#' @param x (\code{RasterArray}  focal object.
+#' @param ... additional arguments passed to class-specific methods.
 #' @exportMethod proxy
+#' @rdname proxy
 setGeneric("proxy", function(x,...) standardGeneric("proxy"))
 
+#' @rdname proxy
 setMethod(
 	"proxy",
 	signature="RasterArray",
@@ -261,50 +197,6 @@ setMethod(
 	}
 
 )
-
-#' S3-type method for RasterArray allowing View(), head() and tail() to work.
-#' @exportMethod as.data.frame
-#' @S3method as.data.frame RasterArray
-as.data.frame.RasterArray <- function(x, rownames=NULL, optional=FALSE){
-	df <- as.data.frame(proxy(x))
-	if(ncol(df)==1) colnames(df) <- "X0"
-	if(!is.null(rownames)){
-		rownames(df)<- rownames
-	}
-	if(optional){
-		rownames(df) <- NULL
-		colnames(df) <- NULL
-	}
-	return(df)
-}
-
-#' @exportMethod as.RasterArray
-setGeneric("as.RasterArray", function(from) standardGeneric("as.RasterArray"))
-
-#' @exportMethod coerce
-setMethod(as.RasterArray, signature=c("RasterLayer"), definition=function(from){
-	RasterArray(raster::stack(from), index=1)
-})
-
-setMethod(as.RasterArray, signature=c("RasterStack"), definition=function(from){
-	RasterArray(from, index=1:nlayers(from))
-})
-
-setMethod(as.RasterArray, signature=c("RasterBrick"), definition=function(from){
-	RasterArray(stack(from), index=1:nlayers(from))
-})
-
-setAs(from="RasterLayer", to="RasterArray", function(from){
-	as.RasterArray(from)
-})
-
-setAs(from="RasterStack", to="RasterArray", function(from){
-	as.RasterArray(from)
-})
-
-setAs(from="RasterBrick", to="RasterArray", function(from){
-	as.RasterArray(from)
-})
 
 
 # function to defragment the matrix
@@ -410,19 +302,18 @@ setMethod(
 	}
 )
 
-#' @exportMethod as.list
-setMethod("as.list","RasterArray", function(x,...){
-	as.list(x@stack)
-})
-
 
 #' Apply-type iterator for RasterArrays
 #' 
-#' The function implements the apply-type iterators for the RasterArray class. Output values are constrained to RasterArrays, whenever possible. 
+#' The function implements the \code{\link[base]{apply}}-type iterators for the RasterArray class. Output values are constrained to RasterArrays, whenever possible. 
 #' Not yet implemented for multidimensional MARGINs.
 #' @examples
 #' # not yet
 #' a<- cbind(demo, demo)
+#' @param X an array, including matrices and RasterArrays.
+#' @param MARGIN a vector giving the subscripts which the function will be applied over. E.g., for a matrix 1 indicates rows, 2 indicates columns, \code{c(1, 2)} indicates rows and columns. Where \code{X} has named dimnames, it can be a character vector selecting dimension names. For \code{RasterArrays} only single dimension margins are implemented.
+#' @param FUN  the function to be applied: see ‘Details’ of \code{\link[base]{apply}}. 
+#' @param ... optional arguments passed to \code{FUN}.
 #' @rdname apply-methods
 #' @exportMethod apply
 setGeneric("apply", def=base::apply)

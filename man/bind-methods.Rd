@@ -9,6 +9,9 @@
 
 \method{rbind}{RasterArray}(...)
 }
+\arguments{
+\item{...}{RasterLayer or RasterArray class objects to be combined.}
+}
 \description{
 The function takes a sequence of \code{RasterLayer} or \code{RasterArray} class objects and combines them to two dimensional \code{RasterArrays}...
 Named objects will be forced together based on \code{names}, \code{colnames} or \code{rownames} attributes, via insertion of \code{NAs}.

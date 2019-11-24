@@ -10,8 +10,17 @@ apply(X, MARGIN, FUN, ...)
 
 \S4method{apply}{RasterArray}(X, MARGIN, FUN, ...)
 }
+\arguments{
+\item{X}{an array, including matrices and RasterArrays.}
+
+\item{MARGIN}{a vector giving the subscripts which the function will be applied over. E.g., for a matrix 1 indicates rows, 2 indicates columns, \code{c(1, 2)} indicates rows and columns. Where \code{X} has named dimnames, it can be a character vector selecting dimension names. For \code{RasterArrays} only single dimension margins are implemented.}
+
+\item{FUN}{the function to be applied: see ‘Details’ of \code{\link[base]{apply}}.}
+
+\item{...}{optional arguments passed to \code{FUN}.}
+}
 \description{
-The function implements the apply-type iterators for the RasterArray class. Output values are constrained to RasterArrays, whenever possible. 
+The function implements the \code{\link[base]{apply}}-type iterators for the RasterArray class. Output values are constrained to RasterArrays, whenever possible. 
 Not yet implemented for multidimensional MARGINs.
 }
 \examples{

@@ -8,7 +8,8 @@
 #'
 #' Methods sequences that start with an NA do not yet work. 
 #' @rdname combine
-#' @param x \code{RasterLayer} or \code{RasterArray} objects to combine.
+#' @param x \code{RasterLayer} or \code{RasterArray} object to combine.
+#' @param ... additional objects to combine. 
 #' @examples
 #' data(demo)
 #' a <- combine(demo[1], demo[2])
@@ -402,6 +403,7 @@ function(x,y, deparse.level=1){
 #' @export rbind.RasterArray
 #' @S3method rbind RasterArray
 #' @rdname bind-methods
+#' @param ... RasterLayer or RasterArray class objects to be combined.
 #rbind.RasterArray<-function(..., deparse.level=1){
 rbind.RasterArray<-function(...){
 	listArg <- list(...)

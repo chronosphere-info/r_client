@@ -1,10 +1,10 @@
 # Change log of the R package 'chronosphere'
 
-## [0.1.12 (build 50)]  - 2019-11-23 
+## [0.1.12 (build 50)]  - 2019-11-24 
 ### Added
 - Windows support for the local reconstruction submodule (default path)
-- defense agains different projections for SPDF input to reconstruct()
-
+- defense against different projections for SPDF input to reconstruct()
+- major documentation upgrade (package passes R CMD check) without notes
 
 
 ## [0.1.12 (build 49)]  - 2019-11-22 

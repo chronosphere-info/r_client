@@ -5,6 +5,14 @@
 #' @param x Object to be plotted 
 #' @param legend (\code{logical}) Triggers whether the legend of a RasterLayer would be plotted.
 #' @param col \code{character} Color or color scheme of the plot. See \code{?ramps} for available palettes.
+#' @param ... arguments passed to class-specific methods.
+#' @param axes \code{logical} Should axes be displayed?
+#' @param box \code{logical} Should bounding boxes be displayed?
+#' @param legend.title write!
+#' @param rgb write!
+#' @param ask write!
+#' @param nplots write!
+#' @param plot.title write!
 #' @rdname mapplot
 #' @exportMethod mapplot
 setGeneric("mapplot", function(x,...) standardGeneric("mapplot"))

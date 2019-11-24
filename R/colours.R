@@ -2,7 +2,7 @@
 #'
 #' The object contains functions produced by the \code{colorRampPalette} function.
 #' 
-#' \cr
+# \cr
 #' \code{show.pal} is used to display the available palettes. You can use \code{pal = "all"} or \code{pal=""} if you want to look at all the available palettes. 
 #' You can also view single palettes individually. The following colour palettes are implemented:
 #' \itemize{
@@ -19,7 +19,7 @@
 #' @param pal A palette name from the lists below
 #' 
 NULL
-#> NULL
+
 
 #' inverse heatmap
 #' @rdname ramps

@@ -33,6 +33,8 @@ reconstruct(x, ...)
 a single point or a matrix/dataframe with the first column as longitude and second column as latitude, or a \code{SpatialPolygonsDataFrame} class object. 
 The character strings \code{"plates"} and \code{"coastlines"} return static plates and rotated present-day coastlines, respectively.}
 
+\item{...}{arguments passed to class-specific methods.}
+
 \item{age}{(\code{numeric})is the age in Ma at which the points will be reconstructed}
 
 \item{model}{(\code{character} or \code{\link{platemodel}}) The  reconstruction model. The class of this argument selects the submodule used for reconstruction, a \code{character} value will invoke the remote reconstruction submodule and will submit \code{x} to the GPlates Web Service. A \code{platemodel} class object will call the local-reconstruction submodule. The default is \code{"PALEOMAP"}. See details for available models.}

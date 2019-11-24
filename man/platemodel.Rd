@@ -11,6 +11,8 @@
   rotation = NULL, polygons = NULL)
 }
 \arguments{
+\item{.Object}{Virtual argument used for method dispatch.}
+
 \item{path}{Path to a .mod unique plate model object.}
 
 \item{rotation}{If \code{path} is \code{NULL}, the path to the rotation file-part of the model.}

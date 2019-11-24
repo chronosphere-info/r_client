@@ -34,7 +34,6 @@ show.pal(pal = "all", n = 11)
 The object contains functions produced by the \code{colorRampPalette} function.
 }
 \details{
-\cr
 \code{show.pal} is used to display the available palettes. You can use \code{pal = "all"} or \code{pal=""} if you want to look at all the available palettes. 
 You can also view single palettes individually. The following colour palettes are implemented:
 \itemize{

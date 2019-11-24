@@ -9,6 +9,7 @@
 #' @param index (\code{logical}) If this argument is \code{TRUE}, only the indices will be returned that refer to the new order, rather than the reordered \code{x} variable.
 #' 
 #' @param time \code{numeric}. Single value referring to that dimension of \code{x} where the time-coding names are (\code{time=1} is the default for RasterArrays in \code{chronosphere}).
+#' @param ... additional arguments passed to class-specific methods.
 #' @rdname matchtime
 #' @examples
 #' # original vector
