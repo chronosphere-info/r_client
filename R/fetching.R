@@ -34,30 +34,45 @@ dataindex <- function(datadir=NULL, verbose=FALSE){
 			} # no? ->download
 		} # no? ->download
 
+		tempLog <- tempfile()
+		
 		# you can set target file, won't change anything if there is nothing to download
 		temp<- file.path(datadir, "reg.csv")
 
 	# need to download but not saved
 	}else{
-		# temporary file
-		temp <- tempfile()
+		# temporary files
+		tempReg <- tempfile()
+		tempLog <- tempfile()
+
 	}
 
 	# go on with download
 	if(download){
 		# do the download
 		if(is.null(userpwd)){
-			download.file(paste(remote, "reg.csv", sep = ""),temp, mode="wb", quiet=!verbose)
+			download.file(paste(remote, "log.csv", sep = ""),tempLog, mode="wb", quiet=T)
+			download.file(paste(remote, "reg.csv", sep = ""),tempReg, mode="wb", quiet=!verbose)
 		}else{
-			download.file(paste("ftp://", userpwd, "@",remote, "reg.csv", sep = ""),temp, mode="wb", quiet=!verbose)
+			download.file(paste("ftp://", userpwd, "@",remote, "log.csv", sep = ""),tempLog, mode="wb", quiet=TRUE)
+			download.file(paste("ftp://", userpwd, "@",remote, "reg.csv", sep = ""),tempReg, mode="wb", quiet=!verbose)
 		}	
 		
+		# read server log
+		log <- read.csv(tempLog, sep=",", header=TRUE, stringsAsFactors=FALSE)
+
+		# display message intended for people using this particular version
+		pkgver <- sessionInfo()$otherPkgs$chronosphere$Version
+		bLine <- pkgver==log$version
+		currentMessage <- log$message[bLine]
+		if(""!=currentMessage) warning(currentMessage)
+
 		# and set return value
-		ret <- read.csv(temp, sep=",", header=TRUE, stringsAsFactors=FALSE)
+		ret <- read.csv(tempReg, sep=",", header=TRUE, stringsAsFactors=FALSE)
 
 		# get rid of the  temporary file
-		if(is.null(datadir)) unlink(temp)
-	
+		if(is.null(datadir)) unlink(tempReg)
+		unlink(tempLog)
 	}
 
 	return(ret)
@@ -76,8 +91,9 @@ dataindex <- function(datadir=NULL, verbose=FALSE){
 #' @param datadir Directory where downloaded files are kept. Individual layers will be looked up from the directory if this is given, and will be downloaded if they are not found. The default \code{NULL} option will download data to a temporary directory that exists only until the R session ends.
 #' @param verbose Should console feedback during download be displayed?
 #' @examples
+#' \donttest{
 #' 	a <- fetch(dat="paleomap", var="dem")
-#' 	b <- fetch(dat="paleomap", var="paleoatlas", res=0.1)
+#' }
 #' @export
 fetch <- function(dat, var=NULL, ver=NULL, res=1, datadir=NULL, verbose=TRUE){
 	# get the remote server data, or read it from hard drive!
@@ -129,22 +145,31 @@ fetch <- function(dat, var=NULL, ver=NULL, res=1, datadir=NULL, verbose=TRUE){
 
 	# method dispatch
 	if(varType=="raster"){
-		final <- fetchRaster(dat=dat, var=var, ver=ver, res=res, datadir=datadir, register=register, verbose=verbose)
+		combined <- fetchRaster(dat=dat, var=var, ver=ver, res=res, datadir=datadir, register=register, verbose=verbose)
 	}
 
 	if(varType=="data.frame"){
 		# check for non-related input
 		if(res!=1) warning("Argument 'res' is ignored for data.frame fetching.")
-		final <- fetchDF(dat=dat, var=var, ver=ver, datadir=datadir, register=register, verbose=verbose)
+		combined <- fetchDF(dat=dat, var=var, ver=ver, datadir=datadir, register=register, verbose=verbose)
 	}
 
 	if(varType=="platemodel"){
 		# check for non-related input
 		if(res!=1) warning("Argument 'res' is ignored for plate model fetching.")
-		final <- fetchModel(dat=dat, var=var, ver=ver, datadir=datadir, register=register, verbose=verbose)
+		combined <- fetchModel(dat=dat, var=var, ver=ver, datadir=datadir, register=register, verbose=verbose)
+	}
+
+	# display citations
+	if(verbose){
+		message("If you use the data in publications, please cite its\nreference, as well as that of the 'chronosphere' package.")
+		for(i in 1:length(combined$citation)){
+			cat("\n")
+			message(paste("-", combined$citation[i]))
+		}
 	}
 	
-	return(final)
+	return(combined$final)
 	
 }
 
@@ -162,6 +187,8 @@ fetchModel <- function(dat, var, ver, datadir, register, verbose=TRUE){
 		varName <- paste(var, "_", sep="")
 		varPath <- paste(var, "/", sep="")
 	}
+
+	citation <- unique(varReg$citation)
 
 	# no version number given for the variable
 	if(is.null(ver)){
@@ -234,7 +261,7 @@ fetchModel <- function(dat, var, ver, datadir, register, verbose=TRUE){
 		final <- platemodel(paste(tempd, "/",dir, "/", dir, ".", format, sep=""))
 	}
 
-	return(final)
+	return(list(final=final, citation=citation))
 }
 
 
@@ -254,6 +281,7 @@ fetchDF <- function(dat, var, ver, datadir, register, verbose=TRUE){
 		varPath <- paste(var, "/", sep="")
 	}
 
+	citation <- unique(varReg$citation)
 
 	# no version number given for the variable
 	if(is.null(ver)){
@@ -321,7 +349,7 @@ fetchDF <- function(dat, var, ver, datadir, register, verbose=TRUE){
 		if(separator=="semicolon") sep <- ";"
 		final <- read.csv(pathToFile, header=TRUE, sep=sep, stringsAsFactors=FALSE)
 	}
-	return(final)
+	return(list(final=final, citation=citation))
 }
 
 
@@ -361,6 +389,8 @@ fetchRaster <- function(dat, var, res=1, ver=NULL, datadir=NULL, register=regist
 		}
 		# if this passes, then the variables will be checked during the loop
 	}
+
+	citation <- NULL
 	varObj <-list()
 	# for all the variables
 	for(j in 1:length(var)){
@@ -369,6 +399,7 @@ fetchRaster <- function(dat, var, res=1, ver=NULL, datadir=NULL, register=regist
 
 		# check structure database, whether the given verison is alright
 		varReg<- register[register[,"var"]==var[j],, drop=FALSE]
+		citation <-c(citation, varReg$citation)
 
 		# no version number given for the variable
 		if(is.na(version)){
@@ -402,9 +433,9 @@ fetchRaster <- function(dat, var, res=1, ver=NULL, datadir=NULL, register=regist
 
 				# download archive
 				if(is.null(userpwd)){
-					download.file(paste(remote, dat,"/",  res,"/", var[j], "/", archive,  sep = ""),pathToArchive, mode="wb", quiet=!verbose)
+					download.file(paste(remote, dat,"/",  var[j], "/", archive,  sep = ""),pathToArchive, mode="wb", quiet=!verbose)
 				}else{
-					download.file(paste("ftp://", userpwd, "@",remote, dat,"/",  res,"/", var[j], "/", res,"_",  var[j],"_", version, ".zip",  sep = ""),pathToArchive, mode="wb", quiet=!verbose)
+					download.file(paste("ftp://", userpwd, "@",remote, dat,"/",  archive,  sep = ""),pathToArchive, mode="wb", quiet=!verbose)
 				}
 			}
 
@@ -418,9 +449,9 @@ fetchRaster <- function(dat, var, res=1, ver=NULL, datadir=NULL, register=regist
 		
 			# download archive
 			if(is.null(userpwd)){
-				download.file(paste(remote, dat,"/",  res,"/", var[j], "/", archive,  sep = ""),temp, mode="wb", quiet=!verbose)
+				download.file(paste(remote, dat,"/",  var[j], "/", archive,  sep = ""),temp, mode="wb", quiet=!verbose)
 			}else{
-				download.file(paste("ftp://", userpwd, "@",remote, dat,"/",  res,"/", var[j], "/", res,"_",  var[j],"_", version, ".zip",  sep = ""),temp, mode="wb", quiet=!verbose)
+				download.file(paste("ftp://", userpwd, "@",remote, dat,"/",  var[j], "/", archive,  sep = ""),temp, mode="wb", quiet=!verbose)
 			}
 			
 		
@@ -546,6 +577,7 @@ fetchRaster <- function(dat, var, res=1, ver=NULL, datadir=NULL, register=regist
 		colnames(final) <- var
 	}
 
-	return(final)
+	citation <- unique(citation)
+	return(list(final=final, citation=citation))
 }
 

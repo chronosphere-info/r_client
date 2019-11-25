@@ -1,7 +1,7 @@
 #' @import raster
 #' @import sp
 #' @importFrom methods new cbind2 rbind2
-#' @importFrom utils read.csv download.file unzip flush.console
+#' @importFrom utils read.csv download.file unzip flush.console sessionInfo
 #' @importFrom graphics par layout
 #' @importFrom grDevices devAskNewPage
 

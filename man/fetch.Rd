@@ -28,6 +28,7 @@ The function is implemented for a single variable, which can be downloaded and a
 Version 2.
 }
 \examples{
+\donttest{
 	a <- fetch(dat="paleomap", var="dem")
-	b <- fetch(dat="paleomap", var="paleoatlas", res=0.1)
+}
 }
