@@ -141,7 +141,7 @@ setMethod(
 				for(i in 1:length(ageLevs)){
 					# which rows apply
 					index <- which(ageLevs[i]==age)
-					current <- x[index,]
+					current <- x[index,, drop=FALSE]
 					# do reconstruction and store
                     if(is.character(model)){
 					   container[index,] <- IteratedPointReconstruction(coords=current, chunk=chunk, age=ageLevs[i], model=model, reverse=reverse, verbose=verbose)
