@@ -286,7 +286,7 @@ fetchDF <- function(dat, var, ver, datadir, register, verbose=TRUE){
 	# no version number given for the variable
 	if(is.null(ver)){
 		# select latest version 
-		ver <- varReg[order(varReg[,"ver"], decreasing=TRUE)==1,"ver"]
+		ver <- varReg[order(varReg[,"date"], decreasing=TRUE)==1,"ver"]
 	
 	# version number is given 
 	}else{
@@ -404,7 +404,7 @@ fetchRaster <- function(dat, var, res=1, ver=NULL, datadir=NULL, register=regist
 		# no version number given for the variable
 		if(is.na(version)){
 			# select latest version 
-			version <- varReg[order(varReg[,"ver"], decreasing=TRUE)==1,"ver"]
+			version <- varReg[order(varReg[,"date"], decreasing=TRUE)==1,"ver"]
 		
 		# version number is given 
 		}else{
