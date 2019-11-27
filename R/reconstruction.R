@@ -141,7 +141,7 @@ setMethod(
 				for(i in 1:length(ageLevs)){
 					# which rows apply
 					index <- which(ageLevs[i]==age)
-					current <- x[index,, drop=FALSE]
+					current <- x[index,]
 					# do reconstruction and store
                     if(is.character(model)){
 					   container[index,] <- IteratedPointReconstruction(coords=current, chunk=chunk, age=ageLevs[i], model=model, reverse=reverse, verbose=verbose)
@@ -298,6 +298,16 @@ setMethod(
 ###########################################################################
 # Offline interface to Gplates
 
+
+#Mac examples
+library(chronosphere)
+x<- fetch("pared", "public")[,c("longitude", "latitude")]
+mo <- fetch("paleomap", "model")
+reconstruct(x, age=10, model=mo, verbose=T)
+#reconstruct(x, age=10, model=mo, verbose=T, path.gplates="/Users/Nick/Downloads/GPlates-2.2.0/gplates.app/Contents/MacOS/gplates")
+
+
+
 reconstructGPlates <- function(x, age, model, path.gplates=NULL,dir=NULL, verbose=FALSE, cleanup=TRUE){
 	if(class(model)!="platemodel") stop("You need a GPlates tectonic model for this method.")
 	if(! requireNamespace("rgdal", quietly=TRUE)) stop("This method requires the 'rgdal' package to run")
@@ -341,11 +351,26 @@ reconstructGPlates <- function(x, age, model, path.gplates=NULL,dir=NULL, verbos
 				dirSep <- "\\\\"
 
 			}
-			if(os=="darwin"){
+			if(os=="osx"){
+				# the GPlates executable itself
+				# default
+				# gplatesExecutable <- "/Applications/GPlates-2.2.0/gplates.app/Contents/MacOS/gplates"
+				gplatesPaths <- macDefaultGPlates()
+				gplatesExecutable <- paste(gplatesPaths, collapse="/")
+				
+				# what the user would have entered
+				path.gplates <- gplatesExecutable
 
+				# leave the model intact in the namespace (easier debug)
+				rotation <- model@rotation
+				platePolygons <- model@polygons
+
+				# separator character between directories
+				dirSep <- "/"
+				
 			}
 
-		# look for predefined path
+		# look for given path
 		}else{
 			# separate to form a length 2 vector
 			gplatesExecutable <- path.gplates
@@ -353,7 +378,27 @@ reconstructGPlates <- function(x, age, model, path.gplates=NULL,dir=NULL, verbos
 			if(os=="windows"){
 				gpExe <- paste(gplatesExecutable, collapse="/")
 				gplatesTest <- paste("\"", gpExe, "\"", " --v", sep="")
+				
+				#path to executable
+				path.gplates <- paste(gplatesPaths, collapse="/")
+				# system call to executable
+				gplatesExecutable <- paste("\"", path.gplates, "\"", sep="")
 
+				# 2. replace model paths with \\
+				rotation <- gsub("/","\\\\", model@rotation)
+				platePolygons <- gsub("/","\\\\", model@polygons)
+
+				# characters to include directory 
+				dirSep <- "\\\\"
+
+			}
+			if(os=="osx"){
+				# leave the model intact in the namespace (easier debug)
+				rotation <- model@rotation
+				platePolygons <- model@polygons
+
+				# separator character between directories
+				dirSep <- "/"
 			}
 		}
 
@@ -474,7 +519,7 @@ winDefaultGPlates<-function(){
 
 	# grab the latest version
 	if(length(found)>0){
-		pver<- gpver[found[length(found)]]
+		gpver<- gpver[found[length(found)]]
 	}else{
 		stop("Could not locate GPlates.")
 	}
@@ -492,6 +537,27 @@ winDefaultGPlates<-function(){
 
 	return(c(dir=dir, exe=exe))
 }
+
+macDefaultGPlates <-function(){
+# default installation path
+	basic <- "/Applications"
+	# enter program files
+	gpver <- list.files(basic)
+
+	found <- grep("GPlates", gpver)
+
+	# grab the latest version
+	if(length(found)>0){
+		gpver<- gpver[found[length(found)]]
+	}else{
+		stop("Could not locate GPlates.")
+	}
+	dir <-file.path(basic,gpver, "gplates.app/Contents/MacOS")
+	exe <-"gplates"
+	return(c(dir=dir, exe=exe))
+}
+
+
 
 testGPlates<- function(gplatesExecutable, verbose){
 # ask version
