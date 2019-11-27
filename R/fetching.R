@@ -65,7 +65,7 @@ dataindex <- function(datadir=NULL, verbose=FALSE){
 		pkgver <- sessionInfo()$otherPkgs$chronosphere$Version
 		bLine <- pkgver==log$version
 		currentMessage <- log$message[bLine]
-		if(""!=currentMessage) warning(currentMessage)
+		if(!is.null(currentMessage)) if(""!=currentMessage) warning(currentMessage)
 
 		# and set return value
 		ret <- read.csv(tempReg, sep=",", header=TRUE, stringsAsFactors=FALSE)

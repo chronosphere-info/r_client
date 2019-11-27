@@ -374,7 +374,15 @@ reconstructGPlates <- function(x, age, model, path.gplates=NULL,dir=NULL, verbos
 		}else{
 			# separate to form a length 2 vector
 			gplatesExecutable <- path.gplates
+			
+			# leave the model intact in the namespace (easier debug)
+			rotation <- model@rotation
+			platePolygons <- model@polygons
 
+			# separator character between directories
+			dirSep <- "/"
+			
+			# windows needs special treatment
 			if(os=="windows"){
 			
 				# system call to executable
@@ -388,14 +396,7 @@ reconstructGPlates <- function(x, age, model, path.gplates=NULL,dir=NULL, verbos
 				dirSep <- "\\\\"
 
 			}
-			if(os=="osx"){
-				# leave the model intact in the namespace (easier debug)
-				rotation <- model@rotation
-				platePolygons <- model@polygons
-
-				# separator character between directories
-				dirSep <- "/"
-			}
+			
 		}
 
 		# C. one moretest whether gplates was detected or not
@@ -506,22 +507,33 @@ reconstructGPlates <- function(x, age, model, path.gplates=NULL,dir=NULL, verbos
 # function to find Gplates installation directory
 winDefaultGPlates<-function(){
 
-	# default installation path
-	basic <- "C:/Program Files (x86)/GPlates"
-	# enter program files
-	gpver <- list.files(basic)
+	# default installation paths
+	basic <- c(
+		"C:/Program Files/GPlates",
+		"C:/Program Files (x86)/GPlates"
+		
+	)
 
-	found <- grep("GPlates", gpver)
+	versioned <- NULL
+	inWhich <- NULL
 
-	# grab the latest version
-	if(length(found)>0){
-		gpver<- gpver[found[length(found)]]
-	}else{
-		stop("Could not locate GPlates.")
+	# search both possible folders 
+	for(i in 1:2){
+		# enter program files
+		gpver <- list.files(basic[i])
+	
+		found <- grep("GPlates", gpver)
+	
+		# grab the latest version
+		if(length(found)>0){
+			versioned <- gpver[found[length(found)]]
+			inWhich <- i
+		}
 	}
+	if(is.null(inWhich)) stop("Could not locate GPlates.")
 
 	# add it 
-	dir <- file.path(basic, gpver)
+	dir <- file.path(basic[inWhich], versioned)
 
 	# search executable
 	gpfiles <- list.files(dir)
@@ -533,6 +545,7 @@ winDefaultGPlates<-function(){
 
 	return(c(dir=dir, exe=exe))
 }
+
 
 macDefaultGPlates <-function(){
 # default installation path

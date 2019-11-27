@@ -2,8 +2,11 @@
 
 ## [0.1.12 (build 52)]  - 2019-11-27 
 ### Added
-- reconstruction() local method supported for MacOS
+- reconstruction() local method support for MacOS
 - reconstruction() local method support for custom paths under windows
+- added support for default installation path  of 64bit gplates in windows
+- vignette template
+- lot's of minor fixes
 
 ### Fixed 
 - missing drop=TRUE for age-iterated reconstruction
