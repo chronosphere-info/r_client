@@ -300,10 +300,10 @@ setMethod(
 
 
 #Mac examples
-library(chronosphere)
-x<- fetch("pared", "public")[,c("longitude", "latitude")]
-mo <- fetch("paleomap", "model")
-reconstruct(x, age=10, model=mo, verbose=T)
+#	library(chronosphere)
+#	x<- fetch("pared", "public")[,c("longitude", "latitude")]
+#	mo <- fetch("paleomap", "model")
+#	reconstruct(x, age=10, model=mo, verbose=T)
 #reconstruct(x, age=10, model=mo, verbose=T, path.gplates="/Users/Nick/Downloads/GPlates-2.2.0/gplates.app/Contents/MacOS/gplates")
 
 
@@ -376,11 +376,7 @@ reconstructGPlates <- function(x, age, model, path.gplates=NULL,dir=NULL, verbos
 			gplatesExecutable <- path.gplates
 
 			if(os=="windows"){
-				gpExe <- paste(gplatesExecutable, collapse="/")
-				gplatesTest <- paste("\"", gpExe, "\"", " --v", sep="")
-				
-				#path to executable
-				path.gplates <- paste(gplatesPaths, collapse="/")
+			
 				# system call to executable
 				gplatesExecutable <- paste("\"", path.gplates, "\"", sep="")
 

@@ -2,7 +2,8 @@
 
 ## [0.1.12 (build 52)]  - 2019-11-27 
 ### Added
-- reconstruction() local method supported for MacOS 
+- reconstruction() local method supported for MacOS
+- reconstruction() local method support for custom paths under windows
 
 ### Fixed 
 - missing drop=TRUE for age-iterated reconstruction
