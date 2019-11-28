@@ -122,7 +122,7 @@
   \postauthor{\par}
       \predate{\centering\large\emph}
   \postdate{\par}
-    \date{2019-11-27}
+    \date{2019-11-28}
 
 
 \begin{document}
@@ -134,24 +134,21 @@
 \hypertarget{installation}{%
 \subsection{1.1. Installation}\label{installation}}
 
-Lots of blabla\ldots.
+To install this alpha version of the package, you must download it
+either from the CRAN servers or its dedicated GitHub repository
+(\url{http://www.github.com/adamkocsis/chronosphere/}). All minor
+updates will be posted on GitHub as soon as they are finished, so please
+check this regularly. The version on CRAN will be lagging for some time,
+as it takes the servers many days to process everything. All questions
+and bugs can be reported at the github issues board
+(\url{https://github.com/adamkocsis/chronosphere/issues}). Instead of
+spending it on actual research, a tremendous amount of time was invested
+in making this piece of software streamlined and user-friendly. If you
+use a dataset of the package in a publication, please cite both its
+reference(s) and the chronosphere' package itself.
 
-To install this beta version of the package, you must download it either
-from the CRAN servers or its dedicated GitHub repository
-(\url{http://www.github.com/divDyn/r_package/}). All minor updates will
-be posted on GitHub as soon as they are finished, so please check this
-regularly. The version on CRAN will be lagging for some time, as it
-takes the servers many days to process everything and updates are
-expected to be frequent. All questions should be addressed to Adam
-Kocsis, the creator and maintainer of the package
-(\href{mailto:adam.kocsis@fau.de}{\nolinkurl{adam.kocsis@fau.de}}).
-Instead of spending it on actual research, a tremendous amount of time
-was invested in making this piece of software useable and user-friendly.
-If you use a method implemented in the package in a publication, please
-cite both its reference(s) and the `divDyn' package itself (Kocsis et
-al.~2019).
-
-You can attach the package with:
+After installing, from the CRAN, from a source or with
+\texttt{devtools::install\_github()} , you can attach the package with:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -159,25 +156,79 @@ You can attach the package with:
 \end{Highlighting}
 \end{Shaded}
 
-each chunk has to have a unique name (after r) otherwise the
-vignettebuilder will give an error.
+\hypertarget{general-features}{%
+\section{1.2 General features}\label{general-features}}
 
-The echo field sets wether the code is visible. eval triggers whether it
-is evaluated.
+The purpose of the `chronosphere' project is to facilitate, streamline
+and fasten the finding, acquisition and importing of Earth science data
+in R. Although the package currently focuses on deep time datasets, the
+scope of the included datasets will be much larger, spanning from a
+single variable published as supplementary material in a journal
+article, to GIS data or the entire output of GCM models. `chronosphere'
+intends to decrease the gap between research hypotheses and the finding,
+download and importing of datasets.
 
-For instance you can attach the current demo file with :
+\hypertarget{rasterarray}{%
+\section{2. RasterArray}\label{rasterarray}}
+
+Faster data importing and better organization represents a considerable
+part of this process. Spatially explicit data are excellent candidatates
+to demonstrate how more efficient data organization can speed up
+research. Although R has an excellent infrastructure for handling raster
+data (\$hijmans), the arrangement of individual layers are rather
+limited, which can be a problem, when a large number of layers have to
+be considered. RasterStacks and RasterBricks are very efficient for
+organizing RasterLayers according to a single dimension (e.g.~depth for
+3D variables, or time), multidimensional structures are preferred.
+
+To offer a more effective solution, the `chronosphere' package includes
+the definition of the RasterArray S4 class. RasterArrays represent
+hybrids between RasterStacks and regular R arrays. In short, they are
+virtual arrays of RasterLayers, and can be thought of as regular arrays,
+that include entire rasters as elements rather than single numeric,
+logical or character values. As regular R users are familiar with
+subsetting, combinations and structures of regular arrays (including
+formal vectors and matrices), the finding, extraction and storage of
+spatially explicit data is much easier in such containers.
+
+\hypertarget{strucuture}{%
+\subsection{2.1. Strucuture}\label{strucuture}}
+
+RasterArrays do not directly inherit from Raster* objects of the raster
+package, as a considerable number of main functions differ, but they
+rather represent a wrapper object around regular RasterStacks - stacks
+of individual RasterLayers. This ensures that whenever users are
+unfamililar with the methods of RasterArray class objects, they can
+always reduce their data to stacks or individual layers.
+
+The formal class RasterArray has only two slots: a stack and and index.
+The stack includes the Raster data in an unfolded manner, similarly to
+how matrices and arrays are essentially just vectors with additional
+attributes. The stack slot incorporates a single RasterStack object,
+which represents the data content of the object. The index slot, on the
+other hand, describes the structure of the RasterArray. It is a
+vector/matrix/array of integers each representing an index of the layers
+in the stack. The configuration (dimensions) of the index represents the
+entire array.
+
+The `chronosphere' package includes two demo datasets: a set of ancient
+topogrophies (PaleoDEMs, SCotese..) and time series of bioclimatic
+variables (annual mean temperature and precipitation) from the CHELSA
+project. (\$ref) These datasets can be attached with the data command.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{data}\NormalTok{(demo)}
+\KeywordTok{data}\NormalTok{(dems)}
+\KeywordTok{data}\NormalTok{(clim)}
 \end{Highlighting}
 \end{Shaded}
 
-Then you can show the output with:
+THe structure of RasterArrays can be inspected if the object's name is
+typed into the console:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{demo}
+\NormalTok{dems}
 \end{Highlighting}
 \end{Shaded}
 
@@ -198,17 +249,720 @@ Then you can show the output with:
 ## "dem_40" "dem_45"
 \end{verbatim}
 
-For plotting you have to set plot=TRUE, fig.~height is self explanatory.
+The first part of the console output includes propoerties of the
+individual RasterLayers stored in the stack. These layers have to share
+essential attributes that allow them to be stored in a single stack
+(extent, resolution, CRS).
+
+The second part of the output is a visualization of the strucutre of the
+RasterArray itself. In the case of the DEMs, 10 layers are stored in the
+stack, each layer having its individual name (e.g.~`dem\_0'). It is a
+single dimensional array (vector), and each element has its name in the
+array (``0''). The differentiating between the names of layers and the
+names of elements allows different subsetting and replacement rules for
+the two, which both can be handy - depending on the needs of the user.
+
+The strucuture of the RasterArray can be visualized, analyzed or
+processed using the the proxy object. Proxies are essentially the same
+as the index slots of the RasterArray, but instead of including the
+indices of the layers they represent, proxies include the names of the
+layers. These can be accessed using the proxy() function.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{mapplot}\NormalTok{(demo[}\DecValTok{1}\NormalTok{], }\DataTypeTok{col=}\StringTok{"earth"}\NormalTok{)}
+\KeywordTok{proxy}\NormalTok{(dems)}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{chronos_files/figure-latex/tsplot1-1.pdf}
+\begin{verbatim}
+##        0        5       10       15       20       25       30       35 
+##  "dem_0"  "dem_5" "dem_10" "dem_15" "dem_20" "dem_25" "dem_30" "dem_35" 
+##       40       45 
+## "dem_40" "dem_45"
+\end{verbatim}
 
-And this is the end.
+Proxies are displayed as the second parts of the console output when the
+name of the object is typed into the console (show method).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{clim}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## class         : RasterArray 
+## RasterLayer properties: 
+## - dimensions  : 181, 361  (nrow, ncol)
+## - resolution  : 1, 1  (x, y)
+## - extent      : -180.5, 180.5, -90.5, 90.5  (xmin, xmax, ymin, ymax)
+## - coord. ref. : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## Array properties: 
+## - dimensions  : 10, 2  (nrow, ncol)
+## - num. layers    : 20
+## - proxy:
+##       bio1       bio12     
+## 2001 "dem_0.1"  "dem_0.2" 
+## 2002 "dem_5.1"  "dem_5.2" 
+## 2003 "dem_10.1" "dem_10.2"
+## 2004 "dem_15.1" "dem_15.2"
+## 2005 "dem_20.1" "dem_20.2"
+## 2006 "dem_25.1" "dem_25.2"
+## 2007 "dem_30.1" "dem_30.2"
+## 2008 "dem_35.1" "dem_35.2"
+## 2009 "dem_40.1" "dem_40.2"
+## 2010 "dem_45.1" "dem_45.2"
+\end{verbatim}
+
+This RasterArray has 10 rows (annual means) and two variables/columns:
+temperature (bio1) and precipitation (bio12). With the proxy() function
+it is easy to interact with this object, or to query or analyze it.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{proxy}\NormalTok{(clim)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      bio1       bio12     
+## 2001 "dem_0.1"  "dem_0.2" 
+## 2002 "dem_5.1"  "dem_5.2" 
+## 2003 "dem_10.1" "dem_10.2"
+## 2004 "dem_15.1" "dem_15.2"
+## 2005 "dem_20.1" "dem_20.2"
+## 2006 "dem_25.1" "dem_25.2"
+## 2007 "dem_30.1" "dem_30.2"
+## 2008 "dem_35.1" "dem_35.2"
+## 2009 "dem_40.1" "dem_40.2"
+## 2010 "dem_45.1" "dem_45.2"
+\end{verbatim}
+
+RasterArrays are fairly easy to construct: one only needs a stack of the
+data and an regular vector/matrix/array including integers. For
+instance, the dems object can be recreated from scratch without
+problems.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# a stack of rasters}
+\NormalTok{stackOfLayers <-}\StringTok{ }\NormalTok{dems}\OperatorTok{@}\NormalTok{stack}
+\CommentTok{# an index object}
+\NormalTok{ind <-}\StringTok{ }\DecValTok{1}\OperatorTok{:}\DecValTok{10}
+\KeywordTok{names}\NormalTok{(ind) <-}\StringTok{ }\NormalTok{letters[}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{]}
+\CommentTok{# a RasterArray}
+\NormalTok{nra  <-}\StringTok{ }\KeywordTok{RasterArray}\NormalTok{(}\DataTypeTok{index=}\NormalTok{ind, }\DataTypeTok{stack=}\NormalTok{stackOfLayers)}
+\NormalTok{nra}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## class         : RasterArray 
+## RasterLayer properties: 
+## - dimensions  : 181, 361  (nrow, ncol)
+## - resolution  : 1, 1  (x, y)
+## - extent      : -180.5, 180.5, -90.5, 90.5  (xmin, xmax, ymin, ymax)
+## - coord. ref. : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## Array properties: 
+## - dimensions   : 10  (vector)
+## - num. layers    : 10
+## - proxy:
+##         a        b        c        d        e        f        g        h 
+##  "dem_0"  "dem_5" "dem_10" "dem_15" "dem_20" "dem_25" "dem_30" "dem_35" 
+##        i        j 
+## "dem_40" "dem_45"
+\end{verbatim}
+
+The attributes of the index object are defining the structure of the
+RasterArray. RasterArrays can be created with the combination of
+individual RasterLayers (or RasterArrays) using the combine() function.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# one raster}
+\NormalTok{r1 <-}\StringTok{ }\KeywordTok{raster}\NormalTok{()}
+\KeywordTok{values}\NormalTok{(r1) <-}\StringTok{ }\DecValTok{1}
+\CommentTok{# same structure, different value}
+\NormalTok{r2 <-}\KeywordTok{raster}\NormalTok{()}
+\KeywordTok{values}\NormalTok{(r2) <-}\StringTok{ }\DecValTok{2}
+\NormalTok{comb <-}\StringTok{ }\KeywordTok{combine}\NormalTok{(r1, r2)}
+\NormalTok{comb}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## class         : RasterArray 
+## RasterLayer properties: 
+## - dimensions  : 180, 360  (nrow, ncol)
+## - resolution  : 1, 1  (x, y)
+## - extent      : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)
+## - coord. ref. : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## Array properties: 
+## - dimensions   : 2  (vector)
+## - num. layers    : 2
+## - proxy:
+##         r1        r2 
+## "layer.1" "layer.2"
+\end{verbatim}
+
+Matrix-like RasterArrays can also be created easilly with the, cbind(),
+and rbind() functions.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# bind dems to itself}
+\KeywordTok{cbind}\NormalTok{(dems, dems)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## class         : RasterArray 
+## RasterLayer properties: 
+## - dimensions  : 181, 361  (nrow, ncol)
+## - resolution  : 1, 1  (x, y)
+## - extent      : -180.5, 180.5, -90.5, 90.5  (xmin, xmax, ymin, ymax)
+## - coord. ref. : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## Array properties: 
+## - dimensions  : 10, 2  (nrow, ncol)
+## - num. layers    : 20
+## - proxy:
+##     [,1]       [,2]      
+## 0  "dem_0.1"  "dem_0.2" 
+## 5  "dem_5.1"  "dem_5.2" 
+## 10 "dem_10.1" "dem_10.2"
+## 15 "dem_15.1" "dem_15.2"
+## 20 "dem_20.1" "dem_20.2"
+## 25 "dem_25.1" "dem_25.2"
+## 30 "dem_30.1" "dem_30.2"
+## 35 "dem_35.1" "dem_35.2"
+## 40 "dem_40.1" "dem_40.2"
+## 45 "dem_45.1" "dem_45.2"
+\end{verbatim}
+
+\hypertarget{rasterarray-attributes-and-function-to-query}{%
+\subsection{2.2. RasterArray attributes and function to
+query}\label{rasterarray-attributes-and-function-to-query}}
+
+Functions that query and change attributes of the RasterArray resemble
+general arrays more than Raster* objects. They are connected to the
+index slot of the RasterArray and return values accordingly.
+
+The number of elements represented in the RasterArray can be queried
+with the length() function:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{length}\NormalTok{(dems)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 10
+\end{verbatim}
+
+This RasterArray has 10 elements. The number of column and row names can
+be queried in a similar way:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{nrow}\NormalTok{(clim)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 10
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ncol}\NormalTok{(clim)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2
+\end{verbatim}
+
+These functions are summarized in the dim() funciton. This, however,
+unlike the regular dim() method of vectors, return the length of the
+RasterArray-vector, rather than just NULL.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dim}\NormalTok{(dems)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 10
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dim}\NormalTok{(clim)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 10  2
+\end{verbatim}
+
+The organization of RasterLayers can be greatly facilitated with names.
+The names(), colnames(), rownames() and dimnames() functions work the
+same way on RasterArrays as if they were arrays of simple numeric,
+logical or character values. The names() function returns the names of
+individual elements of a vector-like RasterArray.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{names}\NormalTok{(dems)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] "0"  "5"  "10" "15" "20" "25" "30" "35" "40" "45"
+\end{verbatim}
+
+The colnames() and rownames() functions are more relevant for
+matrix-like RasterArrays, such as clim.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{colnames}\NormalTok{(clim)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "bio1"  "bio12"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{rownames}\NormalTok{(clim)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] "2001" "2002" "2003" "2004" "2005" "2006" "2007" "2008" "2009" "2010"
+\end{verbatim}
+
+All name-related methods can be used for replacement as well. For
+instance, you can quickly rename the names of the columns of the clim
+object this way:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{clim2 <-}\StringTok{ }\NormalTok{clim}
+\KeywordTok{colnames}\NormalTok{(clim2) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"temp"}\NormalTok{, }\StringTok{"prec"}\NormalTok{)}
+\NormalTok{clim2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## class         : RasterArray 
+## RasterLayer properties: 
+## - dimensions  : 181, 361  (nrow, ncol)
+## - resolution  : 1, 1  (x, y)
+## - extent      : -180.5, 180.5, -90.5, 90.5  (xmin, xmax, ymin, ymax)
+## - coord. ref. : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## Array properties: 
+## - dimensions  : 10, 2  (nrow, ncol)
+## - num. layers    : 20
+## - proxy:
+##       temp       prec      
+## 2001 "dem_0.1"  "dem_0.2" 
+## 2002 "dem_5.1"  "dem_5.2" 
+## 2003 "dem_10.1" "dem_10.2"
+## 2004 "dem_15.1" "dem_15.2"
+## 2005 "dem_20.1" "dem_20.2"
+## 2006 "dem_25.1" "dem_25.2"
+## 2007 "dem_30.1" "dem_30.2"
+## 2008 "dem_35.1" "dem_35.2"
+## 2009 "dem_40.1" "dem_40.2"
+## 2010 "dem_45.1" "dem_45.2"
+\end{verbatim}
+
+Just as you would do it with normal arrays, the you can query/rewrite
+all names with the dimnames() function, that uses a list to store the
+names in every dimension.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dimnames}\NormalTok{(clim2)[[}\DecValTok{1}\NormalTok{]] <-}\StringTok{ }\DecValTok{1}\OperatorTok{:}\DecValTok{10}
+\NormalTok{clim2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## class         : RasterArray 
+## RasterLayer properties: 
+## - dimensions  : 181, 361  (nrow, ncol)
+## - resolution  : 1, 1  (x, y)
+## - extent      : -180.5, 180.5, -90.5, 90.5  (xmin, xmax, ymin, ymax)
+## - coord. ref. : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## Array properties: 
+## - dimensions  : 10, 2  (nrow, ncol)
+## - num. layers    : 20
+## - proxy:
+##     temp       prec      
+## 1  "dem_0.1"  "dem_0.2" 
+## 2  "dem_5.1"  "dem_5.2" 
+## 3  "dem_10.1" "dem_10.2"
+## 4  "dem_15.1" "dem_15.2"
+## 5  "dem_20.1" "dem_20.2"
+## 6  "dem_25.1" "dem_25.2"
+## 7  "dem_30.1" "dem_30.2"
+## 8  "dem_35.1" "dem_35.2"
+## 9  "dem_40.1" "dem_40.2"
+## 10 "dem_45.1" "dem_45.2"
+\end{verbatim}
+
+Besides the names of the eements in the RasterArray, every layer has its
+own name in the stack. These can be accessed with layers() function:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{layers}\NormalTok{(clim)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] "dem_0.1"  "dem_5.1"  "dem_10.1" "dem_15.1" "dem_20.1" "dem_25.1"
+##  [7] "dem_30.1" "dem_35.1" "dem_40.1" "dem_45.1" "dem_0.2"  "dem_5.2" 
+## [13] "dem_10.2" "dem_15.2" "dem_20.2" "dem_25.2" "dem_30.2" "dem_35.2"
+## [19] "dem_40.2" "dem_45.2"
+\end{verbatim}
+
+The total number of cells in the RasterLayer or the entire stack can
+accessed with the ncell() and nvalues() functions, respectively.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ncell}\NormalTok{(dems)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 65341
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{nvalues}\NormalTok{(dems)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 653410
+\end{verbatim}
+
+\hypertarget{subsetting-and-replacement}{%
+\subsection{2.3. Subsetting and
+replacement}\label{subsetting-and-replacement}}
+
+Facilitating the accession of items is the primary purpose of
+RasterArrays. These either focus on the layers (stack items, double
+bracket operator ``{[}{[}'') or the elements of the RasterArrray (single
+bracket operator ``{[}'').
+
+\hypertarget{layer-selection---double-bracket}{%
+\subsubsection{2.3.1 Layer selection - Double bracket
+{[}{[}}\label{layer-selection---double-bracket}}
+
+This form of subsetting and replacement are inherited from the
+RasterStack class. Individual layers can be accessed directly from the
+stack using either the position index, the name of the layer or the
+logical value pointing to the position. Whichever is used, the
+RasterArray wrapper omitted and output will a RasterLayer or RasterStack
+class object.
+
+A single layer can be accessed using its name, regardless of its
+position in the RasterArray. This can be visulized either with the
+default plot() or the more general mapplot() funciton.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{one <-}\StringTok{ }\NormalTok{dems[[}\StringTok{"dem_45"}\NormalTok{]]}
+\KeywordTok{mapplot}\NormalTok{(one, }\DataTypeTok{col=}\StringTok{"earth"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{chronos_files/figure-latex/single-1.pdf}
+
+Returning a single RasterArray. Multiple elements will be the format of
+a stack:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dems[[}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{)]]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## class      : RasterStack 
+## dimensions : 181, 361, 65341, 2  (nrow, ncol, ncell, nlayers)
+## resolution : 1, 1  (x, y)
+## extent     : -180.5, 180.5, -90.5, 90.5  (xmin, xmax, ymin, ymax)
+## crs        : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## names      : dem_0, dem_5 
+## min values : -9000, -7000 
+## max values :  6000,  6300
+\end{verbatim}
+
+Which are the first two RasterLayers in the stack of the RasterArray.
+
+Double brackets can also be used for replacements, but as this has no
+effect on the structure of the array, changes implemented with this
+method are more difficult to trace. For instance,
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# copy}
+\NormalTok{dem2 <-}\StringTok{ }\NormalTok{dems}
+\NormalTok{dem2[[}\StringTok{"dem_0"}\NormalTok{]] <-}\StringTok{ }\NormalTok{dem2[[}\StringTok{"dem_5"}\NormalTok{]]}
+\end{Highlighting}
+\end{Shaded}
+
+will rewrite the values in the first element of dem2, but that will not
+be evident in the RasterArray's structure.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# but these two are now the same}
+\NormalTok{dem2[[}\DecValTok{1}\NormalTok{]]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## class      : RasterLayer 
+## dimensions : 181, 361, 65341  (nrow, ncol, ncell)
+## resolution : 1, 1  (x, y)
+## extent     : -180.5, 180.5, -90.5, 90.5  (xmin, xmax, ymin, ymax)
+## crs        : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## source     : memory
+## names      : dem_0 
+## values     : -7000, 6300  (min, max)
+## zvar       : z
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dem2[[}\DecValTok{2}\NormalTok{]]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## class      : RasterLayer 
+## dimensions : 181, 361, 65341  (nrow, ncol, ncell)
+## resolution : 1, 1  (x, y)
+## extent     : -180.5, 180.5, -90.5, 90.5  (xmin, xmax, ymin, ymax)
+## crs        : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## source     : memory
+## names      : dem_5 
+## values     : -7000, 6300  (min, max)
+## zvar       : z
+\end{verbatim}
+
+\hypertarget{single-bracket}{%
+\subsubsection{2.3.2 Single bracket}\label{single-bracket}}
+
+Features offered by the double bracket (``{[}{[}'') operator are
+virtually identical with those of RasterStacks. The true utility of
+RasterArrays become evident with simple array-type subsetting.
+
+Unike Raster* objects of the raster package, single brackets will get
+and replace items from the RasterArray as if they were simple arrays.
+For example, single elements of the DEMs can be selected with the age of
+the DEM, passed as a character subscript.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dems[}\StringTok{"30"}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## class      : RasterLayer 
+## dimensions : 181, 361, 65341  (nrow, ncol, ncell)
+## resolution : 1, 1  (x, y)
+## extent     : -180.5, 180.5, -90.5, 90.5  (xmin, xmax, ymin, ymax)
+## crs        : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## source     : memory
+## names      : dem_30 
+## values     : -8000, 10200  (min, max)
+## zvar       : z
+\end{verbatim}
+
+returning the 30Ma RasterLayer. By default the RasterArray container is
+dropped, but it can be conserved, if the drop argument is set to FALSE.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dem30 <-}\StringTok{ }\NormalTok{dems[}\StringTok{"30"}\NormalTok{, drop=}\OtherTok{FALSE}\NormalTok{]}
+\KeywordTok{class}\NormalTok{(dem30)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "RasterArray"
+## attr(,"package")
+## [1] "chronosphere"
+\end{verbatim}
+
+Beyond bounds accessing is valid for single dimensional RasterArrays
+(vector-like ones):
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dems[}\DecValTok{4}\OperatorTok{:}\DecValTok{12}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## class         : RasterArray 
+## RasterLayer properties: 
+## - dimensions  : 181, 361  (nrow, ncol)
+## - resolution  : 1, 1  (x, y)
+## - extent      : -180.5, 180.5, -90.5, 90.5  (xmin, xmax, ymin, ymax)
+## - coord. ref. : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## Array properties: 
+## - dimensions   : 9  (vector)
+## - num. layers    : 7
+## - proxy:
+##        15       20       25       30       35       40       45     <NA> 
+## "dem_15" "dem_20" "dem_25" "dem_30" "dem_35" "dem_40" "dem_45"       NA 
+##     <NA> 
+##       NA
+\end{verbatim}
+
+Missing values are legitimate parts of RasterArrays. These gaps in the
+data are not represented in the stacks, but only in the index slots of
+the RasterArrays. They can be inserted or added into the layers.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{demna <-}\StringTok{ }\NormalTok{dems}
+\NormalTok{demna[}\DecValTok{3}\NormalTok{] <-}\StringTok{ }\OtherTok{NA}
+\end{Highlighting}
+\end{Shaded}
+
+Multidimensional subscripts work in a similar fashion. If a single layer
+is desired from the RasterArray, that can be accessed using the names of
+the margins.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# character is necessary, as the row named "2003" is necessary}
+\NormalTok{one <-}\StringTok{ }\NormalTok{clim[}\StringTok{"2003"}\NormalTok{, }\StringTok{"bio1"}\NormalTok{]}
+\KeywordTok{mapplot}\NormalTok{(one)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{chronos_files/figure-latex/cellsbu-1.pdf}
+
+similarly to entire rows,
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{clim[}\StringTok{"2005"}\NormalTok{, ]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## class         : RasterArray 
+## RasterLayer properties: 
+## - dimensions  : 181, 361  (nrow, ncol)
+## - resolution  : 1, 1  (x, y)
+## - extent      : -180.5, 180.5, -90.5, 90.5  (xmin, xmax, ymin, ymax)
+## - coord. ref. : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## Array properties: 
+## - dimensions   : 2  (vector)
+## - num. layers    : 2
+## - proxy:
+##        bio1      bio12 
+## "dem_20.1" "dem_20.2"
+\end{verbatim}
+
+or columns
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{clim[,}\StringTok{"bio12"}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## class         : RasterArray 
+## RasterLayer properties: 
+## - dimensions  : 181, 361  (nrow, ncol)
+## - resolution  : 1, 1  (x, y)
+## - extent      : -180.5, 180.5, -90.5, 90.5  (xmin, xmax, ymin, ymax)
+## - coord. ref. : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## Array properties: 
+## - dimensions   : 10  (vector)
+## - num. layers    : 10
+## - proxy:
+##        2001       2002       2003       2004       2005       2006 
+##  "dem_0.2"  "dem_5.2" "dem_10.2" "dem_15.2" "dem_20.2" "dem_25.2" 
+##       2007       2008       2009       2010 
+## "dem_30.2" "dem_35.2" "dem_40.2" "dem_45.2"
+\end{verbatim}
+
+\hypertarget{inherited-from-raster}{%
+\subsubsection{2.4 Inherited from Raster*}\label{inherited-from-raster}}
+
+As the spatial information is contained entirely in the RasterStacks, a
+number methods are practically inherited from RasterStack class. For
+instance, all RasterLayer of the RasterArray can be cropped in a single
+line of code.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# crop to Australia}
+\NormalTok{ext <-}\StringTok{ }\KeywordTok{extent}\NormalTok{(}\KeywordTok{c}\NormalTok{(                }
+  \DataTypeTok{xmin =} \FloatTok{106.58}\NormalTok{,}
+  \DataTypeTok{xmax =} \FloatTok{157.82}\NormalTok{,}
+  \DataTypeTok{ymin =} \FloatTok{-45.23}\NormalTok{,}
+  \DataTypeTok{ymax =} \FloatTok{1.14} 
+\NormalTok{)) }
+
+\CommentTok{# cropping all DEMS (Australia drifted in)}
+\NormalTok{au<-}\StringTok{ }\KeywordTok{crop}\NormalTok{(dems, ext)}
+
+\CommentTok{# select the first element}
+\KeywordTok{mapplot}\NormalTok{(au[}\DecValTok{1}\NormalTok{], }\DataTypeTok{col=}\StringTok{"earth"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{chronos_files/figure-latex/crop-1.pdf}
+
+Other functions such as aggregation or resampling works just the same.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{template <-}\StringTok{ }\KeywordTok{raster}\NormalTok{(}\DataTypeTok{res=}\DecValTok{5}\NormalTok{)}
+
+\CommentTok{# resample all DEMS}
+\NormalTok{coarse <-}\StringTok{ }\KeywordTok{resample}\NormalTok{(dems, template)}
+
+\CommentTok{# plot an elemnt}
+\KeywordTok{mapplot}\NormalTok{(coarse[}\StringTok{"45"}\NormalTok{], }\DataTypeTok{col=}\StringTok{"earth"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{chronos_files/figure-latex/resam-1.pdf}
+
+\hypertarget{plotting}{%
+\subsection{3. Plotting}\label{plotting}}
+
+mapplot() - RasterLayer -RasterArray{[}1 dimension{]} - RasterArray{[}2
+dimension{]}
+
+each chunk has to have a unique name (after r) otherwise the
+vignettebuilder will give an error.
+
+The echo field sets wether the code is visible. eval triggers whether it
+is evaluated.
 
 
 \end{document}

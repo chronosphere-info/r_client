@@ -1,5 +1,13 @@
 # Change log of the R package 'chronosphere'
 
+
+## [0.1.12 (build 53)]  - 2019-11-28
+### Changed
+- most of vignette is written
+- lots of small changes
+- major documentation upgrades, including examples
+
+
 ## [0.1.12 (build 52)]  - 2019-11-27 
 ### Added
 - reconstruction() local method support for MacOS

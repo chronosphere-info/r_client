@@ -11,7 +11,7 @@ userpwd <- NULL
 #' @param datadir Directory where the downloaded file 'reg.csv' file is kept. Individual layers will be looked up from the directory if this is given, and will be downloaded if they are not found. The default \code{NULL} option will download data to a temporary directory that exists only until the R session ends.
 #'
 #' @param verbose Should console feedback during download be displayed?
-#' @param examples
+#' @examples
 #' \donttest{
 #' ind <- dataindex()
 #' View(ind)
@@ -70,7 +70,7 @@ dataindex <- function(datadir=NULL, verbose=FALSE){
 		pkgver <- sessionInfo()$otherPkgs$chronosphere$Version
 		bLine <- pkgver==log$version
 		currentMessage <- log$message[bLine]
-		if(!is.null(currentMessage)) if(""!=currentMessage) warning(currentMessage)
+		if(length(currentMessage)!=0) if(""!=currentMessage) warning(currentMessage)
 
 		# and set return value
 		ret <- read.csv(tempReg, sep=",", header=TRUE, stringsAsFactors=FALSE)

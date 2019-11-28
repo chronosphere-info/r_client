@@ -10,15 +10,16 @@ dataindex(datadir = NULL, verbose = FALSE)
 \item{datadir}{Directory where the downloaded file 'reg.csv' file is kept. Individual layers will be looked up from the directory if this is given, and will be downloaded if they are not found. The default \code{NULL} option will download data to a temporary directory that exists only until the R session ends.}
 
 \item{verbose}{Should console feedback during download be displayed?}
-
-\item{examples}{\donttest{
-ind <- dataindex()
-View(ind)
-}}
 }
 \description{
 The function will download a list of available data from the data repository
 }
 \details{
 The function will download a single .csv file and attached it as a \code{data.frame}.
+}
+\examples{
+\donttest{
+ind <- dataindex()
+View(ind)
+}
 }
