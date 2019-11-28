@@ -12,14 +12,14 @@
 \usage{
 mapplot(x, ...)
 
-\S4method{mapplot}{RasterLayer}(x, col = gradinv(255), axes = FALSE,
+\S4method{mapplot}{RasterLayer}(x, col = "gradinv", axes = FALSE,
   box = FALSE, legend = FALSE, legend.title = NULL, ...)
 
 \S4method{mapplot}{RasterStack}(x, col = gradinv(255), ...)
 
-\S4method{mapplot}{RasterArray}(x, col = gradinv(255), rgb = FALSE,
+\S4method{mapplot}{RasterArray}(x, col = "gradinv", rgb = FALSE,
   legend = FALSE, axes = FALSE, box = FALSE, ask = TRUE,
-  nplots = 6, legend.title = NULL, plot.title = NULL, ...)
+  ncol = 3, legend.title = NULL, plot.title = NULL, ...)
 
 \S4method{mapplot}{SpatialPolygonsDataFrame}(x, col = "lightgrey", ...)
 
@@ -38,15 +38,15 @@ mapplot(x, ...)
 
 \item{legend}{(\code{logical}) Triggers whether the legend of a RasterLayer would be plotted.}
 
-\item{legend.title}{write!}
+\item{legend.title}{title for the legend, if legend = TRUE.}
 
-\item{rgb}{write!}
+\item{rgb}{set to \code{TRUE} to make a red-green-blue plot based on three layers or bands.}
 
-\item{ask}{write!}
-
-\item{nplots}{write!}
+\item{ask}{NULL or a logical values. If multi.page = TRUE and ask = TRUE, then the user will be prompted before a new page of output is started}
 
 \item{plot.title}{write!}
+
+\item{nplots}{maximum number of plots per page}
 }
 \description{
 This function plots Raster and sp-type objects.
