@@ -66,7 +66,7 @@ wet <-  colorRampPalette(c("#FBFEF9FF","#D8F0D3FF","#97D5BCFF","#568975FF","#53B
 #'@rdname ramps
 #'
 #'@export
-show.pal <- function(pal="all", n=11){
+showPal <- function(pal="all", n=11){
   pals <- c("ocean", "gradinv", "terra", "coldhot", "drywet", "wet")
   
   if(pal %in% pals){

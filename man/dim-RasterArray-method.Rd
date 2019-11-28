@@ -13,3 +13,9 @@
 \description{
 The function returns the dimensions of the array in which \code{RasterLayer}s are organized.
 }
+\examples{
+data(dems)
+dim(dems)
+data(clim)
+dim(clim)
+}

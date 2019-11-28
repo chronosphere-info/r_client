@@ -22,6 +22,6 @@ combine(x, ...)
 Methods sequences that start with an NA do not yet work.
 }
 \examples{
-data(demo)
-a <- combine(demo[1], demo[2])
+data(dems)
+a <- combine(dems[1], dems[2])
 }

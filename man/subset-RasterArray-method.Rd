@@ -24,3 +24,18 @@
 \description{
 Extract subsets of RasterArray class object similarly to a regular array.
 }
+\examples{
+data(dems)
+# first 4
+subset(dems, i=1:4)
+# missing at the end
+subset(dems, i=1:12)
+# character subscript
+subset(dems, i=c("5", "25"))
+# logical subscript
+subs <- rep(TRUE, length(dems))
+subs[1] <- FALSE # remove first
+subset(dems, i= subs)
+# no drop
+subset(dems, i=1, drop=FALSE)
+}

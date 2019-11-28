@@ -18,3 +18,8 @@ layers(x, ...)
 \description{
 Names of RasterArray's Layers in the stack
 }
+\examples{
+# names of layers in the stack
+data(dems)
+layers(dems)
+}

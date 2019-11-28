@@ -19,5 +19,7 @@
 Get or set the column names of two-dimensional RasterArray or SpArray objects
 }
 \examples{
-# an example
+data(clim)
+colnames(clim)
+colnames(clim) <- c("a", "b")
 }

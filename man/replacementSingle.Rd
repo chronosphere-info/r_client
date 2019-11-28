@@ -25,10 +25,10 @@
 Single bracket \code{'['} refers to indices and names within the \code{RasterArray}. Use double brackets to replace layers based on their names (in the stack).
 }
 \examples{
-data(demo)
+data(dems)
 # replace third element with missing value
-demo[3] <- NA
+dems[3] <- NA
 # duplicate first element and make it the second too
-demo[2] <-demo[1]
+dems[2] <-dems[1]
 
 }

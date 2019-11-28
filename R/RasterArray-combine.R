@@ -11,8 +11,8 @@
 #' @param x \code{RasterLayer} or \code{RasterArray} object to combine.
 #' @param ... additional objects to combine. 
 #' @examples
-#' data(demo)
-#' a <- combine(demo[1], demo[2])
+#' data(dems)
+#' a <- combine(dems[1], dems[2])
 #' @export 
 setGeneric("combine", function(x,...) standardGeneric("combine"))
 
@@ -248,13 +248,19 @@ setMethod("c2", signature=c("RasterArray", "RasterArray"),
 
 ###############################################################################
 
-#' Combine RasterLayers or RasterArrays by Rows or columns
+#' Combine RasterLayers or RasterArrays by rows or columns
 #' 
 #' The function takes a sequence of \code{RasterLayer} or \code{RasterArray} class objects and combines them to two dimensional \code{RasterArrays}...
 #' Named objects will be forced together based on \code{names}, \code{colnames} or \code{rownames} attributes, via insertion of \code{NAs}.
 #' 
 #' @examples
-#' # yet to come!
+#' data(dems)
+#' # create matrices out of vectors
+#' colb <- cbind(dems, dems)
+#' rowb <- rbind(dems, dems)
+#' # automatic name matching
+#' dems2 <- dems[c(1:4, 6:10)]
+#' matched <- suppressWarnings(cbind(dems, dems2))
 #' @export cbind.RasterArray
 #' @S3method cbind RasterArray
 #' @rdname bind-methods

@@ -18,3 +18,7 @@ nvalues(x, ...)
 \description{
 The total number of values in a RasterArray object
 }
+\examples{
+data(dems)
+nvalues(dems)
+}

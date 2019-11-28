@@ -28,9 +28,9 @@ Calculate values for a new RasterLayer/RasterArray object from another RasterArr
 The method is an extension of the \code{\link[raster]{calc}} function. The strucuture expressed as the RasterArray's dimensions allows the calculations to be iterated for different margins of the array, similarly to the \code{apply} function, controlled by the \code{margin} argument.
 }
 \examples{
-data(demo)
+data(dems)
 
-d2 <- cbind(demo, demo)
+d2 <- cbind(dems, dems)
 double <- calc(d2, margin=1, fun=sum)
 
 }

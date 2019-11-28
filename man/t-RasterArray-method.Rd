@@ -14,6 +14,8 @@
 Transpose a RasterArray object
 }
 \examples{
-data(demo)
-t(demo)
+data(dems)
+t(dems)
+data(clim)
+t(clim)
 }

@@ -6,15 +6,15 @@
 #' 
 #' @param x a \code{RasterArray} class object.
 #' @examples
-#' data(demo)
+#' data(dems)
 #' # omit third element
-#' demo[3] <- NA
+#' dems[3] <- NA
 #' # number of elements in the RasterArray
-#' length(demo)
+#' length(dems)
 #' # remaining number values in the stack 
-#' length(demo@stack)
+#' length(dems@stack)
 #' # the number of remaining layers in the RasterArray
-#' nlayers(demo)
+#' nlayers(dems)
 #' 
 #' @rdname arraylength
 #' @exportMethod length
@@ -30,6 +30,9 @@ setMethod(
 #' 
 #' @param x a \code{RasterArray} class object.
 #' @rdname ncell
+#' @examples
+#' data(dems)
+#' ncell(dems)
 #' @exportMethod ncell
 setMethod(
 	"ncell",
@@ -53,7 +56,9 @@ setMethod(
 #' @param value \code{character} vector.
 #' 
 #' @examples
-#' # an example
+#' data(clim)
+#' colnames(clim)
+#' colnames(clim) <- c("a", "b")
 #' @rdname colnames
 #' @exportMethod colnames
 setMethod(
@@ -83,7 +88,9 @@ setReplaceMethod(
 #' @param value \code{character} vector.
 #' 
 #' @examples
-#' # an example
+#' data(clim)
+#' rownames(clim)
+#' rownames(clim) <- paste("year", rownames(clim))
 #' @rdname rownames
 #' @exportMethod rownames
 setMethod(
@@ -111,7 +118,12 @@ setReplaceMethod(
 #' @param value \code{character} vector.
 #' 
 #' @examples
-#' # an example
+#' data(dems)
+#' names(dems)
+#' names(dems)[4] <- "weirdo"
+#' # NULL
+#' data(clim)
+#' names(clim)
 #' @rdname names
 #' @exportMethod names
 setMethod(
@@ -141,7 +153,11 @@ setReplaceMethod(
 #' @param value \code{character} vector.
 #' 
 #' @examples
-#' # an example
+#' data(dems)
+#' dimnames(dems)
+#' data(clim)
+#' dimnames(clim)
+#' dimnames(clim)[[2]] <- c("first", "second")
 #' @rdname dimnames
 #' @exportMethod dimnames
 setMethod(
@@ -168,6 +184,10 @@ setReplaceMethod(
 #' @param ... additional arguments passed to class-specific methods.
 #' 
 #' @exportMethod layers
+#' @examples
+#' # names of layers in the stack
+#' data(dems)
+#' layers(dems)
 #' @rdname layers
 setGeneric("layers", function(x,...) standardGeneric("layers"))
 
@@ -188,6 +208,9 @@ setMethod(
 #' @param ... additional arguments passed to class-specific methods.
 #' 
 #' @exportMethod nvalues
+#' @examples 
+#' data(dems)
+#' nvalues(dems)
 #' @rdname nvalues
 setGeneric("nvalues", function(x,...) standardGeneric("nvalues"))
 
@@ -208,6 +231,11 @@ setMethod(
 #' The function returns the dimensions of the array in which \code{RasterLayer}s are organized.
 #' @param x A \code{RasterArray} class object.
 #' 
+#' @examples
+#' data(dems)
+#' dim(dems)
+#' data(clim)
+#' dim(clim)
 #' @exportMethod dim
 setMethod(
 	"dim", 
@@ -249,6 +277,10 @@ setMethod(
 #' @param x A \code{RasterLayer} class object.
 #' @rdname adimatt
 #' @exportMethod ncol
+#' @examples
+#' data(clim)
+#' ncol(clim)
+#' nrow(clim)
 setMethod(
 	"ncol", 
 	signature="RasterArray", 

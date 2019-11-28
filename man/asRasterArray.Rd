@@ -23,8 +23,8 @@ as.RasterArray(from)
 The function converts \code{RasterLayer}, \code{RasterStack} and \code{RasterBrick} objects to \code{RasterArray} class objects.
 }
 \examples{
-data(demo)
-recent <- demo[1]
+data(dems)
+recent <- dems[1]
 # convert RasterLayer to RasterArray
 ra <- as.RasterArray(recent)
 }

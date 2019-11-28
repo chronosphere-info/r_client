@@ -19,5 +19,7 @@
 Get or set the row names of two-dimensional RasterArray or SpArray objects
 }
 \examples{
-# an example
+data(clim)
+rownames(clim)
+rownames(clim) <- paste("year", rownames(clim))
 }

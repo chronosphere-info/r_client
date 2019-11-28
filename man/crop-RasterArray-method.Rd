@@ -17,3 +17,16 @@
 \description{
 The method is inherited from the \code{RasterStack} class.
 }
+\examples{
+data(dems)
+# crop to Australia
+ext <- extent(c(                
+  xmin = 106.58,
+  xmax = 157.82,
+  ymin = -45.23,
+  ymax = 1.14 
+)) 
+# cropping all DEMS (Australia drifted in)
+au<- crop(dems, ext)
+
+}

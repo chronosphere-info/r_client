@@ -30,3 +30,26 @@ forced to \code{character} values and will be used as character subscripts.}
 \description{
 The function takes a set of time-dependent coordinates and extracts the value they point to from associted RasterLayers in a RasterArray.
 }
+\examples{
+# one pair of random coordinates from Africa
+mat <- matrix(c(                
+  -1.34, 42.96
+), ncol=2, byrow=TRUE) 
+
+# repeat four times
+mat<- mat[rep(1,4), ]
+
+# assign default names and age
+df<- data.frame(plng=mat[, 1],plat=mat[, 2], age=c(1,3,5, 1))
+rownames(df) <- paste("point", 1:nrow(df))
+
+# first coordinate pair will be extrated from RasterLayer 1 ["0"]
+# second coordinate pair will be extracted from RasterLayer 3 ["10"]
+# thrid coordinate pair will be extracted from RasterLayer 5 ["20"]
+# fourth coordinate pair will be extracted from RasterLayer 1 ["0"]
+data(dems)
+extract(dems, df, by="age")
+
+# by=NULL will be implemented in the next update 
+# (all coordinates extracted from all layers)
+}

@@ -19,5 +19,10 @@
 Get or set the names of one-dimensional RasterArray or SpArray objects
 }
 \examples{
-# an example
+data(dems)
+names(dems)
+names(dems)[4] <- "weirdo"
+# NULL
+data(clim)
+names(clim)
 }

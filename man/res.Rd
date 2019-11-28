@@ -19,3 +19,9 @@
 \description{
 The methods are inherited from the \code{RasterStack} class, see \code{\link[raster]{resolution}}. Replacement is not allowed.
 }
+\examples{
+data(dems)
+res(dems)
+yres(dems)
+xres(dems)
+}

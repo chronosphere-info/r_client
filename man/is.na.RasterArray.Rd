@@ -13,8 +13,8 @@
 The function behaves similar to the regular \code{is.na()} function applied to the proxy object of a \code{RasterArray}.
 }
 \examples{
-data(demo)
-demo[2] <- NA
-is.na(demo)
+data(dems)
+dems[2] <- NA
+is.na(dems)
 
 }

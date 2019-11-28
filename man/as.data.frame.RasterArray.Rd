@@ -21,7 +21,7 @@ Convert RasterArray class objects to data.frames}
 Formal conversion method transforming the proxy object to a data.frame.
 }
 \examples{
-data(demo)
-df <- as.data.frame(demo)
+data(dems)
+df <- as.data.frame(dems)
 
 }

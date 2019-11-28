@@ -15,3 +15,8 @@
 \description{
 The method is inherited from the \code{RasterStack} class.
 }
+\examples{
+data(dems)
+agg <- aggregate(dems, 5)
+
+}

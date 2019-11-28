@@ -16,3 +16,8 @@
 \description{
 Unlike the \code{ncol} and \code{nrow} functions of the raster package (\code{\link[raster]{ncell}}), this function returns the number of columns and rows of the \code{RasterArray} container, rather than the dimensions of the contained \code{RasterLayer}s.
 }
+\examples{
+data(clim)
+ncol(clim)
+nrow(clim)
+}

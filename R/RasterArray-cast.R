@@ -8,8 +8,8 @@
 #' @param optional \code{logical} Flag to reset the rownames and colnaems attributes.
 #' @param ... additional arguments passed to and from methods.
 #' @examples
-#' data(demo)
-#' df <- as.data.frame(demo)
+#' data(dems)
+#' df <- as.data.frame(dems)
 #' 
 #' @method as.data.frame RasterArray
 #' @export 
@@ -34,8 +34,8 @@ as.data.frame.RasterArray <- function(x, row.names=NULL, optional=FALSE,...){
 #' @param from Object to be converted. 
 #' 
 #' @examples
-#' data(demo)
-#' recent <- demo[1]
+#' data(dems)
+#' recent <- dems[1]
 #' # convert RasterLayer to RasterArray
 #' ra <- as.RasterArray(recent)
 #' @rdname asRasterArray

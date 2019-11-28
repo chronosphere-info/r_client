@@ -21,3 +21,10 @@ This function returns an object that symbolizes the structure of layers in the \
 \details{
 The \code{proxy} method wraps the names of layers in the stack using the \code{index} slot of the \code{RasterArray}.
 }
+\examples{
+data(dems)
+proxy(dems)
+
+data(clim)
+proxy(clim)
+}

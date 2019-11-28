@@ -39,13 +39,28 @@ newbounds <- function(x, cols=NULL, rows=NULL){
 #' 
 #' The function returns snippets of code that you can paste in your script after you select points on a plot. Useful for defining areas on a map. The default methods assume that you will first click in the bottom left and then in the bottom right corner.
 #' 
-#' 
-#'
 #' @param round (\code{integer}) Number of digits to round to, can be two values, first is for \code{x} second for \code{y}. 
 #' @param f (\code{character}) A single letter value specifying for which function's arugment format you want to get parameters. \code{"p"} is for \code{\link[graphics]{plot}}, \code{"r"} is for \code{\link[graphics]{rect}}, \code{"s"} is for \code{\link[graphics]{segments}}. \code{"e"} returns a call to create an \code{\link[raster]{extent}} class object from the package \code{raster}. \code{"m"} will return code to define a 2 column matrix.
 #' @param n (\code{integer}) The number of points to request. 
 #' @param ... arguments passed to the \code{\link[graphics]{locator}} fucntion
-# 
+#' @examples
+#' \donttest{
+#' # plot something
+#' data(dems)
+#' mapplot(dems[1], col="earth")
+#' # click 5 times to get the long-lat coords of 5 points
+#' shaper("m",5)
+#' # example output:
+#' mat <- matrix(c(                
+#'   -2.89, 31.55,
+#'   3.32, 26.99,
+#'   21.17, 17.87,
+#'   33.6, 11.03,
+#'   5.65, 19.39
+#' ), ncol=2, byrow=TRUE)
+#' #plot them 
+#' points(mat)
+#'}
 #' @export
 shaper <- function(f="p",n=2, round=2,...){
 	if(length(round)==1) round <- rep(round,2)

@@ -8,7 +8,7 @@
 \arguments{
 \item{stack}{A \code{RasterStack} class object.}
 
-\item{proxy}{A \code{vector}, \code{matrix} or \code{array} type object. Includes either the indices of layers in the stack, or their names.}
+\item{index}{A \code{vector}, \code{matrix} or \code{array} type object. Includes either the indices of layers in the stack, or their names.}
 
 \item{dim}{A \code{numeric} vector. Same as for \code{array}, creates \code{proxy} procedurally.}
 }
@@ -20,46 +20,12 @@ The class implements structures to organize RasterLayers that have the same dime
 
 The class has two slots:
 stack: RasterStack, the actual data.
-proxy: A proxy object that represents the organization of the layers.
-
-Currently the following methods are implemented - documentation will come later:
-
-show: type in the name to the console.
-
-subset: needed for [
-
-"[": behaves just like a matrix, or array. drop=TRUE keeps RasterArray, even if there is only one layer. x[i] doesn't yet work for multidimensional containers.
-
-"[[": just like RasterStack
-
-"colnames": names of the second dim.
-
-"rownames":names of the first dim.
-
-"dim": dimensions of the array. Unlike the method of RasterStack, this doesn't include the layer dimensions.
-
-"dimlayer": dimensions of the RasterLayers.
-
-"dimnames": Names in all dimensions. I am thinking about naming the dimensions in some way (e.g. time, depth, var), so we can do subsetting with them.
-
-"nrow": Number of rows in the array. Unlike nrow for the RasterLayers.
-
-"ncol": Number of columns in the array. Unlike ncol for the RasterLayers.
-  
-  "maxValue": outputs maximum value in RasterLayers - keeping the structure of proxy.
-  
-  "minValue": outputs minimum value in RasterLayers - keeping the structure of proxy.
-  
-  "res", "yres", "xres" are the same as for RasterStack.
-
-There are only two contructor processes defined, these should get us through the initial developmental phases.
-There is no validity testing yet, that is still to be implemented.
-The plot method will be directed with the proxy object.
+index: A proxy object that represents the organization of the layers.
 }
 \examples{
 # data import
-  data(demo)
-  st <-demo@stack
+  data(dems)
+  st <-dems@stack
   ind <- 1:nlayers(st)
   names(ind) <- letters[1:length(ind)]
   ra<- RasterArray(stack=st, index=ind)

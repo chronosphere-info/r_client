@@ -18,8 +18,9 @@ mapplot(x, ...)
 \S4method{mapplot}{RasterStack}(x, col = gradinv(255), ...)
 
 \S4method{mapplot}{RasterArray}(x, col = "gradinv", rgb = FALSE,
-  legend = FALSE, axes = FALSE, box = FALSE, ask = TRUE,
-  ncol = 3, legend.title = NULL, plot.title = NULL, ...)
+  legend = FALSE, axes = FALSE, box = FALSE, ask = FALSE,
+  ncol = 3, legend.title = NULL, plot.title = NULL, multi = FALSE,
+  rownames = NULL, colnames = NULL, ...)
 
 \S4method{mapplot}{SpatialPolygonsDataFrame}(x, col = "lightgrey", ...)
 

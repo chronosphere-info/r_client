@@ -19,5 +19,9 @@
 Get or set the dimnames of multidimensional RasterArray or SpArray objects
 }
 \examples{
-# an example
+data(dems)
+dimnames(dems)
+data(clim)
+dimnames(clim)
+dimnames(clim)[[2]] <- c("first", "second")
 }

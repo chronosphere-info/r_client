@@ -18,3 +18,22 @@ shaper(f = "p", n = 2, round = 2, ...)
 \description{
 The function returns snippets of code that you can paste in your script after you select points on a plot. Useful for defining areas on a map. The default methods assume that you will first click in the bottom left and then in the bottom right corner.
 }
+\examples{
+\donttest{
+# plot something
+data(dems)
+mapplot(dems[1], col="earth")
+# click 5 times to get the long-lat coords of 5 points
+shaper("m",5)
+# example output:
+mat <- matrix(c(                
+  -2.89, 31.55,
+  3.32, 26.99,
+  21.17, 17.87,
+  33.6, 11.03,
+  5.65, 19.39
+), ncol=2, byrow=TRUE)
+#plot them 
+points(mat)
+}
+}

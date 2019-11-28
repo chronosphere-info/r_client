@@ -19,50 +19,16 @@ setClassUnion("arrayORmatrixORvector", c("vector", "matrix", "array"))
 #' 
 #' The class has two slots:
 #' stack: RasterStack, the actual data.
-#' proxy: A proxy object that represents the organization of the layers. 
+#' index: A proxy object that represents the organization of the layers. 
 #' 
-#' Currently the following methods are implemented - documentation will come later:
-#' 
-#'   show: type in the name to the console.
-#'
-#'   subset: needed for [
-#'
-#'   "[": behaves just like a matrix, or array. drop=TRUE keeps RasterArray, even if there is only one layer. x[i] doesn't yet work for multidimensional containers. 
-#'
-#'   "[[": just like RasterStack
-#'
-#'   "colnames": names of the second dim.
-#'
-#'   "rownames":names of the first dim.
-#'
-#'   "dim": dimensions of the array. Unlike the method of RasterStack, this doesn't include the layer dimensions.
-#'
-#'   "dimlayer": dimensions of the RasterLayers.
-#'
-#'   "dimnames": Names in all dimensions. I am thinking about naming the dimensions in some way (e.g. time, depth, var), so we can do subsetting with them. 
-#'
-#'   "nrow": Number of rows in the array. Unlike nrow for the RasterLayers.
-#'
-#'   "ncol": Number of columns in the array. Unlike ncol for the RasterLayers.
-#'   
-#'   "maxValue": outputs maximum value in RasterLayers - keeping the structure of proxy.
-#'   
-#'   "minValue": outputs minimum value in RasterLayers - keeping the structure of proxy.
-#'   
-#'   "res", "yres", "xres" are the same as for RasterStack.
-#'   
-#' 
-#' There are only two contructor processes defined, these should get us through the initial developmental phases.
-#' There is no validity testing yet, that is still to be implemented.
-#' The plot method will be directed with the proxy object. 
 #' 
 #' @param stack A \code{RasterStack} class object.
-#' @param proxy A \code{vector}, \code{matrix} or \code{array} type object. Includes either the indices of layers in the stack, or their names.
+#' @param index A \code{vector}, \code{matrix} or \code{array} type object. Includes either the indices of layers in the stack, or their names.
 #' @param dim A \code{numeric} vector. Same as for \code{array}, creates \code{proxy} procedurally.
 #' @examples
 #' # data import
-#'   data(demo)
-#'   st <-demo@stack
+#'   data(dems)
+#'   st <-dems@stack
 #'   ind <- 1:nlayers(st)
 #'   names(ind) <- letters[1:length(ind)]
 #'   ra<- RasterArray(stack=st, index=ind)
@@ -177,6 +143,12 @@ setMethod(
 #'  
 #' @param x (\code{RasterArray}  focal object.
 #' @param ... additional arguments passed to class-specific methods.
+#' @examples
+#' data(dems)
+#' proxy(dems)
+#'
+#' data(clim)
+#' proxy(clim)
 #' @exportMethod proxy
 #' @rdname proxy
 setGeneric("proxy", function(x,...) standardGeneric("proxy"))
@@ -256,9 +228,9 @@ extendDim <- function(proxy, vals2d, newdim=1){
 #' @param x A \code{RasterArray} class object.
 #' 
 #' @examples
-#' data(demo)
-#' demo[2] <- NA
-#' is.na(demo)
+#' data(dems)
+#' dems[2] <- NA
+#' is.na(dems)
 #' 
 #' @export
 is.na.RasterArray<-function(x){
@@ -270,8 +242,10 @@ is.na.RasterArray<-function(x){
 #' Transpose a RasterArray object
 #' 
 #' @examples
-#' data(demo)
-#' t(demo)
+#' data(dems)
+#' t(dems)
+#' data(clim)
+#' t(clim)
 #' @param x A RasterArray class object. 
 #' 
 #' @exportMethod t
@@ -308,8 +282,10 @@ setMethod(
 #' The function implements the \code{\link[base]{apply}}-type iterators for the RasterArray class. Output values are constrained to RasterArrays, whenever possible. 
 #' Not yet implemented for multidimensional MARGINs.
 #' @examples
-#' # not yet
-#' a<- cbind(demo, demo)
+#' # double of itself
+#' data(dems)
+#' a<- cbind(dems, dems)
+#' same <- apply(a, 1, sum)
 #' @param X an array, including matrices and RasterArrays.
 #' @param MARGIN a vector giving the subscripts which the function will be applied over. E.g., for a matrix 1 indicates rows, 2 indicates columns, \code{c(1, 2)} indicates rows and columns. Where \code{X} has named dimnames, it can be a character vector selecting dimension names. For \code{RasterArrays} only single dimension margins are implemented.
 #' @param FUN  the function to be applied: see ‘Details’ of \code{\link[base]{apply}}. 

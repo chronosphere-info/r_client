@@ -22,3 +22,13 @@
 \description{
 Meta-object containing paths to a unique plate tectonic model
 }
+\examples{
+link to a single .mod file
+\donttest{
+	mo <- fetch("paleomap", "model", datadir="~")
+ # manually attach model paths
+	model <- platemodel(file.path(tempdir(), 
+   "paleomap_model_v3-GPlates/paleomap_model_v3-GPlates.mod"))
+}
+plate
+}

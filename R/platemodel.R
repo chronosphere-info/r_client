@@ -14,6 +14,15 @@ platemodel <- setClass("platemodel", slots=list(name="character", rotation="char
 #' @param polygons If \code{path} is \code{NULL}, the path to the plate polygon file-part of the model.
 #' @rdname platemodel 
 #' @export platemodel
+#' @examples
+#' link to a single .mod file
+#' \donttest{
+#' 	mo <- fetch("paleomap", "model", datadir="~")
+#'  # manually attach model paths
+#' 	model <- platemodel(file.path(tempdir(), 
+#'    "paleomap_model_v3-GPlates/paleomap_model_v3-GPlates.mod"))
+#' }
+#' plate
 setMethod("initialize",signature="platemodel",
 	definition=function(.Object,path=NULL, rotation=NULL, polygons=NULL){
 		if(!is.null(path)){

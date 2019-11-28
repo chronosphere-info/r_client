@@ -8,7 +8,7 @@
 \alias{coldhot}
 \alias{drywet}
 \alias{wet}
-\alias{show.pal}
+\alias{showPal}
 \title{Colour gradient ramps for default plotting}
 \usage{
 gradinv(n)
@@ -23,7 +23,7 @@ drywet(n)
 
 wet(n)
 
-show.pal(pal = "all", n = 11)
+showPal(pal = "all", n = 11)
 }
 \arguments{
 \item{n}{Number of different colors to generate from the palette}

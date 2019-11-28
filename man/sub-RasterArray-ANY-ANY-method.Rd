@@ -22,14 +22,14 @@
 Single bracket \code{'['} refers to indices and names within the \code{RasterArray}. Use double brackets to extract layers based on their names (in the stack).
 }
 \examples{
-data(demo)
+data(dems)
 # numeric subsetting
-firstThree <- demo[1:3]
+firstThree <- dems[1:3]
 # character subsetting
-second <- demo["10"]
+second <- dems["10"]
 # logical subsetting
-subscript <- rep(FALSE, length(demo))
+subscript <- rep(FALSE, length(dems))
 subscript[2] <- TRUE
-second2 <- demo[subscript]
+second2 <- dems[subscript]
 
 }

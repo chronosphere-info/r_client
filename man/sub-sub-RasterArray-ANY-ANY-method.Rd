@@ -20,3 +20,15 @@ The function returns either a single \code{RasterLayer}, a \code{RasterStack} or
 \description{
 Double bracket \code{'[['} refers to layers' name in the \code{RasterStack} of the \code{RasterArray}. Use single brackets to extract elements based on their position in the \code{RasterArray}.
 }
+\examples{
+data(dems)
+# finds a layer
+dems[["dem_30"]]
+# returns a stack
+dems[[c("dem_0", "dem_15")]]
+# replaces a layervalues, but not the attributes of the layer
+dem2 <- dems
+dem2[["dem_0"]] <- dem2[["dem_5"]]
+# compare every value in the 0 and 5 ma maps, they are all the same
+mean(values(dem2[["dem_0"]]==dem2[["dem_5"]]))
+}

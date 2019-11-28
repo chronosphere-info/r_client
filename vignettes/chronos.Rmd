@@ -14,11 +14,12 @@ knitr::opts_chunk$set(echo = TRUE)
 library(chronosphere)
 ```
 
+# 1. 
+
+
 # 1. Introduction
 
 ## 1.1. Installation
-
-Lots of blabla....
 
 To install this beta version of the package, you must download it either from the CRAN servers or its dedicated GitHub repository (http://www.github.com/divDyn/r_package/). All minor updates will be posted on GitHub as soon as they are finished, so please check this regularly. The version on CRAN will be lagging for some time, as it takes the servers many days to process everything and updates are expected to be frequent. All questions should be addressed to Adam Kocsis, the creator and maintainer of the package (adam.kocsis@fau.de). 
 Instead of spending it on actual research, a tremendous amount of time was invested in making this piece of software useable and user-friendly. If you use a method implemented in the package in a publication, please cite both its reference(s) and the ‘divDyn’ package itself (Kocsis et al. 2019).
@@ -53,4 +54,52 @@ mapplot(demo[1], col="earth")
 
 And this is the end.
 
+# 1.2 General features
 
+# 2. RasterArray
+purpose
+
+## 2.1. Strucuture
+
+show()
+proxy()
+str()
+
+Constructor
+
+
+## 2.2. attributes and function to query
+length()
+nlayers()
+ncol()
+dim()
+nrow()
+names()
+rownames()
+colnames()
+layers()
+ncell()
+
+
+
+## 2.3. subsetting and replacement
+
+### 2.3.1 Double bracket
+- add NAs
+
+### 2.3.2 Single bracket
+ - multidimensional
+ - single dimension
+
+### 2.4 Inherited from Raster*
+
+crop()
+resample()
+aggregate()
+
+
+## 3. Plotting
+mapplot()
+- RasterLayer
+-RasterArray[1 dimension]
+- RasterArray[2 dimension]

@@ -24,6 +24,8 @@ The function implements the \code{\link[base]{apply}}-type iterators for the Ras
 Not yet implemented for multidimensional MARGINs.
 }
 \examples{
-# not yet
-a<- cbind(demo, demo)
+# double of itself
+data(dems)
+a<- cbind(dems, dems)
+same <- apply(a, 1, sum)
 }

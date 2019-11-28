@@ -34,3 +34,10 @@ projectRaster(from, to, res, crs, method = "bilinear",
 \description{
 The method implemets the \code{\link[raster]{projectRaster}} function for \code{RasterArray} class objects.
 }
+\examples{
+# project first three to mollweide
+data(dems)
+suppressWarnings(
+  mollDem <- projectRaster(dems[1:3], crs=CRS("+proj=moll"))
+)
+}

@@ -7,6 +7,11 @@
 #' @param x a \code{RasterArray} class object.
 #' 
 #' @rdname res
+#' @examples
+#' data(dems)
+#' res(dems)
+#' yres(dems)
+#' xres(dems)
 #' @exportMethod xres
 setMethod(
 	"xres",
@@ -55,6 +60,12 @@ setMethod(
 #' @param ... arguments passed to the \code{\link[raster]{cellStats}} function.
 #' 
 #' @rdname extremeValues
+#' @examples 
+#' data(dems)
+#' rangeVals <- cbind(
+#'   minValue(dems),
+#'   maxValue(dems)
+#' )
 #' @exportMethod minValue
 setMethod(
 	"minValue",
@@ -97,6 +108,10 @@ setMethod(
 #' @param y The y argument of the \code{\link[raster]{resample}} function.
 #' @param ... arguments passed to the \code{\link[raster]{resample}} function.
 #' 
+#' @examples
+#' data(dems)
+#' template <- raster(res=5)
+#' resampled <- resample(dems, template)
 #' @exportMethod resample
 setMethod(
 	"resample",
@@ -114,6 +129,18 @@ setMethod(
 #' @param x a \code{RasterArray} class object.
 #' @param y an xtent object, or any object from which an Extent object can be extracted (see Details)
 #' @param ... arguments passed to the \code{\link[raster]{crop}} function.
+#' 
+#' @examples
+#' data(dems)
+#' # crop to Australia
+#' ext <- extent(c(                
+#'   xmin = 106.58,
+#'   xmax = 157.82,
+#'   ymin = -45.23,
+#'   ymax = 1.14 
+#' )) 
+#' # cropping all DEMS (Australia drifted in)
+#' au<- crop(dems, ext)
 #' 
 #' @exportMethod crop
 setMethod(
@@ -133,6 +160,10 @@ setMethod(
 #' @param ... arguments passed to the \code{\link[raster]{aggregate}} function.
 #' 
 #' @exportMethod aggregate
+#' @examples
+#' data(dems)
+#' agg <- aggregate(dems, 5)
+#' 
 setMethod(
 	"aggregate",
 	signature=c("RasterArray"),
@@ -150,6 +181,10 @@ setMethod(
 #' @param ... arguments passed to the \code{\link[raster]{disaggregate}} function.
 #' 
 #' @exportMethod disaggregate
+#' @examples
+#' data(dems)
+#' disagg <- disaggregate(dems, 3)
+#' 
 setMethod(
 	"disaggregate",
 	signature=c("RasterArray"),
@@ -177,6 +212,28 @@ setMethod(
 #' numeric values, and x will be subsetted with \code{numeric} subscripts of the \code{x} \code{RasterArray}. If set to character, the by column (or vector) will be
 #' forced to \code{character} values and will be used as character subscripts.
 #' @exportMethod extract
+#' @examples
+#' # one pair of random coordinates from Africa
+#' mat <- matrix(c(                
+#'   -1.34, 42.96
+#' ), ncol=2, byrow=TRUE) 
+#' 
+#' # repeat four times
+#' mat<- mat[rep(1,4), ]
+#' 
+#' # assign default names and age
+#' df<- data.frame(plng=mat[, 1],plat=mat[, 2], age=c(1,3,5, 1))
+#' rownames(df) <- paste("point", 1:nrow(df))
+#' 
+#' # first coordinate pair will be extrated from RasterLayer 1 ["0"]
+#' # second coordinate pair will be extracted from RasterLayer 3 ["10"]
+#' # thrid coordinate pair will be extracted from RasterLayer 5 ["20"]
+#' # fourth coordinate pair will be extracted from RasterLayer 1 ["0"]
+#' data(dems)
+#' extract(dems, df, by="age")
+#' 
+#' # by=NULL will be implemented in the next update 
+#' # (all coordinates extracted from all layers)
 setMethod(
 	"extract", 
 	signature=c(x="RasterArray", y="data.frame"), 
@@ -186,7 +243,7 @@ setMethod(
 #	if(!is.data.frame(y) & !is.matrix(y)) stop("The argument y has to be a data.frame or matrix.")
 	
 	dimX <- dim(x)
-	if(length(dimX)>2) stop("x has to be a one or two-dimensional RasterArray.")
+	if(length(dimX)>2) stop("'x' has to be a one or two-dimensional RasterArray.")
 
 	# recursive case
 	if(length(dimX)==2){
@@ -257,6 +314,9 @@ setMethod(
 #' @param ... arguments passed to the \code{\link[raster]{cellStats}} function.
 #' 
 #' @exportMethod cellStats
+#' @examples
+#' data(clim)
+#' cellStats(clim, stat=mean, na.rm=TRUE)
 setMethod("cellStats", signature="RasterArray", 
 	definition=function(x, stat,...){
 		statVect <- raster::cellStats(x@stack, stat=stat,...)
@@ -265,24 +325,6 @@ setMethod("cellStats", signature="RasterArray",
 		return(endObj)
 	}
 )
-
-#' Summary
-#'
-#' Summarizes a \code{RasterArray} class object.
-#' 
-#' The method is inherited from the \code{RasterStack} class. 
-#' 
-#' @param object a \code{RasterArray} class object.
-#' @exportMethod summary
-setMethod("summary", 
-	signature="RasterArray",
-	definition=function(object){
-		allSumm <- raster::summary(object@stack)
-		endRes <- extendDim(proxy(object), allSumm)
-		endRes
-	}
-)
-
 
 #' Project a RasterArray object
 #'
@@ -299,6 +341,12 @@ setMethod("summary",
 #' @param ... additional arguments as for \code{\link[raster]{writeRaster}}.
 #' @rdname projectRaster
 #' @exportMethod projectRaster
+#' @examples
+#' # project first three to mollweide
+#' data(dems)
+#' suppressWarnings(
+#'   mollDem <- projectRaster(dems[1:3], crs=CRS("+proj=moll"))
+#' )
 setGeneric("projectRaster", def=raster::projectRaster)
 
 #' @rdname projectRaster
@@ -347,17 +395,17 @@ setMethod("projectRaster", "RasterArray",
 #' @param ... additional arguments as in \code{\link[raster]{writeRaster}}. 
 #' 
 #' @examples
-#' data(demo)
+#' data(dems)
 #' 
 #' # land
-#' lands <- demo
+#' lands <- dems
 #' for(i in 1:length(lands)){
 #'   values(lands[i])[values(lands[i])<0] <- NA
 #'   values(lands[i])[!is.na(values(lands[i]))] <- 1
 #' }
 #' 
 #' # land topographies
-#' landTopo<- mask(demo, lands)
+#' landTopo<- mask(dems, lands)
 #' 
 #' @rdname mask-RasterArray-methods
 #' @exportMethod mask
@@ -488,9 +536,9 @@ setMethod(
 #' @param forceapply logical. Force calc to use fun with apply; for use with ambiguous functions and for debugging (see Details)
 #' 
 #' @examples
-#' data(demo)
+#' data(dems)
 #' 
-#' d2 <- cbind(demo, demo)
+#' d2 <- cbind(dems, dems)
 #' double <- calc(d2, margin=1, fun=sum)
 #' 
 #' @exportMethod calc

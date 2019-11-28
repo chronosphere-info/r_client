@@ -17,3 +17,8 @@
 \description{
 The method is inherited from the \code{RasterStack} class.
 }
+\examples{
+data(dems)
+template <- raster(res=5)
+resampled <- resample(dems, template)
+}

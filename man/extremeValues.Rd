@@ -20,3 +20,10 @@
 \description{
 The method is inherited from the \code{RasterStack} class. Postitions of layers are conserved in the output. (including missing layers)
 }
+\examples{
+data(dems)
+rangeVals <- cbind(
+  minValue(dems),
+  maxValue(dems)
+)
+}

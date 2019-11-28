@@ -13,6 +13,20 @@
 #' 
 # combined
 #' @exportMethod subset
+#' @examples
+#' data(dems)
+#' # first 4
+#' subset(dems, i=1:4)
+#' # missing at the end
+#' subset(dems, i=1:12)
+#' # character subscript
+#' subset(dems, i=c("5", "25"))
+#' # logical subscript
+#' subs <- rep(TRUE, length(dems))
+#' subs[1] <- FALSE # remove first
+#' subset(dems, i= subs)
+#' # no drop
+#' subset(dems, i=1, drop=FALSE)
 setMethod(
 	"subset", 
 	signature(x="RasterArray"), 
@@ -84,15 +98,15 @@ setMethod(
 #' @param ... subscript of additional dimensions.
 #' @param drop \code{logical} in case the result of subsetting is a single element, should the \code{RasterArray} wrapper be dropped and the element be reduced to a single \code{RasterLayer}?
 #' @examples
-#' data(demo)
+#' data(dems)
 #' # numeric subsetting
-#' firstThree <- demo[1:3]
+#' firstThree <- dems[1:3]
 #' # character subsetting
-#' second <- demo["10"]
+#' second <- dems["10"]
 #' # logical subsetting
-#' subscript <- rep(FALSE, length(demo))
+#' subscript <- rep(FALSE, length(dems))
 #' subscript[2] <- TRUE
-#' second2 <- demo[subscript]
+#' second2 <- dems[subscript]
 #' 
 #' @exportMethod [
 setMethod(
@@ -120,11 +134,11 @@ setMethod(
 #' @param ... subscript of additional dimensions.
 #' @param value A \code{RasterLayer} or \code{RasterArray} object.
 #' @examples
-#' data(demo)
+#' data(dems)
 #' # replace third element with missing value
-#' demo[3] <- NA
+#' dems[3] <- NA
 #' # duplicate first element and make it the second too
-#' demo[2] <-demo[1]
+#' dems[2] <-dems[1]
 #' 
 #' @rdname replacementSingle
 #' @exportMethod "[<-"
@@ -313,6 +327,17 @@ setReplaceMethod(
 #' @param i subscript of the first dimension(rows) or vector-like subsetting.
 #' @param drop \code{logical} should the \code{RasterStack} be dropped and the element be reduced to a single \code{RasterLayer}?
 #' @exportMethod "[["
+#' @examples
+#' data(dems)
+#' # finds a layer
+#' dems[["dem_30"]]
+#' # returns a stack
+#' dems[[c("dem_0", "dem_15")]]
+#' # replaces a layervalues, but not the attributes of the layer
+#' dem2 <- dems
+#' dem2[["dem_0"]] <- dem2[["dem_5"]]
+#' # compare every value in the 0 and 5 ma maps, they are all the same
+#' mean(values(dem2[["dem_0"]]==dem2[["dem_5"]]))
 setMethod(
 	"[[", 
 	signature(x="RasterArray"),

@@ -3,7 +3,7 @@
 \name{cbind.RasterArray}
 \alias{cbind.RasterArray}
 \alias{rbind.RasterArray}
-\title{Combine RasterLayers or RasterArrays by Rows or columns}
+\title{Combine RasterLayers or RasterArrays by rows or columns}
 \usage{
 \method{cbind}{RasterArray}(...)
 
@@ -17,5 +17,11 @@ The function takes a sequence of \code{RasterLayer} or \code{RasterArray} class 
 Named objects will be forced together based on \code{names}, \code{colnames} or \code{rownames} attributes, via insertion of \code{NAs}.
 }
 \examples{
-# yet to come!
+data(dems)
+# create matrices out of vectors
+colb <- cbind(dems, dems)
+rowb <- rbind(dems, dems)
+# automatic name matching
+dems2 <- dems[c(1:4, 6:10)]
+matched <- suppressWarnings(cbind(dems, dems2))
 }

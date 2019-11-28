@@ -20,14 +20,14 @@ Function to return the length of the array in which \code{RasterLayers} are orga
 The length() function returns the number elements that should be present based on the array structure itself, and not the total number of values stored in the object (such as the \code{length} method of \code{RasterStack}s). As the object can contain missing values, the number of actual layers can be queried with \code{\link{nlayers}}.
 }
 \examples{
-data(demo)
+data(dems)
 # omit third element
-demo[3] <- NA
+dems[3] <- NA
 # number of elements in the RasterArray
-length(demo)
+length(dems)
 # remaining number values in the stack 
-length(demo@stack)
+length(dems@stack)
 # the number of remaining layers in the RasterArray
-nlayers(demo)
+nlayers(dems)
 
 }

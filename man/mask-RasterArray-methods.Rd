@@ -64,16 +64,16 @@ RasterArray masked with Spatial: all layers masked with an Sp object
 RasterLayer masked with RasterArray: layer is masked out iteratively with every member of RasterArray.
 }
 \examples{
-data(demo)
+data(dems)
 
 # land
-lands <- demo
+lands <- dems
 for(i in 1:length(lands)){
   values(lands[i])[values(lands[i])<0] <- NA
   values(lands[i])[!is.na(values(lands[i]))] <- 1
 }
 
 # land topographies
-landTopo<- mask(demo, lands)
+landTopo<- mask(dems, lands)
 
 }
