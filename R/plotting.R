@@ -71,7 +71,7 @@ setMethod("mapplot", signature="RasterStack",
 
 #' @rdname mapplot
 setMethod("mapplot", signature="RasterArray", 
-          definition = function(x, col="gradinv", rgb=FALSE, legend=FALSE, axes=FALSE, box=FALSE, ask=TRUE,
+          definition = function(x, col="gradinv", rgb=FALSE, legend=FALSE, axes=FALSE, box=FALSE, ask=FALSE,
                                 ncol = 3, legend.title=NULL, plot.title =NULL, ...){
             if(rgb == TRUE){
               raster::plotRGB(x@stack, ...)  	    
@@ -122,12 +122,12 @@ setMethod("mapplot", signature="RasterArray",
                   rng[[n]] <- range(range(x[n,])[,], na.rm=TRUE)
                 }
                 
-                  nbrks = lapply(col, length) 
-                  brks <- list()
+                nbrks = lapply(col, length) 
+                brks <- list()
                   
-                  for (i in 1:length(nbrks)){
+                for (i in 1:length(nbrks)){
                     brks[[i]] <- seq(rng[[i]][1], rng[[i]][2], length.out = nbrks[[i]]+1)
-                  }
+                }
                 
                 for (i in 1:pg2){
                   
@@ -164,10 +164,10 @@ setMethod("mapplot", signature="RasterArray",
               } else {
                 devAskNewPage(ask=FALSE)
                 
-                pg <- if(nlayers(x)%%nplots == 0) seq(0,nlayers(x),nplots) else  c(seq(0,nlayers(x),nplots), nlayers(x))
-                
                 nrow = 2 #unless < 3
                 nplots = nrow * ncol
+                
+                pg <- if(nlayers(x)%%nplots == 0) seq(0,nlayers(x),nplots) else  c(seq(0,nlayers(x),nplots), nlayers(x))
                 
                 m <- matrix(c(1:nplots,rep((nplots+1), ncol)), nrow = nrow+1,ncol = ncol,byrow = TRUE)
                 layout(mat = m,heights = c(rep(0.4, nrow),0.2))
@@ -175,18 +175,16 @@ setMethod("mapplot", signature="RasterArray",
                 #consistent legend
                 rng <- range(range(x)[])
                 
-                if (is.null(pal)){
-                  nbrks = length(col)
-                  brks <- seq(rng[1], rng[2], length.out = nbrks+1)
-                } else {
-                  nbrks <- length(brks)
-                }
+                nbrks = length(col[[1]])
+                brks <- seq(rng[1], rng[2], length.out = nbrks+1)
+                
                 
                 for (i in 1:(length(pg)-1)){
                   
                   for (j in (pg[i]+1): (pg[i+1])){
                     par(mar=c(0,1,2,1))
-                    raster::image(x[j], axes=axes, xlab="", ylab="", asp=1, col=col[[j]], breaks=brks[[j]], 
+                    raster::image(x[j], axes=axes, xlab="", ylab="", asp=1,
+                                  col=col[[1]], breaks=brks, 
                                   main=plot.title[j])
                   }
                   
@@ -198,7 +196,7 @@ setMethod("mapplot", signature="RasterArray",
                   
                   par(mar=c(6,4,2,4))
                   plot(rng,c(0,5), type="n", axes=FALSE, ylab="", xlab="", xaxs="i", yaxs="i")
-                  image(x=brks, z=as.matrix(brks), col=col, add=TRUE)
+                  image(x=brks, z=as.matrix(brks), col=col[[1]], add=TRUE)
                   box()
                   
                   par(xpd=TRUE)
