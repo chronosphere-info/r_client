@@ -3,16 +3,29 @@
 #' This function plots Raster and sp-type objects.
 #' 
 #' @param x Object to be plotted 
-#' @param legend (\code{logical}) Triggers whether the legend of a RasterLayer would be plotted.
 #' @param col \code{character} Color or color scheme of the plot. See \code{?ramps} for available palettes.
-#' @param ... arguments passed to class-specific methods.
+#' @param rgb set to \code{TRUE} to make a red-green-blue plot based on three layers or bands.
+#' @param legend (\code{logical}) Triggers whether the legend of a RasterLayer would be plotted.
 #' @param axes \code{logical} Should axes be displayed?
 #' @param box \code{logical} Should bounding boxes be displayed?
+#' @param ncol set number of columns in a multi-plot for a single variable. For a RasterArray with multiple variables, this number is automatically set to the number of variables. 
 #' @param legend.title title for the legend, if legend = TRUE. 
-#' @param rgb set to \code{TRUE} to make a red-green-blue plot based on three layers or bands.
-#' @param ask NULL or a logical values. If multi.page = TRUE and ask = TRUE, then the user will be prompted before a new page of output is started 
-#' @param nplots maximum number of plots per page
-#' @param plot.title write!
+#' @param plot.title The title for each individual plot. Only available for a single variable at the moment.
+#' @param rownames label for each row of the overall plot. Uses the rownames of the RasterArray by default. Only availble for multivariate RasterArrays. 
+#' @param multi Should the plots be printed on multiple pages? 
+#' @param ask NULL or a logical values. If multi.page = TRUE and ask = TRUE, then the user will be prompted before a new page of output is started
+#' @param ... arguments passed to class-specific methods.
+#' @examples
+#' 
+#'  #single variable
+#' 	data(dems)
+#' 	mapplot(dems, ncol=4)
+#' 	
+#' 	#multiple variables
+#' 	data(clim)
+#' 	mapplot(clim, multi=TRUE, legend=TRUE)
+
+
 #' @rdname mapplot
 #' @exportMethod mapplot
 setGeneric("mapplot", function(x,...) standardGeneric("mapplot"))
@@ -71,27 +84,21 @@ setMethod("mapplot", signature="RasterStack",
 
 #' @rdname mapplot
 setMethod("mapplot", signature="RasterArray", 
-          definition = function(x, col="gradinv", rgb=FALSE, 
-                                legend=FALSE, axes=FALSE, box=FALSE, ask=FALSE,
-                                ncol = 3, legend.title=NULL, plot.title =NULL, multi=FALSE,rownames=NULL,colnames=NULL,...){
+          definition = function(x, col="gradinv", rgb=FALSE, legend=FALSE, axes=FALSE, box=FALSE, 
+                                ncol = 3, legend.title=NULL, plot.title =NULL, rowlabels=rownames(x), multi=FALSE, ask=FALSE,...){
             if(rgb == TRUE){ #plot with rgb bands
               raster::plotRGB(x@stack, ...)  	    
             } else { #uni and multivariate rasterArrays
+              
+              #number of variables in array
               nvars <- ifelse (is.na(dim(x)[2]), 1, dim(x)[2])
               
               #check for colour palettes - might need to check for typos
               
-              #set colours to list
+              #set colours
               if(length(col)==nvars){
                 col <- as.list(col)
               } else col <- as.list(rep(col,nvars))
-              
-              #set legend to list
-              if (is.null(legend.title)) legend.title <- ""
-              
-              if(length(rownames)==nvars){
-                legend.title <- as.list(legend.title)
-              } else legend.title <- as.list(rep(legend.title,nvars))
               
               for (i in 1:nvars){
                 if(col[[i]][1] %in% c("ocean", "gradinv", "terra", "coldhot", "drywet", "wet")){
@@ -99,32 +106,22 @@ setMethod("mapplot", signature="RasterArray",
                 }
                 
                 if(col[[i]][1] == "earth"){
+                  pal_earth <- i #save for later to be used for rng and brks
+                  brks <- list() 
+                  rng <- list()
+                  
                   negBreaks <- seq(-10000, 0, by=50)
                   posBreaks <- seq(0, 10000, by=50)
                   
-                  brks <- c(negBreaks[1:(length(negBreaks)-1)], posBreaks)
+                  brks[[i]] <- c(negBreaks[1:(length(negBreaks)-1)], posBreaks)
                   col[[i]] <- c(ocean(length(negBreaks)-1), terra(length(posBreaks)-1))
-                }
-                
-              } 
-              
-              #edit for plot title
-              # if (is.null(plot.title)){
-              #   plot.title <- names(x)
-              # }
-              
+                  
+                  rng[[i]] <- range(brks[[i]])
+                } 
+              }
               
               #multivariate
               if (nvars > 1){
-                
-                if(is.null(colnames)){ #should be only for nvars> 1
-                  colnames <- colnames(x)
-                }
-                
-                if(is.null(rownames)){ #should be only for nvars> 1
-                  rownames <- rownames(x)
-                }
-                
                 devAskNewPage(ask=FALSE)
                 
                 #multiple or single page layout
@@ -145,26 +142,35 @@ setMethod("mapplot", signature="RasterArray",
                 nplots=ncol*nrow
                 
                 if (legend == TRUE) {
+                  #set legend to list
+                  if (is.null(legend.title)) legend.title <-colnames(x)
+                  
+                  if(length(legend.title)==nvars){
+                    legend.title <- as.list(legend.title)
+                  } else legend.title <- as.list(rep(legend.title,nvars))
+                  
                   m <- matrix(c(1:(nplots+nvars)),nrow = nrow+1 ,ncol = ncol,byrow = TRUE)
                   layout(mat = m,heights = c(rep(0.4, nrow),0.2))
-                  } else{
+                } else{
                   m <- matrix(c(1:nplots),nrow = nrow ,ncol = ncol,byrow = TRUE)
                   layout(mat = m,heights = c(rep(0.4, nrow)))
                 }
                 
-                
-                #get ranges for each variable
-                rng <- list()
-                
-                for (n in 1:nvars){
-                  rng[[n]] <- range(range(x[n,])[,], na.rm=TRUE)
+                if (is.null(pal_earth)){
+                  #get ranges for each variable
+                  rng <- list()
+                  brks <- list()
+                  pal_earth <- nvars+1 #so that subsetting works
                 }
                 
                 #breaks for each variable
                 nbrks = lapply(col, length) 
-                brks <- list()
                 
-                for (i in 1:length(nbrks)){
+                for (n in (1:nvars)[-pal_earth]){
+                  rng[[n]] <- range(range(x[,n])[,], na.rm=TRUE)
+                }
+                
+                for (i in (1:length(nbrks))[-pal_earth]){
                   brks[[i]] <- seq(rng[[i]][1], rng[[i]][2], length.out = nbrks[[i]]+1)
                 }
                 
@@ -176,9 +182,12 @@ setMethod("mapplot", signature="RasterArray",
                     for (k in 1:nvars){
                       par(mar=c(0,1,2,1))
                       raster::image(x[j,k], axes=axes, xlab="", ylab="", asp=1, col=col[[k]], breaks=brks[[k]], main=plot.title)
+                      
+                      if (box == TRUE) box()
+                      
                       devAskNewPage(ask=FALSE)
                       
-                      if (k == 1) mtext(rownames[j], adj=0.03, line=-1, font=2) # colnames
+                      if (k == 1) mtext(rowlabels[j], adj=0.03, line=-1, font=2) # colnames
                     }
                   }
                   
@@ -210,6 +219,9 @@ setMethod("mapplot", signature="RasterArray",
               } else {
                 devAskNewPage(ask=FALSE)
                 
+                if (is.null(plot.title)){
+                  plot.title <- proxy(x)
+                }
                 
                 if(multi == TRUE){
                   nrow = 2 #unless < 3
@@ -222,6 +234,9 @@ setMethod("mapplot", signature="RasterArray",
                 }
                 
                 if (legend == TRUE){
+                  #set legend to list
+                  if (is.null(legend.title)) legend.title <- ""
+                  
                   m <- matrix(c(1:nplots,rep((nplots+1), ncol)), nrow = nrow+1,ncol = ncol,byrow = TRUE)
                   layout(mat = m,heights = c(rep(0.4, nrow),0.2))
                 } else {
@@ -230,23 +245,24 @@ setMethod("mapplot", signature="RasterArray",
                 }
                 
                 
-                #consistent legend
-                rng <- range(range(x)[])
+                if (is.null(brks)){ #if earth hasn't been assigned
+                  #consistent legend
+                  rng <- range(range(x)[])
+                  
+                  nbrks = length(col[[1]])
+                  brks[[1]] <- seq(rng[1], rng[2], length.out = nbrks+1)
+                }
                 
-                nbrks = length(col[[1]])
-                brks <- seq(rng[1], rng[2], length.out = nbrks+1)
                 
                 for (i in 1:(length(pg)-1)){
                   
                   for (j in (pg[i]+1): (pg[i+1])){
                     par(mar=c(0,1,2,1))
                     
-                    
                     raster::image(x[j], axes=axes, xlab="", ylab="", asp=1,
-                                  col=col[[1]], breaks=brks, 
+                                  col=col[[1]], breaks=brks[[1]], 
                                   main=plot.title[j])
-                    
-                    
+                    if (box == TRUE) box()
                   }
                   
                   #empty plots if needed
@@ -257,22 +273,22 @@ setMethod("mapplot", signature="RasterArray",
                   }
                   
                   if (legend == TRUE){
-                  #add legend
-                  par(mar=c(6,4,2,4)) 
-                  plot(rng,c(0,5), type="n", axes=FALSE, ylab="", xlab="", xaxs="i", yaxs="i")
-                  image(x=brks, z=as.matrix(brks), col=col[[1]], add=TRUE)
-                  box()
-                  
-                  par(xpd=TRUE)
-                  labs <- pretty(rng, n=10)
-                  labs <- labs[labs > rng[1] & labs < rng[2]]
-                  text(x = labs, y=-8, labels = labs, cex=1.5)
-                  
-                  for(l in 1:length(labs)){
-                    lines(c(labs[l], labs[l]), c(-3, 0))
-                  }
-                  
-                  graphics::text(x=mean(rng), y=10, labels=legend.title, cex=1.4, font=2)
+                    #add legend
+                    par(mar=c(6,4,2,4)) 
+                    plot(rng,c(0,5), type="n", axes=FALSE, ylab="", xlab="", xaxs="i", yaxs="i")
+                    image(x=brks, z=as.matrix(brks), col=col[[1]], add=TRUE)
+                    box()
+                    
+                    par(xpd=TRUE)
+                    labs <- pretty(rng, n=10)
+                    labs <- labs[labs > rng[1] & labs < rng[2]]
+                    text(x = labs, y=-8, labels = labs, cex=1.5)
+                    
+                    for(l in 1:length(labs)){
+                      lines(c(labs[l], labs[l]), c(-3, 0))
+                    }
+                    
+                    graphics::text(x=mean(rng), y=10, labels=legend.title, cex=1.4, font=2)
                   }
                   devAskNewPage(ask=ask)
                 }

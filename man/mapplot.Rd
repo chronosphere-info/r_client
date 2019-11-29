@@ -18,9 +18,9 @@ mapplot(x, ...)
 \S4method{mapplot}{RasterStack}(x, col = gradinv(255), ...)
 
 \S4method{mapplot}{RasterArray}(x, col = "gradinv", rgb = FALSE,
-  legend = FALSE, axes = FALSE, box = FALSE, ask = FALSE,
-  ncol = 3, legend.title = NULL, plot.title = NULL, multi = FALSE,
-  rownames = NULL, colnames = NULL, ...)
+  legend = FALSE, axes = FALSE, box = FALSE, ncol = 3,
+  legend.title = NULL, plot.title = NULL, rowlabels = rownames(x),
+  multi = FALSE, ask = FALSE, ...)
 
 \S4method{mapplot}{SpatialPolygonsDataFrame}(x, col = "lightgrey", ...)
 
@@ -43,12 +43,26 @@ mapplot(x, ...)
 
 \item{rgb}{set to \code{TRUE} to make a red-green-blue plot based on three layers or bands.}
 
+\item{ncol}{set number of columns in a multi-plot for a single variable. For a RasterArray with multiple variables, this number is automatically set to the number of variables.}
+
+\item{plot.title}{The title for each individual plot. Only available for a single variable at the moment.}
+
+\item{multi}{Should the plots be printed on multiple pages?}
+
 \item{ask}{NULL or a logical values. If multi.page = TRUE and ask = TRUE, then the user will be prompted before a new page of output is started}
 
-\item{plot.title}{write!}
-
-\item{nplots}{maximum number of plots per page}
+\item{rownames}{label for each row of the overall plot. Uses the rownames of the RasterArray by default. Only availble for multivariate RasterArrays.}
 }
 \description{
 This function plots Raster and sp-type objects.
+}
+\examples{
+
+ #single variable
+	data(dems)
+	mapplot(dems, ncol=4)
+	
+	#multiple variables
+	data(clim)
+	mapplot(clim, multi=TRUE, legend=TRUE)
 }
