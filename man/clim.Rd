@@ -19,6 +19,6 @@ land surface areas,  v1.2) resampled to 2x2 degrees resolution. CHELSA (http://c
 CHELSA_v1 is based on a quasi-mechanistical statistical downscaling of the ERA interim global circulation model. The provided data is in a All products of CHELSA are 
 in a geographic coordinate system referenced to the WGS 84 horizontal datum. 
 \cr
-\cr More details on the technical specification of CHELSA can be found \href{http://chelsa-climate.org/wp-admin/download-page/CHELSA_tech_specification.pdf}{here}.
+\cr More details on the technical specification of CHELSA can be found at http://chelsa-climate.org/wp-admin/download-page/CHELSA_tech_specification.pdf.
 }
 \keyword{datasets}

@@ -6,7 +6,7 @@
 \title{PaleoDEM rasters from the reconstructions Chris Scotese.}
 \format{A RasterArray with 10 layers.}
 \source{
-Chris Scotese
+Scotese, C. R. Wright, N. (2018). PALEOMAP Paleodigital Elevation Models (PaleoDEMS) for the Phanerozoic. URL: https://www.earthbyte.org/paleodem-resource-scotese-and-wright-2018/
 }
 \usage{
 dems
