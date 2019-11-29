@@ -149,7 +149,7 @@ fetch <- function(dat, var=NULL, ver=NULL, res=1, datadir=NULL, verbose=TRUE){
 	
 
 	# method dispatch
-	if(varType=="raster"){
+	if(varType=="RasterArray"){
 		combined <- fetchRaster(dat=dat, var=var, ver=ver, res=res, datadir=datadir, register=register, verbose=verbose)
 	}
 
