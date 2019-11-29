@@ -6,8 +6,10 @@
 - 'clim' data object
 - bug fix for the apply() RasterArray method
 
+
 ### Changed 
 - [[ of RasterArrays now wrap output in a RasterArray by default.
+- reconstruct() function's local submodule no longer returns coordinates for points that are situated on plates that did not exist on the at reconstruction date (matrix method returns NA coordinates, Sp methods omit)
 
 ## [0.1.12 (build 54)]  - 2019-11-29
 ### Changed

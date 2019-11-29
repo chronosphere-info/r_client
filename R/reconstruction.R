@@ -458,7 +458,7 @@ reconstructGPlates <- function(x, age, model, path.gplates=NULL,dir=NULL, verbos
 		# do the plate assignment
 		if(!is.character(x)){
 			if(verbose) message("Assigning plate IDs to .gpml file.")
-			assignment <- paste(gplatesExecutable, " assign-plate-ids -p ", platePolygons, " -l ",pathToFileNoEXT,".gpml", sep="")
+			assignment <- paste(gplatesExecutable, " assign-plate-ids -e 1 -p ", platePolygons, " -l ",pathToFileNoEXT,".gpml", sep="")
 			system(assignment, ignore.stdout=!verbose,ignore.stderr=!verbose)
 		}
 		# do reconstruction
@@ -472,18 +472,23 @@ reconstructGPlates <- function(x, age, model, path.gplates=NULL,dir=NULL, verbos
 		# reading coordinates
 		if(!is.character(x)){
 			if(verbose) message("Reading reconstructed coordinates.")
-			somethingDF <- rgdal::readOGR(paste(pathToFileNoEXT,"_reconstructed.shx",	sep=""), verbose=verbose)
+			somethingDF <<- rgdal::readOGR(paste(pathToFileNoEXT,"_reconstructed.shx",	sep=""), verbose=verbose)
 		} 
 		if(is.character(x)){
 			if(x=="plates") if(verbose) message("Reading plates.")
 			pathToFile <- paste(pathToFileNoEXT,"_reconstructed",dirSep ,fileFromPath(pathToFileNoEXT),"_reconstructed_polygon.shx", sep="")
-			somethingDF <- rgdal::readOGR(pathToFile, verbose=verbose)
+			somethingDF <<- rgdal::readOGR(pathToFile, verbose=verbose)
 		}
 		
 		# transform object back to whatever it was
 		if(class(x)=="matrix" | class(x)=="data.frame"){
-			rotated <- somethingDF@coords
-			rownames(rotated)<-rownames(x)
+			# some coordinates probably were missing
+			rotated <- x
+			rotated <- matrix(NA, ncol=2, nrow=nrow(x))
+			colnames(rotated) <- colnames(x)
+			rownames(rotated) <- rownames(x)
+			rotated[somethingDF@data$a,]  <- somethingDF@coords
+			
 		}
 
 		if(
