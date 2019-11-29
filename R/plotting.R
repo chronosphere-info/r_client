@@ -11,7 +11,7 @@
 #' @param ncol set number of columns in a multi-plot for a single variable. For a RasterArray with multiple variables, this number is automatically set to the number of variables. 
 #' @param legend.title title for the legend, if legend = TRUE. 
 #' @param plot.title The title for each individual plot. Only available for a single variable at the moment.
-#' @param rownames label for each row of the overall plot. Uses the rownames of the RasterArray by default. Only availble for multivariate RasterArrays. 
+#' @param rowlabels label for each row of the overall plot. Uses the rownames of the RasterArray by default. Only availble for multivariate RasterArrays. 
 #' @param multi Should the plots be printed on multiple pages? 
 #' @param ask NULL or a logical values. If multi.page = TRUE and ask = TRUE, then the user will be prompted before a new page of output is started
 #' @param ... arguments passed to class-specific methods.
@@ -200,7 +200,7 @@ setMethod("mapplot", signature="RasterArray",
                       
                       devAskNewPage(ask=FALSE)
                       
-                      if (k == 1) mtext(rowlabels[j], adj=0.03, line=-1, font=2) # colnames
+                      if (k == 1) mtext(rowlabels[j], adj=0.03, line=0, font=2, cex=0.8) # colnames
                     }
                   }
                   
@@ -208,7 +208,7 @@ setMethod("mapplot", signature="RasterArray",
                     #add legend
                     for (k in 1:nvars){
                       
-                      if (multi == TRUE) par(mar=c(6,4,2,4)) else par(mar=c(2,4,2,4))
+                      par(mar=c(4,2,2,2))
                       plot(rng[[k]],c(0,5), type="n", axes=FALSE, ylab="", xlab="", xaxs="i", yaxs="i")
                       image(x=brks[[k]], z=as.matrix(brks[[k]]), col=col[[k]], add=TRUE)
                       box()
@@ -233,7 +233,7 @@ setMethod("mapplot", signature="RasterArray",
                 devAskNewPage(ask=FALSE)
                 
                 if (is.null(plot.title)){
-                  plot.title <- proxy(x)
+                  plot.title <- names(proxy(dems))
                 }
                 
                 if(multi == TRUE){
@@ -251,7 +251,7 @@ setMethod("mapplot", signature="RasterArray",
                   if (is.null(legend.title)) legend.title <- ""
                   
                   m <- matrix(c(1:nplots,rep((nplots+1), ncol)), nrow = nrow+1,ncol = ncol,byrow = TRUE)
-                  layout(mat = m,heights = c(rep(0.4, nrow),0.2))
+                  layout(mat = m,heights = c(rep(0.4, nrow),0.3))
                 } else {
                   m <- matrix(c(1:nplots), nrow = nrow,ncol = ncol,byrow = TRUE)
                   layout(mat = m,heights = rep(0.4, nrow))
@@ -293,7 +293,7 @@ setMethod("mapplot", signature="RasterArray",
                   
                   if (legend == TRUE){
                     #add legend
-                    par(mar=c(6,4,2,4)) 
+                    if (multi == TRUE) par(mar=c(6,4,3,4)) else par(mar=c(2.5,4,2,4))
                     plot(rng,c(0,5), type="n", axes=FALSE, ylab="", xlab="", xaxs="i", yaxs="i")
                     image(x=brks[[1]], z=as.matrix(brks[[1]]), col=col[[1]], add=TRUE)
                     box()

@@ -78,7 +78,7 @@ setMethod(
 	signature="matrix", 
 	function(x,age, model="PALEOMAP", listout=TRUE, verbose=FALSE, enumerate=TRUE, chunk=200, reverse=FALSE, path.gplates=NULL, cleanup=TRUE, dir=NULL){
 	 
-		# CHeck long lat!
+		# Check long lat!
 
 
 		if(!is.numeric(age)) age <- as.numeric(age)
