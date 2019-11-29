@@ -117,7 +117,9 @@ setMethod("mapplot", signature="RasterArray",
                   col[[i]] <- c(ocean(length(negBreaks)-1), terra(length(posBreaks)-1))
                   
                   rng[[i]] <- range(brks[[i]])
-                } 
+                } else {
+                  brks <- NULL
+                  pal_earth <- NULL}
               }
               
               #multivariate
@@ -156,6 +158,7 @@ setMethod("mapplot", signature="RasterArray",
                   layout(mat = m,heights = c(rep(0.4, nrow)))
                 }
                 
+                # if one of the chosen colours were set to earth
                 if (is.null(pal_earth)){
                   #get ranges for each variable
                   rng <- list()
@@ -167,12 +170,14 @@ setMethod("mapplot", signature="RasterArray",
                 nbrks = lapply(col, length) 
                 
                 for (n in (1:nvars)[-pal_earth]){
-                  rng[[n]] <- range(range(x[,n])[,], na.rm=TRUE)
+                  rng[[n]] <- range(range(x[,n], na.rm=TRUE)[,], na.rm=TRUE)
                 }
                 
                 for (i in (1:length(nbrks))[-pal_earth]){
                   brks[[i]] <- seq(rng[[i]][1], rng[[i]][2], length.out = nbrks[[i]]+1)
                 }
+                
+                na.raster <- is.na(x)
                 
                 for (i in 1:pg2){
                   
@@ -181,9 +186,16 @@ setMethod("mapplot", signature="RasterArray",
                     #main plots
                     for (k in 1:nvars){
                       par(mar=c(0,1,2,1))
-                      raster::image(x[j,k], axes=axes, xlab="", ylab="", asp=1, col=col[[k]], breaks=brks[[k]], main=plot.title)
                       
-                      if (box == TRUE) box()
+                      if (na.raster[j,k]){
+                        plot(c(0,1), c(0,1), type="n", axes=F, ylab="", xlab="")
+                        graphics::text(0.5, 0.5, labels = c("Plot \nnot available"), font=2)
+                      } else {
+                        raster::image(x[j,k], axes=axes, xlab="", ylab="", asp=1, col=col[[k]], breaks=brks[[k]], main=plot.title)
+                        
+                        if (box == TRUE) box()
+                        
+                      }
                       
                       devAskNewPage(ask=FALSE)
                       
@@ -247,21 +259,27 @@ setMethod("mapplot", signature="RasterArray",
                 
                 if (is.null(brks)){ #if earth hasn't been assigned
                   #consistent legend
-                  rng <- range(range(x)[])
+                  rng <- range(range(x, na.rm = TRUE)[])
                   
                   nbrks = length(col[[1]])
                   brks[[1]] <- seq(rng[1], rng[2], length.out = nbrks+1)
                 }
                 
+                na.raster <- which(is.na(x))
                 
                 for (i in 1:(length(pg)-1)){
                   
                   for (j in (pg[i]+1): (pg[i+1])){
                     par(mar=c(0,1,2,1))
                     
-                    raster::image(x[j], axes=axes, xlab="", ylab="", asp=1,
-                                  col=col[[1]], breaks=brks[[1]], 
-                                  main=plot.title[j])
+                    if (j %in% na.raster){ #plot empty if na
+                      plot(c(0,1), c(0,1), type="n", axes=F, ylab="", xlab="")
+                      graphics::text(0.5, 0.5, labels = c("Plot \nnot available"), font=2)
+                    } else {
+                      raster::image(x[j], axes=axes, xlab="", ylab="", asp=1,
+                                    col=col[[1]], breaks=brks[[1]], 
+                                    main=plot.title[j])
+                    }
                     if (box == TRUE) box()
                   }
                   
@@ -276,7 +294,7 @@ setMethod("mapplot", signature="RasterArray",
                     #add legend
                     par(mar=c(6,4,2,4)) 
                     plot(rng,c(0,5), type="n", axes=FALSE, ylab="", xlab="", xaxs="i", yaxs="i")
-                    image(x=brks, z=as.matrix(brks), col=col[[1]], add=TRUE)
+                    image(x=brks[[1]], z=as.matrix(brks[[1]]), col=col[[1]], add=TRUE)
                     box()
                     
                     par(xpd=TRUE)
