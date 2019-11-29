@@ -47,11 +47,11 @@ mapplot(x, ...)
 
 \item{plot.title}{The title for each individual plot. Only available for a single variable at the moment.}
 
+\item{rowlabels}{label for each row of the overall plot. Uses the rownames of the RasterArray by default. Only availble for multivariate RasterArrays.}
+
 \item{multi}{Should the plots be printed on multiple pages?}
 
 \item{ask}{NULL or a logical values. If multi.page = TRUE and ask = TRUE, then the user will be prompted before a new page of output is started}
-
-\item{rownames}{label for each row of the overall plot. Uses the rownames of the RasterArray by default. Only availble for multivariate RasterArrays.}
 }
 \description{
 This function plots Raster and sp-type objects.

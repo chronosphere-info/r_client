@@ -6,10 +6,19 @@
 #' @source Chris Scotese
 "dems"
 
-#' Annual mean temperature (bio1) and precipitation (bio12) variables between 2001 and 2010 from the CHELSA model
+#' Annual mean temperature and precipitation (2001-2010) 
 #'
-#' Currently this is just a dummy made from the DEMS.
+#' This data set provides the annual temperature (bio01, unit: °C) and precipitation (bio12, unit: mm/year) obtained from the CHELSA model (Climatologies at high resolution for the Earth 
+#' land surface areas,  v1.2). CHELSA (http://chelsa-climate.org/) is a high resolution (30 arc sec, ~1 km) climate data set for the earth land surface areas. 
+#' CHELSA_v1 is based on a quasi-mechanistical statistical downscaling of the ERA interim global circulation model. The provided data is in a All products of CHELSA are 
+#' in a geographic coordinate system referenced to the WGS 84 horizontal datum. 
+#' \cr
+#' \cr More details on the technical specification of CHELSA can be found \href{http://chelsa-climate.org/wp-admin/download-page/CHELSA_tech_specification.pdf}{here}.
 #' @format A RasterArray with 20 layers, 10 rows and two columns.
-#' @source DEMS
+#' @source
+#' Karger, D.N., Conrad, O., Böhner, J., Kawohl, T., Kreft, H., Soria-Auza, R.W., Zimmermann, N.E., Linder, H.P. & Kessler, M. (2017) Climatologies at high resolution for the earth’s land surface areas. Scientific Data 4, 170122.
+#' \cr
+#' \cr Karger, D.N., Conrad, O., Böhner, J., Kawohl, T., Kreft, H., Soria-Auza, R.W., Zimmermann, N.E., Linder, H.P., Kessler, M. (2017) Data from: Climatologies at high resolution for the earth’s land surface areas. Dryad Digital Repository. https://doi.org/10.5061/dryad.kd1d4
+
 "clim"
 
