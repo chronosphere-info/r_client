@@ -51,19 +51,19 @@
 #' \donttest{
 #' # With the web service
 #' # simple matrices
-#'	reconstruct(matrix(95, 54, nrow=1), 140)
+#'	reconstruct(matrix(c(95, 54), nrow=1), 140)
 #'	
 #'	# points reconstruction
 #'	xy <-cbind(long=c(95,142), lat=c(54, -33))
 #'	reconstruct(xy, 140)
 #'
 #' # coastlines/plates
-#'	reconstruct("coastlines", 140)
-#'	reconstruct("plates", 139)
+#'	coast <- reconstruct("coastlines", 140)
+#'	plate <- reconstruct("plates", 139)
 #'	
 #' # With GPlates
 #'  pm <- fetch("paleomap", "model")
-#'  reconstruct(matrix(95, 54, nrow=1), 140, model=pm)
+#'  reconstruct(matrix(c(95, 54), nrow=1), 140, model=pm)
 #'  }
 #' @rdname reconstruct
 #' @exportMethod reconstruct
@@ -472,12 +472,12 @@ reconstructGPlates <- function(x, age, model, path.gplates=NULL,dir=NULL, verbos
 		# reading coordinates
 		if(!is.character(x)){
 			if(verbose) message("Reading reconstructed coordinates.")
-			somethingDF <<- rgdal::readOGR(paste(pathToFileNoEXT,"_reconstructed.shx",	sep=""), verbose=verbose)
+			somethingDF <- rgdal::readOGR(paste(pathToFileNoEXT,"_reconstructed.shx",	sep=""), verbose=verbose)
 		} 
 		if(is.character(x)){
 			if(x=="plates") if(verbose) message("Reading plates.")
 			pathToFile <- paste(pathToFileNoEXT,"_reconstructed",dirSep ,fileFromPath(pathToFileNoEXT),"_reconstructed_polygon.shx", sep="")
-			somethingDF <<- rgdal::readOGR(pathToFile, verbose=verbose)
+			somethingDF <- rgdal::readOGR(pathToFile, verbose=verbose)
 		}
 		
 		# transform object back to whatever it was

@@ -24,7 +24,7 @@ The function returns snippets of code that you can paste in your script after yo
 data(dems)
 mapplot(dems[1], col="earth")
 # click 5 times to get the long-lat coords of 5 points
-shaper("m",5)
+# shaper("m",5)
 # example output:
 mat <- matrix(c(                
   -2.89, 31.55,

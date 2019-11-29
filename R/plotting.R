@@ -233,7 +233,7 @@ setMethod("mapplot", signature="RasterArray",
                 devAskNewPage(ask=FALSE)
                 
                 if (is.null(plot.title)){
-                  plot.title <- names(proxy(dems))
+                  plot.title <- names(proxy(x))
                 }
                 
                 if(multi == TRUE){
@@ -333,3 +333,25 @@ setMethod("mapplot", signature="SpatialPolygons",
             sp::plot(x, col=col,...)
           }
 )
+
+
+
+#' Shorthand for the plotting RasterArray objects
+#' 
+#' The plot(), method executes the \code{\link{mapplot}} function on the RasterArray object.
+#' 
+#' @param x A RasterArray class object.
+#' @param y Not implemented yet.
+#' @param ... Arguments passed to the \code{\link{mapplot}} function.
+#' @examples
+#' data(dems)
+#' plot(dems)
+#' @exportMethod plot
+setMethod(
+  "plot",
+  signature=c("RasterArray", "missing"),
+  function(x,y, ...){
+    mapplot(x,...)
+  }
+)
+

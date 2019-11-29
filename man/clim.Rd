@@ -14,8 +14,8 @@ Karger, D.N., Conrad, O., Böhner, J., Kawohl, T., Kreft, H., Soria-Auza, R.W., 
 clim
 }
 \description{
-This data set provides the annual temperature (bio01, unit: °C) and precipitation (bio12, unit: mm/year) obtained from the CHELSA model (Climatologies at high resolution for the Earth 
-land surface areas,  v1.2). CHELSA (http://chelsa-climate.org/) is a high resolution (30 arc sec, ~1 km) climate data set for the earth land surface areas. 
+This data set provides annual temperature (bio01, unit: °C) and precipitation (bio12, unit: mm/year) obtained from the CHELSA model (Climatologies at high resolution for the Earth 
+land surface areas,  v1.2) resampled to 2x2 degrees resolution. CHELSA (http://chelsa-climate.org/) is a high resolution (30 arc sec, ~1 km) climate data set for the earth land surface areas. 
 CHELSA_v1 is based on a quasi-mechanistical statistical downscaling of the ERA interim global circulation model. The provided data is in a All products of CHELSA are 
 in a geographic coordinate system referenced to the WGS 84 horizontal datum. 
 \cr

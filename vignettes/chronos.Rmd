@@ -41,7 +41,7 @@ RasterArrays do not directly inherit from Raster* objects of the raster package,
 
 The formal class RasterArray has only two slots: a stack and and index. The stack includes the Raster data in an unfolded manner, similarly to how matrices and arrays are essentially just vectors with additional attributes. The stack slot incorporates a single RasterStack object, which represents the data content of the object. The index slot, on the other hand, describes the structure of the RasterArray. It is a vector/matrix/array of integers each representing an index of the layers in the stack. The configuration (dimensions) of the index represents the entire array.
 
-The 'chronosphere' package includes two demo data sets: a set of ancient topographies (PaleoDEMs, Scotese..) and time series of bio-climatic variables (annual mean temperature and precipitation) from the CHELSA project (Karger et al, 2017a, 2017b) These datasets can be attached with the data command. 
+The 'chronosphere' package includes two demo data sets: a set of ancient topographies (Scotese and Wright, 2018) and time series of bio-climatic variables (annual mean temperature and precipitation) from the CHELSA project (Karger et al, 2017a, 2017b) These datasets can be attached with the data command. 
 ```{r dat, echo= TRUE}
 data(dems)
 data(clim)
@@ -386,3 +386,5 @@ Hijmans, R. J., & van Etten, J. (2019). raster: Geographic Data Analysis and Mod
 Karger, D. N., Conrad, O., Böhner, J., Kawohl, T., Kreft, H., Soria-Auza, R. W., … Kessler, M. (2017a). Data from: Climatologies at high resolution for the earth’s land surface areas. Dryad Digital Repository. https://doi.org/10.5061/dryad.kd1d4
 
 Karger, D. N., Conrad, O., Böhner, J., Kawohl, T., Kreft, H., Soria-Auza, R. W., … Kessler, M. (2017b). Climatologies at high resolution for the earth’s land surface areas. Scientific Data, 4(1), 170122. https://doi.org/10.1038/sdata.2017.122
+
+Scotese, C. R. Wright, N. (2018). PALEOMAP Paleodigital Elevation Models (PaleoDEMS) for the Phanerozoic. URL: https://www.earthbyte.org/paleodem-resource-scotese-and-wright-2018/
