@@ -293,14 +293,91 @@ mapplot(coarse["45"], col="earth")
 ```
 
 
-## 3. Plotting
-mapplot()
-- RasterLayer
--RasterArray[1 dimension]
-- RasterArray[2 dimension]
+# 3. Plotting
+The `mapplot()` function makes it easy to visually pleasing plots of a Raster* object. 
+
+## 3.1 Colour palettes
+The package include several colour palettes which can be used for plotting purposes. An additional palette option developed specifically with dems in mind is "earth". This combines the ocean and terra palettes and automatically sets the breaks to differentiate between marine and terrestrial cells. An example is show below in [RasterLayer plotting example](#RasterLayer).
+
+```{r palette, fig.height=3, fig.width=8}
+showPal()
+```
+
+## 3.2 RasterLayer {#RasterLayer}
+The `mapplot()` function for RasterLayer works similar to the `plot()` function. The `mapplot` function for the Raster* objects include a default palette, omits the legend, axes and the bounding box. 
+
+```{r rlayer_plot, echo=TRUE, out.width='80%', fig.align="center"}
+data(dems)
+mapplot(dems[1])
+
+#using an custom colour palette
+mapplot(dems[1], col="earth", main="Using the earth palette")
+
+```
+
+## 3.3 RasterArray
+
+RasterArrays can be plotted as a multi-faceted plots using `mapplot()`. The `mapplot()` function keeps the structure of the RasterArray in terms of the order that the plots are generate. The plot titles are automatically generated based on the names of the layers within the RasterArray. This can be changed by passing the custom plot titles to the argument `plot.title`. **Note:** This number of plots titles provided should be equal to the number of layers in the RasterArray. 
+
+```{r rarray_plot_def, echo=TRUE, out.width='80%', fig.align="center"}
+data(dems)
+mapplot(dems)
+
+```
+
+### 3.3.1 Adding a single consistent legend
+Just like with [RasterLayers](#RasterLayer), different palettes can be used for the plots. This implements a single palette for all the plots. In addition, this can then be used to generate a single legend that ensures consistency and makes it easier to compare the figures. 
+```{r rarray_plot_leg, echo=TRUE, fig.align="center"}
+data(dems)
+mapplot(dems, col="ocean", legend=TRUE, legend.title="DEM", 
+        plot.title=proxy(dems))
+```
+### 3.3.2 RasterArrays with NA layers
+
+In the event that one of the layers of the dem does not exist i.e. has an NA value instead, this plot corresponding to the this NA layer will show "Plot Not Available".
+```{r na_layer, echo=TRUE, fig.align="center"}
+data(dems)
+
+#create NA layer
+dems[5] <- NA
+is.na(dems)
+
+mapplot(dems, col="coldhot")
+
+```
+
+### 3.3.3 Number of columns and pages
+
+The custom number of columns can also be speficied through the `ncol` argument. The default number of columns is 3. 
+
+```{r rarray_plot_ncol, echo=TRUE}
+# 4 columns
+data(dems)
+mapplot(dems, ncol=4)
+```
+
+Sometimes, there might be too many plots for them to all plot on one single page. In this instance, the argument `multi` can be set to `TRUE` to allow the figures to be plotted on multiple figures. 
+```{r rarray_plot_multi, echo = TRUE, eval=FALSE}
+data(dems)
+mapplot(dems, multi=TRUE)
+```
+
+### 3.3.4 Multiple variables in RasterArray
+
+The above described methods can also be applied to RasterArrays containing more than one variables. However, in this instance, the number of columns automatically defaults to the number of variables in the array. Also, plot titles for each individual plot is not printed. Instead, row labels corresponding to the row names of each variable is added and when `legend=TRUE` the default legend title defaults to the variables names in the RasterArray. 
+
+```{r rarray_plot_nvar, echo=TRUE, fig.width=8, fig.height=4.5}
+data(clim)
+
+mapplot(clim[1:2,], legend=TRUE)
+```
+
+The row labels and legend title can be edited by using the argument `rowlabels` and `legend.title` respectively. Different colours for each variables can also be provided. The number of provided colour palettes should be either 1 or correspond to the number of variables.  
+```{r rarray_plot_rowlabs, echo=TRUE, fig.width=8, fig.height=4.5}
+data(clim)
+
+mapplot(clim[1:2,], col=c("coldhot", "wet"), 
+        legend=TRUE, legend.title=c("Temperature", "Precipitation"))
+```
 
 
-each chunk has to have a unique name (after r) otherwise the vignettebuilder will give an error.
-
-The echo field sets wether the code is visible.
-eval triggers whether it is evaluated.
