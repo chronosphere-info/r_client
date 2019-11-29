@@ -63,6 +63,9 @@ setMethod("initialize",signature="RasterArray",
 			newIndex[] <- NA
 			newIndex[!bNA] <- 1:nlayers(stack)
 
+			# promote RasterLayer if that is the only Layer
+			if(class(newStack)=="RasterLayer") newStack <- raster::stack(newStack)
+
 			# store final object
 			.Object@index <- newIndex
 			.Object@stack <- newStack

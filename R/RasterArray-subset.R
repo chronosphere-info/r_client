@@ -376,7 +376,7 @@ setMethod(
 		
 		if(drop){
 			if(length(final)==1){
-			final <- final[[1]]
+				final <- final@stack[[1]]
 			}
 		}
 
