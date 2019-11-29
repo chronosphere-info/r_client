@@ -36,23 +36,48 @@ setClassUnion("arrayORmatrixORvector", c("vector", "matrix", "array"))
 #' @exportClass RasterArray
 RasterArray <- setClass("RasterArray", slots=list(index="arrayORmatrixORvector", stack="RasterStack"))
 
-# constructor generic
-# constructor note: should force the name of the layers in the stack!
-
 # build from existing stack with existing index, or dimensions
 #' @export RasterArray
 setMethod("initialize",signature="RasterArray",
 	definition=function(.Object,stack, index=NULL, dim=NULL){
-
+		# some defense for index
 		if(is.null(dim)){ 
-			.Object@index <- index
-			.Object@stack <- stack
+			if(class(stack)!="RasterStack") stop("The 'stack' has to be a 'RasterStack' - class object.")
+			if(!is.numeric(index)) stop("The 'index' has to be a 'numeric' object.")
+			
+
+			# where were supposed to be NAs
+			bNA <- is.na(index)
+
+			if(any(index[!bNA]%%1!=0) | any(index[!bNA]<1)) stop("The 'index' has to contain positive integer values.")
+			
+			# the number of valid entries mismatch the number of layers
+			if(sum(!bNA)!=nlayers(stack)) stop("You have to provide as many layers as many valid entries in index.")
+
+			# reorder the stack
+			noNAInd <- index[!bNA]
+			newStack <- stack[[noNAInd]]
+
+			# force index to be monotonous integer sequence
+			newIndex <- index
+			newIndex[] <- NA
+			newIndex[!bNA] <- 1:nlayers(stack)
+
+			# promote RasterLayer if that is the only Layer
+			if(class(newStack)=="RasterLayer") newStack <- raster::stack(newStack)
+
+			# store final object
+			.Object@index <- newIndex
+			.Object@stack <- newStack
 			
 		}else{
-			if(raster::nlayers(stack)==prod(index, na.rm=T)){
+			if(!is.numeric(dim)) stop("The 'dim' argument has to be a 'numeric' vector.")
+			if(raster::nlayers(stack)==prod(dim, na.rm=T)){
 				.Object@stack<- stack
 				index <- array(1:nlayers(stack), dim=dim)
 				.Object@index<- index
+			}else{
+				stop("The number of layers in the does not equal the product of the 'dim' vector.")
 			}
 
 		}
@@ -300,11 +325,17 @@ setMethod("apply", "RasterArray",
 		if(length(dim(X))==1) stop("The 'apply()'' function is not applicable to vector-like RasterArrays.\nUse 'sapply()'' instead.")
 		if(length(MARGIN)>1) stop("Not yet implemented for multidimensinal margins.")
 
-		ret <-apply(X@index, MARGIN, function(y){
+		# use the proxy instead
+		proxX <- proxy(X)
+
+		ret <-apply(proxX, MARGIN, function(y){
 			# get the columns/rows associated with this subset
-			layers <- X[y]
+			thislayers <- X[[y]]
+			# if all are empty, force numeric
+			if(sum(is.na(thislayers))==length(thislayers)) thislayers <- as.numeric(thislayers)
+
 			# and plug it into the supplied function
-			FUN(layers)
+			FUN(thislayers)
 		})
 
 		# draft of the apply output structure
@@ -312,13 +343,28 @@ setMethod("apply", "RasterArray",
 
 		# if this output is a rasterlayer make an exception!
 		if(is.list(ret)){
-			classOfItems <- unlist(lapply(ret, function(y) class(y)!="RasterLayer"))
-			if(sum(unique(classOfItems))==0){
+			classOfItems <- unlist(lapply(ret, function(y){
+					if(class(y)=="RasterLayer"){
+						return(FALSE)
+					}else{
+						if(is.numeric(y) | is.character(y) | is.logical(y)){
+							if(is.na(y)){
+								return(NA)
+							}else{
+								return(TRUE)
+							}
+						}else{
+							return(TRUE)
+						}
+					}
+				} ))
+			if(sum(unique(classOfItems), na.rm=TRUE)==0){
 				bNA <- is.na(classOfItems)
 
 				# transform this to a rasterArray
 				newStack <- raster::stack(ret[!bNA])
 				# index
+				struct[] <- NA
 				struct[!bNA] <- 1:sum(!bNA)
 				names(struct) <- names(ret)
 
@@ -331,4 +377,23 @@ setMethod("apply", "RasterArray",
 	}
 )
 
+
+#' Shorthand for the plotting RasterArray objects
+#' 
+#' The plot(), method executes the \code{\link{mapplot}} function on the RasterArray object.
+#' 
+#' @param x A RasterArray class object.
+#' @param y Not implemented yet.
+#' @param ... Arguments passed to the \code{\link{mapplot}} function.
+#' @examples
+#' data(dems)
+#' plot(dems)
+#' @exportMethod plot
+setMethod(
+	"plot",
+	signature=c("RasterArray", "missing"),
+	function(x,y, ...){
+		mapplot(x,...)
+	}
+)
 

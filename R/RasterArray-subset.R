@@ -342,7 +342,45 @@ setMethod(
 	"[[", 
 	signature(x="RasterArray"),
 	function(x,i,drop=TRUE){
-		x@stack[[i, drop=drop]]
+		# where are NAs in the subscrtip
+		bNA <- is.na(i)
+		if(sum(bNA)==length(i)) return(i)
+
+		# logical method
+		if(is.logical(i)){
+			if(length(i)!=length(x)) stop("Invalid subscript length.")
+			
+			# stack subscript
+			usedInd <- i
+			usedInd[bNA] <- FALSE
+			
+			#select appropriate layers
+			newStack<- x@stack[[which(usedInd), drop=FALSE]]
+
+			# index subscript
+			newIndex <- x@index[i]
+			newIndex[!is.na(newIndex)] <- 1:sum(!is.na(newIndex))
+		}
+
+		# either character or numeric
+		if(is.character(i) | is.numeric(i)){
+			#select appropriate layers
+			newStack<- x@stack[[i[!bNA], drop=FALSE]]
+
+			# reindex
+			newIndex <- rep(NA, length(i))
+			newIndex[!bNA] <- 1:nlayers(newStack)
+		}
+
+		final <- RasterArray(index=newIndex, stack=newStack)
+		
+		if(drop){
+			if(length(final)==1){
+				final <- final@stack[[1]]
+			}
+		}
+
+		return(final)
 	}
 )
 
