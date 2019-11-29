@@ -34,7 +34,7 @@ Open R and paste
 in:
 
 ``` r
-install.packages("https://github.com/adamkocsis/chronosphere/raw/master/_archive/source/chronosphere_0.1.12-52.tar.gz", repos=NULL, type="source")
+install.packages("https://github.com/adamkocsis/chronosphere/raw/master/_archive/source/chronosphere_0.2.0.tar.gz", repos=NULL, type="source")
 ```
 
 ## Install method B.
