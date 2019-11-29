@@ -169,8 +169,9 @@ setMethod("mapplot", signature="RasterArray",
                 #breaks for each variable
                 nbrks = lapply(col, length) 
                 
+                
                 for (n in (1:nvars)[-pal_earth]){
-                  rng[[n]] <- range(range(x[,n], na.rm=TRUE)[,], na.rm=TRUE)
+                  rng[[n]] <- range(range(x[,n])[,], na.rm=TRUE)
                 }
                 
                 for (i in (1:length(nbrks))[-pal_earth]){
