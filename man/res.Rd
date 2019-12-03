@@ -16,6 +16,9 @@
 \arguments{
 \item{x}{a \code{RasterArray} class object.}
 }
+\value{
+A \code{numeric} vector.
+}
 \description{
 The methods are inherited from the \code{RasterStack} class, see \code{\link[raster]{resolution}}. Replacement is not allowed.
 }

@@ -47,6 +47,9 @@
 
 \item{filename}{character. Optional output filename (only if x is a RasterLayer and RasterStackBrick)}
 }
+\value{
+A \code{RasterArray} or \code{RasterLayer} class object (see detaisl above).
+}
 \description{
 Additional functions to \code{\link[raster]{mask}} generic function involving the \code{\link{RasterArray}} class. The following methods are implemented:
 }

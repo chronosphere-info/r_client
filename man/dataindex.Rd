@@ -11,6 +11,9 @@ dataindex(datadir = NULL, verbose = FALSE)
 
 \item{verbose}{Should console feedback during download be displayed?}
 }
+\value{
+A \code{data.frame} class object.
+}
 \description{
 The function will download a list of available data from the data repository
 }

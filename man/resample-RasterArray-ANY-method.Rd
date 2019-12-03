@@ -14,6 +14,9 @@
 
 \item{...}{arguments passed to the \code{\link[raster]{resample}} function.}
 }
+\value{
+A resampled \code{RasterArray} class object.
+}
 \description{
 The method is inherited from the \code{RasterStack} class.
 }

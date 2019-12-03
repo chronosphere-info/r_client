@@ -31,6 +31,9 @@ projectRaster(from, to, res, crs, method = "bilinear",
 
 \item{...}{additional arguments as for \code{\link[raster]{writeRaster}}.}
 }
+\value{
+A projected \code{RasterArray} class object.
+}
 \description{
 The method implemets the \code{\link[raster]{projectRaster}} function for \code{RasterArray} class objects.
 }

@@ -12,6 +12,9 @@
 
 \item{dim}{A \code{numeric} vector. Same as for \code{array}, creates \code{proxy} procedurally.}
 }
+\value{
+A \code{RasterArray} class object.
+}
 \description{
 Array template for RasterLayers
 }

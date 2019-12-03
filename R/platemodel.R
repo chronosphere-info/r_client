@@ -13,6 +13,7 @@ platemodel <- setClass("platemodel", slots=list(name="character", rotation="char
 #' @param rotation If \code{path} is \code{NULL}, the path to the rotation file-part of the model.
 #' @param polygons If \code{path} is \code{NULL}, the path to the plate polygon file-part of the model.
 #' @rdname platemodel 
+#' @return A \code{platemodel} class object.
 #' @export platemodel
 #' @examples
 #' # link to a single .mod file

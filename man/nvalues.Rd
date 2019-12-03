@@ -15,6 +15,9 @@ nvalues(x, ...)
 
 \item{...}{additional arguments passed to class-specific methods.}
 }
+\value{
+A \code{numeric} value.
+}
 \description{
 The total number of values in a RasterArray object
 }

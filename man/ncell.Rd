@@ -10,6 +10,9 @@
 \arguments{
 \item{x}{a \code{RasterArray} class object.}
 }
+\value{
+A \code{numeric} value.
+}
 \description{
 The method is inherited from the \code{RasterStack} class.
 }

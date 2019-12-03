@@ -12,6 +12,9 @@
 
 \item{...}{arguments passed to or from methods.}
 }
+\value{
+A \code{list} of \code{RasterLayers}.
+}
 \description{
 The function will return the items of the RasterArray as a list (conserving the names of the elements in the stack).
 }

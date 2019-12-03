@@ -17,6 +17,9 @@
 
 \item{...}{arguments passed to the \code{\link[raster]{cellStats}} function.}
 }
+\value{
+A \code{numeric} vector.
+}
 \description{
 The method is inherited from the \code{RasterStack} class. Postitions of layers are conserved in the output. (including missing layers)
 }

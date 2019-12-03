@@ -13,6 +13,9 @@
 \arguments{
 \item{x}{a \code{RasterArray} class object.}
 }
+\value{
+A \code{numeric} value.
+}
 \description{
 Function to return the length of the array in which \code{RasterLayers} are organized.
 }

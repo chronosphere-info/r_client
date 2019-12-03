@@ -5,6 +5,7 @@
 #' The length() function returns the number elements that should be present based on the array structure itself, and not the total number of values stored in the object (such as the \code{length} method of \code{RasterStack}s). As the object can contain missing values, the number of actual layers can be queried with \code{\link{nlayers}}. 
 #' 
 #' @param x a \code{RasterArray} class object.
+#' @return A \code{numeric} value. 
 #' @examples
 #' data(dems)
 #' # omit third element
@@ -30,6 +31,7 @@ setMethod(
 #' 
 #' @param x a \code{RasterArray} class object.
 #' @rdname ncell
+#' @return A \code{numeric} value.
 #' @examples
 #' data(dems)
 #' ncell(dems)
@@ -54,6 +56,7 @@ setMethod(
 #' Get or set the column names of two-dimensional RasterArray or SpArray objects 
 #' @param x \code{RasterArray} or \code{SpArray} object.
 #' @param value \code{character} vector.
+#' @return A \code{character} vector of column names or \code{NULL}.
 #' 
 #' @examples
 #' data(clim)
@@ -86,6 +89,7 @@ setReplaceMethod(
 #' Get or set the row names of two-dimensional RasterArray or SpArray objects  
 #' @param x \code{RasterArray} or \code{SpArray} object.
 #' @param value \code{character} vector.
+#' @return A \code{character} vector of row names or \code{NULL}.
 #' 
 #' @examples
 #' data(clim)
@@ -116,6 +120,7 @@ setReplaceMethod(
 #' Get or set the names of one-dimensional RasterArray or SpArray objects 
 #' @param x \code{RasterArray} or \code{SpArray} object.
 #' @param value \code{character} vector.
+#' @return A \code{character} vector of names or \code{NULL}.
 #' 
 #' @examples
 #' data(dems)
@@ -151,6 +156,7 @@ setReplaceMethod(
 #' Get or set the dimnames of multidimensional RasterArray or SpArray objects 
 #' @param x \code{RasterArray} or \code{SpArray} object.
 #' @param value \code{character} vector.
+#' @return A \code{list} of \code{character} vectors or \code{NULL}.
 #' 
 #' @examples
 #' data(dems)
@@ -182,8 +188,9 @@ setReplaceMethod(
 #' 
 #' @param x A \code{RasterArray} class object.
 #' @param ... additional arguments passed to class-specific methods.
-#' 
+#' @return A \code{character} vector of names.
 #' @exportMethod layers
+#' 
 #' @examples
 #' # names of layers in the stack
 #' data(dems)
@@ -206,6 +213,7 @@ setMethod(
 #' 
 #' @param x A \code{RasterArray} class object.
 #' @param ... additional arguments passed to class-specific methods.
+#' @return A \code{numeric} value.
 #' 
 #' @exportMethod nvalues
 #' @examples 
@@ -230,6 +238,7 @@ setMethod(
 #' 
 #' The function returns the dimensions of the array in which \code{RasterLayer}s are organized.
 #' @param x A \code{RasterArray} class object.
+#' @return A \code{numeric} vector.
 #' 
 #' @examples
 #' data(dems)
@@ -252,7 +261,8 @@ setMethod(
 #' 
 #' The funcion will return the dimensions RasterLayers
 #' 
-#' @param x A \code{RasterLayer} class object.
+#' @param x A \code{RasterArray} class object.
+#' @return A \code{numeric} vector with the number of rows and columns in the \code{RasterLayer}s.
 #' @param ... additional arguments passed to class-specific methods.
 #' 
 #' @rdname dimlayer
@@ -276,6 +286,7 @@ setMethod(
 #' 
 #' @param x A \code{RasterLayer} class object.
 #' @rdname adimatt
+#' @return A \code{numeric} value of the number of columns and rows.
 #' @exportMethod ncol
 #' @examples
 #' data(clim)

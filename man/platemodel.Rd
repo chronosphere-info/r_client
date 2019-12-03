@@ -19,6 +19,9 @@
 
 \item{polygons}{If \code{path} is \code{NULL}, the path to the plate polygon file-part of the model.}
 }
+\value{
+A \code{platemodel} class object.
+}
 \description{
 Meta-object containing paths to a unique plate tectonic model
 }

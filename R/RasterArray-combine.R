@@ -9,6 +9,7 @@
 #' Methods sequences that start with an NA do not yet work. 
 #' @rdname combine
 #' @param x \code{RasterLayer} or \code{RasterArray} object to combine.
+#' @return A \code{RasterArray} class object.
 #' @param ... additional objects to combine. 
 #' @examples
 #' data(dems)
@@ -263,6 +264,7 @@ setMethod("c2", signature=c("RasterArray", "RasterArray"),
 #' matched <- suppressWarnings(cbind(dems, dems2))
 #' @export cbind.RasterArray
 #' @S3method cbind RasterArray
+#' @return A \code{RasterArray} class object.
 #' @rdname bind-methods
 #cbind.RasterArray<-function(..., deparse.level=1){
 cbind.RasterArray<-function(...){

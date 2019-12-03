@@ -5,6 +5,7 @@
 #' The methods are inherited from the \code{RasterStack} class, see \code{\link[raster]{resolution}}. Replacement is not allowed.
 #' 
 #' @param x a \code{RasterArray} class object.
+#' @return A \code{numeric} vector.
 #' 
 #' @rdname res
 #' @examples
@@ -57,6 +58,7 @@ setMethod(
 #' 
 #' @param x a \code{RasterArray} class object.
 #' @param vec Should the dimensions of the \code{RasterArray} be omitted?
+#' @return A \code{numeric} vector.
 #' @param ... arguments passed to the \code{\link[raster]{cellStats}} function.
 #' 
 #' @rdname extremeValues
@@ -106,6 +108,7 @@ setMethod(
 #' 
 #' @param x a \code{RasterArray} class object.
 #' @param y The y argument of the \code{\link[raster]{resample}} function.
+#' @return A resampled \code{RasterArray} class object.
 #' @param ... arguments passed to the \code{\link[raster]{resample}} function.
 #' 
 #' @examples
@@ -129,6 +132,7 @@ setMethod(
 #' @param x a \code{RasterArray} class object.
 #' @param y an xtent object, or any object from which an Extent object can be extracted (see Details)
 #' @param ... arguments passed to the \code{\link[raster]{crop}} function.
+#' @return A cropped \code{RasterArray} class object.
 #' 
 #' @examples
 #' data(dems)
@@ -160,6 +164,7 @@ setMethod(
 #' @param ... arguments passed to the \code{\link[raster]{aggregate}} function.
 #' 
 #' @exportMethod aggregate
+#' @return An aggregated \code{RasterArray} class object.
 #' @examples
 #' data(dems)
 #' agg <- aggregate(dems, 5)
@@ -178,6 +183,7 @@ setMethod(
 #' The method is inherited from the \code{RasterStack} class.
 #' 
 #' @param x a \code{RasterArray} class object.
+#' @return A disaggregated \code{RasterArray} class object.
 #' @param ... arguments passed to the \code{\link[raster]{disaggregate}} function.
 #' 
 #' @exportMethod disaggregate
@@ -212,6 +218,7 @@ setMethod(
 #' numeric values, and x will be subsetted with \code{numeric} subscripts of the \code{x} \code{RasterArray}. If set to character, the by column (or vector) will be
 #' forced to \code{character} values and will be used as character subscripts.
 #' @exportMethod extract
+#' @return A \code{numeric} \code{vector}, \code{matrix} or \code{array} of values.
 #' @examples
 #' # one pair of random coordinates from Africa
 #' mat <- matrix(c(                
@@ -311,6 +318,7 @@ setMethod(
 #' 
 #' @param x a \code{RasterArray} class object.
 #' @param stat A function to be applied.
+#' @return A set of the values matching the output of \code{stat}, organized the same way as the \code{RasterArray}.
 #' @param ... arguments passed to the \code{\link[raster]{cellStats}} function.
 #' 
 #' @exportMethod cellStats
@@ -340,6 +348,7 @@ setMethod("cellStats", signature="RasterArray",
 #' @param filename \code{character} output filname. Not applicable for RasterArray class objects.
 #' @param ... additional arguments as for \code{\link[raster]{writeRaster}}.
 #' @rdname projectRaster
+#' @return A projected \code{RasterArray} class object.
 #' @exportMethod projectRaster
 #' @examples
 #' # project first three to mollweide
@@ -393,7 +402,7 @@ setMethod("projectRaster", "RasterArray",
 #' @param updatevalue numeric. The value that cells of \code{x} should become if they are not covered by \code{mask} (and not \code{NA})
 #' @param updateNA logical. If \code{TRUE}, \code{NA} values outside the masked area are also updated to the \code{updatevalue} (only relevant if the \code{updatevalue} is not \code{NA}.
 #' @param ... additional arguments as in \code{\link[raster]{writeRaster}}. 
-#' 
+#' @return A \code{RasterArray} or \code{RasterLayer} class object (see detaisl above).
 #' @examples
 #' data(dems)
 #' 
@@ -527,14 +536,14 @@ setMethod(
 #' 
 #' @param fun function to be applied.
 #' 
-#' @param margin The \code{MARGIN} parameter of the \code{apply} function.
+#' @param margin The \code{MARGIN} parameter of the \code{apply} function. If set to \code{NULL} then the \code{fun} will be applied to the entire stack, producing a single layer.
 #' 
 #' @param na.rm Remove NA values, if supported by 'fun' (only relevant when summarizing a multilayer Raster object into a RasterLayer)
 #' 
 #' @param forcefun logical. Force calc to not use fun with apply; for use with ambiguous functions and for debugging (see Details)
 #' 
 #' @param forceapply logical. Force calc to use fun with apply; for use with ambiguous functions and for debugging (see Details)
-#' 
+#' @return A \code{RasterLayer} or \code{RasterArray class object.}
 #' @examples
 #' data(dems)
 #' 

@@ -21,6 +21,9 @@
 
 \item{value}{A \code{RasterLayer} or \code{RasterArray} object.}
 }
+\value{
+None.
+}
 \description{
 Single bracket \code{'['} refers to indices and names within the \code{RasterArray}. Use double brackets to replace layers based on their names (in the stack).
 }

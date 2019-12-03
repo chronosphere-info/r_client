@@ -11,7 +11,7 @@ Karger, D.N., Conrad, O., Böhner, J., Kawohl, T., Kreft, H., Soria-Auza, R.W., 
 \cr Karger, D.N., Conrad, O., Böhner, J., Kawohl, T., Kreft, H., Soria-Auza, R.W., Zimmermann, N.E., Linder, H.P., Kessler, M. (2017) Data from: Climatologies at high resolution for the earth’s land surface areas. Dryad Digital Repository. https://doi.org/10.5061/dryad.kd1d4
 }
 \usage{
-clim
+data(clim)
 }
 \description{
 This data set provides annual temperature (bio01, unit: °C) and precipitation (bio12, unit: mm/year) obtained from the CHELSA model (Climatologies at high resolution for the Earth 

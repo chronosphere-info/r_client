@@ -6,6 +6,9 @@
 \arguments{
 \item{from}{Object to be coerced.}
 }
+\value{
+A \code{RasterArray} class object.
+}
 \description{
 The function coerces RasterLayer, RasterStack and RasterBrick object to a RasterArray.
 }

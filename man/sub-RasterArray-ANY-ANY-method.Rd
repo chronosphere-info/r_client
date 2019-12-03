@@ -18,6 +18,9 @@
 
 \item{drop}{\code{logical} in case the result of subsetting is a single element, should the \code{RasterArray} wrapper be dropped and the element be reduced to a single \code{RasterLayer}?}
 }
+\value{
+A \code{RasterLayer} or \code{RasterArray} class object.
+}
 \description{
 Single bracket \code{'['} refers to indices and names within the \code{RasterArray}. Use double brackets to extract layers based on their names (in the stack).
 }

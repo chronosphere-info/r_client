@@ -15,6 +15,9 @@
 
 \item{value}{\code{character} vector.}
 }
+\value{
+A \code{character} vector of column names or \code{NULL}.
+}
 \description{
 Get or set the column names of two-dimensional RasterArray or SpArray objects
 }

@@ -9,7 +9,7 @@
 Scotese, C. R. Wright, N. (2018). PALEOMAP Paleodigital Elevation Models (PaleoDEMS) for the Phanerozoic. URL: https://www.earthbyte.org/paleodem-resource-scotese-and-wright-2018/
 }
 \usage{
-dems
+data(dems)
 }
 \description{
 A dataset containing the paleoDEM reconstructions of Chris Scotese for the time interval 0 - 45 Ma.

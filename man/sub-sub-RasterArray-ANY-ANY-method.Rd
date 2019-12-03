@@ -15,7 +15,7 @@
 \item{drop}{\code{logical} should the \code{RasterStack} be dropped and the element be reduced to a single \code{RasterLayer}?}
 }
 \value{
-The function returns either a single \code{RasterLayer}, a \code{RasterStack} or a list of \code{RasterLayers}.
+A \code{RasterLayer} or \code{RasterArray} class object.
 }
 \description{
 Double bracket \code{'[['} refers to layers' name in the \code{RasterStack} of the \code{RasterArray}. Use single brackets to extract elements based on their position in the \code{RasterArray}.

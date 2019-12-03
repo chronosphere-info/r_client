@@ -14,6 +14,9 @@
 
 \item{...}{Arguments passed to the \code{\link{mapplot}} function.}
 }
+\value{
+None.
+}
 \description{
 The plot(), method executes the \code{\link{mapplot}} function on the RasterArray object.
 }

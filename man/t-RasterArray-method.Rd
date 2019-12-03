@@ -8,7 +8,10 @@
 \S4method{t}{RasterArray}(x)
 }
 \arguments{
-\item{x}{A RasterArray class object.}
+\item{x}{A \code{RasterArray} class object.}
+}
+\value{
+A \code{RasterArray} class object.
 }
 \description{
 Transpose a RasterArray object

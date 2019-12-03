@@ -8,6 +8,7 @@
 #' @param cols Column names guiding the restructuring.
 #' @param rows Row names guiding the restructuring.
 #' 
+#' @return A matrix with extended bounds. 
 #' @examples
 #' a<-matrix(1:9, ncol=3)
 #' rownames(a) <- c("a", "c", "d")
@@ -42,7 +43,8 @@ newbounds <- function(x, cols=NULL, rows=NULL){
 #' @param round (\code{integer}) Number of digits to round to, can be two values, first is for \code{x} second for \code{y}. 
 #' @param f (\code{character}) A single letter value specifying for which function's arugment format you want to get parameters. \code{"p"} is for \code{\link[graphics]{plot}}, \code{"r"} is for \code{\link[graphics]{rect}}, \code{"s"} is for \code{\link[graphics]{segments}}. \code{"e"} returns a call to create an \code{\link[raster]{extent}} class object from the package \code{raster}. \code{"m"} will return code to define a 2 column matrix.
 #' @param n (\code{integer}) The number of points to request. 
-#' @param ... arguments passed to the \code{\link[graphics]{locator}} fucntion
+#' @param ... arguments passed to the \code{\link[graphics]{locator}} function
+#' @return For certain methods (\code{"m"} and \code{"e"}) the function returns a \code{matrix} or \code{extent} class object if the function output is assigned to a name.
 #' @examples
 #' \donttest{
 #' # plot something
@@ -172,7 +174,7 @@ shaper <- function(f="p",n=2, round=2,...){
 # 
 # This package returns the type of OS you use.
 # 
-# This function is stolen from somewhere on the web. I will look it up later :). 
+# This function and derivates have been circling over the web, I could not trace the original source.
 getOS <- function(){
   sysinf <- Sys.info()
   if (!is.null(sysinf)){

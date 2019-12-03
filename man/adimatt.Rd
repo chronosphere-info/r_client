@@ -13,6 +13,9 @@
 \arguments{
 \item{x}{A \code{RasterLayer} class object.}
 }
+\value{
+A \code{numeric} value of the number of columns and rows.
+}
 \description{
 Unlike the \code{ncol} and \code{nrow} functions of the raster package (\code{\link[raster]{ncell}}), this function returns the number of columns and rows of the \code{RasterArray} container, rather than the dimensions of the contained \code{RasterLayer}s.
 }

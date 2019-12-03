@@ -1,15 +1,26 @@
 # Change log of the R package 'chronosphere'
 
-## [0.2.0 (build 55)]  - 2019-11-29 
+## [0.2.0 (build 56)]  - 2019-12-03 (CRAN initial submission, take 2)
+### Added 
+- return value documentation for all functions
+- on.exit() statements where options and par are changed.
+
+### Changed
+- description field in DESCRIPTION
+- LazyData is set to false
+- usage entries for 'dems' and 'clim'
+
+
+## [0.2.0 (build 55)]  - 2019-11-29 (CRAN initial submission)
 ### Added 
 - support for NAs in the RasterArray constructor and defenses
 - 'clim' data object
 - bug fix for the apply() RasterArray method
 
-
 ### Changed 
 - [[ of RasterArrays now wrap output in a RasterArray by default.
 - reconstruct() function's local submodule no longer returns coordinates for points that are situated on plates that did not exist on the at reconstruction date (matrix method returns NA coordinates, Sp methods omit)
+
 
 ## [0.1.12 (build 54)]  - 2019-11-29
 ### Changed

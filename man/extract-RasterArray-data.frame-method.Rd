@@ -27,6 +27,9 @@ and it will be used as if it were a column of \code{x}.}
 numeric values, and x will be subsetted with \code{numeric} subscripts of the \code{x} \code{RasterArray}. If set to character, the by column (or vector) will be
 forced to \code{character} values and will be used as character subscripts.}
 }
+\value{
+A \code{numeric} \code{vector}, \code{matrix} or \code{array} of values.
+}
 \description{
 The function takes a set of time-dependent coordinates and extracts the value they point to from associted RasterLayers in a RasterArray.
 }

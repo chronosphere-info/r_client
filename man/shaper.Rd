@@ -13,7 +13,10 @@ shaper(f = "p", n = 2, round = 2, ...)
 
 \item{round}{(\code{integer}) Number of digits to round to, can be two values, first is for \code{x} second for \code{y}.}
 
-\item{...}{arguments passed to the \code{\link[graphics]{locator}} fucntion}
+\item{...}{arguments passed to the \code{\link[graphics]{locator}} function}
+}
+\value{
+For certain methods (\code{"m"} and \code{"e"}) the function returns a \code{matrix} or \code{extent} class object if the function output is assigned to a name.
 }
 \description{
 The function returns snippets of code that you can paste in your script after you select points on a plot. Useful for defining areas on a map. The default methods assume that you will first click in the bottom left and then in the bottom right corner.

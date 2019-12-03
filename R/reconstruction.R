@@ -47,6 +47,7 @@
 #' @param verbose (\code{logical}) Should call URLs (remote submodule) or console feedback (local-submodule) be printed?
 #' @param cleanup (\code{logical}) Argument of the local reconstruction submodule. Should the temporary files be deleted immediately after reconstructions?
 #' @param dir (\code{character}) Argument of the local reconstruction submodule. Directory where the temporary files of the reconstruction are stored (defaults to a temporary directory created by R). Remember to toggle \code{cleanup} if you want to see the files.  
+#' @return A \code{numeric} matrix if \code{x} is a \code{numeric}, \code{matrix} or \code{data.frame}, or \code{Spatial*} class objects, depending on input.
 #' @examples
 #' \donttest{
 #' # With the web service
@@ -583,10 +584,12 @@ testGPlates<- function(gplatesExecutable, verbose){
 	
 	# depending on how much the user wants to see
 	if(!verbose){
-		options(show.error.messages = FALSE)
+		opt <- options(show.error.messages = FALSE)
+		# revert even if command below fails for some reason
+		on.exit(options(opt))
+
 		try(ver <- system(gplatesTest, intern=TRUE,ignore.stdout = TRUE, 
 				ignore.stderr = TRUE))
-		options(show.error.messages = TRUE)
 	}else{
 		try(ver <- system(gplatesTest, intern=TRUE))
 	}

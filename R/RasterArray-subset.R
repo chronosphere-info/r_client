@@ -10,7 +10,7 @@
 #' @param ... subscript of additional dimensions.
 #' @param drop \code{logical} in case the result of subsetting is a single element, should the \code{RasterArray} wrapper be dropped and the element be reduced to a single \code{RasterLayer}?
 #' @param oneDim \code{logical} In case of multidimensional \code{RasterArray}s, setting \code{oneDim} to \code{TRUE} allows the application of one dimensional subscripts.  
-#' 
+#' @return A \code{RasterLayer} or \code{RasterArray} class object.
 # combined
 #' @exportMethod subset
 #' @examples
@@ -97,6 +97,7 @@ setMethod(
 #' @param j subscript of the second dimension (columns).
 #' @param ... subscript of additional dimensions.
 #' @param drop \code{logical} in case the result of subsetting is a single element, should the \code{RasterArray} wrapper be dropped and the element be reduced to a single \code{RasterLayer}?
+#' @return A \code{RasterLayer} or \code{RasterArray} class object.
 #' @examples
 #' data(dems)
 #' # numeric subsetting
@@ -133,6 +134,7 @@ setMethod(
 #' @param j subscript of the second dimension (columns).
 #' @param ... subscript of additional dimensions.
 #' @param value A \code{RasterLayer} or \code{RasterArray} object.
+#' @return None.
 #' @examples
 #' data(dems)
 #' # replace third element with missing value
@@ -322,10 +324,10 @@ setReplaceMethod(
 #'
 #' Double bracket \code{'[['} refers to layers' name in the \code{RasterStack} of the \code{RasterArray}. Use single brackets to extract elements based on their position in the \code{RasterArray}.
 #' 
-#' @return The function returns either a single \code{RasterLayer}, a \code{RasterStack} or a list of \code{RasterLayers}. 
 #' @param x \code{RasterArray} object.
 #' @param i subscript of the first dimension(rows) or vector-like subsetting.
 #' @param drop \code{logical} should the \code{RasterStack} be dropped and the element be reduced to a single \code{RasterLayer}?
+#' @return A \code{RasterLayer} or \code{RasterArray} class object.
 #' @exportMethod "[["
 #' @examples
 #' data(dems)
@@ -391,6 +393,7 @@ setMethod(
 #' @param x \code{RasterArray} object.
 #' @param i subscript of layers to replace.
 #' @param value \code{character} vector.
+#' @return None.
 #' 
 #' @examples
 #' # an example

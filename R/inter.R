@@ -11,6 +11,7 @@
 #' @param time \code{numeric}. Single value referring to that dimension of \code{x} where the time-coding names are (\code{time=1} is the default for RasterArrays in \code{chronosphere}).
 #' @param ... additional arguments passed to class-specific methods.
 #' @rdname matchtime
+#' @return An object of the class as \code{x} or a \code{numeric} vector.
 #' @examples
 #' # original vector
 #' orig <- 1:10

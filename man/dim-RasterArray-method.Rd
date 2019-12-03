@@ -10,6 +10,9 @@
 \arguments{
 \item{x}{A \code{RasterArray} class object.}
 }
+\value{
+A \code{numeric} vector.
+}
 \description{
 The function returns the dimensions of the array in which \code{RasterLayer}s are organized.
 }

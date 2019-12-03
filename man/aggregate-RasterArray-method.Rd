@@ -12,6 +12,9 @@
 
 \item{...}{arguments passed to the \code{\link[raster]{aggregate}} function.}
 }
+\value{
+An aggregated \code{RasterArray} class object.
+}
 \description{
 The method is inherited from the \code{RasterStack} class.
 }

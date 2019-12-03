@@ -3,6 +3,7 @@
 #' A dataset containing the paleoDEM reconstructions of Chris Scotese for the time interval 0 - 45 Ma. 
 #'
 #' @format A RasterArray with 10 layers.
+#' @usage data(dems)
 #' @source 
 #' Scotese, C. R. Wright, N. (2018). PALEOMAP Paleodigital Elevation Models (PaleoDEMS) for the Phanerozoic. URL: https://www.earthbyte.org/paleodem-resource-scotese-and-wright-2018/
 "dems"
@@ -16,6 +17,7 @@
 #' \cr
 #' \cr More details on the technical specification of CHELSA can be found at http://chelsa-climate.org/wp-admin/download-page/CHELSA_tech_specification.pdf.
 #' @format A RasterArray with 20 layers, 10 rows and two columns.
+#' @usage data(clim)
 #' @source
 #' Karger, D.N., Conrad, O., Böhner, J., Kawohl, T., Kreft, H., Soria-Auza, R.W., Zimmermann, N.E., Linder, H.P. & Kessler, M. (2017) Climatologies at high resolution for the earth’s land surface areas. Scientific Data 4, 170122.
 #' \cr

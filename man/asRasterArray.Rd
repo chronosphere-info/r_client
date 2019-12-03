@@ -19,6 +19,9 @@ as.RasterArray(from)
 \arguments{
 \item{from}{Object to be converted.}
 }
+\value{
+A \code{RasterArray} class object.
+}
 \description{
 The function converts \code{RasterLayer}, \code{RasterStack} and \code{RasterBrick} objects to \code{RasterArray} class objects.
 }

@@ -56,6 +56,9 @@ calculate the present-day coordinates of the given paleo-coordinates.}
 
 \item{dir}{(\code{character}) Argument of the local reconstruction submodule. Directory where the temporary files of the reconstruction are stored (defaults to a temporary directory created by R). Remember to toggle \code{cleanup} if you want to see the files.}
 }
+\value{
+A \code{numeric} matrix if \code{x} is a \code{numeric}, \code{matrix} or \code{data.frame}, or \code{Spatial*} class objects, depending on input.
+}
 \description{
 Reconstruct the geographic locations from present day coordinates and spatial objects back to their paleo-positions. 
 Each location will be assigned a plate id and moved back in time using the chosen reconstruction model.

@@ -14,6 +14,9 @@
 
 \item{...}{arguments passed to the \code{\link[raster]{crop}} function.}
 }
+\value{
+A cropped \code{RasterArray} class object.
+}
 \description{
 The method is inherited from the \code{RasterStack} class.
 }

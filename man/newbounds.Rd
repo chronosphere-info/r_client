@@ -13,6 +13,9 @@ newbounds(x, cols = NULL, rows = NULL)
 
 \item{rows}{Row names guiding the restructuring.}
 }
+\value{
+A matrix with extended bounds.
+}
 \description{
 The function restructures a matrix and extends its current limits to a range defined by a names attribute
 }

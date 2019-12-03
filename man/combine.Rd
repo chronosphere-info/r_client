@@ -18,6 +18,9 @@ combine(x, ...)
 
 \item{...}{additional objects to combine.}
 }
+\value{
+A \code{RasterArray} class object.
+}
 \description{
 Methods sequences that start with an NA do not yet work.
 }

@@ -14,6 +14,7 @@
 #' \item \code{wet()}: gradient from white to green to blue. 
 #' }
 #' 
+#' @return A function producing a colour gradient ramp.
 #' @name ramps
 #' @param n Number of different colors to generate from the palette
 #' @param pal A palette name from the lists below
@@ -74,7 +75,8 @@ showPal <- function(pal="all", n=11){
           ylab="",xaxt="n",yaxt="n",bty="n")
   } else {
     if (pal=="all" | pal==""){
-      par(mfrow=c(2,3))
+      oldPar<- par(mfrow=c(2,3))
+      on.exit(par(oldPar))
       for (i in 1:length(pals)){
         image(1:n,1,as.matrix(1:n),col=eval(parse(text = pals[i]))(n),main=pals[i], 
               xlab="", ylab="",xaxt="n",yaxt="n",bty="n")

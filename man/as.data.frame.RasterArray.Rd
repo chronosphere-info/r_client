@@ -17,6 +17,9 @@ Convert RasterArray class objects to data.frames}
 
 \item{...}{additional arguments passed to and from methods.}
 }
+\value{
+A \code{data.frame} class object.
+}
 \description{
 Formal conversion method transforming the proxy object to a data.frame.
 }

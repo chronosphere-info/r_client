@@ -15,6 +15,9 @@ proxy(x, ...)
 
 \item{...}{additional arguments passed to class-specific methods.}
 }
+\value{
+A \code{vector}, \code{matrix} or \code{array} of characters representing the \code{RasterArray} structure.
+}
 \description{
 This function returns an object that symbolizes the structure of layers in the \code{RasterArray}.
 }

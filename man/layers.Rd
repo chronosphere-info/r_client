@@ -15,6 +15,9 @@ layers(x, ...)
 
 \item{...}{additional arguments passed to class-specific methods.}
 }
+\value{
+A \code{character} vector of names.
+}
 \description{
 Names of RasterArray's Layers in the stack
 }

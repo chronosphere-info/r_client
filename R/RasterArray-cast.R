@@ -7,6 +7,7 @@
 #' @param row.names Argument to define the rownames of the resulting \code{data.frame}.
 #' @param optional \code{logical} Flag to reset the rownames and colnaems attributes.
 #' @param ... additional arguments passed to and from methods.
+#' @return A \code{data.frame} class object.
 #' @examples
 #' data(dems)
 #' df <- as.data.frame(dems)
@@ -39,6 +40,7 @@ as.data.frame.RasterArray <- function(x, row.names=NULL, optional=FALSE,...){
 #' # convert RasterLayer to RasterArray
 #' ra <- as.RasterArray(recent)
 #' @rdname asRasterArray
+#' @return A \code{RasterArray} class object.
 #' @exportMethod as.RasterArray
 setGeneric("as.RasterArray", function(from) standardGeneric("as.RasterArray"))
 
@@ -62,6 +64,7 @@ setMethod(as.RasterArray, signature=c("RasterBrick"), definition=function(from){
 #'
 #' The function coerces RasterLayer, RasterStack and RasterBrick object to a RasterArray.
 #' @param from Object to be coerced.
+#' @return A \code{RasterArray} class object.
 #' @name as
 #' @rdname coercion
 setAs(from="RasterLayer", to="RasterArray", function(from){
@@ -84,6 +87,7 @@ setAs(from="RasterBrick", to="RasterArray", function(from){
 #' 
 #' The function will return the items of the RasterArray as a list (conserving the names of the elements in the stack).
 #' @param x A \code{RasterArray} class object.
+#' @return A \code{list} of \code{RasterLayers}.
 #' @param ... arguments passed to or from methods.
 #' 
 #' @exportMethod as.list

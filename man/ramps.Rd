@@ -30,6 +30,9 @@ showPal(pal = "all", n = 11)
 
 \item{pal}{A palette name from the lists below}
 }
+\value{
+A function producing a colour gradient ramp.
+}
 \description{
 The object contains functions produced by the \code{colorRampPalette} function.
 }

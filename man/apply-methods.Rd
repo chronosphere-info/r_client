@@ -19,6 +19,9 @@ apply(X, MARGIN, FUN, ...)
 
 \item{...}{optional arguments passed to \code{FUN}.}
 }
+\value{
+Depending on the on the output of \code{FUN}, a \code{list}, a \code{vector} or \code{RasterArray} object.
+}
 \description{
 The function implements the \code{\link[base]{apply}}-type iterators for the RasterArray class. Output values are constrained to RasterArrays, whenever possible. 
 Not yet implemented for multidimensional MARGINs.

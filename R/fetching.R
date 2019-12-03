@@ -11,6 +11,7 @@ userpwd <- NULL
 #' @param datadir Directory where the downloaded file 'reg.csv' file is kept. Individual layers will be looked up from the directory if this is given, and will be downloaded if they are not found. The default \code{NULL} option will download data to a temporary directory that exists only until the R session ends.
 #'
 #' @param verbose Should console feedback during download be displayed?
+#' @return A \code{data.frame} class object.
 #' @examples
 #' \donttest{
 #' ind <- dataindex()
@@ -87,8 +88,7 @@ dataindex <- function(datadir=NULL, verbose=FALSE){
 #' 
 #' Function to download and attach variables in the \code{chronosphere} package
 #' 
-#' The function is implemented for a single variable, which can be downloaded and attached efficiently (dem). There are a lot of things to figure out.
-#' Version 2.
+#' Use the function \code{\link{dataindex}} to find available variables.
 #' @param dat The dataset to get variables from.
 #' @param var Vector of variable names to get.
 #' @param res The resolution of raster layers. This has to be the same for all RasterLayers that make up the variable.
@@ -100,6 +100,7 @@ dataindex <- function(datadir=NULL, verbose=FALSE){
 #' 	a <- fetch(dat="paleomap", var="dem")
 #' }
 #' @export
+#' @return An object that matches the 'type' field of the varibles in the output of the \code{\link{dataindex}} function.
 fetch <- function(dat, var=NULL, ver=NULL, res=1, datadir=NULL, verbose=TRUE){
 	# get the remote server data, or read it from hard drive!
 	register <- dataindex(datadir=datadir, verbose=verbose)

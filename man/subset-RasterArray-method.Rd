@@ -21,6 +21,9 @@
 
 \item{drop}{\code{logical} in case the result of subsetting is a single element, should the \code{RasterArray} wrapper be dropped and the element be reduced to a single \code{RasterLayer}?}
 }
+\value{
+A \code{RasterLayer} or \code{RasterArray} class object.
+}
 \description{
 Extract subsets of RasterArray class object similarly to a regular array.
 }

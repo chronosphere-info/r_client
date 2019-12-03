@@ -13,13 +13,16 @@
 
 \item{fun}{function to be applied.}
 
-\item{margin}{The \code{MARGIN} parameter of the \code{apply} function.}
+\item{margin}{The \code{MARGIN} parameter of the \code{apply} function. If set to \code{NULL} then the \code{fun} will be applied to the entire stack, producing a single layer.}
 
 \item{na.rm}{Remove NA values, if supported by 'fun' (only relevant when summarizing a multilayer Raster object into a RasterLayer)}
 
 \item{forcefun}{logical. Force calc to not use fun with apply; for use with ambiguous functions and for debugging (see Details)}
 
 \item{forceapply}{logical. Force calc to use fun with apply; for use with ambiguous functions and for debugging (see Details)}
+}
+\value{
+A \code{RasterLayer} or \code{RasterArray class object.}
 }
 \description{
 Calculate values for a new RasterLayer/RasterArray object from another RasterArray object, using a formula.

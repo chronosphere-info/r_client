@@ -11,9 +11,12 @@ dimlayer(x, ...)
 \S4method{dimlayer}{RasterArray}(x)
 }
 \arguments{
-\item{x}{A \code{RasterLayer} class object.}
+\item{x}{A \code{RasterArray} class object.}
 
 \item{...}{additional arguments passed to class-specific methods.}
+}
+\value{
+A \code{numeric} vector with the number of rows and columns in the \code{RasterLayer}s.
 }
 \description{
 The funcion will return the dimensions RasterLayers

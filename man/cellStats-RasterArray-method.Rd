@@ -14,6 +14,9 @@
 
 \item{...}{arguments passed to the \code{\link[raster]{cellStats}} function.}
 }
+\value{
+A set of the values matching the output of \code{stat}, organized the same way as the \code{RasterArray}.
+}
 \description{
 The method is inherited from the \code{RasterStack} class. Postitions of layers are conserved in the output. (including missing layers)
 }

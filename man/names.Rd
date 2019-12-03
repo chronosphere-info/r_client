@@ -15,6 +15,9 @@
 
 \item{value}{\code{character} vector.}
 }
+\value{
+A \code{character} vector of names or \code{NULL}.
+}
 \description{
 Get or set the names of one-dimensional RasterArray or SpArray objects
 }

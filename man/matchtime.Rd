@@ -27,6 +27,9 @@ matchtime(x, y, ...)
 
 \item{time}{\code{numeric}. Single value referring to that dimension of \code{x} where the time-coding names are (\code{time=1} is the default for RasterArrays in \code{chronosphere}).}
 }
+\value{
+An object of the class as \code{x} or a \code{numeric} vector.
+}
 \description{
 The function takes a variable \code{x} (e.g. a vector or a RasterArray object), and reorders it to best match the dates provided in a vector \code{y}.
 }

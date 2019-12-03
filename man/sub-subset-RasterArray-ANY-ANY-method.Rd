@@ -14,6 +14,9 @@
 
 \item{value}{\code{character} vector.}
 }
+\value{
+None.
+}
 \description{
 Double bracket \code{'[['} refers to layers' name in the \code{RasterStack} of the \code{RasterArray}. Use single brackets to replace elements based on their position in the \code{RasterArray}.
 }

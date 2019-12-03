@@ -15,6 +15,9 @@
 
 \item{value}{\code{character} vector.}
 }
+\value{
+A \code{list} of \code{character} vectors or \code{NULL}.
+}
 \description{
 Get or set the dimnames of multidimensional RasterArray or SpArray objects
 }

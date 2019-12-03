@@ -25,6 +25,7 @@ setClassUnion("arrayORmatrixORvector", c("vector", "matrix", "array"))
 #' @param stack A \code{RasterStack} class object.
 #' @param index A \code{vector}, \code{matrix} or \code{array} type object. Includes either the indices of layers in the stack, or their names.
 #' @param dim A \code{numeric} vector. Same as for \code{array}, creates \code{proxy} procedurally.
+#' @return A \code{RasterArray} class object.
 #' @examples
 #' # data import
 #'   data(dems)
@@ -167,6 +168,7 @@ setMethod(
 #' The \code{proxy} method wraps the names of layers in the stack using the \code{index} slot of the \code{RasterArray}.
 #'  
 #' @param x (\code{RasterArray}  focal object.
+#' @return A \code{vector}, \code{matrix} or \code{array} of characters representing the \code{RasterArray} structure.
 #' @param ... additional arguments passed to class-specific methods.
 #' @examples
 #' data(dems)
@@ -251,6 +253,7 @@ extendDim <- function(proxy, vals2d, newdim=1){
 #' The function behaves similar to the regular \code{is.na()} function applied to the proxy object of a \code{RasterArray}.
 #' 
 #' @param x A \code{RasterArray} class object.
+#' @return A \code{logical} \code{vector}, \code{matrix} or \code{array} matching the structure of the \code{RasterArray}.
 #' 
 #' @examples
 #' data(dems)
@@ -271,7 +274,8 @@ is.na.RasterArray<-function(x){
 #' t(dems)
 #' data(clim)
 #' t(clim)
-#' @param x A RasterArray class object. 
+#' @param x A \code{RasterArray} class object. 
+#' @return A \code{RasterArray} class object.
 #' 
 #' @exportMethod t
 setMethod(
@@ -311,6 +315,7 @@ setMethod(
 #' data(dems)
 #' a<- cbind(dems, dems)
 #' same <- apply(a, 1, sum)
+#' @return Depending on the on the output of \code{FUN}, a \code{list}, a \code{vector} or \code{RasterArray} object.
 #' @param X an array, including matrices and RasterArrays.
 #' @param MARGIN a vector giving the subscripts which the function will be applied over. E.g., for a matrix 1 indicates rows, 2 indicates columns, \code{c(1, 2)} indicates rows and columns. Where \code{X} has named dimnames, it can be a character vector selecting dimension names. For \code{RasterArrays} only single dimension margins are implemented.
 #' @param FUN  the function to be applied: see ‘Details’ of \code{\link[base]{apply}}. 

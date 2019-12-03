@@ -53,6 +53,9 @@ mapplot(x, ...)
 
 \item{ask}{NULL or a logical values. If multi.page = TRUE and ask = TRUE, then the user will be prompted before a new page of output is started}
 }
+\value{
+None.
+}
 \description{
 This function plots Raster and sp-type objects.
 }

@@ -20,12 +20,14 @@ fetch(dat, var = NULL, ver = NULL, res = 1, datadir = NULL,
 
 \item{verbose}{Should console feedback during download be displayed?}
 }
+\value{
+An object that matches the 'type' field of the varibles in the output of the \code{\link{dataindex}} function.
+}
 \description{
 Function to download and attach variables in the \code{chronosphere} package
 }
 \details{
-The function is implemented for a single variable, which can be downloaded and attached efficiently (dem). There are a lot of things to figure out.
-Version 2.
+Use the function \code{\link{dataindex}} to find available variables.
 }
 \examples{
 \donttest{
