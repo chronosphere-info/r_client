@@ -197,7 +197,7 @@ setMethod("mapplot", signature="RasterArray",
                       on.exit(par(oldPar1))
                       
                       if (na.raster[j,k]){
-                        plot(c(0,1), c(0,1), type="n", axes=F, ylab="", xlab="")
+                        plot(c(0,1), c(0,1), type="n", axes=FALSE, ylab="", xlab="")
                         graphics::text(0.5, 0.5, labels = c("Plot \nnot available"), font=2)
                       } else {
                         raster::image(x[j,k], axes=axes, xlab="", ylab="", asp=1, col=col[[k]], breaks=brks[[k]], main=plot.title)
@@ -286,7 +286,7 @@ setMethod("mapplot", signature="RasterArray",
                     on.exit(par(oldPar4))
                     
                     if (j %in% na.raster){ #plot empty if na
-                      plot(c(0,1), c(0,1), type="n", axes=F, ylab="", xlab="")
+                      plot(c(0,1), c(0,1), type="n", axes=FALSE, ylab="", xlab="")
                       graphics::text(0.5, 0.5, labels = c("Plot \nnot available"), font=2)
                     } else {
                       raster::image(x[j], axes=axes, xlab="", ylab="", asp=1,
@@ -299,7 +299,7 @@ setMethod("mapplot", signature="RasterArray",
                   #empty plots if needed
                   if (i == length(pg)-1 & pg[i+1]%%nplots !=0) {
                     for (i in 1:(nplots - pg[i+1]%%nplots)) {
-                      plot(1, type="n", axes=F, ylab=NULL, xlab=NULL)
+                      plot(1, type="n", axes=FALSE, ylab=NULL, xlab=NULL)
                     }
                   }
                   

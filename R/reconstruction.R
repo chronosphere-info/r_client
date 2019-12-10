@@ -304,8 +304,8 @@ setMethod(
 #	library(chronosphere)
 #	x<- fetch("pared", "public")[,c("longitude", "latitude")]
 #	mo <- fetch("paleomap", "model")
-#	reconstruct(x, age=10, model=mo, verbose=T)
-#reconstruct(x, age=10, model=mo, verbose=T, path.gplates="/Users/Nick/Downloads/GPlates-2.2.0/gplates.app/Contents/MacOS/gplates")
+#	reconstruct(x, age=10, model=mo, verbose=TRUE)
+#reconstruct(x, age=10, model=mo, verbose=TRUE, path.gplates="/Users/Nick/Downloads/GPlates-2.2.0/gplates.app/Contents/MacOS/gplates")
 
 
 
@@ -745,7 +745,7 @@ gplates_reconstruct_coastlines <- function(age, model="PALEOMAP", verbose=TRUE){
 	r <- readLines(fullrequest, warn=FALSE)
 	
 	#read data
-	dat <- rgdal::readOGR(r, "OGRGeoJSON", verbose = F)
+	dat <- rgdal::readOGR(r, "OGRGeoJSON", verbose = FALSE)
 	
 	return(dat)
 }
@@ -775,7 +775,7 @@ gplates_reconstruct_static_polygons <- function(age, model="PALEOMAP", verbose=T
 	r <- readLines(fullrequest, warn=FALSE)
 	
 	#read data
-	dat <- rgdal::readOGR(r, "OGRGeoJSON", verbose = F)
+	dat <- rgdal::readOGR(r, "OGRGeoJSON", verbose = FALSE)
 	
 	return(dat)
 }
@@ -808,7 +808,7 @@ gplates_reconstruct_polygon <- function(sp, age, model="PALEOMAP", verbose=TRUE)
 	if(verbose) cat("Reconstructing polygon from:",	fullrequest, "\n")
 	rawdata <- readLines(fullrequest, warn="F") 
 	
-	rpoly <- rgdal::readOGR(rawdata, "OGRGeoJSON", verbose = F)
+	rpoly <- rgdal::readOGR(rawdata, "OGRGeoJSON", verbose = FALSE)
 	
 	return(rpoly)
 }

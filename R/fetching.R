@@ -57,7 +57,7 @@ dataindex <- function(datadir=NULL, verbose=FALSE){
 	if(download){
 		# do the download
 		if(is.null(userpwd)){
-			download.file(paste(remote, "log.csv", sep = ""),tempLog, mode="wb", quiet=T)
+			download.file(paste(remote, "log.csv", sep = ""),tempLog, mode="wb", quiet=TRUE)
 			download.file(paste(remote, "reg.csv", sep = ""),tempReg, mode="wb", quiet=!verbose)
 		}else{
 			download.file(paste("ftp://", userpwd, "@",remote, "log.csv", sep = ""),tempLog, mode="wb", quiet=TRUE)

@@ -73,7 +73,7 @@ setMethod("initialize",signature="RasterArray",
 			
 		}else{
 			if(!is.numeric(dim)) stop("The 'dim' argument has to be a 'numeric' vector.")
-			if(raster::nlayers(stack)==prod(dim, na.rm=T)){
+			if(raster::nlayers(stack)==prod(dim, na.rm=TRUE)){
 				.Object@stack<- stack
 				index <- array(1:nlayers(stack), dim=dim)
 				.Object@index<- index
