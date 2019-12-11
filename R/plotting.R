@@ -34,17 +34,20 @@ setGeneric("mapplot", function(x,...) standardGeneric("mapplot"))
 #' @rdname mapplot
 setMethod("mapplot", signature="RasterLayer", 
           definition = function(x, col="gradinv", axes=FALSE, box=FALSE, legend=FALSE, legend.title=NULL,...){
+            
+            old.par <- par(no.readonly = TRUE)
+            
+            
             if(length(col)==1){
               if(col %in% c("ocean", "gradinv", "terra", "coldhot", "drywet", "wet")){
                 # store par and resent on exit
-                oldPar1 <- par(mar=c(3,1,1,0))
-                on.exit(par(oldPar1))
+                par(mar=c(3,1,1,0))
 
                 raster::plot(x,legend=FALSE, col=eval(parse(text = col))(255), axes=axes, box=box, ...)
                 
                 if (legend == TRUE){
-                  oldPar2 <- par(oma=c(1,0,0,0))
-                  on.exit(par(oldPar2))
+                  par(oma=c(1,0,0,0))
+
                   plot(x, col=eval(parse(text = col))(255), legend.only=TRUE, horizontal = TRUE,
                        legend.args=list(text=legend.title,side=1, font=2, line=2.5, cex=1))
                 }
@@ -60,8 +63,8 @@ setMethod("mapplot", signature="RasterLayer",
                                    terra(length(posBreaks))), axes=axes, box=box,...)
                 
                 if (legend == TRUE){
-                  oldPar3 <- par(oma=c(1,0,0,0))
-                  on.exit(par(oldPar3))
+                  par(oma=c(1,0,0,0))
+
                   plot(x, col=c(ocean(length(negBreaks)-1), 
                                 terra(length(posBreaks))), legend.only=TRUE, horizontal = TRUE,
                        legend.args=list(text=legend.title,side=1, font=2, line=2.5, cex=1))
@@ -71,14 +74,13 @@ setMethod("mapplot", signature="RasterLayer",
               raster::plot(x,legend=FALSE, col=col, axes=axes, box=box,...)
               
               if (legend == TRUE){
-                oldPar4 <- par(oma=c(1,0,0,0))
-                on.exit(par(oldPar4))
+                par(oma=c(1,0,0,0))
                 plot(x, col=eval(parse(text = col))(255), legend.only=TRUE, horizontal = TRUE,
                      legend.args=list(text=legend.title,side=1, font=2, line=2.5, cex=1))
               }
             }
             
-            
+            on.exit(par(old.par), add = TRUE)
           }
 )
 
@@ -93,6 +95,10 @@ setMethod("mapplot", signature="RasterStack",
 setMethod("mapplot", signature="RasterArray", 
           definition = function(x, col="gradinv", rgb=FALSE, legend=FALSE, axes=FALSE, box=FALSE, 
                                 ncol = 3, legend.title=NULL, plot.title =NULL, rowlabels=rownames(x), multi=FALSE, ask=FALSE,...){
+            
+            old.par <- par(no.readonly = TRUE)
+           
+            
             if(rgb == TRUE){ #plot with rgb bands
               raster::plotRGB(x@stack, ...)  	    
             } else { #uni and multivariate rasterArrays
@@ -193,8 +199,8 @@ setMethod("mapplot", signature="RasterArray",
                     
                     #main plots
                     for (k in 1:nvars){
-                      oldPar1 <- par(mar=c(0,1,2,1))
-                      on.exit(par(oldPar1))
+                      par(mar=c(0,1,2,1))
+                      
                       
                       if (na.raster[j,k]){
                         plot(c(0,1), c(0,1), type="n", axes=FALSE, ylab="", xlab="")
@@ -216,14 +222,14 @@ setMethod("mapplot", signature="RasterArray",
                     #add legend
                     for (k in 1:nvars){
                       
-                      oldPar2 <- par(mar=c(4,2,2,2))
-                      on.exit(par(oldPar2))
+                      par(mar=c(4,2,2,2))
+                      
                       plot(rng[[k]],c(0,5), type="n", axes=FALSE, ylab="", xlab="", xaxs="i", yaxs="i")
                       image(x=brks[[k]], z=as.matrix(brks[[k]]), col=col[[k]], add=TRUE)
                       box()
                       
-                      oldPar3 <- par(xpd=TRUE)
-                      on.exit(par(oldPar3))
+                      par(xpd=TRUE)
+                      
 
                       labs <- pretty(rng[[k]], n=6, min.n = 4)
                       labs <- labs[labs > rng[[k]][1] & labs < rng[[k]][2]]
@@ -282,8 +288,8 @@ setMethod("mapplot", signature="RasterArray",
                 for (i in 1:(length(pg)-1)){
                   
                   for (j in (pg[i]+1): (pg[i+1])){
-                    oldPar4 <- par(mar=c(0,1,2,1))
-                    on.exit(par(oldPar4))
+                    par(mar=c(0,1,2,1))
+                    
                     
                     if (j %in% na.raster){ #plot empty if na
                       plot(c(0,1), c(0,1), type="n", axes=FALSE, ylab="", xlab="")
@@ -306,18 +312,16 @@ setMethod("mapplot", signature="RasterArray",
                   if (legend == TRUE){
                     #add legend
                     if (multi == TRUE){ 
-                      oldPar5 <- par(mar=c(6,4,3,4))
-                      on.exit(par(oldPar5))
+                      par(mar=c(6,4,3,4))
                     }else{
-                      oldPar6 <- par(mar=c(2.5,4,2,4))
-                      on.exit(par(oldPar6))
+                      par(mar=c(2.5,4,2,4))
                     }
                     plot(rng,c(0,5), type="n", axes=FALSE, ylab="", xlab="", xaxs="i", yaxs="i")
                     image(x=brks[[1]], z=as.matrix(brks[[1]]), col=col[[1]], add=TRUE)
                     box()
                     
-                    oldPar7 <- par(xpd=TRUE)
-                    on.exit(par(oldPar7))
+                    par(xpd=TRUE)
+                
                     labs <- pretty(rng, n=10)
                     labs <- labs[labs > rng[1] & labs < rng[2]]
                     text(x = labs, y=-8, labels = labs, cex=1.5)
@@ -334,6 +338,7 @@ setMethod("mapplot", signature="RasterArray",
               }
               
             }
+            on.exit(par(old.par), add=TRUE)
             
           }
 )
