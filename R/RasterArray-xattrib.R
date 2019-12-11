@@ -77,7 +77,7 @@ setReplaceMethod(
 	signature="RasterArray",
 	definition=function(x,  value){
 		# not defined for matrices or higher
-		if(is.null(colnames(x))) stop("The RasterArray proxy is not a 2D matrix.")
+		if(length(dim(x))!=2) stop("The RasterArray proxy is not a 2D matrix.")
 		colnames(x@index) <- value 
 		return(x)
 })
@@ -110,7 +110,7 @@ setReplaceMethod(
 	signature="RasterArray",
 	definition=function(x,  value){
 		# not defined for matrices or higher
-		if(is.null(rownames(x))) stop("The RasterArray proxy is not a 2D matrix.")
+		if(length(dim(x))!=2) stop("The RasterArray proxy is not a 2D matrix.")
 		rownames(x@index) <- value 
 		return(x)
 })

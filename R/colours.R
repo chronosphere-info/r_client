@@ -75,8 +75,10 @@ showPal <- function(pal="all", n=11){
           ylab="",xaxt="n",yaxt="n",bty="n")
   } else {
     if (pal=="all" | pal==""){
-      oldPar<- par(mfrow=c(2,3))
-      on.exit(par(oldPar))
+       old.par <- par(no.readonly = TRUE)
+       on.exit(par(old.par), add = TRUE)
+          
+      par(mfrow=c(2,3))
       for (i in 1:length(pals)){
         image(1:n,1,as.matrix(1:n),col=eval(parse(text = pals[i]))(n),main=pals[i], 
               xlab="", ylab="",xaxt="n",yaxt="n",bty="n")

@@ -73,14 +73,14 @@ setMethod("initialize",signature="RasterArray",
 			
 		}else{
 			if(!is.numeric(dim)) stop("The 'dim' argument has to be a 'numeric' vector.")
-			if(raster::nlayers(stack)==prod(dim, na.rm=TRUE)){
-				.Object@stack<- stack
-				index <- array(1:nlayers(stack), dim=dim)
-				.Object@index<- index
-			}else{
-				stop("The number of layers in the does not equal the product of the 'dim' vector.")
-			}
-
+			if(raster::nlayers(stack)!=prod(dim, na.rm=TRUE)) warning("The number of layers in the does not equal the product of the 'dim' vector.")
+			.Object@stack<- stack
+			index <- array(1:nlayers(stack), dim=dim)
+			# in case of reuse
+			index[duplicated(as.numeric(index))] <- NA
+			.Object@index<- index
+			
+			
 		}
 		return(.Object)
 	}
@@ -297,8 +297,15 @@ setMethod(
 		# refill the index
 		tIndex[!is.na(tIndex)] <- 1:raster::nlayers(x@stack)
 
+		# copy names
+		if(!is.null(colnames(x@index))) rownames(tIndex) <- colnames(x@index)
+		if(!is.null(rownames(x@index))) colnames(tIndex) <- rownames(x@index)
+		if(!is.null(names(x@index)))  colnames(tIndex) <- names(x@index)
+
 		# replace the index
 		x@index <- tIndex
+
+
 
 		return(x)
 
