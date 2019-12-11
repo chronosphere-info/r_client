@@ -467,106 +467,19 @@ fetchRaster <- function(dat, var, res=1, ver=NULL, datadir=NULL, register=regist
 			# get rid of the archive
 			unlink(temp)
 		}
-
 		
-		# read all files in temporary directory
-		all<-list.files(tempd)
-	
-			# resolution names have to be here, otherwise they will be overwritten here and the links to the 
-			# hard drive versions will break
+		# variable directory
+		varDir <- file.path(tempd, gsub(".zip", "", archive))
 
-			# select the ones that were just downloaded, current variable
-			all<- all[unlist(
-				lapply(strsplit(all, "_"), function(x){
-				 	paste(x[1:3], collapse="_")
-				})
-				)==paste(resChar, var[j],version, sep="_")]
-		
-			# order them
-			# # future layer names
-			#splittedExt <- strsplit(all, "[^.]+$")
-			
-			# resolution_variable_age
-			#resVarAge <- unlist(lapply(splittedExt, function(x)x[1]))
-			resVarVerAge <- sub("\\.[[:alnum:]]+$", "", all)
-			
-			# remove the version too
-			resVarAge <- sub(paste("_",version, sep=""), "", resVarVerAge)
+		# loading script - variable specific
+		loadScript <- gsub(".zip", ".R", archive)
 
-			# variable_age - future layer name
-			# varAge <- unlist(
-			#   lapply(strsplit(resVarAge, "_"), function(x){
-			#     paste(x[2:3], collapse="_")
-			#   })
-			# )
-			# 
-			# remove resolution from the variable name
-			varAge <- gsub('([A-za-z0-9]+)_([A-Za-z]+_[0-9.]+$)', '\\2', resVarAge)
+		# source the R file associated with the variable
+		source(file.path(varDir, loadScript))
 
-			# get the extension of the file for later decisions 
-			# extension <- unlist(lapply(splittedExt, function(x)x[[2]]))[1]
-			extension <- regmatches(all, gregexpr("[^.]+$", all))[[1]]
+		# run the function that loads in the variable and save it
+		varObj[[j]] <- loadVar(variable=var[j], version=version, resChar=resChar, dir=varDir)
 
-			# only the ages
-			# ageNum <- as.numeric(unlist(lapply(strsplit(varAge, "_"), function(x) x[[2]])))
-
-			# get ages 
-		 	 ageNum <- as.numeric(unlist(regmatches(varAge, gregexpr("[0-9]\\d{0,9}(\\.\\d{1,3})?%?$", varAge))))
-
-			# ordered file names
-			all<-all[order(ageNum)]
-	
-		
-		# to make a stack in memory, make a list first
-		listForm <- list()
-		
-		# netCDF files (raster data - two dimension!)
-		if(extension=="nc"){
-			for(i in 1:length(all)){
-				listForm[[i]]<-raster::raster(file.path(tempd, all[i]))
-				listForm[[i]]@data@names <- varAge[order(ageNum)][i]
-			}
-			# when the variable is a raster
-			# make a RasterArray
-			ind <- 1:length(all)
-			names(ind) <-  as.character(sort(ageNum))
-		}
-
-		# JPEG (images)
-		if(extension=="jpg"){
-			# check for the presence of the jpeg package
-			
-			# iterate, this will be the stack, later
-			for(i in 1:length(all)){
-				# import all three channells
-				scot <- raster::stack(paste0(tempd, "/", all[i]))
-				
-				#redefine extent 
-				extent(scot) <- extent(-180, 180, -90, 90)
-				
-				#name them properly
-				names(scot) <- paste(varAge[order(ageNum)][i], c("R", "G", "B"), sep="_")
-				
-				# add them to list
-				listForm[[i]]<- scot[[1]]
-				listForm[[i+length(all)]]<- scot[[2]]
-				listForm[[i+length(all)*2]]<- scot[[3]]
-
-				# add the projections
-				listForm[[i]]@crs@projargs<-"+proj=longlat"
-				listForm[[i+length(all)]]@crs@projargs<-"+proj=longlat"
-				listForm[[i+length(all)*2]]@crs@projargs<-"+proj=longlat"
-			}
-		  
-			# the proxy object structure of the RasterArray
-			ind <- matrix(1:length(listForm), ncol=3, byrow=FALSE)
-			colnames(ind) <- c("paleoatlas_R", "paleoatlas_G", "paleoatlas_B")
-			rownames(ind) <-  as.character(sort(ageNum))
-		}
-		
-		# RasterArray
-		varObj[[j]] <- RasterArray(stack=raster::stack(listForm), index=ind)
-	
 		# 'get rid of' temporary directory
 		unlink(tempd)
 	}
@@ -587,3 +500,7 @@ fetchRaster <- function(dat, var, res=1, ver=NULL, datadir=NULL, register=regist
 	return(list(final=final, citation=citation))
 }
 
+# placeholder function in package namespace
+loadVar <- function(variable, version, resChar,dir){
+	stop("If this method is run, then you have an error.")
+}

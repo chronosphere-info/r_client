@@ -1,11 +1,14 @@
 # Change log of the R package 'chronosphere'
 
-## [0.2.0 (build 57)]  - 2019-12-10 (CRAN initial submission, take 3)
+## [0.2.0 (build 57)]  - 2019-12-11 (CRAN initial submission, take 3)
 ### Changed 
 - replaced all occurrences of T and F with TRUE and FALSE respectively
+- on.exit statements for mapplot() and showPal()
 - RasterArray constructor now works for stacks that do not have the same length as the dim product (with warning)
 - Fixed bug with colnames and rownames assignment
 - t() copies colnames and rownames attributes
+- Raster variable loading is now done with R code provided by the server
+- renamed NEWS file to NEWS.md
 
 ## [0.2.0 (build 56)]  - 2019-12-03 (CRAN initial submission, take 2)
 ### Added 
