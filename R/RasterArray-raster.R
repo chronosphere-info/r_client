@@ -262,9 +262,9 @@ setMethod(
 		# rename the column names
 		colnames(vals)<- colnames(x)
 
-	# base case
+	# base case - one vector of layers
 	}else{
-
+		
 		# column that contains which map the coordinate belongs to
 		if(is.character(by)){
 			if(!by%in%colnames(y)) stop("The argument by has to be a column of y. ")

@@ -31,7 +31,7 @@ https://www.evolv-ed.net/post/chronosphere-paleomap/chronosphere-paleomap/
 
 Open R and paste in: 
 ```r
-install.packages("https://github.com/adamkocsis/chronosphere/raw/master/_archive/source/chronosphere_0.2.0.tar.gz", repos=NULL, type="source")
+install.packages("https://github.com/adamkocsis/chronosphere/raw/master/_archive/source/chronosphere_0.2.1-58.tar.gz", repos=NULL, type="source")
 ```
 
 ## Install method B. 
@@ -52,5 +52,5 @@ library(chronosphere)
 Run dataindex() to see the publicly available variables. 
 
 # Cite as
-Kocsis, Ádám T. & Raja, Nussaïbah B. (2019). chronosphere: Earth system history variables (pre-release) (Version 0.1.5). Zenodo. http://doi.org/10.5281/zenodo.3525482
+Kocsis, Ádám T. & Raja, Nussaïbah B. (2020). chronosphere: Earth system history variables (pre-release) (Version 0.2.1). Zenodo. http://doi.org/10.5281/zenodo.3525482
 

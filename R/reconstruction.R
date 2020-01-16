@@ -80,8 +80,6 @@ setMethod(
 	function(x,age, model="PALEOMAP", listout=TRUE, verbose=FALSE, enumerate=TRUE, chunk=200, reverse=FALSE, path.gplates=NULL, cleanup=TRUE, dir=NULL){
 	 
 		# Check long lat!
-
-
 		if(!is.numeric(age)) age <- as.numeric(age)
 
 		# depending on length
@@ -142,7 +140,7 @@ setMethod(
 				for(i in 1:length(ageLevs)){
 					# which rows apply
 					index <- which(ageLevs[i]==age)
-					current <- x[index,]
+					current <- x[index, , drop=FALSE]
 					# do reconstruction and store
                     if(is.character(model)){
 					   container[index,] <- IteratedPointReconstruction(coords=current, chunk=chunk, age=ageLevs[i], model=model, reverse=reverse, verbose=verbose)

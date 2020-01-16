@@ -95,13 +95,14 @@ dataindex <- function(datadir=NULL, verbose=FALSE){
 #' @param ver The version of the variable. Defaults to \code{NULL}, which will download the latest available version. We have to create a data table, which should be part of the package. This has to be searched for valid argument combinations. Right this is just a folder with a date.
 #' @param datadir Directory where downloaded files are kept. Individual layers will be looked up from the directory if this is given, and will be downloaded if they are not found. The default \code{NULL} option will download data to a temporary directory that exists only until the R session ends.
 #' @param verbose Should console feedback during download be displayed?
+#' @param ... Arguments passed to variable-specific loading functions.
 #' @examples
 #' \donttest{
 #' 	a <- fetch(dat="paleomap", var="dem")
 #' }
 #' @export
 #' @return An object that matches the 'type' field of the varibles in the output of the \code{\link{dataindex}} function.
-fetch <- function(dat, var=NULL, ver=NULL, res=1, datadir=NULL, verbose=TRUE){
+fetch <- function(dat, var=NULL, ver=NULL, res=1, datadir=NULL, verbose=TRUE,...){
 	# get the remote server data, or read it from hard drive!
 	register <- dataindex(datadir=datadir, verbose=verbose)
 	
@@ -151,7 +152,7 @@ fetch <- function(dat, var=NULL, ver=NULL, res=1, datadir=NULL, verbose=TRUE){
 
 	# method dispatch
 	if(varType=="RasterArray"){
-		combined <- fetchRaster(dat=dat, var=var, ver=ver, res=res, datadir=datadir, register=register, verbose=verbose)
+		combined <- fetchRaster(dat=dat, var=var, ver=ver, res=res, datadir=datadir, register=register, verbose=verbose,...)
 	}
 
 	if(varType=="data.frame"){
@@ -360,7 +361,7 @@ fetchDF <- function(dat, var, ver, datadir, register, verbose=TRUE){
 
 
 # Raster-specific submodule of fetch()
-fetchRaster <- function(dat, var, res=1, ver=NULL, datadir=NULL, register=register, verbose=TRUE){
+fetchRaster <- function(dat, var, res=1, ver=NULL, datadir=NULL, register=register, verbose=TRUE,...){
 	if(! requireNamespace("ncdf4", quietly=TRUE)) stop("This method requires the 'ncdf4' package to run.")
 	
 	# the data have to use the same resolution!!!
@@ -460,7 +461,6 @@ fetchRaster <- function(dat, var, res=1, ver=NULL, datadir=NULL, register=regist
 				download.file(paste("ftp://", userpwd, "@",remote, dat,"/",  var[j], "/", archive,  sep = ""),temp, mode="wb", quiet=!verbose)
 			}
 			
-		
 			# unzip it in temporary directory
 			unzip(temp, exdir=tempd)
 		
@@ -478,7 +478,9 @@ fetchRaster <- function(dat, var, res=1, ver=NULL, datadir=NULL, register=regist
 		source(file.path(varDir, loadScript))
 
 		# run the function that loads in the variable and save it
-		varObj[[j]] <- loadVar(variable=var[j], version=version, resChar=resChar, dir=varDir)
+		varObj[[j]] <- loadVar(variable=var[j], version=version, resChar=resChar, dir=varDir, ...)
+
+		#
 
 		# 'get rid of' temporary directory
 		unlink(tempd)

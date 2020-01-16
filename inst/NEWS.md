@@ -1,5 +1,13 @@
 # Change log of the R package 'chronosphere'
 
+## [0.2.1 (build 58)]  - 2020-01-12 
+### Added
+- the nums(), colnums() and rownums() functions
+- the ... argument to fetch to reach variable-specific loading options
+
+### Changed 
+- Fixed issue with offline reconstruction method (one entry in an age with enumerate = FALSE)
+
 ## [0.2.0 (build 57)]  - 2019-12-11 (CRAN initial submission, take 3)
 ### Changed 
 - replaced all occurrences of T and F with TRUE and FALSE respectively

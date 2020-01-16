@@ -5,7 +5,7 @@
 \title{Data fetching}
 \usage{
 fetch(dat, var = NULL, ver = NULL, res = 1, datadir = NULL,
-  verbose = TRUE)
+  verbose = TRUE, ...)
 }
 \arguments{
 \item{dat}{The dataset to get variables from.}
@@ -19,6 +19,8 @@ fetch(dat, var = NULL, ver = NULL, res = 1, datadir = NULL,
 \item{datadir}{Directory where downloaded files are kept. Individual layers will be looked up from the directory if this is given, and will be downloaded if they are not found. The default \code{NULL} option will download data to a temporary directory that exists only until the R session ends.}
 
 \item{verbose}{Should console feedback during download be displayed?}
+
+\item{...}{Arguments passed to variable-specific loading functions.}
 }
 \value{
 An object that matches the 'type' field of the varibles in the output of the \code{\link{dataindex}} function.

@@ -169,6 +169,38 @@ shaper <- function(f="p",n=2, round=2,...){
 
 }
 
+#' Names as numerics
+#' 
+#' The set of functions return names of objects directly transformed to numeric values.
+#' 
+#' @param x Object with names, colnames or rownames attributes.
+#' @rdname nums
+#' @return Numeric vector.
+#' @examples
+#' data(dems)
+#' # ages as numerics
+#' nums(dems)
+#' # younger than 20Ma
+#' dems[nums(dems)<20]
+#' 
+#' 
+#' @rdname nums
+#' @export
+nums <- function(x){
+	as.numeric(names(x))
+}
+
+#' @rdname nums
+#' @export
+colnums<- function(x){
+	as.numeric(colnames(x))
+}
+
+#' @rdname nums
+#' @export
+rownums <- function(x){
+	as.numeric(rownames(x))
+}
 
 # Get operating system 
 # 
@@ -214,4 +246,6 @@ randomString <- function(n=1, length=12){
     }
     return(randomString)
 }
+
+
 
