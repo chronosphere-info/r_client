@@ -4,7 +4,7 @@
 \alias{fetch}
 \title{Data fetching}
 \usage{
-fetch(dat, var = NULL, ver = NULL, res = 1, datadir = NULL,
+fetch(dat, var = NULL, ver = NULL, res = NULL, datadir = NULL,
   verbose = TRUE, ...)
 }
 \arguments{

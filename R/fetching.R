@@ -102,7 +102,7 @@ dataindex <- function(datadir=NULL, verbose=FALSE){
 #' }
 #' @export
 #' @return An object that matches the 'type' field of the varibles in the output of the \code{\link{dataindex}} function.
-fetch <- function(dat, var=NULL, ver=NULL, res=1, datadir=NULL, verbose=TRUE,...){
+fetch <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=TRUE,...){
 	# get the remote server data, or read it from hard drive!
 	register <- dataindex(datadir=datadir, verbose=verbose)
 	
@@ -151,19 +151,19 @@ fetch <- function(dat, var=NULL, ver=NULL, res=1, datadir=NULL, verbose=TRUE,...
 	
 
 	# method dispatch
-	if(varType=="RasterArray"){
-		combined <- fetchRaster(dat=dat, var=var, ver=ver, res=res, datadir=datadir, register=register, verbose=verbose,...)
+	if(varType=="RasterArray" | varType=="SpatialPolygonsDataFrame"){
+		combined <- fetchRemote(dat=dat, var=var, ver=ver, res=res, datadir=datadir, register=register, verbose=verbose,...)
 	}
 
 	if(varType=="data.frame"){
 		# check for non-related input
-		if(res!=1) warning("Argument 'res' is ignored for data.frame fetching.")
+		if(!is.null(res)) warning("Argument 'res' is ignored for data.frame fetching.")
 		combined <- fetchDF(dat=dat, var=var, ver=ver, datadir=datadir, register=register, verbose=verbose)
 	}
 
 	if(varType=="platemodel"){
 		# check for non-related input
-		if(res!=1) warning("Argument 'res' is ignored for plate model fetching.")
+		if(!is.null(res)) warning("Argument 'res' is ignored for plate model fetching.")
 		combined <- fetchModel(dat=dat, var=var, ver=ver, datadir=datadir, register=register, verbose=verbose)
 	}
 
@@ -361,14 +361,24 @@ fetchDF <- function(dat, var, ver, datadir, register, verbose=TRUE){
 
 
 # Raster-specific submodule of fetch()
-fetchRaster <- function(dat, var, res=1, ver=NULL, datadir=NULL, register=register, verbose=TRUE,...){
+fetchRemote <- function(dat, var, res=NULL, ver=NULL, datadir=NULL, register=register, verbose=TRUE,...){
 	if(! requireNamespace("ncdf4", quietly=TRUE)) stop("This method requires the 'ncdf4' package to run.")
 	
 	# the data have to use the same resolution!!!
-	if(length(res)>1) stop("Only one resolution can be used in a single download call.")
+	if(!is.null(res)) if(length(res)>1) stop("Only one resolution can be used in a single download call.")
 
+	# default resolution used
+	noRes <- FALSE
 	# subset the register to the resolution of interest
-	register <- register[register[, "res"]==res, , drop=FALSE] 
+	if(!is.null(res)){
+		register <- register[register[, "res"]==res, , drop=FALSE]
+	
+	# select the coarsest resolution
+	}else{
+		res <- max(register[, "res"])
+		# if res is NA, than the dataset has no resolution variable
+		if(is.na(res)) noRes <- TRUE
+	}
 
 	# check whether resolution is there, before the download
 	for(j in 1:length(var)){
@@ -419,8 +429,12 @@ fetchRaster <- function(dat, var, res=1, ver=NULL, datadir=NULL, register=regist
 		}
 		
 		# Check whether download is required or not
-		# the name of the res_variable_ver-specific archive
-		archive<- paste(resChar,"_",  var[j],"_", version, ".zip", sep="")
+		if(noRes){
+			archive <- paste(var[j],"_", version, ".zip", sep="")
+		}else{
+			# the name of the res_variable_ver-specific archive
+			archive <- paste(resChar,"_",  var[j],"_", version, ".zip", sep="")
+		}
 
 		# we need a temporary directory to store the extracted files until the end of the session
 		tempd <- tempdir()

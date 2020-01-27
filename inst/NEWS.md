@@ -1,5 +1,13 @@
 # Change log of the R package 'chronosphere'
 
+
+## [0.2.1 (build 59)]  - 2020-01-27 
+### Added
+- support for shapefile fetching
+
+### Changed
+- fetch() defaults to the coarsest resolution (highest res entry, new default is res=NULL)
+
 ## [0.2.1 (build 58)]  - 2020-01-12 
 ### Added
 - the nums(), colnums() and rownums() functions
