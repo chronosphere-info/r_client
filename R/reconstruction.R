@@ -762,6 +762,7 @@ gplates_reconstruct_coastlines <- function(age, model="PALEOMAP", verbose=TRUE){
 #  gplates_reconstruct_static_polygons(140)
 #  
 gplates_reconstruct_static_polygons <- function(age, model="PALEOMAP", verbose=TRUE){
+	if(! requireNamespace("rgdal", quietly=TRUE)) stop("This method requires the 'rgdal' package to run.")
 	
 	#download and save data
 	url <- 'http://gws.gplates.org/reconstruct/static_polygons/'
