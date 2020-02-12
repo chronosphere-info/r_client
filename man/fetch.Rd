@@ -4,8 +4,15 @@
 \alias{fetch}
 \title{Data fetching}
 \usage{
-fetch(dat, var = NULL, ver = NULL, res = NULL, datadir = NULL,
-  verbose = TRUE, ...)
+fetch(
+  dat,
+  var = NULL,
+  ver = NULL,
+  res = NULL,
+  datadir = NULL,
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{dat}{The dataset to get variables from.}

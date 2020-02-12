@@ -7,8 +7,7 @@
 \alias{initialize,platemodel-method}
 \title{Class of objects representing plate tectonic models}
 \usage{
-\S4method{initialize}{platemodel}(.Object, path = NULL,
-  rotation = NULL, polygons = NULL)
+\S4method{initialize}{platemodel}(.Object, path = NULL, rotation = NULL, polygons = NULL)
 }
 \arguments{
 \item{.Object}{Virtual argument used for method dispatch.}

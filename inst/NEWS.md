@@ -1,5 +1,8 @@
 # Change log of the R package 'chronosphere'
 
+## [0.2.1 (build 60)]  - 2020-02-12 
+### Changed
+- corrected documentation problems
 
 ## [0.2.1 (build 59)]  - 2020-01-27 
 ### Added

@@ -184,7 +184,6 @@ shaper <- function(f="p",n=2, round=2,...){
 #' dems[nums(dems)<20]
 #' 
 #' 
-#' @rdname nums
 #' @export
 nums <- function(x){
 	as.numeric(names(x))

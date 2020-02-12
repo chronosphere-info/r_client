@@ -263,7 +263,7 @@ setMethod("c2", signature=c("RasterArray", "RasterArray"),
 #' dems2 <- dems[c(1:4, 6:10)]
 #' matched <- suppressWarnings(cbind(dems, dems2))
 #' @export cbind.RasterArray
-#' @S3method cbind RasterArray
+#' @exportS3Method cbind RasterArray
 #' @return A \code{RasterArray} class object.
 #' @rdname bind-methods
 #cbind.RasterArray<-function(..., deparse.level=1){
@@ -409,7 +409,7 @@ function(x,y, deparse.level=1){
 
 
 #' @export rbind.RasterArray
-#' @S3method rbind RasterArray
+#' @exportS3Method rbind RasterArray
 #' @rdname bind-methods
 #' @param ... RasterLayer or RasterArray class objects to be combined.
 #rbind.RasterArray<-function(..., deparse.level=1){

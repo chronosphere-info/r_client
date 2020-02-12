@@ -59,7 +59,6 @@ setMethod(
 #' @param x a \code{RasterArray} class object.
 #' @param vec Should the dimensions of the \code{RasterArray} be omitted?
 #' @return A \code{numeric} vector.
-#' @param ... arguments passed to the \code{\link[raster]{cellStats}} function.
 #' 
 #' @rdname extremeValues
 #' @examples 

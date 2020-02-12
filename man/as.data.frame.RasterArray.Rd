@@ -5,8 +5,7 @@
 \title{S3-type method for RasterArray allowing View(), head() and tail() to work.
 Convert RasterArray class objects to data.frames}
 \usage{
-\method{as.data.frame}{RasterArray}(x, row.names = NULL,
-  optional = FALSE, ...)
+\method{as.data.frame}{RasterArray}(x, row.names = NULL, optional = FALSE, ...)
 }
 \arguments{
 \item{x}{a \code{RasterArray} class object.}
