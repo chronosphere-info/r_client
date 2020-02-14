@@ -35,8 +35,8 @@ setGeneric("mapplot", function(x,...) standardGeneric("mapplot"))
 setMethod("mapplot", signature="RasterLayer", 
           definition = function(x, col="gradinv", axes=FALSE, box=FALSE, legend=FALSE, legend.title=NULL,...){
             
-            old.par <- par(no.readonly = TRUE)
-            on.exit(par(old.par), add = TRUE)
+            old.par <- graphics::par(no.readonly = TRUE) 
+            on.exit(graphics::par(old.par))
             
             if(length(col)==1){
               if(col %in% c("ocean", "gradinv", "terra", "coldhot", "drywet", "wet")){
@@ -96,8 +96,8 @@ setMethod("mapplot", signature="RasterArray",
           definition = function(x, col="gradinv", rgb=FALSE, legend=FALSE, axes=FALSE, box=FALSE, 
                                 ncol = 3, legend.title=NULL, plot.title =NULL, rowlabels=rownames(x), multi=FALSE, ask=FALSE,...){
             
-           old.par <- par(no.readonly = TRUE)
-           on.exit(par(old.par), add=TRUE)
+            old.par <- graphics::par(no.readonly = TRUE) 
+            on.exit(graphics::par(old.par))
             
             if(rgb == TRUE){ #plot with rgb bands
               raster::plotRGB(x@stack, ...)  	    
