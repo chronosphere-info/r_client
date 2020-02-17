@@ -39,12 +39,12 @@ setMethod("mapplot", signature="RasterLayer",
             on.exit(graphics::par(old.par))
             
             if(length(col)==1){
-              if(col %in% c("ocean", "gradinv", "terra", "coldhot", "drywet", "wet")){
-                # store par and resent on exit
-                par(mar=c(3,1,1,0))
-
+              if(col %in% c("ocean", "gradinv", "terra", "ipccTemp", "ipccPrec", "wet")){
                 raster::plot(x,legend=FALSE, col=eval(parse(text = col))(255), axes=axes, box=box, ...)
                 
+                #save coordinates
+                old.par$usr <- par()$usr
+                  
                 if (legend == TRUE){
                   par(oma=c(1,0,0,0))
 
@@ -61,6 +61,8 @@ setMethod("mapplot", signature="RasterLayer",
                              breaks =c(negBreaks[1:(length(negBreaks)-1)], posBreaks), 
                              col=c(ocean(length(negBreaks)-1), 
                                    terra(length(posBreaks))), axes=axes, box=box,...)
+                #save coordinates
+                old.par$usr <- par()$usr
                 
                 if (legend == TRUE){
                   par(oma=c(1,0,0,0))
