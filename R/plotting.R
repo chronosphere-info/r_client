@@ -39,7 +39,7 @@ setMethod("mapplot", signature="RasterLayer",
             on.exit(graphics::par(old.par))
             
             if(length(col)==1){
-              if(col %in% c("ocean", "gradinv", "terra", "ipccTemp", "ipccPrec", "wet")){
+              if(col %in% c("ocean", "gradinv", "terra", "ipccTemp", "ipccPrec", "wet", "ipccLine", "ipccRCP")){
                 raster::plot(x,legend=FALSE, col=eval(parse(text = col))(255), axes=axes, box=box, ...)
                 
                 #save coordinates
@@ -117,7 +117,7 @@ setMethod("mapplot", signature="RasterArray",
               } else col <- as.list(rep(col,nvars))
               
               for (i in 1:nvars){
-                if(col[[i]][1] %in% c("ocean", "gradinv", "terra", "coldhot", "drywet", "wet")){
+                if(col[[i]][1] %in% c("ocean", "gradinv", "terra", "ipccTemp", "ipccPrec", "wet")){
                   col[[i]]=eval(parse(text = col[[i]]))(255)
                 }
                 

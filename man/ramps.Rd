@@ -42,7 +42,7 @@ showPal(pal = "all")
 A function producing a colour gradient ramp.
 }
 \description{
-The object contains functions produced by the \code{\link[graphics:colorRamp]{colorRampPalette}} function.
+The object contains functions produced by the \code{\link[grDevices:colorRamp]{colorRampPalette}} function.
 }
 \details{
 \code{showPal} can be used to display the available palettes. You can use \code{pal = "all"} or \code{pal=""} if you want to look at all the available palettes. 
