@@ -12,6 +12,7 @@ library(badger)
 `r badge_devel("adamkocsis/chronosphere", "green")`
 `r badge_cran_release("chronosphere", "orange")`
 `r badge_cran_download("chronosphere", "grand-total", "yellow")`
+`r badge_cran_checks("chronosphere")`
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3530703.svg)](https://doi.org/10.5281/zenodo.3530703)
 
 Earth System History Variables
