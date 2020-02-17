@@ -5,9 +5,11 @@
 \alias{gradinv}
 \alias{ocean}
 \alias{terra}
-\alias{coldhot}
-\alias{drywet}
+\alias{ipccTemp}
+\alias{ipccPrec}
 \alias{wet}
+\alias{ipccLine}
+\alias{ipccRCP}
 \alias{showPal}
 \title{Colour gradient ramps for default plotting}
 \usage{
@@ -17,16 +19,22 @@ ocean(n)
 
 terra(n)
 
-coldhot(n)
+ipccTemp(n, force = 11)
 
-drywet(n)
+ipccPrec(n, force = 11)
 
 wet(n)
 
-showPal(pal = "all", n = 11)
+ipccLine(n = 6)
+
+ipccRCP(n = 4)
+
+showPal(pal = "all")
 }
 \arguments{
 \item{n}{Number of different colors to generate from the palette}
+
+\item{force}{Specify pal when multiple are available. More details to come.}
 
 \item{pal}{A palette name from the lists below}
 }
@@ -43,8 +51,10 @@ You can also view single palettes individually. The following colour palettes ar
 \item \code{gradinv()}: inverse heatmap.
 \item \code{ocean()}: ocean bathymetrical colours.
 \item \code{terra()}: terrestrial topographical colours.
-\item \code{coldhot()}: gradient from blue to red.
-\item \code{drywet()}: gradient from brown to green.
+\item \code{ipccTemp()}: gradient from blue to red according to the official IPCC colour palette.
+\item \code{ipccPrec()}: gradient from brown to green according to the official IPCC colour palette.
 \item \code{wet()}: gradient from white to green to blue. 
+\item \code{ipccLine()}: discrete colours for line graphs according to the official IPCC colour palette. 
+\item \code{ipccRCP()}: discrete colours for climate scenarios according to the official IPCC colour palette. 
 }
 }

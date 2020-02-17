@@ -3,6 +3,7 @@
 ## [0.2.1 (build 61)]  - 2020-02-14 
 ### Changed
 - mapplot() coordinate reset fixed
+- IPCC palettes added
 
 ## [0.2.1 (build 60)]  - 2020-02-12 
 ### Changed
