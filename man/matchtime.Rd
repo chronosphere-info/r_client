@@ -20,7 +20,7 @@ matchtime(x, y, ...)
 
 \item{y}{(\code{numeric}) The vector of dates (numeric values) to order to.}
 
-\item{...}{additional arguments passed to class-specific methods.}
+\item{...}{Additional arguments passed to class-specific methods.}
 
 \item{index}{(\code{logical}) If this argument is \code{TRUE}, only the indices will be returned that refer to the new order, rather than the reordered \code{x} variable.}
 
@@ -30,7 +30,7 @@ matchtime(x, y, ...)
 An object of the class as \code{x} or a \code{numeric} vector.
 }
 \description{
-The function takes a variable \code{x} (e.g. a vector or a RasterArray object), and reorders it to best match the dates provided in a vector \code{y}.
+The function takes a variable \code{x} (e.g. a vector or a \code{\link[chronosphere:RasterArray-class]{RasterArray}} object), and reorders it to best match the dates provided in a vector \code{y}.
 }
 \examples{
 # original vector

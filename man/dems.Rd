@@ -4,9 +4,9 @@
 \name{dems}
 \alias{dems}
 \title{PaleoDEM rasters from the reconstructions Chris Scotese.}
-\format{A RasterArray with 10 layers.}
+\format{A \code{\link[chronosphere:RasterArray-class]{RasterArray}} with 10 layers.}
 \source{
-Scotese, C. R. Wright, N. (2018). PALEOMAP Paleodigital Elevation Models (PaleoDEMS) for the Phanerozoic. URL: https://www.earthbyte.org/paleodem-resource-scotese-and-wright-2018/
+Scotese, C. R. Wright, N. (2018). PALEOMAP Paleodigital Elevation Models (PaleoDEMS) for the Phanerozoic. URL: \url{https://www.earthbyte.org/paleodem-resource-scotese-and-wright-2018/}
 }
 \usage{
 data(dems)

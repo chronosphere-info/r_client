@@ -17,7 +17,7 @@ newbounds(x, cols = NULL, rows = NULL)
 A matrix with extended bounds.
 }
 \description{
-The function restructures a matrix and extends its current limits to a range defined by a names attribute
+The function restructures a \code{\link[base]{matrix}} and extends its current limits to a range defined by a names attribute
 }
 \details{
 This is essentially a subsetting function that allows you to subset even when the rownames or colnames vector

@@ -1,6 +1,6 @@
 #' Match the dates of a time-dependent variable with a predefined vector
 #' 
-#' The function takes a variable \code{x} (e.g. a vector or a RasterArray object), and reorders it to best match the dates provided in a vector \code{y}.
+#' The function takes a variable \code{x} (e.g. a vector or a \code{\link[chronosphere:RasterArray-class]{RasterArray}} object), and reorders it to best match the dates provided in a vector \code{y}.
 #' 
 #' @param x Object to be reordered to match \code{y}.
 #' 
@@ -9,7 +9,7 @@
 #' @param index (\code{logical}) If this argument is \code{TRUE}, only the indices will be returned that refer to the new order, rather than the reordered \code{x} variable.
 #' 
 #' @param time \code{numeric}. Single value referring to that dimension of \code{x} where the time-coding names are (\code{time=1} is the default for RasterArrays in \code{chronosphere}).
-#' @param ... additional arguments passed to class-specific methods.
+#' @param ... Additional arguments passed to class-specific methods.
 #' @rdname matchtime
 #' @return An object of the class as \code{x} or a \code{numeric} vector.
 #' @examples

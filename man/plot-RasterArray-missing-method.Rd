@@ -2,12 +2,12 @@
 % Please edit documentation in R/plotting.R
 \name{plot,RasterArray,missing-method}
 \alias{plot,RasterArray,missing-method}
-\title{Shorthand for the plotting RasterArray objects}
+\title{Shorthand for the plotting \code{\link[chronosphere:RasterArray-class]{RasterArray}} objects}
 \usage{
 \S4method{plot}{RasterArray,missing}(x, y, ...)
 }
 \arguments{
-\item{x}{A RasterArray class object.}
+\item{x}{A (\code{\link[chronosphere:RasterArray-class]{RasterArray}}) Object to be plotted.}
 
 \item{y}{Not implemented yet.}
 
@@ -17,7 +17,7 @@
 None.
 }
 \description{
-The plot(), method executes the \code{\link{mapplot}} function on the RasterArray object.
+This \code{plot}, method executes the \code{\link{mapplot}} function on the \code{\link[chronosphere:RasterArray-class]{RasterArray}} object.
 }
 \examples{
 data(dems)

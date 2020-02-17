@@ -14,11 +14,11 @@ userpwd <- NULL
 #' @return A \code{data.frame} class object.
 #' @examples
 #' \donttest{
-#' ind <- dataindex()
+#' ind <- datasets()
 #' View(ind)
 #' }
 #' @export
-dataindex <- function(datadir=NULL, verbose=FALSE){
+datasets <- function(datadir=NULL, verbose=FALSE){
 		
 	# if it does not exist in datadir, then 
 	# by default, download the file
@@ -84,27 +84,39 @@ dataindex <- function(datadir=NULL, verbose=FALSE){
 	return(ret)
 }
 
+#' Deprecated function for data fetching
+#' 
+#' This function will be removed in version 0.3.0.
+#' 
+#' @param ... Arguments passed to the \code{\link{datasets}} function. 
+#' @return The output of the \code{\link{datasets}} function.
+#' @export
+dataindex  <- function(...){
+	message("This function is deprecated, and will be removed in chronosphere v0.3.0.\nPlease use datasets() instead.")
+	datasets(...)
+}
+
 #' Data fetching
 #' 
 #' Function to download and attach variables in the \code{chronosphere} package
 #' 
-#' Use the function \code{\link{dataindex}} to find available variables.
-#' @param dat The dataset to get variables from.
-#' @param var Vector of variable names to get.
-#' @param res The resolution of raster layers. This has to be the same for all RasterLayers that make up the variable.
-#' @param ver The version of the variable. Defaults to \code{NULL}, which will download the latest available version. We have to create a data table, which should be part of the package. This has to be searched for valid argument combinations. Right this is just a folder with a date.
-#' @param datadir Directory where downloaded files are kept. Individual layers will be looked up from the directory if this is given, and will be downloaded if they are not found. The default \code{NULL} option will download data to a temporary directory that exists only until the R session ends.
-#' @param verbose Should console feedback during download be displayed?
+#' Use the function \code{\link{datasets}} to find available variables.
+#' @param dat (\code{character}) The dataset to get variables from.
+#' @param var (\code{character}) Vector of variable names to get.
+#' @param res (\code{character} or \code{numeric}) The resolution of raster layers. This has to be the same for all RasterLayers that make up the variable.
+#' @param ver (\code{character}) The version of the variable. Defaults to \code{NULL}, which will download the latest available version. We have to create a data table, which should be part of the package. This has to be searched for valid argument combinations. Right this is just a folder with a date.
+#' @param datadir (\code{character}) Directory where downloaded files are kept. Individual layers will be looked up from the directory if this is given, and will be downloaded if they are not found. The default \code{NULL} option will download data to a temporary directory that exists only until the R session ends.
+#' @param verbose (\code{logical}) Should console feedback during download be displayed?
 #' @param ... Arguments passed to variable-specific loading functions.
 #' @examples
 #' \donttest{
 #' 	a <- fetch(dat="paleomap", var="dem")
 #' }
 #' @export
-#' @return An object that matches the 'type' field of the varibles in the output of the \code{\link{dataindex}} function.
+#' @return An object that matches the 'type' field of the varibles in the output of the \code{\link{datasets}} function.
 fetch <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=TRUE,...){
 	# get the remote server data, or read it from hard drive!
-	register <- dataindex(datadir=datadir, verbose=verbose)
+	register <- datasets(datadir=datadir, verbose=verbose)
 	
 	# the data have to use the same resolution!!!
 	if(length(dat)>1) stop("Only one dataset can be accessed in a single download call.")

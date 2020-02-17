@@ -155,19 +155,23 @@ setMethod(
 	}
 )
 
-#' Aggregate raster cells in a RasterArray object
+#' Aggregate raster cells in a \code{\link[chronosphere:RasterArray-class]{RasterArray}} object
 #' 
-#' The method is inherited from the \code{RasterStack} class.
+#' The method is inherited from the \code{\link[raster:raster]{RasterStack}} class.
 #' 
-#' @param x a \code{RasterArray} class object.
+#' @param x a \code{\link[chronosphere:RasterArray-class]{RasterArray}}-class object.
 #' @param ... arguments passed to the \code{\link[raster]{aggregate}} function.
 #' 
 #' @exportMethod aggregate
-#' @return An aggregated \code{RasterArray} class object.
+#' @return An aggregated \code{\link[chronosphere:RasterArray-class]{RasterArray}} class object.
 #' @examples
 #' data(dems)
 #' agg <- aggregate(dems, 5)
-#' 
+#' @rdname aggregate
+#' @name aggregate
+NULL
+
+#' @rdname aggregate
 setMethod(
 	"aggregate",
 	signature=c("RasterArray"),
@@ -189,7 +193,11 @@ setMethod(
 #' @examples
 #' data(dems)
 #' disagg <- disaggregate(dems, 3)
-#' 
+#' @rdname disaggregate
+#' @name disaggregate
+NULL
+
+#' @rdname disaggregate
 setMethod(
 	"disaggregate",
 	signature=c("RasterArray"),

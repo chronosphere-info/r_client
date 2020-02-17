@@ -1,26 +1,26 @@
-#' Colour gradient ramps for default plotting
+#' Colour gradient ramps
 #'
-#' The object contains functions produced by the \code{colorRampPalette} function.
+#' The object contains functions produced by the \code{\link[graphics:colorRamp]{colorRampPalette}} function.
 #' 
 # \cr
-#' \code{show.pal} is used to display the available palettes. You can use \code{pal = "all"} or \code{pal=""} if you want to look at all the available palettes. 
+#' \code{showPal} can be used to display the available palettes. You can use \code{pal = "all"} or \code{pal=""} if you want to look at all the available palettes. 
 #' You can also view single palettes individually. The following colour palettes are implemented:
 #' \itemize{
 #' \item \code{gradinv()}: inverse heatmap.
 #' \item \code{ocean()}: ocean bathymetrical colours.
 #' \item \code{terra()}: terrestrial topographical colours.
-#' \item \code{ipccTemp()}: gradient from blue to red according to the official IPCC colour palette.
-#' \item \code{ipccPrec()}: gradient from brown to green according to the official IPCC colour palette.
+#' \item \code{ipccTemp()}: gradient from blue to red according to the official IPCC AR6 WG2 colour palette.
+#' \item \code{ipccPrec()}: gradient from brown to green according to the official IPCC AR6 WG2  colour palette.
 #' \item \code{wet()}: gradient from white to green to blue. 
-#' \item \code{ipccLine()}: discrete colours for line graphs according to the official IPCC colour palette. 
-#' \item \code{ipccRCP()}: discrete colours for climate scenarios according to the official IPCC colour palette. 
+#' \item \code{ipccLine()}: discrete colours for line graphs according to the official IPCC AR6 WG2  colour palette. 
+#' \item \code{ipccRCP()}: discrete colours for climate scenarios according to the official IPCC AR6 WG2  colour palette. 
 #' }
 #' 
 #' @return A function producing a colour gradient ramp.
 #' @name ramps
-#' @param n Number of different colors to generate from the palette
-#' @param force Specify pal when multiple are available. More details to come. 
-#' @param pal A palette name from the lists below
+#' @param n (\code{numeric}) Number of different colors to generate from the palette
+#' @param force (\code{logical}) Specify \code{pal} when multiple are available. More details to come. 
+#' @param pal (\code{character}) A palette name from the lists below
 #' 
 NULL
 

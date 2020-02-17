@@ -343,7 +343,7 @@ data(dems)
 dems[5] <- NA
 is.na(dems)
 
-mapplot(dems, col="coldhot")
+mapplot(dems, col="ipccTemp")
 
 ```
 
@@ -377,7 +377,7 @@ The row labels and legend title can be edited by using the argument `rowlabels` 
 ```{r rarray_plot_rowlabs, echo=TRUE, fig.width=8, fig.height=4.5}
 data(clim)
 
-mapplot(clim[1:2,], col=c("coldhot", "wet"), 
+mapplot(clim[1:2,], col=c("ipccTemp", "ipccPrec"), 
         legend=TRUE, legend.title=c("Temperature", "Precipitation"))
 ```
 

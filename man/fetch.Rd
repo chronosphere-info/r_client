@@ -15,28 +15,28 @@ fetch(
 )
 }
 \arguments{
-\item{dat}{The dataset to get variables from.}
+\item{dat}{(\code{character}) The dataset to get variables from.}
 
-\item{var}{Vector of variable names to get.}
+\item{var}{(\code{character}) Vector of variable names to get.}
 
-\item{ver}{The version of the variable. Defaults to \code{NULL}, which will download the latest available version. We have to create a data table, which should be part of the package. This has to be searched for valid argument combinations. Right this is just a folder with a date.}
+\item{ver}{(\code{character}) The version of the variable. Defaults to \code{NULL}, which will download the latest available version. We have to create a data table, which should be part of the package. This has to be searched for valid argument combinations. Right this is just a folder with a date.}
 
-\item{res}{The resolution of raster layers. This has to be the same for all RasterLayers that make up the variable.}
+\item{res}{(\code{character} or \code{numeric}) The resolution of raster layers. This has to be the same for all RasterLayers that make up the variable.}
 
-\item{datadir}{Directory where downloaded files are kept. Individual layers will be looked up from the directory if this is given, and will be downloaded if they are not found. The default \code{NULL} option will download data to a temporary directory that exists only until the R session ends.}
+\item{datadir}{(\code{character}) Directory where downloaded files are kept. Individual layers will be looked up from the directory if this is given, and will be downloaded if they are not found. The default \code{NULL} option will download data to a temporary directory that exists only until the R session ends.}
 
-\item{verbose}{Should console feedback during download be displayed?}
+\item{verbose}{(\code{logical}) Should console feedback during download be displayed?}
 
 \item{...}{Arguments passed to variable-specific loading functions.}
 }
 \value{
-An object that matches the 'type' field of the varibles in the output of the \code{\link{dataindex}} function.
+An object that matches the 'type' field of the varibles in the output of the \code{\link{datasets}} function.
 }
 \description{
 Function to download and attach variables in the \code{chronosphere} package
 }
 \details{
-Use the function \code{\link{dataindex}} to find available variables.
+Use the function \code{\link{datasets}} to find available variables.
 }
 \examples{
 \donttest{

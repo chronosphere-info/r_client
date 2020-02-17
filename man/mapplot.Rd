@@ -48,27 +48,27 @@ mapplot(x, ...)
 
 \item{...}{arguments passed to class-specific methods.}
 
-\item{col}{\code{character} Color or color scheme of the plot. See \code{?ramps} for available palettes.}
+\item{col}{(\code{character}) Color or color scheme of the plot. See \code{\link{ramps}} for available palettes.}
 
-\item{axes}{\code{logical} Should axes be displayed?}
+\item{axes}{(\code{logical}) Should axes be displayed?}
 
-\item{box}{\code{logical} Should bounding boxes be displayed?}
+\item{box}{(\code{logical}) Should bounding boxes be displayed?}
 
-\item{legend}{(\code{logical}) Triggers whether the legend of a RasterLayer would be plotted.}
+\item{legend}{(\code{logical}) Triggers whether the legend of a \code{\link[raster:raster]{RasterLayer}} would be plotted.}
 
-\item{legend.title}{title for the legend, if legend = TRUE.}
+\item{legend.title}{(\code{character}) Title for the legend, if \code{legend = TRUE}.}
 
-\item{rgb}{set to \code{TRUE} to make a red-green-blue plot based on three layers or bands.}
+\item{rgb}{set to (\code{TRUE}) to make a red-green-blue plot based on three layers or bands.}
 
-\item{ncol}{set number of columns in a multi-plot for a single variable. For a RasterArray with multiple variables, this number is automatically set to the number of variables.}
+\item{ncol}{\code{numeric}) Set number of columns in a multi-plot for a single variable. For a \code{\link[chronosphere:RasterArray-class]{RasterArray}} with multiple variables, this number is automatically set to the number of variables.}
 
-\item{plot.title}{The title for each individual plot. Only available for a single variable at the moment.}
+\item{plot.title}{(\code{character}) The title for each individual plot. Only available for a single variable at the moment.}
 
-\item{rowlabels}{label for each row of the overall plot. Uses the rownames of the RasterArray by default. Only availble for multivariate RasterArrays.}
+\item{rowlabels}{(\code{character}) label for each row of the overall plot. Uses the rownames of the \code{\link[chronosphere:RasterArray-class]{RasterArray}} by default. Only availble for multivariate \code{\link[chronosphere:RasterArray-class]{RasterArray}}s.}
 
-\item{multi}{Should the plots be printed on multiple pages?}
+\item{multi}{(\code{logical}) Should the plots be printed on multiple pages?}
 
-\item{ask}{NULL or a logical values. If multi.page = TRUE and ask = TRUE, then the user will be prompted before a new page of output is started}
+\item{ask}{(\code{logical} or \code{NULL}) If \code{multi.page = TRUE} and \code{ask = TRUE}, then the user will be prompted before a new page of output is started}
 }
 \value{
 None.

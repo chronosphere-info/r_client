@@ -1,6 +1,6 @@
 #' Redefine bounds of a named matrix
 #' 
-#' The function restructures a matrix and extends its current limits to a range defined by a names attribute
+#' The function restructures a \code{\link[base]{matrix}} and extends its current limits to a range defined by a names attribute
 #' 
 #' This is essentially a subsetting function that allows you to subset even when the rownames or colnames vector
 #' extends beyond the bounds of a matrix and traditional subsetting methods result in the notorious 'out of bounds' error.

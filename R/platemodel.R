@@ -8,10 +8,10 @@
 #' @exportClass platemodel
 platemodel <- setClass("platemodel", slots=list(name="character", rotation="character", polygons="character", version="character"))
 
-#' @param .Object Virtual argument used for method dispatch.
-#' @param path Path to a .mod unique plate model object.
-#' @param rotation If \code{path} is \code{NULL}, the path to the rotation file-part of the model.
-#' @param polygons If \code{path} is \code{NULL}, the path to the plate polygon file-part of the model.
+#' @param .Object Constructor argument (not needed).
+#' @param path (\code{character}) Path to a .mod unique plate model object.
+#' @param rotation (\code{character}) If \code{path} is \code{NULL}, the path to the rotation file-part of the model.
+#' @param polygons (\code{character}) If \code{path} is \code{NULL}, the path to the plate polygon file-part of the model.
 #' @rdname platemodel 
 #' @return A \code{platemodel} class object.
 #' @export platemodel
