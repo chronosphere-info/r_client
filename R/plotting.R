@@ -102,7 +102,8 @@ setMethod("mapplot", signature="RasterArray",
             on.exit(graphics::par(old.par))
             
             if(rgb == TRUE){ #plot with rgb bands
-              raster::plotRGB(x@stack, ...)  	    
+              raster::plotRGB(x@stack, ...) 
+              old.par$usr <- par()$usr
             } else { #uni and multivariate rasterArrays
               
               #number of variables in array
