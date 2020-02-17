@@ -18,7 +18,7 @@
 #'	 \item "MATTHEWS2016" (Matthews et al., 2016) for coastlines and plate polygons. 
 #' }
 #' 
-#' If \code{model} is a \code{\link{platemodel}} class object, then the function will try to use the GPLates desktop application (\url{https://www.gplates.org/}) to reconstruct the coordinates (local reconstruction submodule).
+#' If \code{model} is a \code{\link{platemodel}} class object, then the function will try to use the GPLates desktop application (\url{http://www.gplates.org/}) to reconstruct the coordinates (local reconstruction submodule).
 #' Plate models are available in chronosphere with the \code{\link{fetch}} function. See \code{\link{dataindex}} for the available models.
 #' The function will try to find the main GPlates executable in its default installation directory. If this does not succeed, use \code{path.gplates} to enter the full path to the GPlates executable as a \code{character} string.
 #' 

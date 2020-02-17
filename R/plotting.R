@@ -4,7 +4,7 @@
 #' 
 #' @return None.
 #' @param x Object to be plotted 
-#' @param col (\code{character}) Color or color scheme of the plot. See \code{\link{ramps}} for available palettes.
+#' @param col (\code{character}) Color or color scheme of the plot. See \code{\link{ramps}} for available palettes (\code{ipccLine} and \code{ipccRCP} are not available).
 #' @param rgb set to (\code{TRUE}) to make a red-green-blue plot based on three layers or bands.
 #' @param legend (\code{logical}) Triggers whether the legend of a \code{\link[raster:raster]{RasterLayer}} would be plotted.
 #' @param axes (\code{logical}) Should axes be displayed?
@@ -39,7 +39,7 @@ setMethod("mapplot", signature="RasterLayer",
             on.exit(graphics::par(old.par))
             
             if(length(col)==1){
-              if(col %in% c("ocean", "gradinv", "terra", "ipccTemp", "ipccPrec", "wet", "ipccLine", "ipccRCP")){
+              if(col %in% c("ocean", "gradinv", "terra", "ipccTemp", "ipccPrec", "wet")){
                 raster::plot(x,legend=FALSE, col=eval(parse(text = col))(255), axes=axes, box=box, ...)
                 
                 #save coordinates

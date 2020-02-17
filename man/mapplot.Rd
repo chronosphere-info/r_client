@@ -48,7 +48,7 @@ mapplot(x, ...)
 
 \item{...}{arguments passed to class-specific methods.}
 
-\item{col}{(\code{character}) Color or color scheme of the plot. See \code{\link{ramps}} for available palettes.}
+\item{col}{(\code{character}) Color or color scheme of the plot. See \code{\link{ramps}} for available palettes (\code{ipccLine} and \code{ipccRCP} are not available).}
 
 \item{axes}{(\code{logical}) Should axes be displayed?}
 
