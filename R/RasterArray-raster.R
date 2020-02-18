@@ -603,3 +603,25 @@ setMethod(
 		return(ret)
 	}
 )
+
+
+#' Rotate a \code{\link[chronosphere:RasterArray-class]{RasterArray}} object
+#' 
+#' The method is inherited from the \code{\link[raster:raster]{RasterStack}} class.
+#' 
+#' @param x (\code{\link[chronosphere:RasterArray-class]{RasterArray}}) Object.
+#' @param ... Additional arguments passed to the \code{\link[raster]{rotate}} function.
+#' @rdname rotate
+#' @return A \code{\link[chronosphere:RasterArray-class]{RasterArray}}-class object.
+#' @name rotate
+NULL
+
+#' @rdname rotate
+setMethod(
+	"rotate",
+	signature=c("RasterArray"),
+	function(x,...){
+		x@stack <- raster::stack(raster::rotate(x@stack,...))
+		return(x)
+	}
+)

@@ -1,5 +1,10 @@
 # Change log of the R package 'chronosphere'
 
+## [0.2.2 (build 63)] - 2020-02-18 
+## Added
+- rotate-method for the RasterArray class
+
+
 ## [0.2.2 (build 62)] - 2020-02-17 
 ## Added
 - zzz.R with chronosphere package help file
@@ -7,14 +12,17 @@
 ### Changed
 - the dataindex() function was renamed to datasets()
 
+
 ## [0.2.1 (build 61)] - 2020-02-14 
 ### Changed
 - mapplot() coordinate reset fixed
 - IPCC palettes added
 
+
 ## [0.2.1 (build 60)] - 2020-02-12 
 ### Changed
 - corrected documentation problems
+
 
 ## [0.2.1 (build 59)] - 2020-01-27 
 ### Added
@@ -23,6 +31,7 @@
 ### Changed
 - fetch() defaults to the coarsest resolution (highest res entry, new default is res=NULL)
 
+
 ## [0.2.1 (build 58)] - 2020-01-12 
 ### Added
 - the nums(), colnums() and rownums() functions
@@ -30,6 +39,7 @@
 
 ### Changed 
 - Fixed issue with offline reconstruction method (one entry in an age with enumerate = FALSE)
+
 
 ## [0.2.0 (build 57)] - 2019-12-11 (CRAN initial submission, take 3)
 ### Changed 
@@ -40,6 +50,7 @@
 - t() copies colnames and rownames attributes
 - Raster variable loading is now done with R code provided by the server
 - renamed NEWS file to NEWS.md
+
 
 ## [0.2.0 (build 56)] - 2019-12-03 (CRAN initial submission, take 2)
 ### Added 
