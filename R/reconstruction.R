@@ -47,6 +47,7 @@
 #' @param verbose (\code{logical}) Should call URLs (remote submodule) or console feedback (local-submodule) be printed?
 #' @param cleanup (\code{logical}) Argument of the local reconstruction submodule. Should the temporary files be deleted immediately after reconstructions?
 #' @param dir (\code{character}) Argument of the local reconstruction submodule. Directory where the temporary files of the reconstruction are stored (defaults to a temporary directory created by R). Remember to toggle \code{cleanup} if you want to see the files.  
+#' @param plateperiod (\code{logical}) Argument of the local reconstruction submodule. Should the durations of the plates be forced on the partitioned feature? If these are set to \code{TRUE} and the plate duration estimates are long, then you might lose some data.
 #' @return A \code{numeric} matrix if \code{x} is a \code{numeric}, \code{matrix} or \code{data.frame}, or \code{Spatial*} class objects, depending on input.
 #' @examples
 #' \donttest{
@@ -77,7 +78,7 @@ setGeneric("reconstruct", function(x,...) standardGeneric("reconstruct"))
 setMethod(
 	"reconstruct", 
 	signature="matrix", 
-	function(x,age, model="PALEOMAP", listout=TRUE, verbose=FALSE, enumerate=TRUE, chunk=200, reverse=FALSE, path.gplates=NULL, cleanup=TRUE, dir=NULL){
+	function(x,age, model="PALEOMAP", listout=TRUE, verbose=FALSE, enumerate=TRUE, chunk=200, reverse=FALSE, path.gplates=NULL, cleanup=TRUE, dir=NULL, plateperiod=FALSE){
 	 
 		# Check long lat!
 		if(!is.numeric(age)) age <- as.numeric(age)
@@ -107,7 +108,7 @@ setMethod(
                     if(is.character(model)){
 					   fresh <- IteratedPointReconstruction(coords=x, chunk=chunk, age=age[i], model=model, reverse=reverse, verbose=verbose)
                     }else{
-                        fresh <- reconstructGPlates(x=x, age=age[i], model=model, path.gplates=path.gplates, dir=dir, verbose=verbose, cleanup=cleanup)
+                        fresh <- reconstructGPlates(x=x, age=age[i], model=model, path.gplates=path.gplates, dir=dir, verbose=verbose, cleanup=cleanup, plateperiod=plateperiod)
                     }
 					# list
 					if(listout){
@@ -145,7 +146,7 @@ setMethod(
                     if(is.character(model)){
 					   container[index,] <- IteratedPointReconstruction(coords=current, chunk=chunk, age=ageLevs[i], model=model, reverse=reverse, verbose=verbose)
 				    }else{
-                        container[index,] <- reconstructGPlates(x=current, age=ageLevs[i], model=model, path.gplates=path.gplates, dir=dir, verbose=verbose, cleanup=cleanup)
+                        container[index,] <- reconstructGPlates(x=current, age=ageLevs[i], model=model, path.gplates=path.gplates, dir=dir, verbose=verbose, cleanup=cleanup, plateperiod=plateperiod)
                     }
                 }
 			}
@@ -155,7 +156,7 @@ setMethod(
             if(is.character(model)){
                 container <- IteratedPointReconstruction(coords=x, chunk=chunk, age=age, model=model, reverse=reverse, verbose=verbose)
             }else{
-                container <- reconstructGPlates(x=x, age=age, model=model, path.gplates=path.gplates, dir=dir, verbose=verbose, cleanup=cleanup)
+                container <- reconstructGPlates(x=x, age=age, model=model, path.gplates=path.gplates, dir=dir, verbose=verbose, cleanup=cleanup, plateperiod=plateperiod)
             }
 		}
 
@@ -185,7 +186,7 @@ setMethod(
 setMethod(
 	"reconstruct", 
 	signature="character", 
-	function(x,age, model="PALEOMAP", listout=TRUE, verbose=FALSE,path.gplates=NULL, cleanup=TRUE, dir=NULL){
+	function(x,age, model="PALEOMAP", listout=TRUE, verbose=FALSE,path.gplates=NULL, cleanup=TRUE, dir=NULL, plateperiod=FALSE){
         if(!any(x==c("plates", "coastlines"))) stop("Invalid 'x' argument.\nThe only valid character input are \"plates\" and \"coastlines\"")
 		# vectorized
 		if(length(age)>1){
@@ -208,7 +209,7 @@ setMethod(
 					if(is.character(model)){
 						feature <- gplates_reconstruct_static_polygons(age=age[i], model=model, verbose=verbose)
 					}else{
-						feature <- reconstructGPlates(x="plates", age=age[i], model=model, path.gplates=path.gplates, dir=dir, verbose=verbose, cleanup=cleanup)
+						feature <- reconstructGPlates(x="plates", age=age[i], model=model, path.gplates=path.gplates, dir=dir, verbose=verbose, cleanup=cleanup, plateperiod=plateperiod)
 					}
 				}
 
@@ -231,7 +232,7 @@ setMethod(
 				if(is.character(model)){
 					container <- gplates_reconstruct_static_polygons(age=age, model=model, verbose=verbose)
 				}else{
-					container <- reconstructGPlates(x="plates", age=age, model=model, path.gplates=path.gplates, dir=dir, verbose=verbose, cleanup=cleanup)
+					container <- reconstructGPlates(x="plates", age=age, model=model, path.gplates=path.gplates, dir=dir, verbose=verbose, cleanup=cleanup,plateperiod=plateperiod)
 				}
 			}
 		}
@@ -245,7 +246,7 @@ setMethod(
 setMethod(
 	"reconstruct",
 	"SpatialPolygonsDataFrame", 
-	function(x, age, model="PALEOMAP", listout=TRUE, verbose=FALSE,path.gplates=NULL, cleanup=TRUE, dir=NULL){
+	function(x, age, model="PALEOMAP", listout=TRUE, verbose=FALSE,path.gplates=NULL, cleanup=TRUE, dir=NULL, plateperiod=FALSE){
 		if(!is.na(x@proj4string)){
 			x <- sp::spTransform(x, sp::CRS("+proj=longlat"))
 		}else{
@@ -268,7 +269,7 @@ setMethod(
 				if(is.character(model)){
 					container[[i]] <- gplates_reconstruct_polygon(sp=x, age=age[i], model=model, verbose=verbose)
 				}else{
-					container[[i]] <- reconstructGPlates(x=x, age=age[i], model=model, path.gplates=path.gplates, dir=dir, verbose=verbose, cleanup=cleanup)
+					container[[i]] <- reconstructGPlates(x=x, age=age[i], model=model, path.gplates=path.gplates, dir=dir, verbose=verbose, cleanup=cleanup, plateperiod=plateperiod)
 				}
 				# rotate entry back
 				container[[i]] <- sp::spTransform(container[[i]], x@proj4string)
@@ -284,7 +285,7 @@ setMethod(
 			if(is.character(model)){
 				container <- gplates_reconstruct_polygon(sp=x, age, model=model, verbose=verbose)
 			}else{
-				container <- reconstructGPlates(x=x, age=age, model=model, path.gplates=path.gplates, dir=dir, verbose=verbose, cleanup=cleanup)
+				container <- reconstructGPlates(x=x, age=age, model=model, path.gplates=path.gplates, dir=dir, verbose=verbose, cleanup=cleanup, plateperiod=plateperiod)
 			}
 			container <- sp::spTransform(container, x@proj4string)
 			
@@ -307,7 +308,7 @@ setMethod(
 
 
 
-reconstructGPlates <- function(x, age, model, path.gplates=NULL,dir=NULL, verbose=FALSE, cleanup=TRUE){
+reconstructGPlates <- function(x, age, model, path.gplates=NULL,dir=NULL, verbose=FALSE, cleanup=TRUE, plateperiod=FALSE){
 	if(class(model)!="platemodel") stop("You need a GPlates tectonic model for this method.")
 	if(! requireNamespace("rgdal", quietly=TRUE)) stop("This method requires the 'rgdal' package to run")
 	
@@ -447,6 +448,14 @@ reconstructGPlates <- function(x, age, model, path.gplates=NULL,dir=NULL, verbos
 				pathToFileNoEXT <- gsub(".gpml", "",model@polygons)
 			}
 		}
+
+		# inheritance of appearance and disappearance dates
+		if(plateperiod){
+			pPer <- 1
+		}else{
+			pPer <- 0
+		}
+
 	# 3. Execute GPlates commands
 		# convert to gpml
 		if(!is.character(x)){
@@ -457,7 +466,7 @@ reconstructGPlates <- function(x, age, model, path.gplates=NULL,dir=NULL, verbos
 		# do the plate assignment
 		if(!is.character(x)){
 			if(verbose) message("Assigning plate IDs to .gpml file.")
-			assignment <- paste(gplatesExecutable, " assign-plate-ids -e 1 -p ", platePolygons, " -l ",pathToFileNoEXT,".gpml", sep="")
+			assignment <- paste(gplatesExecutable, " assign-plate-ids -e ",pPer," -p ", platePolygons, " -l ",pathToFileNoEXT,".gpml", sep="")
 			system(assignment, ignore.stdout=!verbose,ignore.stderr=!verbose)
 		}
 		# do reconstruction

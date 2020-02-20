@@ -1,8 +1,14 @@
 # Change log of the R package 'chronosphere'
 
+## [0.2.2 (build 65)] - 2020-02-20 
+## Added
+- plateperiod argument of the reconstruct() function
+
+
 ## [0.2.2 (build 64)] - 2020-02-20 
 ## Changed
 - mapplot overlap offset fixed
+
 
 ## [0.2.2 (build 63)] - 2020-02-18 
 ## Added
