@@ -35,16 +35,14 @@ setGeneric("mapplot", function(x,...) standardGeneric("mapplot"))
 setMethod("mapplot", signature="RasterLayer", 
           definition = function(x, col="gradinv", axes=FALSE, box=FALSE, legend=FALSE, legend.title=NULL,...){
             
-            old.par <- graphics::par(no.readonly = TRUE) 
-            on.exit(graphics::par(old.par))
-            
             if(length(col)==1){
               if(col %in% c("ocean", "gradinv", "terra", "ipccTemp", "ipccPrec", "wet")){
                 raster::plot(x,legend=FALSE, col=eval(parse(text = col))(255), axes=axes, box=box, ...)
                 
-                #save coordinates
-                old.par$usr <- par()$usr
-                  
+                #save par from raster
+                old.par <- par(no.readonly = TRUE)
+                on.exit(graphics::par(old.par))
+                
                 if (legend == TRUE){
                   par(oma=c(1,0,0,0))
 
@@ -61,8 +59,9 @@ setMethod("mapplot", signature="RasterLayer",
                              breaks =c(negBreaks[1:(length(negBreaks)-1)], posBreaks), 
                              col=c(ocean(length(negBreaks)-1), 
                                    terra(length(posBreaks))), axes=axes, box=box,...)
-                #save coordinates
-                old.par$usr <- par()$usr
+                #save par from raster
+                old.par <- par(no.readonly = TRUE)
+                on.exit(graphics::par(old.par))
                 
                 if (legend == TRUE){
                   par(oma=c(1,0,0,0))
@@ -74,6 +73,10 @@ setMethod("mapplot", signature="RasterLayer",
               }
             }else{
               raster::plot(x,legend=FALSE, col=col, axes=axes, box=box,...)
+              
+              #save par from raster
+              old.par <- par(no.readonly = TRUE)
+              on.exit(graphics::par(old.par))
               
               if (legend == TRUE){
                 par(oma=c(1,0,0,0))
@@ -90,6 +93,10 @@ setMethod("mapplot", signature="RasterLayer",
 setMethod("mapplot", signature="RasterStack", 
           definition = function(x, col=gradinv(255),  ...){
             raster::plotRGB(x,col=col, ...)
+            
+            #save par from raster
+            old.par <- par(no.readonly = TRUE)
+            on.exit(graphics::par(old.par))
           }
 )
 
