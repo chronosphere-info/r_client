@@ -1,5 +1,9 @@
 # Change log of the R package 'chronosphere'
 
+## [0.2.2 (build 64)] - 2020-02-20 
+## Changed
+- mapplot overlap offset fixed
+
 ## [0.2.2 (build 63)] - 2020-02-18 
 ## Added
 - rotate-method for the RasterArray class
