@@ -28,11 +28,11 @@ library(chronosphere)
 
 # 1.2 General features
 
-The purpose of the `chronosphere` project is to facilitate, streamline and fasten the finding, acquisition and importing of Earth science data in R. Although the package currently focuses on deep time data sets, the scope of the included data sets will be much larger, spanning from a single variable published as supplementary material in a journal article, to GIS data or the entire output of GCM models. `chronosphere` intends to decrease the gap between research hypotheses and the finding, download and importing of data sets. 
+The purpose of the `chronosphere` project is to facilitate, streamline and speed up the finding, acquisition and importing of Earth science data in R. Although the package currently focuses on deep time data sets, the scope of the included datasets will be much larger, spanning from a single variable published as supplementary material in a journal article, to GIS data or the entire output of GCM models. `chronosphere` intends to decrease the gap between research hypotheses and the finding, download and importing of data sets. 
 
 # 2. RasterArray
 
-Faster data importing and better organization represents a considerable part of this process. Spatially explicit data are excellent candidates to demonstrate how more efficient data organization can speed up research. Although R has an excellent infrastructure for handling raster data (Hijmans & van Etten, 2019), the arrangement of individual layers are rather limited, which can be a problem, when a large number of layers have to be considered. RasterStacks and RasterBricks are very efficient for organizing RasterLayers according to a single dimension (e.g. depth for 3D variables, or time), multidimensional structures are preferred. 
+Faster data importing and better organization represents a considerable part of this process. Spatially explicit data are excellent candidates to demonstrate how more efficient data organization can speed up research. Although R has an excellent infrastructure for handling raster data (Hijmans & van Etten, 2019), the arrangement of individual layers are rather limited, which can be a problem, when a large number of layers have to be considered. RasterStacks and RasterBricks are very efficient for organizing RasterLayers according to a single dimension (e.g. depth for 3D variables, or time), but multidimensional structures are preferred. 
 
 To offer a more effective solution, the `chronosphere` package includes the definition of the RasterArray S4 class. RasterArrays represent hybrids between RasterStacks and regular R arrays. In short, they are virtual arrays of RasterLayers, and can be thought of as regular arrays, that include entire rasters as elements rather than single numeric, logical or character values. As regular R users are familiar with subsetting, combinations and structures of regular arrays (including formal vectors and matrices), the finding, extraction and storage of spatially explicit data is much easier in such containers.
 
@@ -155,7 +155,7 @@ colnames(clim2) <- c("temp", "prec")
 clim2
 ```
 
-Just as you would do it with normal arrays, the you can query/rewrite all names with the `dimnames()` function, that uses a list to store the names in every dimension.
+Just as you would do it with normal arrays, you can query/rewrite all names with the `dimnames()` function, that uses a list to store the names in every dimension.
 
 ```{r climrenamedim, echo= TRUE}
 dimnames(clim2)[[1]] <- 1:10
@@ -188,13 +188,13 @@ one <- dems[["dem_45"]]
 mapplot(one, col="earth")
 ```
 
-Returning a single RasterArray. Multiple elements will be the format of a stack:
+The double bracket returns a single RasterArray. Using multiple elements for subsetting will return a RasterStack:
 
 ```{r dual, echo= TRUE}
 dems[[c(1,2)]]
 ```
 
-Which are the first two RasterLayers in the stack of the RasterArray.
+These are are the first two RasterLayers in the stack of the RasterArray.
 
 Double brackets can also be used for replacements, but as this has no effect on the structure of the array, changes implemented with this method are more difficult to trace. For instance, 
 
@@ -228,7 +228,7 @@ dem30 <- dems["30", drop=FALSE]
 class(dem30)
 ```
 
-Beyond bounds accessing is valid for single dimensional RasterArrays (vector-like ones):
+Accessing elements which are not present is valid for single dimensional RasterArrays (vector-like ones):
 
 ```{r beyond, echo= TRUE}
 dems[4:12]
@@ -245,7 +245,7 @@ demna[3] <- NA
 Multidimensional subscripts work in a similar fashion. If a single layer is desired from the RasterArray, that can be accessed using the names of the margins.
 
 ```{r cellsbu, echo= TRUE, plot=TRUE, fig.height=5.5}
-# character is necessary, as the row named "2003" is necessary
+# character type is necessary as the rowname is "2003"
 one <- clim["2003", "bio1"]
 mapplot(one)
 ```
@@ -275,30 +275,33 @@ ext <- extent(c(
   ymax = 1.14 
 )) 
 
-# cropping all DEMS (Australia drifted in)
+# cropping all DEMS 
 au<- crop(dems, ext)
 
 # select the first element
 mapplot(au[1], col="earth")
 ```
 
+If you plot all cropped DEMs you can see how Australia drifted to its current position.
+
 Other functions such as aggregation or resampling works just the same. 
+
 ```{r resam, echo= TRUE, plot=TRUE, fig.height=5.5}
 template <- raster(res=5)
 
 # resample all DEMS
 coarse <- resample(dems, template)
 
-# plot an elemnt
+# plot an element
 mapplot(coarse["45"], col="earth")
 ```
 
 
 # 3. Plotting
-The `mapplot()` function makes it easy to visually pleasing plots of a Raster* object. 
+The `mapplot()` function makes it easy to produce visually pleasing plots of a Raster* object. 
 
 ## 3.1 Colour palettes
-The package include several colour palettes which can be used for plotting purposes. An additional palette option developed specifically with DEMs in mind is *earth*. This combines the *ocean* and *terra* palettes and automatically sets the breaks to differentiate between marine and terrestrial cells. An example is show below in [RasterLayer plotting example](#RasterLayer).
+The package includes several colour palettes which can be used for plotting purposes. An additional palette option developed specifically with DEMs in mind is *earth*. This combines the *ocean* and *terra* palettes and automatically sets the breaks to differentiate between marine and terrestrial cells. An example is shows below in [RasterLayer plotting example](#RasterLayer).
 
 ```{r palette, fig.height=3, fig.width=8}
 showPal()
