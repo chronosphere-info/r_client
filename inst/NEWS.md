@@ -1,5 +1,16 @@
 # Change log of the R package 'chronosphere'
 
+## [0.2.2 (build 66)] - 2020-03-05
+### Added
+- new method extract('RasterArray', 'matrix')
+- by=NULL is added as to extract('RasterArray', 'data.frame') 
+
+### Changed
+- bug fix of newbounds() when col was given.
+- by=NULL is the new default of extract('RasterArray', 'data.frame'). The function was redesigned to accomodate n-dimensional RasterArray input.
+- bug fix of dimnames('RasterArray')
+
+
 ## [0.2.2 (build 65)] - 2020-02-20 
 ## Added
 - plateperiod argument of the reconstruct() function
