@@ -215,16 +215,18 @@ setMethod(
 #' @param y (\code{matrix} or \code{data.frame}). The data table containing the coordinates and (optionally) 
 #' 	the indices or names of the associated \code{RasterLayer}s in \code{x}.
 #' @param x (\code{RasterArray}). A set of \code{RasterLayers} that are associated with entries (one dimension) or the rows of \code{x}.
-#' @param by (\code{character} or \code{vector}) The link between \code{x} and \code{y}. If \code{by} is a \code{character}
+#' @param by (\code{character} or \code{vector}) In case of a \code{data.frame} input, the link between \code{x} and \code{y}. If \code{by} is a \code{character}
 #' string then it is expected to be column of \code{x} and should contain the \code{names} or the indices of the
 #' associated \code{RasterLayer}s in \code{x}. If it is a \code{vector} its length should match the number of rows in \code{x}
 #' and it will be used as if it were a column of \code{x}.
 #' @param lng (\code{character}) A column of \code{x} that includes the paleolongitudes.
 #' @param lat (\code{character}) A column of \code{x} that includes the paleolatitudes.
 #' @param force (\code{character}) If set to \code{"numeric"} the \code{by} argument or the column it points to will be converted to
-#' numeric values, and x will be subsetted with \code{numeric} subscripts of the \code{x} \code{RasterArray}. If set to character, the by column (or vector) will be
+#' numeric values, and x will be subsetted with \code{numeric} subscripts of the \code{x} \code{RasterArray}. If set to \code{"character"}, the by column (or vector) will be
 #' forced to \code{character} values and will be used as character subscripts.
 #' @exportMethod extract
+#' @rdname extract
+#' @name extract
 #' @return A \code{numeric} \code{vector}, \code{matrix} or \code{array} of values.
 #' @examples
 #' # one pair of random coordinates from Africa
@@ -248,30 +250,68 @@ setMethod(
 #' 
 #' # by=NULL will be implemented in the next update 
 #' # (all coordinates extracted from all layers)
+"extract"
+
+#' @rdname extract
+setMethod(
+	"extract",
+	signature=c(x="RasterArray", y="matrix"),
+	definition=function(x, y){
+		# rasters
+		dimX <- dim(x)
+		# coordinates
+		nrowY <- nrow(y)
+		
+		# depending on dim of X
+		if(length(dimX)==1){
+			xname <- list(names(x))
+		}else{
+			xname <- dimnames(x)
+		}
+		if(length(x)>0){
+			if(nlayers(x)>0){
+				# will create a 2d solution - rows: points, columns-rasters
+				temp <- raster::extract(x@stack, y)
+
+				# in 2d
+				prox <- proxy(x)
+				# flatten
+				dim(prox) <-NULL
+
+				output <- newbounds(temp, cols=prox)
+
+				# reset the dim
+				dim(output) <-  c(nrowY, dimX)
+				dimnames(output) <- c(list(rownames(y)), xname)
+			}else{
+				output <- array(NA, dim=c(nrowY, dimX))
+			}
+
+		}else{
+			output <- NULL
+		}
+		return(output)
+
+	}
+)
+
+#' @param margin (\code{numeric}) A single value describing which margin (dimension of \code{x}) \code{by} is referring to (1: rows, 2: columns, etc.).
+#' @rdname extract
 setMethod(
 	"extract", 
 	signature=c(x="RasterArray", y="data.frame"), 
-	definition=function(x, y, by, lng="plng", lat="plat", force=NULL){
+	definition=function(x, y, by=NULL, margin=1, lng="plng", lat="plat", force=NULL){
 	
-	# defense
-#	if(!is.data.frame(y) & !is.matrix(y)) stop("The argument y has to be a data.frame or matrix.")
+	# fall back to matrix-method
+	if(is.null(by)) {
+		y <- as.matrix(y[, c(lng, lat)])
+		vals <- extract(x, y)
 	
-	dimX <- dim(x)
-	if(length(dimX)>2) stop("'x' has to be a one or two-dimensional RasterArray.")
-
-	# recursive case
-	if(length(dimX)==2){
-		vals <- NULL
-		for(k in 1:(dimX[2])){
-			temp <- extract(x[,k], y=y, by=by, lng=lng, lat=lat, force=force)
-			vals <- cbind(vals, temp)
-		}
-		# rename the column names
-		colnames(vals)<- colnames(x)
-
-	# base case - one vector of layers
+	# data.frame-proper method - with by
 	}else{
-		
+	#	dimX <- dim(x)
+	#	if(length(dimX)>2) stop("'x' has to be a one or two-dimensional RasterArray.")
+
 		# column that contains which map the coordinate belongs to
 		if(is.character(by)){
 			if(!by%in%colnames(y)) stop("The argument by has to be a column of y. ")
@@ -293,28 +333,125 @@ setMethod(
 			if(force=="character"){
 				interactor <- as.character(interactor)
 			}
+		}else{
+			if(class(interactor)=="factor"){
+				warning("Factor variable 'by' is forced to character.")
+				interactor <- as.character(interactor)
+			}
 		}
 	
 		# iterate by
 		doFor <- sort(unique(interactor))
-	
+
 		# coordinates
-		coords <- y[, c(lng, lat)]
+		coords <- as.matrix(y[, c(lng, lat)])
+		rownames(coords) <- rownames(y)
 	
-		# storage
-		vals <- rep(NA, nrow(y))
-	
-		for(i in 1:length(doFor)){
-			bThis<- doFor[i]==interactor
-	
-			# select the appropriate RasterLayer
-			thisLayer <- x[doFor[i]]
-	
-			# extract values from raster
-			vals[bThis] <- raster::extract(thisLayer, coords[bThis, ])
+		if(is.null(dimnames(x))){
+			marginNames <- names(x)
+			otherNames <- NULL
+		}else{
+			marginNames <- dimnames(x)[[margin]]
+			otherNames <- dimnames(x)[-margin]
 		}
-		names(vals) <- rownames(y)
+
+		# dimensions of x - for RasterArray, vectors have dim
+		dimX <- dim(x)
+		
+		# create the output structure
+		output <- array(NA, dim=c(length(interactor), dimX[-margin]))
+		dimnames(output) <- c(
+			list(rownames(y)),
+			otherNames
+		)
+
+		# make the index lookup table
+		indexLookup <- matrix(NA, nrow=nrow(y), ncol=prod(dimX[-margin]))
+		rownames(indexLookup) <- rep(NA, nrow(indexLookup))
+
+		# offset value
+		offset <- 0
+
+		# coordcounter
+		coordcounter <- 0
+
+		# define static later!
+		flatArray <- NULL
+
+		# should warnings be triggered
+		warn <- FALSE
+
+		for(i in 1:length(doFor)){
+			# select the appropriate part of the RasterArray
+			subArr <- marginsubset(x, margin, doFor[i])
+			
+			# what if this is NA - non-existant layer is referred
+			if(class(subArr)!="RasterArray" & class(subArr)!="RasterLayer"){
+				if(is.na(subArr)){
+					warn <- TRUE
+				}else{
+					warning("Unexpected case. Please send your function call to the package maintainers.")
+				}
+				
+			}else{
+
+				# get the appropriate coordinates
+				iThis<- which(interactor==doFor[i])
+				subCoords <- coords[iThis, , drop=FALSE]
+
+				# extract the values with the matrix method
+				partArray <- extract(subArr,subCoords)
+
+				# move forward only if this thing makes sense
+				# NULL output for empty rasterarray
+				if(!is.null(partArray)){
+
+					# store the whole thing
+					flatArray<-c(flatArray, as.numeric(partArray))
+
+					# get the indices
+						indArray <- partArray
+						indArray[] <- 1:length(indArray)
+
+						# increase the offset
+						indArray <- indArray + offset
+
+						# copy the index Array 
+						# they should go to these rows
+						coordIndex <- coordcounter + 1:nrow(subCoords)
+
+						# it working, but I am not sure that it is ok!
+						indexLookup[coordIndex,] <- indArray
+						rownames(indexLookup)[coordIndex] <- rownames(subCoords)
+
+						# the offsets
+						# processed coordiantes
+						coordcounter <- coordcounter + nrow(subCoords)
+
+						# indices
+						offset <- offset +length(indArray)
+				}
+			}
+		}
+
+		# reorder based on the originally defined output
+		newIndex <- newbounds(indexLookup, rows=rownames(coords))
+		
+		# then paste this in!
+		reordered <- flatArray[as.numeric(newIndex)]
+
+		output[] <- reordered
+		vals <- output
+
+		# do some formatting
+		if(length(dim(output))==1){
+			vals <- as.numeric(vals)
+			names(vals) <- names(output)
+		}
+		if(warn) warning("Argument 'by' refers to non-existant elements in 'x'. ")
+
 	}
+		
 	return(vals)
 
 })

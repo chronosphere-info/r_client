@@ -179,7 +179,7 @@ setReplaceMethod(
 	signature="RasterArray",
 	definition=function(x,  value){
 		# not defined for matrices or higher
-		if(is.null(dimnames(x))) stop("One-dimensional RasterArrays have no dimnames.")
+		if(is.null(dim(x))) stop("One-dimensional RasterArrays have no dimnames.")
 		dimnames(x@index) <- value 
 		return(x)
 })
