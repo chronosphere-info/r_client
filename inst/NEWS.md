@@ -2,7 +2,7 @@
 
 ## [0.2.2 (build 68)] - 2020-03-11
 ### Changed
-- defense against bad coordinates added
+- reconstruct - defense against bad long/lat
 
 ## [0.2.2 (build 67)] - 2020-03-06
 ### Changed
