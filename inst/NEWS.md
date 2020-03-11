@@ -1,5 +1,9 @@
 # Change log of the R package 'chronosphere'
 
+## [0.2.2 (build 68)] - 2020-03-11
+### Changed
+- reconstruct - defense against bad long/lat
+
 ## [0.2.2 (build 67)] - 2020-03-06
 ### Changed
 - bug fixes
