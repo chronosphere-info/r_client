@@ -910,7 +910,7 @@ validCoords <- function (x, invalid = FALSE, verbose=TRUE) {
   }
   
   #check if within range
-  if (length(!(lng >= -180 & lng <=180)) > 0 |length(!(lat >= -90 & lat <=90))) {
+  if (any(!(lng >= -180 & lng <=180)) |any(!(lat >= -90 & lat <=90))) {
     lng[!(lng >= -180 & lng <=180)] <- NA
     lat[!(lat >= -90 & lat <=90)] <- NA
     
