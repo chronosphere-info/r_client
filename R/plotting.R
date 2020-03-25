@@ -92,7 +92,7 @@ setMethod("mapplot", signature="RasterLayer",
 #' @rdname mapplot
 setMethod("mapplot", signature="RasterStack", 
           definition = function(x, col=gradinv(255),  ...){
-            raster::plotRGB(x,col=col, ...)
+            raster::plotRGB(x, ...)
             
             #save par from raster
             old.par <- par(no.readonly = TRUE)
@@ -105,12 +105,15 @@ setMethod("mapplot", signature="RasterArray",
           definition = function(x, col="gradinv", rgb=FALSE, legend=FALSE, axes=FALSE, box=FALSE, 
                                 ncol = 3, legend.title=NULL, plot.title =NULL, rowlabels=rownames(x), multi=FALSE, ask=FALSE,...){
             
-            old.par <- graphics::par(no.readonly = TRUE) 
+            old.par <- graphics::par(no.readonly = TRUE)
             on.exit(graphics::par(old.par))
             
             if(rgb == TRUE){ #plot with rgb bands
               raster::plotRGB(x@stack, ...) 
-              old.par$usr <- par()$usr
+              
+              #save par from raster
+              old.par <- par(no.readonly = TRUE)
+              
             } else { #uni and multivariate rasterArrays
               
               #number of variables in array
