@@ -20,7 +20,7 @@ library(chronosphere)
 
 To install this alpha version of the package, you must download it either from the CRAN servers or its dedicated GitHub repository (http://www.github.com/adamkocsis/chronosphere/). All minor updates will be posted on GitHub as soon as they are finished, so please check this regularly. The version on CRAN will be lagging for some time, as it takes the servers many days to process everything. All questions and bugs can be reported at the GitHub issues board (https://github.com/adamkocsis/chronosphere/issues). Instead of spending it on actual research, a tremendous amount of time was invested in making this piece of software streamlined and user-friendly. If you use a dataset of the package in a publication, please cite both its reference(s) and the `chronosphere` package itself.
 
-After installing, from the CRAN, from a source or with ``devtools::install_github()`` , you can attach the package with:
+After installing from CRAN, from a source, or with ``devtools::install_github()`` , you can attach the package with:
 
 ```{r package, echo= TRUE, eval=FALSE}
 library(chronosphere)
@@ -28,21 +28,21 @@ library(chronosphere)
 
 # 1.2 General features
 
-The purpose of the `chronosphere` project is to facilitate, streamline and speed up the finding, acquisition and importing of Earth science data in R. Although the package currently focuses on deep time data sets, the scope of the included datasets will be much larger, spanning from a single variable published as supplementary material in a journal article, to GIS data or the entire output of GCM models. `chronosphere` intends to decrease the gap between research hypotheses and the finding, download and importing of data sets. 
+The purpose of the `chronosphere` project is to facilitate, streamline and speed up the finding, acquisition and importing of Earth science data in R. Although the package currently focuses on deep time datasets, the scope of the included datasets will be much larger, spanning from a single variable published as supplementary material in a journal article to GIS data or the entire output of GCM models. `chronosphere` intends to decrease the gap between research hypotheses and the finding, downloading and importing of datasets. 
 
 # 2. RasterArray
 
-Faster data importing and better organization represents a considerable part of this process. Spatially explicit data are excellent candidates to demonstrate how more efficient data organization can speed up research. Although R has an excellent infrastructure for handling raster data (Hijmans & van Etten, 2019), the arrangement of individual layers are rather limited, which can be a problem, when a large number of layers have to be considered. RasterStacks and RasterBricks are very efficient for organizing RasterLayers according to a single dimension (e.g. depth for 3D variables, or time), but multidimensional structures are preferred. 
+Faster data importing and better organization represents a considerable part of this process. Spatially explicit data are excellent candidates to demonstrate how more efficient data organization can speed up research. Although R has an excellent infrastructure for handling raster data (Hijmans & van Etten, 2019), the arrangement of individual layers are rather limited, which can be a problem when a large number of layers are considered. RasterStacks and RasterBricks are very efficient for organizing RasterLayers according to a single dimension (e.g. depth for 3D variables, or time), but multidimensional structures are preferred. 
 
-To offer a more effective solution, the `chronosphere` package includes the definition of the RasterArray S4 class. RasterArrays represent hybrids between RasterStacks and regular R arrays. In short, they are virtual arrays of RasterLayers, and can be thought of as regular arrays, that include entire rasters as elements rather than single numeric, logical or character values. As regular R users are familiar with subsetting, combinations and structures of regular arrays (including formal vectors and matrices), the finding, extraction and storage of spatially explicit data is much easier in such containers.
+To offer a more effective solution, the `chronosphere` package includes the definition of the RasterArray S4 class. RasterArrays represent hybrids between RasterStacks and regular R arrays. In short, they are virtual arrays of RasterLayers, and can be thought of as regular arrays that include entire rasters as elements rather than single numeric, logical or character values. As regular R users are familiar with subsetting, combinations and structures of regular arrays (including formal vectors and matrices), the finding, extraction and storage of spatially explicit data is much easier in such containers.
 
 ## 2.1. Structure
 
 RasterArrays do not directly inherit from Raster* objects of the raster package, as a considerable number of main functions differ, but they rather represent a wrapper object around regular RasterStacks - stacks of individual RasterLayers. This ensures that whenever users are unfamiliar with the methods of RasterArray class objects, they can always reduce their data to stacks or individual layers. 
 
-The formal class RasterArray has only two slots: a stack and and index. The stack includes the Raster data in an unfolded manner, similarly to how matrices and arrays are essentially just vectors with additional attributes. The stack slot incorporates a single RasterStack object, which represents the data content of the object. The index slot, on the other hand, describes the structure of the RasterArray. It is a vector/matrix/array of integers each representing an index of the layers in the stack. The configuration (dimensions) of the index represents the entire array.
+The formal class RasterArray has only two slots: a stack and an index. The stack includes the Raster data in an unfolded manner, similarly to how matrices and arrays are essentially just vectors with additional attributes. The stack slot incorporates a single RasterStack object, which represents the data content of the object. The index slot, on the other hand, describes the structure of the RasterArray. It is a vector/matrix/array of integers each representing an index of the layers in the stack. The configuration (dimensions) of the index represents the entire array.
 
-The `chronosphere` package includes two demo data sets: a set of ancient topographies (Scotese and Wright, 2018) and time series of bio-climatic variables (annual mean temperature and precipitation) from the CHELSA project (Karger et al, 2017a, 2017b) These datasets can be attached with the data command. 
+The `chronosphere` package includes two demo data sets: a set of ancient topographies (Scotese and Wright, 2018) and a time series of bio-climatic variables (annual mean temperature and precipitation) from the CHELSA project (Karger et al, 2017a, 2017b). These datasets can be attached with the data command. 
 ```{r dat, echo= TRUE}
 data(dems)
 data(clim)
@@ -55,7 +55,7 @@ dems
 
 The first part of the console output includes properties of the individual RasterLayers stored in the stack. These layers have to share essential attributes that allow them to be stored in a single stack (extent, resolution, CRS). 
 
-The second part of the output is a visualization of the structure of the RasterArray itself. In the case of the DEMs, 10 layers are stored in the stack, each layer having its individual name (e.g. `dem_0`). It is a single dimensional array (vector), and each element has its name in the array (`0`). The differentiating between the names of layers and the names of elements allows different subsetting and replacement rules for the two, which both can be handy - depending on the needs of the user.
+The second part of the output is a visualization of the structure of the RasterArray itself. In the case of the DEMs, 10 layers are stored in the stack, each layer having its individual name (e.g. `dem_0`). It is a single dimensional array (vector), and each element has its name in the array (`0`). Differentiating between the names of layers and the names of elements allows different subsetting and replacement rules for the two, which can both be handy - depending on the needs of the user.
 
 The structure of the RasterArray can be visualized, analyzed or processed using the the proxy object. Proxies are essentially the same as the index slots of the RasterArray, but instead of including the indices of the layers they represent, proxies include the names of the layers. These can be accessed using the `proxy()` function.
 
@@ -75,7 +75,7 @@ This RasterArray has 10 rows (annual means) and two variables/columns: temperatu
 proxy(clim)
 ```
 
-RasterArrays are fairly easy to construct: one only needs a stack of the data and an regular vector/matrix/array including integers. For instance, the dems object can be recreated from scratch without any problem.
+RasterArrays are fairly easy to construct: one only needs a stack of the data and a regular vector/matrix/array including integers. For instance, the dems object can be recreated from scratch without any problem.
 
 ```{r constructor, echo= TRUE}
 # a stack of rasters
@@ -101,7 +101,7 @@ comb <- combine(r1, r2)
 comb
 ```
 
-Matrix-like RasterArrays can also be created easily with the, cbind(), and rbind() functions.
+Matrix-like RasterArrays can also be created easily with the cbind() and rbind() functions.
 
 
 ```{r rbind, echo= TRUE}
@@ -126,7 +126,7 @@ nrow(clim)
 ncol(clim)
 ```
 
-These functions are summarized in the dim() function. This, however, unlike the regular `dim()` method of vectors, return the length of the RasterArray-vector, rather than just `NULL`. 
+These functions are summarized in the dim() function. This, however, unlike the regular `dim()` method of vectors, return the length of the RasterArray vector, rather than just `NULL`. 
 
 ```{r dime, echo= TRUE}
 dim(dems)
@@ -155,7 +155,7 @@ colnames(clim2) <- c("temp", "prec")
 clim2
 ```
 
-Just as you would do it with normal arrays, you can query/rewrite all names with the `dimnames()` function, that uses a list to store the names in every dimension.
+Just as you would do with normal arrays, you can query/rewrite all names with the `dimnames()` function, which uses a list to store the names in every dimension.
 
 ```{r climrenamedim, echo= TRUE}
 dimnames(clim2)[[1]] <- 1:10
@@ -176,10 +176,10 @@ nvalues(dems)
 ```
 
 ## 2.3. Subsetting and replacement
-Facilitating the accession of items is the primary purpose of RasterArrays. These either focus on the layers (stack items, double bracket operator "[[") or the elements of the RasterArray (single bracket operator "["). 
+Facilitating the accession of items is the primary purpose of RasterArrays. These either focus on the layers (stack items, double bracket operator "[[") or on the elements of the RasterArray (single bracket operator "["). 
 
 ### 2.3.1 Layer selection - Double bracket [[
-This form of subsetting and replacement are inherited from the RasterStack class. Individual layers can be accessed directly from the stack using either the position index, the name of the layer or the logical value pointing to the position. Whichever is used, the RasterArray wrapper is omitted and output will be a RasterLayer or RasterStack class object.
+This form of subsetting and replacement is inherited from the RasterStack class. Individual layers can be accessed directly from the stack using either the position index, the name of the layer, or the logical value pointing to the position. Whichever is used, the RasterArray wrapper is omitted and the output will be a RasterLayer or RasterStack class object.
 
 A single layer can be accessed using its name, regardless of its position in the RasterArray. This can be visualized either with the default `plot()` or the more general `mapplot()` function. 
 
@@ -194,7 +194,7 @@ The double bracket returns a single RasterArray. Using multiple elements for sub
 dems[[c(1,2)]]
 ```
 
-These are are the first two RasterLayers in the stack of the RasterArray.
+These are the first two RasterLayers in the stack of the RasterArray.
 
 Double brackets can also be used for replacements, but as this has no effect on the structure of the array, changes implemented with this method are more difficult to trace. For instance, 
 
@@ -216,13 +216,13 @@ dem2[[2]]
 
 Features offered by the double bracket ("[[") operator are virtually identical with those of RasterStacks. The true utility of RasterArrays become evident with simple array-type subsetting. 
 
-Unlike Raster* objects of the raster package, single brackets will get and replace items from the RasterArray as if they were simple arrays. For example, single elements of the DEMs can be selected with the age of the DEM, passed as a character subscript.
+Unlike Raster* objects of the raster package, single brackets will retrieve and replace items from the RasterArray as if they were simple arrays. For example, single elements of the DEMs can be selected with the age of the DEM, passed as a character subscript.
 
 ```{r dem30, echo= TRUE}
 dems["30"]
 ```
 
-returning the 30Ma RasterLayer. By default, the RasterArray container is dropped, but it can be conserved, if the drop argument is set to `FALSE`.
+returning the 30Ma RasterLayer. By default, the RasterArray container is dropped, but it can be conserved if the drop argument is set to `FALSE`.
 ```{r demdrop, echo= TRUE}
 dem30 <- dems["30", drop=FALSE]
 class(dem30)
@@ -234,7 +234,7 @@ Accessing elements which are not present is valid for single dimensional RasterA
 dems[4:12]
 ```
 
-Missing values are legitimate parts of RasterArrays. These gaps in the data are not represented in the stacks, but only in the index slots of the RasterArrays. They can be inserted or added into the layers.
+Missing values are legitimate parts of RasterArrays. These gaps in the data are not represented in the stacks but only in the index slots of the RasterArrays. They can be inserted or added into the layers.
 
 
 ```{r demna, echo= TRUE}
@@ -264,7 +264,7 @@ clim[,"bio12"]
 
 ### 2.4 Inherited from Raster*
 
-As the spatial information is contained entirely in the RasterStacks, a number methods are practically inherited from RasterStack class. For instance, all RasterLayer of the RasterArray can be cropped in a single line of code.
+As the spatial information is contained entirely in the RasterStacks, a number of methods are practically inherited from RasterStack class. For instance, all RasterLayers of the RasterArray can be cropped in a single line of code.
 
 ```{r crop, echo= TRUE, plot=TRUE, fig.height=5.5}
 # crop to Australia
@@ -282,9 +282,9 @@ au<- crop(dems, ext)
 mapplot(au[1], col="earth")
 ```
 
-If you plot all cropped DEMs you can see how Australia drifted to its current position.
+If you plot all cropped DEMs, you can see how Australia drifted to its current position.
 
-Other functions such as aggregation or resampling works just the same. 
+Other functions such as aggregation or resampling work in a similar way. 
 
 ```{r resam, echo= TRUE, plot=TRUE, fig.height=5.5}
 template <- raster(res=5)
@@ -301,27 +301,27 @@ mapplot(coarse["45"], col="earth")
 The `mapplot()` function makes it easy to produce visually pleasing plots of a Raster* object. 
 
 ## 3.1 Colour palettes
-The package includes several colour palettes which can be used for plotting purposes. An additional palette option developed specifically with DEMs in mind is *earth*. This combines the *ocean* and *terra* palettes and automatically sets the breaks to differentiate between marine and terrestrial cells. An example is shows below in [RasterLayer plotting example](#RasterLayer).
+The package includes several colour palettes which can be used for plotting purposes. An additional palette option developed specifically with DEMs in mind is *earth*. This combines the *ocean* and *terra* palettes and automatically sets the breaks to differentiate between marine and terrestrial cells. An example is shown below in [RasterLayer plotting example](#RasterLayer).
 
 ```{r palette, fig.height=3, fig.width=8}
 showPal()
 ```
 
 ## 3.2 RasterLayer {#RasterLayer}
-The `mapplot()` function for RasterLayer works similar to the `plot()` function. The `mapplot` function for the Raster* objects include a default palette, omits the legend, axes and the bounding box. 
+The `mapplot()` function for RasterLayer works similar to the `plot()` function. The `mapplot` function for the Raster* objects include a default palette and omits the legend, axes and bounding box. 
 
 ```{r rlayer_plot, echo=TRUE, out.width='80%', fig.align="center"}
 data(dems)
 mapplot(dems[1])
 
-#using an custom colour palette
+#using a custom colour palette
 mapplot(dems[1], col="earth", main="Using the earth palette")
 
 ```
 
 ## 3.3 RasterArray
 
-RasterArrays can be plotted as a multi-faceted plots using `mapplot()`. The `mapplot()` function keeps the structure of the RasterArray in terms of the order that the plots are generate. The plot titles are automatically generated based on the names of the layers within the RasterArray. This can be changed by passing the custom plot titles to the argument `plot.title`. **Note:** This number of plots titles provided should be equal to the number of layers in the RasterArray. 
+RasterArrays can be plotted as multi-faceted plots using `mapplot()`. The `mapplot()` function keeps the structure of the RasterArray in terms of the order that the plots are generated. The plot titles are automatically generated based on the names of the layers within the RasterArray. This can be changed by passing the custom plot titles to the argument `plot.title`. **Note:** The number of plot titles provided should be equal to the number of layers in the RasterArray. 
 
 ```{r rarray_plot_def, echo=TRUE, out.width='80%', fig.align="center"}
 data(dems)
@@ -338,7 +338,7 @@ mapplot(dems, col="ocean", legend=TRUE, legend.title="DEM",
 ```
 ### 3.3.2 RasterArrays with NA layers
 
-In the event that one of the layers of the dem does not exist i.e. has an NA value instead, this plot corresponding to the this NA layer will show "Plot Not Available".
+In the event that one of the layers of the dem does not exist, i.e. has an NA value instead, the plot corresponding to this NA layer will show "Plot not available".
 ```{r na_layer, echo=TRUE, fig.align="center"}
 data(dems)
 
@@ -360,7 +360,7 @@ data(dems)
 mapplot(dems, ncol=4)
 ```
 
-Sometimes, there might be too many plots for them to all plot on one single page. In this instance, the argument `multi` can be set to `TRUE` to allow the figures to be plotted on multiple figures. 
+Sometimes, there might be too many plots to plot all on one single page. In this instance, the argument `multi` can be set to `TRUE` to allow the maps to be plotted in multiple figures. 
 ```{r rarray_plot_multi, echo = TRUE, eval=FALSE}
 data(dems)
 mapplot(dems, multi=TRUE)
@@ -368,7 +368,7 @@ mapplot(dems, multi=TRUE)
 
 ### 3.3.4 Multiple variables in RasterArray
 
-The above described methods can also be applied to RasterArrays containing more than one variables. However, in this instance, the number of columns automatically defaults to the number of variables in the array. Also, plot titles for each individual plot is not printed. Instead, row labels corresponding to the row names of each variable is added and when `legend=TRUE` the default legend title defaults to the variables names in the RasterArray. 
+The above described methods can also be applied to RasterArrays containing more than one variable. However, in this instance, the number of columns automatically defaults to the number of variables in the array. Also, plot titles for each individual plot are not printed. Instead, row labels corresponding to the row names of each variable are added, and when `legend=TRUE`, the default legend title defaults to the variables names in the RasterArray. 
 
 ```{r rarray_plot_nvar, echo=TRUE, fig.width=8, fig.height=4.5}
 data(clim)
@@ -376,7 +376,7 @@ data(clim)
 mapplot(clim[1:2,], legend=TRUE)
 ```
 
-The row labels and legend title can be edited by using the argument `rowlabels` and `legend.title` respectively. Different colours for each variables can also be provided. The number of provided colour palettes should be either 1 or correspond to the number of variables.  
+The row labels and legend titles can be edited using the argument `rowlabels` and `legend.title` respectively. Different colours for each variable can also be provided. The number of provided colour palettes should be either 1 or correspond to the number of variables.  
 ```{r rarray_plot_rowlabs, echo=TRUE, fig.width=8, fig.height=4.5}
 data(clim)
 
