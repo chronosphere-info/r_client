@@ -115,7 +115,7 @@ setMethod(
     max_ma <- rotationModels()[rotationModels()$models == model,]$max_ma
     
     if (any(age > max_ma)){
-      warning("Some ages provided are beyond the geological range available for the ", model, " model. \nReconstructed ages may be unreliable or unavailable.")
+      warning("Some ages provided are beyond the geological range available for the ", model, " model \n(up to ",max_ma,"). Reconstructed ages may be unreliable or unavailable.")
     }
     
     #only integers allowed

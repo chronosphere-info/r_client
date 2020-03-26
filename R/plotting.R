@@ -39,9 +39,17 @@ setMethod("mapplot", signature="RasterLayer",
               if(col %in% c("ocean", "gradinv", "terra", "ipccTemp", "ipccPrec", "wet")){
                 raster::plot(x,legend=FALSE, col=eval(parse(text = col))(255), axes=axes, box=box, ...)
                 
-                #save par from raster
-                old.par <- par(no.readonly = TRUE)
-                on.exit(graphics::par(old.par))
+                # #save par from raster
+                nplots <- par()$mfrow[1] * par()$mfcol[2]
+                
+                if (nplots == 1){
+                  # #save par from raster
+                  para <- names(par()) 
+                  para <- para[-which(para %in% c("mfcol", "mfrow", "mfg", "fig", "cin", "cra", "csi", "cxy", "din", "page"))]
+                  old.par <- par(para)
+                  
+                  on.exit(graphics::par(old.par))
+                }
                 
                 if (legend == TRUE){
                   par(oma=c(1,0,0,0))
@@ -59,9 +67,17 @@ setMethod("mapplot", signature="RasterLayer",
                              breaks =c(negBreaks[1:(length(negBreaks)-1)], posBreaks), 
                              col=c(ocean(length(negBreaks)-1), 
                                    terra(length(posBreaks))), axes=axes, box=box,...)
-                #save par from raster
-                old.par <- par(no.readonly = TRUE)
-                on.exit(graphics::par(old.par))
+                #save from raster
+                nplots <- par()$mfrow[1] * par()$mfcol[2]
+                
+                if (nplots == 1){
+                  # #save par from raster
+                  para <- names(par()) 
+                  para <- para[-which(para %in% c("mfcol", "mfrow", "mfg", "fig", "cin", "cra", "csi", "cxy", "din", "page"))]
+                  old.par <- par(para)
+                  
+                  on.exit(graphics::par(old.par))
+                }
                 
                 if (legend == TRUE){
                   par(oma=c(1,0,0,0))
@@ -74,10 +90,16 @@ setMethod("mapplot", signature="RasterLayer",
             }else{
               raster::plot(x,legend=FALSE, col=col, axes=axes, box=box,...)
               
-              #save par from raster
-              old.par <- par(no.readonly = TRUE)
-              on.exit(graphics::par(old.par))
+              nplots <- par()$mfrow[1] * par()$mfcol[2]
               
+              if (nplots == 1){
+                # #save par from raster
+                para <- names(par()) 
+                para <- para[-which(para %in% c("mfcol", "mfrow", "mfg", "fig", "cin", "cra", "csi", "cxy", "din", "page"))]
+                old.par <- par(para)
+                
+                on.exit(graphics::par(old.par))
+              }
               if (legend == TRUE){
                 par(oma=c(1,0,0,0))
                 plot(x, col=eval(parse(text = col))(255), legend.only=TRUE, horizontal = TRUE,
@@ -92,11 +114,19 @@ setMethod("mapplot", signature="RasterLayer",
 #' @rdname mapplot
 setMethod("mapplot", signature="RasterStack", 
           definition = function(x, col=gradinv(255),  ...){
-            raster::plotRGB(x, ...)
             
-            #save par from raster
-            old.par <- par(no.readonly = TRUE)
+            raster::plotRGB(x, ...)
+            nplots <- par()$mfrow[1] * par()$mfcol[2]
+            
+            if (nplots == 1){
+            # #save par from raster
+            para <- names(par()) 
+            para <- para[-which(para %in% c("mfcol", "mfrow", "mfg", "fig", "cin", "cra", "csi", "cxy", "din", "page"))]
+            old.par <- par(para)
+            
             on.exit(graphics::par(old.par))
+            }
+            
           }
 )
 
@@ -105,16 +135,25 @@ setMethod("mapplot", signature="RasterArray",
           definition = function(x, col="gradinv", rgb=FALSE, legend=FALSE, axes=FALSE, box=FALSE, 
                                 ncol = 3, legend.title=NULL, plot.title =NULL, rowlabels=rownames(x), multi=FALSE, ask=FALSE,...){
             
-            old.par <- graphics::par(no.readonly = TRUE)
-            on.exit(graphics::par(old.par))
             
             if(rgb == TRUE){ #plot with rgb bands
               raster::plotRGB(x@stack, ...) 
               
               #save par from raster
-              old.par <- par(no.readonly = TRUE)
+              nplots <- par()$mfrow[1] * par()$mfcol[2]
+              
+              if (nplots == 1){
+                # #save par from raster
+                para <- names(par()) 
+                para <- para[-which(para %in% c("mfcol", "mfrow", "mfg", "fig", "cin", "cra", "csi", "cxy", "din", "page"))]
+                old.par <- par(para)
+                
+                on.exit(graphics::par(old.par))
+              }
               
             } else { #uni and multivariate rasterArrays
+              old.par <- par()
+              on.exit(graphics::par(old.par))
               
               #number of variables in array
               nvars <- ifelse (is.na(dim(x)[2]), 1, dim(x)[2])
