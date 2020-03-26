@@ -9,17 +9,17 @@
 #' The function implements two reconstruction submodules, which are selected with the \code{model} argument:
 #' 
 #' If \code{model} is a \code{character} entry, then the \code{reconstruct()} function uses the GPlates Web Service (\url{https://gws.gplates.org/}, remote reconstruction submodule).
-#' The available reconstruction models for this submodule are:
+#' The available reconstruction models and their geologic coverage for this submodule are:
 #' \itemize{
-#'	 \item "SETON2012" (Seton et al., 2012) for coastlines and plate polygons.
-#'	 \item "MULLER2016" (Muller et al., 2016) for coastlines and plate polygons.
-#'	 \item "GOLONKA" (Wright et al. 2013) for coastlines only. 
-#'	 \item "PALEOMAP" (Scotese and Wright, 2018) for coastlines and plate polygons. 
-#'	 \item "MATTHEWS2016" (Matthews et al., 2016) for coastlines and plate polygons. 
+#'	 \item "SETON2012" (Seton et al., 2012) for coastlines and plate polygons (0 - 200 Ma).
+#'	 \item "MULLER2016" (Muller et al., 2016) for coastlines and plate polygons(0 - 230 Ma).
+#'	 \item "GOLONKA" (Wright et al. 2013) for coastlines only (0 - 550 Ma). 
+#'	 \item "PALEOMAP" (Scotese and Wright, 2018) for coastlines and plate polygons (0 - 750 Ma). 
+#'	 \item "MATTHEWS2016" (Matthews et al., 2016) for coastlines and plate polygons (0 - 410 Ma). 
 #' }
 #' 
 #' If \code{model} is a \code{\link{platemodel}} class object, then the function will try to use the GPLates desktop application (\url{http://www.gplates.org/}) to reconstruct the coordinates (local reconstruction submodule).
-#' Plate models are available in chronosphere with the \code{\link{fetch}} function. See \code{\link{dataindex}} for the available models.
+#' Plate models are available in chronosphere with the \code{\link{fetch}} function. See \code{\link{datasets}} for the available models.
 #' The function will try to find the main GPlates executable in its default installation directory. If this does not succeed, use \code{path.gplates} to enter the full path to the GPlates executable as a \code{character} string.
 #' 
 #' 
@@ -87,7 +87,7 @@ setMethod(
   function(x,age, model="PALEOMAP", listout=TRUE, verbose=FALSE, enumerate=TRUE, chunk=200, reverse=FALSE, path.gplates=NULL, cleanup=TRUE, dir=NULL, plateperiod=FALSE){
     
     # Check long lat!
-    clean_coords <- validCoords(x, invalid=TRUE)
+    clean_coords <- validCoords(x, invalid=TRUE, verbose=verbose)
     
     x <- clean_coords$x
     incomplete <- clean_coords$invalid
@@ -99,8 +99,30 @@ setMethod(
       x[incomplete,] <- c(0,0)
     }
     
+    #validating ages
+    
     #age to numeric
-    if(!is.numeric(age)) age <- as.numeric(age)
+    if(!is.numeric(age)) age <- suppressWarnings(as.numeric(age))
+    
+    if(any(is.na(age))) stop("Invalid ages provided.")
+    
+    if(any(age < 0)){
+      age <- abs(age)
+      warning("Negative ages provided. Absolute values used.")
+    }
+    
+    #checking if reconstruction age is valid
+    max_ma <- rotationModels()[rotationModels()$models == model,]$max_ma
+    
+    if (any(age > max_ma)){
+      warning("Some ages provided are beyond the geological range available for the ", model, " model. \nReconstructed ages may be unreliable or unavailable.")
+    }
+    
+    #only integers allowed
+    if(any(!age%%1==0)){
+      age <- round(age)
+      warning("Decimals in ages not allowed. Ages rounded to the nearest digit.")
+    }
     
     # depending on length
     if(length(age)>1){
@@ -125,8 +147,15 @@ setMethod(
         # iterate over ages
         for(i in 1:length(age)){
           if(is.character(model)){
+            
+            if (!model %in% rotationModels()$models){
+              model <- "PALEOMAP"
+              warning('Invalid reconstruction model provided. Default reconstruction model “PALEOMAP” used. \nYou can view available models using rotationModels().')
+            }
+            
             fresh <- IteratedPointReconstruction(coords=x, chunk=chunk, age=age[i], model=model, reverse=reverse, verbose=verbose)
             fresh[clean_coords$incomplete,] <- c(NA, NA)
+            
           }else{
             fresh <- reconstructGPlates(x=x, age=age[i], model=model, path.gplates=path.gplates, dir=dir, verbose=verbose, cleanup=cleanup, plateperiod=plateperiod)
             fresh[clean_coords$incomplete,] <- c(NA, NA)
@@ -165,6 +194,11 @@ setMethod(
           current <- x[index, , drop=FALSE]
           # do reconstruction and store
           if(is.character(model)){
+            
+            if (!model %in% rotationModels()){
+              model <- "PALEOMAP"
+              warning('Invalid reconstruction model provided. Default reconstruction model “PALEOMAP” used. \nYou can view available models using rotationModels().')
+            }
             container[index,] <- IteratedPointReconstruction(coords=current, chunk=chunk, age=ageLevs[i], model=model, reverse=reverse, verbose=verbose)
             container[clean_coords$incomplete,] <- c(NA, NA)
           }else{
@@ -177,9 +211,12 @@ setMethod(
       # single target
     }else{
       if(is.character(model)){
+        if (!model %in% rotationModels()$models){
+          model <- "PALEOMAP"
+          warning('Invalid reconstruction model provided. Default reconstruction model “PALEOMAP” used. \nYou can view available models using rotationModels().')
+        }
         container <- IteratedPointReconstruction(coords=x, chunk=chunk, age=age, model=model, reverse=reverse, verbose=verbose)
         container[clean_coords$incomplete,] <- c(NA, NA)
-        
       }else{
         container <- reconstructGPlates(x=x, age=age, model=model, path.gplates=path.gplates, dir=dir, verbose=verbose, cleanup=cleanup, plateperiod=plateperiod)
         container[clean_coords$incomplete,] <- c(NA, NA)
@@ -585,6 +622,7 @@ winDefaultGPlates<-function(){
       inWhich <- i
     }
   }
+  
   if(is.null(inWhich)) stop("Could not locate GPlates.")
   
   # add it 
@@ -863,9 +901,15 @@ gplates_reconstruct_polygon <- function(sp, age, model="PALEOMAP", verbose=TRUE)
   return(rpoly)
 }
 
-# validate coordinates
-# @param incomplete return vector of indexes of incomplete/invalid coordinates. may be useful in the future
-
+#' Validate coordinates
+#' 
+#' Utility function to check if provided coordinates are valid 
+#' 
+#' @param x coordinates to be checked. Can be a \code{vector}, \code{matrix} or \code{data.frame}.
+#' @param incomplete return vector of indexes of incomplete/invalid coordinates.
+#' @param verbose  (\code{logical}) Should console feedback be printed?
+#'
+#'@export
 validCoords <- function (x, invalid = FALSE, verbose=TRUE) {
   
   if (verbose) message("Testing coordinate validity....")
@@ -925,6 +969,29 @@ validCoords <- function (x, invalid = FALSE, verbose=TRUE) {
   x <- cbind(lng,lat)
   
   na.values <- is.na(lat) | is.na(lng)
-  if(invalid) return(list(x=x, invalid=which(na.values))) else return(x)
+  if(invalid) return(list(x=x, invalid=which(na.values))) else {
+    if (verbose) message("Successful!")
+    return(x)
+  }
 }
 
+#' Available rotation models
+#' 
+#' This function outputs a vector with the available rotation models for the online/remote
+#' reconstruction. 
+#' 
+#' The available reconstruction models are:
+#' \itemize{
+#'	 \item "SETON2012" (Seton et al., 2012) for coastlines and plate polygons (0 - 200 Ma).
+#'	 \item "MULLER2016" (Muller et al., 2016) for coastlines and plate polygons(0 - 230 Ma).
+#'	 \item "GOLONKA" (Wright et al. 2013) for coastlines only (0 - 550 Ma). 
+#'	 \item "PALEOMAP" (Scotese and Wright, 2018) for coastlines and plate polygons (0 - 750 Ma). 
+#'	 \item "MATTHEWS2016" (Matthews et al., 2016) for coastlines and plate polygons (0 - 410 Ma). 
+#' }
+#' 
+#' @export
+
+rotationModels <- function (){
+  data.frame(models = c("SETON2012", "MULLER2016", "GOLONKA", "PALEOMAP", "MATTHEWS2016"),
+  max_ma = c(200, 230, 550, 750, 410))
+} 
