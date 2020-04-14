@@ -152,7 +152,7 @@ setMethod("mapplot", signature="RasterArray",
               }
               
             } else { #uni and multivariate rasterArrays
-              old.par <- par()
+              old.par <- par(no.readonly = TRUE)
               on.exit(graphics::par(old.par))
               
               #number of variables in array

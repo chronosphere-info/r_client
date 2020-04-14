@@ -195,7 +195,7 @@ setMethod(
           # do reconstruction and store
           if(is.character(model)){
             
-            if (!model %in% rotationModels()){
+            if (!model %in% rotationModels()$models){
               model <- "PALEOMAP"
               warning('Invalid reconstruction model provided. Default reconstruction model “PALEOMAP” used. \nYou can view available models using rotationModels().')
             }
