@@ -111,7 +111,7 @@ setMethod(
       warning("Negative ages provided. Absolute values used.")
     }
     
-    if(class(pm) != "platemodel"){
+    if(is.character(model)){
     #checking if reconstruction age is valid
     max_ma <- rotationModels()[rotationModels()$models == model,]$max_ma
     
