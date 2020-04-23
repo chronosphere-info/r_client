@@ -111,13 +111,16 @@ setMethod(
       warning("Negative ages provided. Absolute values used.")
     }
     
+    if(class(pm) != "platemodel"){
     #checking if reconstruction age is valid
     max_ma <- rotationModels()[rotationModels()$models == model,]$max_ma
+    
     
     if (any(age > max_ma)){
       warning("Some ages provided are beyond the geological range available for the ", model, " model \n(up to ",max_ma,"). Reconstructed ages may be unreliable or unavailable.")
     }
     
+    }
     #only integers allowed
     if(any(!age%%1==0)){
       age <- round(age)
