@@ -111,16 +111,13 @@ setMethod(
       warning("Negative ages provided. Absolute values used.")
     }
     
-    if(is.character(model)){
     #checking if reconstruction age is valid
     max_ma <- rotationModels()[rotationModels()$models == model,]$max_ma
     
-    
     if (any(age > max_ma)){
-      warning("Some ages provided are beyond the geological range available for the ", model, " model \n(up to ",max_ma,"). Reconstructed ages may be unreliable or unavailable.")
+      warning("Some ages provided are beyond the geological range available for the ", model, " model. \nReconstructed ages may be unreliable or unavailable.")
     }
     
-    }
     #only integers allowed
     if(any(!age%%1==0)){
       age <- round(age)
@@ -198,7 +195,7 @@ setMethod(
           # do reconstruction and store
           if(is.character(model)){
             
-            if (!model %in% rotationModels()$models){
+            if (!model %in% rotationModels()){
               model <- "PALEOMAP"
               warning('Invalid reconstruction model provided. Default reconstruction model “PALEOMAP” used. \nYou can view available models using rotationModels().')
             }
