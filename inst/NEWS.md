@@ -1,5 +1,10 @@
 # Change log of the R package 'chronosphere'
 
+## [0.2.2 (build 67)] - 2020-03-06
+### Changed
+- bug fixes
+
+
 ## [0.2.2 (build 66)] - 2020-03-05
 ### Added
 - new method extract('RasterArray', 'matrix')

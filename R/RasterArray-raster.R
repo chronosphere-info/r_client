@@ -284,7 +284,7 @@ setMethod(
 				dim(output) <-  c(nrowY, dimX)
 				dimnames(output) <- c(list(rownames(y)), xname)
 			}else{
-				output <- array(NA, dim=c(nrowy, dimX))
+				output <- array(NA, dim=c(nrowY, dimX))
 			}
 
 		}else{
