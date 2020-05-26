@@ -1,16 +1,19 @@
 # remote server 
-remote <- "https://www.cnidaria.nat.fau.de/tersane/public/chronosphere/"
+remote <- "https://www.cnidaria.nat.fau.de/tersane/public/chronosphere/v2/"
 userpwd <- NULL
 
+
+#v2
 #' Download a database extract from \code{chronosphere} remote server
 #' 
 #' The function will download a list of available data from the data repository
 #' 
 #' The function will download a single .csv file and attached it as a \code{data.frame}.
 #' 
-#' @param datadir Directory where the downloaded file 'reg.csv' file is kept. Individual layers will be looked up from the directory if this is given, and will be downloaded if they are not found. The default \code{NULL} option will download data to a temporary directory that exists only until the R session ends.
-#'
-#' @param verbose Should console feedback during download be displayed?
+#' @param dat \code{character}. Dataset ID. If this is set to \code{NULL}, then a simplified list of availables variables will be downloaded, including all \code{dat} and \code{var} combinations. If \code{dat} is a valid dataset ID, then all accessible variables of a dataset are downloaded. 
+#' @param datadir \code{character} Directory where the downloaded files are kept. Individual entries will be looked up from the directory if this is given, and will be downloaded if they are not found. The default \code{NULL} option will download data to a temporary directory that exists only until the R session ends.
+#' @param verbose \code{logical} Should console feedback during download be displayed?
+#' @param master \code{logical} When \code{dat} is \code{NULL}, should the function download the master records file?
 #' @return A \code{data.frame} class object.
 #' @examples
 #' \donttest{
@@ -18,8 +21,22 @@ userpwd <- NULL
 #' View(ind)
 #' }
 #' @export
-datasets <- function(datadir=NULL, verbose=FALSE){
+datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE){
 		
+	# dat tells you what to look for.
+	if(is.null(dat)){
+		# simple data table with dat/var combinations
+		datfile <- "chronos.csv"
+		if(master) datfile <- "master.csv"
+	}else{
+		# recursive call to see whether the dat entry is available
+		tempdat <- datasets(datadir=datadir)
+		if(!any(dat%in%tempdat$dat)) stop(paste0("The dat entry \'", dat, "\' was not found."))
+
+		# full list of available variables in a given dataset - used by fetch()
+		datfile <- paste0(dat, ".csv")
+	}
+
 	# if it does not exist in datadir, then 
 	# by default, download the file
 	download <- TRUE
@@ -30,9 +47,9 @@ datasets <- function(datadir=NULL, verbose=FALSE){
 		all<-list.files(datadir)
 
 		# do any of them match? 
-		if(any("reg.csv"==all)){
+		if(any(datfile==all)){
 			# read it in
-			ret <- read.csv(file.path(datadir, "reg.csv"), sep=",", header=TRUE, stringsAsFactors=FALSE)
+			ret <- read.csv(file.path(datadir, datfile), sep=",", header=TRUE, stringsAsFactors=FALSE)
 
 			# structure is ok
 			if(sum(c("dat", "var", "ver", "res")%in%colnames(ret))==4){
@@ -43,7 +60,7 @@ datasets <- function(datadir=NULL, verbose=FALSE){
 		tempLog <- tempfile()
 		
 		# you can set target file, won't change anything if there is nothing to download
-		tempReg<- file.path(datadir, "reg.csv")
+		tempReg<- file.path(datadir, datfile)
 		tempLog <- tempfile()
 	# need to download but not saved
 	}else{
@@ -55,13 +72,15 @@ datasets <- function(datadir=NULL, verbose=FALSE){
 
 	# go on with download
 	if(download){
+		# if you have to download and if it is not the simple table
+		if(!is.null(dat)) datfile <- file.path(dat, datfile)
 		# do the download
 		if(is.null(userpwd)){
 			download.file(paste(remote, "log.csv", sep = ""),tempLog, mode="wb", quiet=TRUE)
-			download.file(paste(remote, "reg.csv", sep = ""),tempReg, mode="wb", quiet=!verbose)
+			download.file(paste(remote, datfile, sep = ""),tempReg, mode="wb", quiet=!verbose)
 		}else{
 			download.file(paste("ftp://", userpwd, "@",remote, "log.csv", sep = ""),tempLog, mode="wb", quiet=TRUE)
-			download.file(paste("ftp://", userpwd, "@",remote, "reg.csv", sep = ""),tempReg, mode="wb", quiet=!verbose)
+			download.file(paste("ftp://", userpwd, "@",remote, datfile, sep = ""),tempReg, mode="wb", quiet=!verbose)
 		}	
 		
 		# read server log
@@ -74,7 +93,7 @@ datasets <- function(datadir=NULL, verbose=FALSE){
 		if(length(currentMessage)!=0) if(""!=currentMessage) warning(currentMessage)
 
 		# and set return value
-		ret <- read.csv(tempReg, sep=",", header=TRUE, stringsAsFactors=FALSE)
+		ret <- read.csv(tempReg, sep=";", header=TRUE, stringsAsFactors=FALSE)
 
 		# get rid of the  temporary file
 		if(is.null(datadir)) unlink(tempReg)
