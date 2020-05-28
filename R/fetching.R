@@ -31,6 +31,7 @@ datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE){
 	}else{
 		# recursive call to see whether the dat entry is available
 		tempdat <- datasets(datadir=datadir)
+	
 		if(!any(dat%in%tempdat$dat)) stop(paste0("The dat entry \'", dat, "\' was not found."))
 
 		# full list of available variables in a given dataset - used by fetch()
@@ -134,19 +135,19 @@ dataindex  <- function(...){
 #' @export
 #' @return An object that matches the 'type' field of the varibles in the output of the \code{\link{datasets}} function.
 fetch <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=TRUE,...){
-	# get the remote server data, or read it from hard drive!
-	register <- datasets(datadir=datadir, verbose=verbose)
 	
-	# the data have to use the same resolution!!!
+	# only one should be allowed
 	if(length(dat)>1) stop("Only one dataset can be accessed in a single download call.")
 
+	# get the remote server data, or read it from hard drive!
+	register <- datasets(dat=dat, datadir=datadir, verbose=verbose)
+	
 	# subset registry to dataset
 	bDat <- register$dat==dat
 	
-	if(any(bDat)){
-		register <- register[bDat, ]
-	}else{
-		stop(paste("The dataset '", dat, "' does not exist." , sep=""))
+	# select the default variable
+	if(is.null(var)){
+		var <- register[register$default_var, "var"]
 	}
 	
 	# if one of the variables do not exist, then omit it
@@ -155,10 +156,10 @@ fetch <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=TRUE,
 	# stop if not present
 	if(any(!present)){
 		if(length(present)==1) stop(paste("Variable '", var, "' does not exist.", sep=""))
-		if(sum(present)==0) stop("The variables do not exist.")
+		if(sum(present)>1) stop("The variables do not exist.")
 		
 		# some do, but some are missing
-		warning(paste("The variable(s) '",paste(var[!present],collapse="', '"), "' do not exist at and is/are omitted.",  sep=""))
+		warning(paste("The variable(s) '",paste(var[!present],collapse="', '"), "' does/do not exist at and is/are omitted.",  sep=""))
 		var<-var[present]
 	}
 
@@ -175,41 +176,281 @@ fetch <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=TRUE,
 		stop("You can only download one variable type in a single download call.\nRepeat download with one type.")
 	}
 
-	# subset the register to only look for var-specific part
-	if(!is.null(var)){
-		register <- register[which(register$var%in%var),]
-	}
+	
+	# variable download has to be repeated for every variable
+	# 1. DOWNLOAD a single variable - base case
+	if(length(var)==1){
+
+		register <- register[which(register$var==var),]
+
+		# A. RESOLUTION LIMITING
+		# Default resolution
+		if(is.null(res)) res <- register$res[register$default_res]
+
+		# only one version
+		if(length(res)>1) stop("Only one resolution can be used in a single download call.")
+		
+		# again, limit registry - now to desired resolution
+		register <- register[register[, "res"]==res, , drop=FALSE]
+		if(nrow(register)==0) stop(paste0("The variable \'", var, "\' is not available at resolution ", res, "."))
+
+		# B. VERSION LIMITING
+		# Default version
+		if(is.null(ver)){ 
+			ver <- register$ver[register$default_ver]
+		}
+
+		# only one version
+		if(length(ver)>1) stop("Only one version can be used in a single download call.")
+		
+		# again, limit registry - now to desired verson
+		register <- register[register[, "ver"]==ver, , drop=FALSE]
+		if(nrow(register)==0) stop(paste0("Version \'", ver, "\' of variable \'", var, "\' is not available at resolution ", res, "."))
+
+		# after all this is done, there should be just one row in the table...
+		if(nrow(register)!=1) stop("This should not have happened.")
+
+		# do the actual download of this variable
+		downloaded <- fetchArchive(dat=dat, var=var, ver=ver, res=res, datadir=datadir, 
+			link=register$access_url, archive=register$archive_name, verbose=verbose,...)
 	
 
-	# method dispatch
-	if(varType=="RasterArray" | varType=="SpatialPolygonsDataFrame"){
-		combined <- fetchRemote(dat=dat, var=var, ver=ver, res=res, datadir=datadir, register=register, verbose=verbose,...)
+	# 2. DOWNLOAD MULTIPLE VARIABLSE - recursive case
+	}else{
+		# subset the register to only look for var-specific part
+		if(!is.null(var)){
+			register <- register[which(register$var%in%var),]
+		}
+		# recursively download archives and bind them to a list.
+		for(i in 1:length(var)){
+			# all variables have to be present at the desired resolution
+			stop(paste("The variable '", var[i], "' does not exist at the desired resolution (", res, "). ", sep=""))
+
+			stop("Not yet!")
+
+		}
+		# process the recursive download if there is a method for binding it together
 	}
 
-	if(varType=="data.frame"){
-		# check for non-related input
-		if(!is.null(res)) warning("Argument 'res' is ignored for data.frame fetching.")
-		combined <- fetchDF(dat=dat, var=var, ver=ver, datadir=datadir, register=register, verbose=verbose)
-	}
+	# write the chronosphere attributes to the downloaded object
+	
 
-	if(varType=="platemodel"){
-		# check for non-related input
-		if(!is.null(res)) warning("Argument 'res' is ignored for plate model fetching.")
-		combined <- fetchModel(dat=dat, var=var, ver=ver, datadir=datadir, register=register, verbose=verbose)
-	}
+#	if(varType=="data.frame"){
+#		# check for non-related input
+#		if(!is.null(res)) warning("Argument 'res' is ignored for data.frame fetching.")
+#		combined <- fetchDF(dat=dat, var=var, ver=ver, datadir=datadir, register=register, verbose=verbose)
+#	}
+#
+#	if(varType=="platemodel"){
+#		# check for non-related input
+#		if(!is.null(res)) warning("Argument 'res' is ignored for plate model fetching.")
+#		combined <- fetchModel(dat=dat, var=var, ver=ver, datadir=datadir, register=register, verbose=verbose)
+#	}
 
 	# display citations
 	if(verbose){
 		message("If you use the data in publications, please cite its\nreference, as well as that of the 'chronosphere' package.")
-		for(i in 1:length(combined$citation)){
+		for(i in 1:length(downloaded$citation)){
 			cat("\n")
-			message(paste("-", combined$citation[i]))
+			message(paste("-", downloaded$citation[i]))
 		}
 	}
 	
-	return(combined$final)
+	return(downloaded$final)
 	
 }
+
+# function to download and load the contents of an individual archive
+fetchArchive <- function(dat, var, res, ver, archive, link, datadir=NULL, verbose=verbose,...){
+	# we need a temporary directory to store the extracted files until the end of the session
+	tempd <- tempdir()
+
+	# save the data for later?	 
+	if(!is.null(datadir)){
+
+		#check whether the data need to be downloaded or not. 
+		all<-list.files(datadir)
+		
+		# target
+		pathToArchive<- file.path(datadir, archive)
+			
+		# is the archive not downloaded?
+		# do a download
+		if(!any(all==archive)){
+
+			# download archive
+			if(is.null(userpwd)){
+				download.file(paste(remote, link,  sep = ""),pathToArchive, mode="wb", quiet=!verbose)
+			}else{
+				download.file(paste("ftp://", userpwd, "@",remote, link,  sep = ""),pathToArchive, mode="wb", quiet=!verbose)
+			}
+		}
+
+		# and unzip to a temporary directory
+		unzip(pathToArchive, exdir=tempd)
+
+	# must download
+	}else{
+		# temporary files
+		temp <- tempfile()
+	
+		# download archive
+		if(is.null(userpwd)){
+			download.file(paste0(remote, link),temp, mode="wb", quiet=!verbose)
+		}else{
+			download.file(paste0("ftp://", userpwd, "@",remote, link,  sep = ""),temp, mode="wb", quiet=!verbose)
+		}
+		
+		# unzip it in temporary directory
+		unzip(temp, exdir=tempd)
+	
+		# get rid of the archive
+		unlink(temp)
+	}
+	
+	# variable directory
+	varDir <- file.path(tempd, gsub(".zip", "", archive))
+
+	# loading script - variable specific
+	loadScript <- gsub(".zip", ".R", archive)
+
+	# source the R file associated with the variable
+	source(file.path(varDir, loadScript))
+
+	# run the function that loads in the variable and save it
+	varObj <- chronosphere:::loadVar(dat=dat, var=var, dir=varDir, ...)
+
+	# 'get rid of' temporary directory
+	unlink(tempd)
+
+	# return object
+	return(varObj)
+
+}
+
+
+
+
+
+# Raster-specific submodule of fetch()
+fetchRemote <- function(dat, var, res=NULL, ver=NULL, datadir=NULL, register=register, verbose=TRUE,...){
+	
+	# default resolution used
+	noRes <- FALSE
+#	# subset the register to the resolution of interest
+#	if(!is.null(res)){
+#		
+#	
+#	# select the coarsest resolution
+#	}else{
+#		res <- max(register[, "res"])
+#		# if res is NA, than the dataset has no resolution variable
+#		if(is.na(res)) noRes <- TRUE
+#	}
+#
+#	# check whether resolution is there, before the download
+#	for(j in 1:length(var)){
+#		
+#	}
+
+	# resolution variable for files
+	resChar<-gsub("\\.","p", as.character(res))
+
+	# variable versions
+	if(is.null(ver)){
+		verLong <- rep(NA, length(var))
+	}else{
+		# typical R reuse for one entry
+		if(length(ver)==1){
+			verLong <- rep(ver, length(var))
+		}else{
+			# otherwise version should be explicitly given for all variables 
+			if(length(ver)!=length(var)) stop("Some variable versions were not provided. Use NULL to use the latest.")
+
+			# coerce same format
+			verLong <- ver
+		}
+		# if this passes, then the variables will be checked during the loop
+	}
+
+	citation <- NULL
+	varObj <-list()
+	# for all the variables
+	for(j in 1:length(var)){
+		# current version - NA to use default
+		version <- verLong[j]
+
+		# check structure database, whether the given verison is alright
+		varReg<- register[register[,"var"]==var[j],, drop=FALSE]
+		citation <-c(citation, varReg$citation)
+
+		# no version number given for the variable
+		if(is.na(version)){
+			# select latest version 
+			version <- varReg[order(varReg[,"date"], decreasing=TRUE)==1,"ver"]
+		
+		# version number is given 
+		}else{
+			if(!any(version==varReg[, "ver"])) stop(paste("Invalid variable version for ", var[j], sep=""))
+		}
+		
+		# Check whether download is required or not
+		if(noRes){
+			archive <- paste(var[j],"_", version, ".zip", sep="")
+		}else{
+			# the name of the res_variable_ver-specific archive
+			archive <- paste(resChar,"_",  var[j],"_", version, ".zip", sep="")
+		}
+
+		}
+
+	# output - irst varialbe
+	final <- varObj[[1]]
+	
+	# are there more?
+	if(length(var)!=1){
+		for(j in 2:length(var)){
+			nex <- varObj[[j]]
+			final<- cbind2(final, nex, deparse.level=-1)
+		}
+		colnames(final) <- var
+	}
+
+	citation <- unique(citation)
+	return(list(final=final, citation=citation))
+}
+
+# placeholder function in package namespace
+loadVar <- function(variable, version, resChar,dir){
+	stop("If this method is run, then you have an error.")
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##################################################################################
+# DEPRECATED PART: REUSE in loadVar instances!
+
 
 fetchModel <- function(dat, var, ver, datadir, register, verbose=TRUE){
 	# unlikely to have multiple variables
@@ -390,164 +631,3 @@ fetchDF <- function(dat, var, ver, datadir, register, verbose=TRUE){
 	return(list(final=final, citation=citation))
 }
 
-
-# Raster-specific submodule of fetch()
-fetchRemote <- function(dat, var, res=NULL, ver=NULL, datadir=NULL, register=register, verbose=TRUE,...){
-	if(! requireNamespace("ncdf4", quietly=TRUE)) stop("This method requires the 'ncdf4' package to run.")
-	
-	# the data have to use the same resolution!!!
-	if(!is.null(res)) if(length(res)>1) stop("Only one resolution can be used in a single download call.")
-
-	# default resolution used
-	noRes <- FALSE
-	# subset the register to the resolution of interest
-	if(!is.null(res)){
-		register <- register[register[, "res"]==res, , drop=FALSE]
-	
-	# select the coarsest resolution
-	}else{
-		res <- max(register[, "res"])
-		# if res is NA, than the dataset has no resolution variable
-		if(is.na(res)) noRes <- TRUE
-	}
-
-	# check whether resolution is there, before the download
-	for(j in 1:length(var)){
-		if(sum(register[,"var"]==var[j])==0){
-			stop(paste("The variable '", var[j], "' does not exist at the desired resolution (", res, "). ", sep=""))
-		}
-	}
-
-	# resolution variable for files
-	resChar<-gsub("\\.","p", as.character(res))
-
-	# variable versions
-	if(is.null(ver)){
-		verLong <- rep(NA, length(var))
-	}else{
-		# typical R reuse for one entry
-		if(length(ver)==1){
-			verLong <- rep(ver, length(var))
-		}else{
-			# otherwise version should be explicitly given for all variables 
-			if(length(ver)!=length(var)) stop("Some variable versions were not provided. Use NULL to use the latest.")
-
-			# coerce same format
-			verLong <- ver
-		}
-		# if this passes, then the variables will be checked during the loop
-	}
-
-	citation <- NULL
-	varObj <-list()
-	# for all the variables
-	for(j in 1:length(var)){
-		# current version - NA to use default
-		version <- verLong[j]
-
-		# check structure database, whether the given verison is alright
-		varReg<- register[register[,"var"]==var[j],, drop=FALSE]
-		citation <-c(citation, varReg$citation)
-
-		# no version number given for the variable
-		if(is.na(version)){
-			# select latest version 
-			version <- varReg[order(varReg[,"date"], decreasing=TRUE)==1,"ver"]
-		
-		# version number is given 
-		}else{
-			if(!any(version==varReg[, "ver"])) stop(paste("Invalid variable version for ", var[j], sep=""))
-		}
-		
-		# Check whether download is required or not
-		if(noRes){
-			archive <- paste(var[j],"_", version, ".zip", sep="")
-		}else{
-			# the name of the res_variable_ver-specific archive
-			archive <- paste(resChar,"_",  var[j],"_", version, ".zip", sep="")
-		}
-
-		# we need a temporary directory to store the extracted files until the end of the session
-		tempd <- tempdir()
-
-		# save the data for later?	 
-		if(!is.null(datadir)){
-
-			#check whether the data need to be downloaded or not. 
-			all<-list.files(datadir)
-			
-			# target
-			pathToArchive<- file.path(datadir, archive)
-				
-			# is the archive not downloaded?
-			# do a download
-			if(!any(all==archive)){
-
-				# download archive
-				if(is.null(userpwd)){
-					download.file(paste(remote, dat,"/",  var[j], "/", archive,  sep = ""),pathToArchive, mode="wb", quiet=!verbose)
-				}else{
-					download.file(paste("ftp://", userpwd, "@",remote, dat,"/",  archive,  sep = ""),pathToArchive, mode="wb", quiet=!verbose)
-				}
-			}
-
-			# and unzip to a temporary directory
-			unzip(pathToArchive, exdir=tempd)
-
-		# must download
-		}else{
-			# temporary files
-			temp <- tempfile()
-		
-			# download archive
-			if(is.null(userpwd)){
-				download.file(paste(remote, dat,"/",  var[j], "/", archive,  sep = ""),temp, mode="wb", quiet=!verbose)
-			}else{
-				download.file(paste("ftp://", userpwd, "@",remote, dat,"/",  var[j], "/", archive,  sep = ""),temp, mode="wb", quiet=!verbose)
-			}
-			
-			# unzip it in temporary directory
-			unzip(temp, exdir=tempd)
-		
-			# get rid of the archive
-			unlink(temp)
-		}
-		
-		# variable directory
-		varDir <- file.path(tempd, gsub(".zip", "", archive))
-
-		# loading script - variable specific
-		loadScript <- gsub(".zip", ".R", archive)
-
-		# source the R file associated with the variable
-		source(file.path(varDir, loadScript))
-
-		# run the function that loads in the variable and save it
-		varObj[[j]] <- loadVar(variable=var[j], version=version, resChar=resChar, dir=varDir, ...)
-
-		#
-
-		# 'get rid of' temporary directory
-		unlink(tempd)
-	}
-
-	# output - irst varialbe
-	final <- varObj[[1]]
-	
-	# are there more?
-	if(length(var)!=1){
-		for(j in 2:length(var)){
-			nex <- varObj[[j]]
-			final<- cbind2(final, nex, deparse.level=-1)
-		}
-		colnames(final) <- var
-	}
-
-	citation <- unique(citation)
-	return(list(final=final, citation=citation))
-}
-
-# placeholder function in package namespace
-loadVar <- function(variable, version, resChar,dir){
-	stop("If this method is run, then you have an error.")
-}
