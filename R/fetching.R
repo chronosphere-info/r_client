@@ -116,6 +116,12 @@ dataindex  <- function(...){
 	datasets(...)
 }
 
+
+is.chronosphere<-function(x){
+	!is.null(attributes(x)$chronosphere)
+}
+
+
 #' Data fetching
 #' 
 #' Function to download and attach variables in the \code{chronosphere} package
@@ -127,6 +133,8 @@ dataindex  <- function(...){
 #' @param ver (\code{character}) The version of the variable. Defaults to \code{NULL}, which will download the latest available version. We have to create a data table, which should be part of the package. This has to be searched for valid argument combinations. Right this is just a folder with a date.
 #' @param datadir (\code{character}) Directory where downloaded files are kept. Individual layers will be looked up from the directory if this is given, and will be downloaded if they are not found. The default \code{NULL} option will download data to a temporary directory that exists only until the R session ends.
 #' @param verbose (\code{logical}) Should console feedback during download be displayed?
+#' @param call (\code{logical}) If set to \code{TRUE} the function call is returned instead of the object. 
+#' @param call.expr (\code{logical}) If \code{call} is set to \code{TRUE}, then should the call be returned as an \code{expression} (\code{TRUE}) or a message (\code{FALSE})?
 #' @param ... Arguments passed to variable-specific loading functions.
 #' @examples
 #' \donttest{
@@ -134,7 +142,48 @@ dataindex  <- function(...){
 #' }
 #' @export
 #' @return An object that matches the 'type' field of the varibles in the output of the \code{\link{datasets}} function.
-fetch <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=TRUE,...){
+
+fetch <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=TRUE, call=FALSE, call.expr=FALSE, ...){
+	# fetch given an existing chronosphere object
+	if(is.chronosphere(dat)){
+		stop("Not yet!")
+	# regular fetch given dataset identifiers
+	}else{
+		# return a call
+		if(call){
+			
+			# construct a function call
+			theCall<-paste0('fetch(',
+				'dat="', dat, '"')
+
+			# add the optional arguments
+			if(!is.null(var)) theCall <- paste0(theCall, ", var=\"", var,"\"")
+			if(!is.null(ver)) theCall <- paste0(theCall, ", ver=\"", ver,"\"")
+			if(!is.null(res)) theCall <- paste0(theCall, ", res=\"", res,"\"")
+			if(!is.null(datadir)) theCall <- paste0(theCall, ", datadir=\"", datadir,"\"")
+			if(!verbose) theCall <- paste0(theCall, ", verbose=", verbose)
+			# still have to add ...
+			theCall <- paste0(theCall,")")
+
+			if(!call.expr){
+				message(theCall)
+			}else{
+				express <- parse(text=theCall)
+				return(express)
+
+			}
+
+		# do an actual fetch
+		}else{
+			return(fetchVars(dat=dat, var=var, ver=ver, res=res, datadir=datadir, verbose=verbose, ...))
+		}
+
+	}
+
+}
+
+# Actual fetch v2. 
+fetchVars <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=TRUE,...){
 	
 	# only one should be allowed
 	if(length(dat)>1) stop("Only one dataset can be accessed in a single download call.")
@@ -233,6 +282,7 @@ fetch <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=TRUE,
 	}
 
 	# write the chronosphere attributes to the downloaded object
+	attributes(downloaded$final)$chronosphere<- ChronoAttributes()
 	
 
 #	if(varType=="data.frame"){

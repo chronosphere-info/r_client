@@ -1,6 +1,12 @@
 # Change log of the R package 'chronosphere'
 
 
+## Preliminary additions to newFetch build
+### Added
+
+- fetch() can return the function call, using call=TRUE, this can be either an expression or a terminal message, depending on the settings of call.expr=TRUE/FALSE.
+- fetch can be used with an already downloaded the chronosphere-object to either redownload it, or get its download functino call.
+
 ## [0.2.2 (build 69)] - 2020-03-11
 ### Changed
 - reconstruct - defense against bad ages
