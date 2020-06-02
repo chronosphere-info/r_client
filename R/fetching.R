@@ -405,13 +405,13 @@ ChronoAttributes <- function(dat=NULL, var=NULL, res=NULL, ver=NULL, reg=NULL){
 	baseList <- list(dat=dat, var=var, res=res, ver=ver)
 
 	# reference of the archive
-	baseList$reference <- unique(register$citation)
+	baseList$reference <- unique(reg$citation)
 	
 	# when was the archive downloaded
 	baseList$downloadDate <- Sys.time()
 
 	# original version
-	baseList$info <- register$info
+	baseList$info <- reg$info
 
 	if(is.null(baseList$info)){
 		baseList$info <- "https://www.evolv-ed.net/"
