@@ -135,7 +135,18 @@ fetch <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=TRUE,
 		att <- attributes(dat)$chronosphere
 
 		# construct funtcion call
-		theCall <- ChronoCall(att$dat, att$var, att$ver, att$res, att$datadir, FALSE, expr=call.expr)
+		argList <- list(
+			dat=att$dat,
+			var=att$var,
+			ver=att$ver,
+			res=att$res, 
+			datadir=att$datadir,
+			verbose=FALSE,
+			expr=call.expr)
+
+		# extra arguments
+		argList <- c(argList, att$additional)
+		theCall <- do.call("ChronoCall", argList)
 
 		if(!call){
 			# re-download - recursive call to fetch()
@@ -150,10 +161,11 @@ fetch <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=TRUE,
 
 	# regular fetch given dataset character identifiers
 	}else{
+		if(!is.character(dat)) stop("Invalid 'dat' argument.")
 		# return a call
 		if(call){
-			# construct funcion call
-			theCall <- ChronoCall(dat, var, ver, res, datadir, verbose, expr=call.expr)
+			# construct function call
+			theCall <- ChronoCall(dat, var, ver, res, datadir, verbose, expr=call.expr,...)
 
 			# return if it is an expression
 			if(!is.null(theCall)) return(theCall)
@@ -174,7 +186,7 @@ is.chronosphere<-function(x){
 
 
 # function to construct a chronosphere call
-ChronoCall <- function(dat, var, ver, res, datadir, verbose=FALSE, expr=FALSE){
+ChronoCall <- function(dat, var, ver, res, datadir, verbose=FALSE, expr=FALSE,...){
 	# construct a function call
 	theCall<-paste0('fetch(',
 		'dat="', dat, '"')
@@ -182,10 +194,27 @@ ChronoCall <- function(dat, var, ver, res, datadir, verbose=FALSE, expr=FALSE){
 	# add the optional arguments
 	if(!is.null(var)) theCall <- paste0(theCall, ", var=\"", var,"\"")
 	if(!is.null(ver)) theCall <- paste0(theCall, ", ver=\"", ver,"\"")
-	if(!is.null(res)) theCall <- paste0(theCall, ", res=\"", res,"\"")
+	if(!is.null(res)) if(is.character(res)){
+		theCall <- paste0(theCall, ", res=\"", res,"\"")
+		}else{
+			theCall <- paste0(theCall, ", res=", res,"")
+		}
+
 	if(!is.null(datadir)) theCall <- paste0(theCall, ", datadir=\"", datadir,"\"")
 	if(!verbose) theCall <- paste0(theCall, ", verbose=", verbose)
-	# still have to add ...
+	
+	# still have to add variable specific arguments
+	other <- list(...)
+	if(length(other)!=0){
+		for(i in 1:length(other)){
+			if(is.character(other[[i]])){
+				theCall <- paste0(theCall, ", ", names(other)[i],"=\"", other[[i]],"\"")
+			}else{
+				theCall <- paste0(theCall, ", ", names(other)[i],"=", other[[i]],"")
+			}
+		}
+	}
+
 	theCall <- paste0(theCall,")")
 
 	if(!expr){
@@ -297,7 +326,7 @@ FetchVars <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=T
 	}
 
 	# write the chronosphere attributes to the downloaded object
-	attributes(downloaded)$chronosphere<- ChronoAttributes(dat=dat, var=var, res=res, ver=ver, reg=register)
+	attributes(downloaded)$chronosphere<- ChronoAttributes(dat=dat, var=var, res=res, ver=ver, reg=register, ...)
 	
 
 #	if(varType=="data.frame"){
@@ -400,7 +429,7 @@ loadVar <- function(variable, version, resChar,dir){
 
 
 # Function to prepare an attributes list 
-ChronoAttributes <- function(dat=NULL, var=NULL, res=NULL, ver=NULL, reg=NULL){
+ChronoAttributes <- function(dat=NULL, var=NULL, res=NULL, ver=NULL, reg=NULL,...){
 	# general attributes
 	baseList <- list(dat=dat, var=var, res=res, ver=ver)
 
@@ -412,6 +441,9 @@ ChronoAttributes <- function(dat=NULL, var=NULL, res=NULL, ver=NULL, reg=NULL){
 
 	# original version
 	baseList$info <- reg$info
+
+	baseList$additional <- list(...)
+
 
 	if(is.null(baseList$info)){
 		baseList$info <- "https://www.evolv-ed.net/"
