@@ -12,6 +12,10 @@
 - CronoAttributes()
 - is.chronosphere()
 
+### Removed
+- The dataindex() deprecated placeholder function was removed. Use datasets() instead.
+
+
 
 ## [0.2.2 (build 69)] - 2020-03-11
 ### Changed

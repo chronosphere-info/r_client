@@ -104,23 +104,6 @@ datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE){
 	return(ret)
 }
 
-#' Deprecated function for data fetching
-#' 
-#' This function will be removed in version 0.3.0.
-#' 
-#' @param ... Arguments passed to the \code{\link{datasets}} function. 
-#' @return The output of the \code{\link{datasets}} function.
-#' @export
-dataindex  <- function(...){
-	message("This function is deprecated, and will be removed in chronosphere v0.3.0.\nPlease use datasets() instead.")
-	datasets(...)
-}
-
-
-is.chronosphere<-function(x){
-	!is.null(attributes(x)$chronosphere)
-}
-
 
 #' Data fetching
 #' 
@@ -142,37 +125,38 @@ is.chronosphere<-function(x){
 #' }
 #' @export
 #' @return An object that matches the 'type' field of the varibles in the output of the \code{\link{datasets}} function.
-
 fetch <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=TRUE, call=FALSE, call.expr=FALSE, ...){
 	# fetch given an existing chronosphere object
 	if(is.chronosphere(dat)){
-		
+		# force expression output of call reproduction if object should be downlaoded
+		if(!call) call.expr <- TRUE
 
-	# regular fetch given dataset identifiers
+		# return call that can be used to replicate download
+		att <- attributes(dat)$chronosphere
+
+		# construct funtcion call
+		theCall <- ChronoCall(att$dat, att$var, att$ver, att$res, att$datadir, FALSE, expr=call.expr)
+
+		if(!call){
+			# re-download - recursive call to fetch()
+			output <- eval(theCall)
+		}else{
+			output <- theCall
+		}
+		
+		# return if it is an expression or an actually downloaded object
+		if(!is.null(output)) return(output)
+
+
+	# regular fetch given dataset character identifiers
 	}else{
 		# return a call
 		if(call){
-			
-			# construct a function call
-			theCall<-paste0('fetch(',
-				'dat="', dat, '"')
+			# construct funcion call
+			theCall <- ChronoCall(dat, var, ver, res, datadir, verbose, expr=call.expr)
 
-			# add the optional arguments
-			if(!is.null(var)) theCall <- paste0(theCall, ", var=\"", var,"\"")
-			if(!is.null(ver)) theCall <- paste0(theCall, ", ver=\"", ver,"\"")
-			if(!is.null(res)) theCall <- paste0(theCall, ", res=\"", res,"\"")
-			if(!is.null(datadir)) theCall <- paste0(theCall, ", datadir=\"", datadir,"\"")
-			if(!verbose) theCall <- paste0(theCall, ", verbose=", verbose)
-			# still have to add ...
-			theCall <- paste0(theCall,")")
-
-			if(!call.expr){
-				message(theCall)
-			}else{
-				express <- parse(text=theCall)
-				return(express)
-
-			}
+			# return if it is an expression
+			if(!is.null(theCall)) return(theCall)
 
 		# do an actual fetch
 		}else{
@@ -183,7 +167,38 @@ fetch <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=TRUE,
 
 }
 
-# Actual fetch v2. 
+# function to determine if an object was downloaded from the chronosphere
+is.chronosphere<-function(x){
+	!is.null(attributes(x)$chronosphere)
+}
+
+
+# function to construct a chronosphere call
+ChronoCall <- function(dat, var, ver, res, datadir, verbose=FALSE, expr=FALSE){
+	# construct a function call
+	theCall<-paste0('fetch(',
+		'dat="', dat, '"')
+
+	# add the optional arguments
+	if(!is.null(var)) theCall <- paste0(theCall, ", var=\"", var,"\"")
+	if(!is.null(ver)) theCall <- paste0(theCall, ", ver=\"", ver,"\"")
+	if(!is.null(res)) theCall <- paste0(theCall, ", res=\"", res,"\"")
+	if(!is.null(datadir)) theCall <- paste0(theCall, ", datadir=\"", datadir,"\"")
+	if(!verbose) theCall <- paste0(theCall, ", verbose=", verbose)
+	# still have to add ...
+	theCall <- paste0(theCall,")")
+
+	if(!expr){
+		message(theCall)
+		return(NULL)
+	}else{
+		express <- parse(text=theCall)
+		return(express)
+	}
+}
+
+
+# Actual fetch v2. -this function connects to the dataset or loads the downloaded variable
 FetchVars <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=TRUE,...){
 	
 	# only one should be allowed
@@ -378,7 +393,10 @@ FetchArchive <- function(dat, var, res, ver, archive, link, datadir=NULL, verbos
 
 }
 
-
+# placeholder function in package namespace
+loadVar <- function(variable, version, resChar,dir){
+	stop("If this method is run and you see this, then you have encountered an error.")
+}
 
 
 # Function to prepare an attributes list 
@@ -401,6 +419,23 @@ ChronoAttributes <- function(dat=NULL, var=NULL, res=NULL, ver=NULL, reg=NULL){
 	}
 	return(baseList)
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -500,11 +535,6 @@ fetchRemote <- function(dat, var, res=NULL, ver=NULL, datadir=NULL, register=reg
 
 	citation <- unique(citation)
 	return(list(final=final, citation=citation))
-}
-
-# placeholder function in package namespace
-loadVar <- function(variable, version, resChar,dir){
-	stop("If this method is run, then you have an error.")
 }
 
 
