@@ -146,7 +146,8 @@ is.chronosphere<-function(x){
 fetch <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=TRUE, call=FALSE, call.expr=FALSE, ...){
 	# fetch given an existing chronosphere object
 	if(is.chronosphere(dat)){
-		stop("Not yet!")
+		
+
 	# regular fetch given dataset identifiers
 	}else{
 		# return a call
@@ -175,7 +176,7 @@ fetch <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=TRUE,
 
 		# do an actual fetch
 		}else{
-			return(fetchVars(dat=dat, var=var, ver=ver, res=res, datadir=datadir, verbose=verbose, ...))
+			return(FetchVars(dat=dat, var=var, ver=ver, res=res, datadir=datadir, verbose=verbose, ...))
 		}
 
 	}
@@ -183,7 +184,7 @@ fetch <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=TRUE,
 }
 
 # Actual fetch v2. 
-fetchVars <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=TRUE,...){
+FetchVars <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=TRUE,...){
 	
 	# only one should be allowed
 	if(length(dat)>1) stop("Only one dataset can be accessed in a single download call.")
@@ -260,10 +261,9 @@ fetchVars <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=T
 		if(nrow(register)!=1) stop("This should not have happened.")
 
 		# do the actual download of this variable
-		downloaded <- fetchArchive(dat=dat, var=var, ver=ver, res=res, datadir=datadir, 
+		downloaded <- FetchArchive(dat=dat, var=var, ver=ver, res=res, datadir=datadir, 
 			link=register$access_url, archive=register$archive_name, verbose=verbose,...)
 	
-
 	# 2. DOWNLOAD MULTIPLE VARIABLSE - recursive case
 	}else{
 		# subset the register to only look for var-specific part
@@ -282,7 +282,7 @@ fetchVars <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=T
 	}
 
 	# write the chronosphere attributes to the downloaded object
-	attributes(downloaded$final)$chronosphere<- ChronoAttributes()
+	attributes(downloaded)$chronosphere<- ChronoAttributes(dat=dat, var=var, res=res, ver=ver, reg=register)
 	
 
 #	if(varType=="data.frame"){
@@ -300,18 +300,18 @@ fetchVars <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=T
 	# display citations
 	if(verbose){
 		message("If you use the data in publications, please cite its\nreference, as well as that of the 'chronosphere' package.")
-		for(i in 1:length(downloaded$citation)){
+		for(i in 1:length(attributes(downloaded)$chronosphere$reference)){
 			cat("\n")
-			message(paste("-", downloaded$citation[i]))
+			message(paste("-", attributes(downloaded)$chronosphere$reference[i]))
 		}
 	}
 	
-	return(downloaded$final)
+	return(downloaded)
 	
 }
 
 # function to download and load the contents of an individual archive
-fetchArchive <- function(dat, var, res, ver, archive, link, datadir=NULL, verbose=verbose,...){
+FetchArchive <- function(dat, var, res, ver, archive, link, datadir=NULL, verbose=verbose,...){
 	# we need a temporary directory to store the extracted files until the end of the session
 	tempd <- tempdir()
 
@@ -377,6 +377,38 @@ fetchArchive <- function(dat, var, res, ver, archive, link, datadir=NULL, verbos
 	return(varObj)
 
 }
+
+
+
+
+# Function to prepare an attributes list 
+ChronoAttributes <- function(dat=NULL, var=NULL, res=NULL, ver=NULL, reg=NULL){
+	# general attributes
+	baseList <- list(dat=dat, var=var, res=res, ver=ver)
+
+	# reference of the archive
+	baseList$reference <- unique(register$citation)
+	
+	# when was the archive downloaded
+	baseList$downloadDate <- Sys.time()
+
+	# original version
+	baseList$info <- register$info
+
+	if(is.null(baseList$info)){
+		baseList$info <- "https://www.evolv-ed.net/"
+
+	}
+	return(baseList)
+}
+
+
+
+
+
+
+
+
 
 
 
