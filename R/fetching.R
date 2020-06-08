@@ -241,7 +241,7 @@ FetchVars <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=T
 	
 	# select the default variable
 	if(is.null(var)){
-		var <- register[register$default_var, "var"]
+		var <- unique(register[register$default_var, "var"])
 	}
 	
 	# if one of the variables do not exist, then omit it
@@ -279,7 +279,7 @@ FetchVars <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=T
 
 		# A. RESOLUTION LIMITING
 		# Default resolution
-		if(is.null(res)) res <- register$res[register$default_res]
+		if(is.null(res)) res <- unique(register$res[register$default_res])
 
 		# only one version
 		if(length(res)>1) stop("Only one resolution can be used in a single download call.")
@@ -374,9 +374,9 @@ FetchArchive <- function(dat, var, res, ver, archive, link, datadir=NULL, verbos
 
 			# download archive
 			if(is.null(userpwd)){
-				download.file(paste(remote, link,  sep = ""),pathToArchive, mode="wb", quiet=!verbose)
+				download.file(paste0(remote, link, "/", archive),pathToArchive, mode="wb", quiet=!verbose)
 			}else{
-				download.file(paste("ftp://", userpwd, "@",remote, link,  sep = ""),pathToArchive, mode="wb", quiet=!verbose)
+				download.file(paste("ftp://", userpwd, "@",remote, link,"/", archive, sep = ""),pathToArchive, mode="wb", quiet=!verbose)
 			}
 		}
 
@@ -390,9 +390,9 @@ FetchArchive <- function(dat, var, res, ver, archive, link, datadir=NULL, verbos
 	
 		# download archive
 		if(is.null(userpwd)){
-			download.file(paste0(remote, link),temp, mode="wb", quiet=!verbose)
+			download.file(paste0(remote, link, "/", archive),temp, mode="wb", quiet=!verbose)
 		}else{
-			download.file(paste0("ftp://", userpwd, "@",remote, link,  sep = ""),temp, mode="wb", quiet=!verbose)
+			download.file(paste0("ftp://", userpwd, "@",remote, link,"/", archive,  sep = ""),temp, mode="wb", quiet=!verbose)
 		}
 		
 		# unzip it in temporary directory
@@ -412,7 +412,7 @@ FetchArchive <- function(dat, var, res, ver, archive, link, datadir=NULL, verbos
 	source(file.path(varDir, loadScript))
 
 	# run the function that loads in the variable and save it
-	varObj <- chronosphere:::loadVar(dat=dat, var=var, dir=varDir, ...)
+	varObj <- chronosphere:::loadVar(dir=varDir, ...)
 
 	# 'get rid of' temporary directory
 	unlink(tempd)
@@ -423,7 +423,7 @@ FetchArchive <- function(dat, var, res, ver, archive, link, datadir=NULL, verbos
 }
 
 # placeholder function in package namespace
-loadVar <- function(variable, version, resChar,dir){
+loadVar <- function(dir){
 	stop("If this method is run and you see this, then you have encountered an error.")
 }
 
@@ -438,6 +438,9 @@ ChronoAttributes <- function(dat=NULL, var=NULL, res=NULL, ver=NULL, reg=NULL,..
 	
 	# when was the archive downloaded
 	baseList$downloadDate <- Sys.time()
+
+	# when was the archive accessed?
+	baseList$accessDate <- reg$access_date
 
 	# original version
 	baseList$info <- reg$info
@@ -481,297 +484,10 @@ ChronoAttributes <- function(dat=NULL, var=NULL, res=NULL, ver=NULL, reg=NULL,..
 
 
 
-# Raster-specific submodule of fetch()
-fetchRemote <- function(dat, var, res=NULL, ver=NULL, datadir=NULL, register=register, verbose=TRUE,...){
-	
-	# default resolution used
-	noRes <- FALSE
-#	# subset the register to the resolution of interest
-#	if(!is.null(res)){
-#		
-#	
-#	# select the coarsest resolution
-#	}else{
-#		res <- max(register[, "res"])
-#		# if res is NA, than the dataset has no resolution variable
-#		if(is.na(res)) noRes <- TRUE
-#	}
-#
-#	# check whether resolution is there, before the download
-#	for(j in 1:length(var)){
-#		
-#	}
-
-	# resolution variable for files
-	resChar<-gsub("\\.","p", as.character(res))
-
-	# variable versions
-	if(is.null(ver)){
-		verLong <- rep(NA, length(var))
-	}else{
-		# typical R reuse for one entry
-		if(length(ver)==1){
-			verLong <- rep(ver, length(var))
-		}else{
-			# otherwise version should be explicitly given for all variables 
-			if(length(ver)!=length(var)) stop("Some variable versions were not provided. Use NULL to use the latest.")
-
-			# coerce same format
-			verLong <- ver
-		}
-		# if this passes, then the variables will be checked during the loop
-	}
-
-	citation <- NULL
-	varObj <-list()
-	# for all the variables
-	for(j in 1:length(var)){
-		# current version - NA to use default
-		version <- verLong[j]
-
-		# check structure database, whether the given verison is alright
-		varReg<- register[register[,"var"]==var[j],, drop=FALSE]
-		citation <-c(citation, varReg$citation)
-
-		# no version number given for the variable
-		if(is.na(version)){
-			# select latest version 
-			version <- varReg[order(varReg[,"date"], decreasing=TRUE)==1,"ver"]
-		
-		# version number is given 
-		}else{
-			if(!any(version==varReg[, "ver"])) stop(paste("Invalid variable version for ", var[j], sep=""))
-		}
-		
-		# Check whether download is required or not
-		if(noRes){
-			archive <- paste(var[j],"_", version, ".zip", sep="")
-		}else{
-			# the name of the res_variable_ver-specific archive
-			archive <- paste(resChar,"_",  var[j],"_", version, ".zip", sep="")
-		}
-
-		}
-
-	# output - irst varialbe
-	final <- varObj[[1]]
-	
-	# are there more?
-	if(length(var)!=1){
-		for(j in 2:length(var)){
-			nex <- varObj[[j]]
-			final<- cbind2(final, nex, deparse.level=-1)
-		}
-		colnames(final) <- var
-	}
-
-	citation <- unique(citation)
-	return(list(final=final, citation=citation))
-}
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-##################################################################################
-# DEPRECATED PART: REUSE in loadVar instances!
-
-
-fetchModel <- function(dat, var, ver, datadir, register, verbose=TRUE){
-	# unlikely to have multiple variables
-	if(length(var)>1) stop("Only one data.frame type variable can be downloaded.")
-	
-	# check structure database, whether the given verison is alright
-	if(is.null(var)){
-		varReg <- register
-		varName <- NULL
-		varPath <- NULL
-	}else{
-		varReg<- register[register[,"var"]==var, ,drop=FALSE]
-		varName <- paste(var, "_", sep="")
-		varPath <- paste(var, "/", sep="")
-	}
-
-	citation <- unique(varReg$citation)
-
-	# no version number given for the variable
-	if(is.null(ver)){
-		# select latest version 
-		ver <- varReg[order(varReg[,"date"], decreasing=TRUE)==1,"ver"]
-	
-	# version number is given 
-	}else{
-		if(!any(ver==varReg[, "ver"])) stop(paste("Invalid variable version for ", var, sep=""))
-	}
-	
-	# formatting
-	format<-unique(varReg$format)
-	
-	# the name of the res_variable_ver-specific archive
-	dir <- paste(dat, "_", varName, ver,  sep="")
-	archive<- paste(dir, ".zip", sep="")
-	
-	# we need a temporary directory to store the extracted files until the end of the session
-	tempd <- tempdir()
-
-	# save the data for later?	 
-	if(!is.null(datadir)){
-		
-		#check whether the data need to be downloaded or not. 
-		all<-list.files(datadir)
-		
-		# target
-		pathToFile<- file.path(datadir, archive)
-			
-		# is the archive not downloaded?
-		# do a download
-		if(!any(all==archive)){
-			# download archive
-			if(is.null(userpwd)){
-				download.file(paste(remote, dat,"/",  varPath, archive,  sep = ""),pathToFile, mode="wb",quiet=!verbose)
-			}else{
-				download.file(paste("ftp://", userpwd, "@",remote, dat,"/",  varPath, archive,  sep = ""),pathToFile, mode="wb",quiet=!verbose)
-			}
-		}
-		# unzip it in temporary directory
-			unzip(pathToFile, exdir=tempd)
-		
-
-	# must download
-	}else{
-		
-		# temporary files
-		temp <- tempfile()
-	
-		# download archive
-		if(is.null(userpwd)){
-			download.file(paste(remote, dat,"/",  varPath,archive,  sep = ""),temp, mode="wb",quiet=!verbose)
-		}else{
-			download.file(paste("ftp://", userpwd, "@",remote, dat,"/",  varPath, archive,  sep = ""),temp, mode="wb",quiet=!verbose)
-		}
-
-		pathToFile<-file.path(temp, dir)
-
-		# unzip it in temporary directory
-		unzip(temp, exdir=tempd)
-		
-		# get rid of the archive
-		unlink(temp)
-	}
-	
-	# read the file in
-	if(format=="mod"){
-		# read in the file
-		final <- platemodel(paste(tempd, "/",dir, "/", dir, ".", format, sep=""))
-	}
-
-	return(list(final=final, citation=citation))
-}
-
-
-# data.frame-specific submodule of fetch()
-fetchDF <- function(dat, var, ver, datadir, register, verbose=TRUE){
-	# unlikely to have multiple variables
-	if(length(var)>1) stop("Only one data.frame type variable can be downloaded.")
-	
-	# check structure database, whether the given verison is alright
-	if(is.null(var)){
-		varReg <- register
-		varName <- NULL
-		varPath <- NULL
-	}else{
-		varReg<- register[register[,"var"]==var, ,drop=FALSE]
-		varName <- paste(var, "_", sep="")
-		varPath <- paste(var, "/", sep="")
-	}
-
-	citation <- unique(varReg$citation)
-
-	# no version number given for the variable
-	if(is.null(ver)){
-		# select latest version 
-		ver <- varReg[order(varReg[,"date"], decreasing=TRUE)==1,"ver"]
-	
-	# version number is given 
-	}else{
-		if(!any(ver==varReg[, "ver"])) stop(paste("Invalid variable version for ", var, sep=""))
-	}
-	
-	# formatting
-	format<-unique(varReg$format)
-	
-	# the name of the res_variable_ver-specific archive
-	archive<- paste(dat, "_", varName, ver, ".", format, sep="")
-	
-	
-	# save the data for later?	 
-	if(!is.null(datadir)){
-		
-		#check whether the data need to be downloaded or not. 
-		all<-list.files(datadir)
-		
-		# target
-		pathToFile<- file.path(datadir, archive)
-			
-		# is the archive not downloaded?
-		# do a download
-		if(!any(all==archive)){
-			# download archive
-			if(is.null(userpwd)){
-				download.file(paste(remote, dat,"/",  varPath, archive,  sep = ""),pathToFile, mode="wb",quiet=!verbose)
-			}else{
-				download.file(paste("ftp://", userpwd, "@",remote, dat,"/",  varPath, archive,  sep = ""),pathToFile, mode="wb",quiet=!verbose)
-			}
-		}
-
-	# must download
-	}else{
-		
-		# temporary files
-		temp <- tempfile()
-	
-		# download archive
-		if(is.null(userpwd)){
-			download.file(paste(remote, dat,"/",  varPath, archive,  sep = ""),temp, mode="wb",quiet=!verbose)
-		}else{
-			download.file(paste("ftp://", userpwd, "@",remote, dat,"/",  varPath, archive,  sep = ""),temp, mode="wb",quiet=!verbose)
-		}
-
-		pathToFile<-temp
-	}
-	
-	# read the file in
-	if(format=="rds"){
-		# read in the file
-		if(verbose) cat("Reading downloaded file.\n")
-		final <- readRDS(pathToFile)
-	}
-
-	if(format=="csv"){
-		separator <- unique(varReg$separator)
-		if(separator=="comma") sep <- ","
-		if(separator=="semicolon") sep <- ";"
-		final <- read.csv(pathToFile, header=TRUE, sep=sep, stringsAsFactors=FALSE)
-	}
-	return(list(final=final, citation=citation))
-}
 
