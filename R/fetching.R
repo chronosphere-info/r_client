@@ -1,5 +1,5 @@
 # remote server 
-remote <- "https://www.cnidaria.nat.fau.de/tersane/public/chronosphere/v2/"
+remote <- "https://www.cnidaria.nat.fau.de/tersane/public/chronosphere/chrono-arch-2/"
 userpwd <- NULL
 
 
@@ -430,6 +430,7 @@ loadVar <- function(dir){
 
 # Function to prepare an attributes list 
 ChronoAttributes <- function(dat=NULL, var=NULL, res=NULL, ver=NULL, reg=NULL,...){
+	if(res=="none") res <- NULL
 	# general attributes
 	baseList <- list(dat=dat, var=var, res=res, ver=ver)
 
