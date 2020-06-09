@@ -14,6 +14,7 @@ userpwd <- NULL
 #' @param datadir \code{character} Directory where the downloaded files are kept. Individual entries will be looked up from the directory if this is given, and will be downloaded if they are not found. The default \code{NULL} option will download data to a temporary directory that exists only until the R session ends.
 #' @param verbose \code{logical} Should console feedback during download be displayed?
 #' @param master \code{logical} When \code{dat} is \code{NULL}, should the function download the master records file?
+#' @param greetings \code{logical} When the function is invoked without arguments, it displays a message to keep new users informed about different versions and resolutions (even with \code{verbose=FALSE}). This argument turns this message off on demand.
 #' @return A \code{data.frame} class object.
 #' @examples
 #' \donttest{
@@ -21,16 +22,20 @@ userpwd <- NULL
 #' View(ind)
 #' }
 #' @export
-datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE){
+datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greetings=TRUE){
 		
 	# dat tells you what to look for.
 	if(is.null(dat)){
 		# simple data table with dat/var combinations
 		datfile <- "chronos.csv"
-		if(master) datfile <- "master.csv"
+		if(master){
+			datfile <- "master.csv"
+		}else{
+			if(greetings) message("Use datasets(dat = <dat>) to see available versions and resolutions.") 
+		}
 	}else{
 		# recursive call to see whether the dat entry is available
-		tempdat <- datasets(datadir=datadir)
+		tempdat <- datasets(datadir=datadir, greetings=FALSE)
 	
 		if(!any(dat%in%tempdat$dat)) stop(paste0("The dat entry \'", dat, "\' was not found."))
 
