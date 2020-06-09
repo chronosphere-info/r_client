@@ -98,12 +98,18 @@ datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greeti
 			pkgver <- sessionInfo()$otherPkgs$chronosphere$Version
 			bLine <- pkgver==log$version
 			currentMessage <- log$message[bLine]
-			if(length(currentMessage)!=0) if(""!=currentMessage){
-				warning(currentMessage)
+
+			logok <- FALSE
+			if(length(currentMessage)!=0){
+				if(""!=currentMessage){
+					warning(currentMessage)
+				}else{
+					logok <- TRUE
+				}
 			}else{
-				# assignInNamespace
-				assignInNamespace("checklog", FALSE, ns="chronosphere")
+				logok <- TRUE
 			}
+			if(logok) assignInNamespace("checklog", FALSE, ns="chronosphere")
 			unlink(tempLog)
 		}
 		

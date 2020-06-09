@@ -771,16 +771,16 @@ setMethod(
 #' @param x a \code{\link[chronosphere:RasterArray-class]{RasterArray}}-class object.
 #' @param ... arguments passed to the \code{\link[raster]{extent}} function.
 #' 
-#' @exportMethod aggregate
+#' @exportMethod extent
 #' @return An aggregated \code{\link[chronosphere:RasterArray-class]{RasterArray}} class object.
 #' @examples
 #' data(dems)
-#' agg <- aggregate(dems, 5)
-#' @rdname aggregate
-#' @name aggregate
+#' agg <- extent(dems)
+#' @rdname extent
+#' @name extent
 NULL
 
-#' @rdname aggregate
+#' @rdname extent
 setMethod(
 	"extent",
 	signature=c("RasterArray"),

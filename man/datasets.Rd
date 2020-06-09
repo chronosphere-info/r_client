@@ -4,12 +4,24 @@
 \alias{datasets}
 \title{Download a database extract from \code{chronosphere} remote server}
 \usage{
-datasets(datadir = NULL, verbose = FALSE)
+datasets(
+  dat = NULL,
+  datadir = NULL,
+  verbose = FALSE,
+  master = FALSE,
+  greetings = TRUE
+)
 }
 \arguments{
-\item{datadir}{Directory where the downloaded file 'reg.csv' file is kept. Individual layers will be looked up from the directory if this is given, and will be downloaded if they are not found. The default \code{NULL} option will download data to a temporary directory that exists only until the R session ends.}
+\item{dat}{\code{character}. Dataset ID. If this is set to \code{NULL}, then a simplified list of availables variables will be downloaded, including all \code{dat} and \code{var} combinations. If \code{dat} is a valid dataset ID, then all accessible variables of a dataset are downloaded.}
 
-\item{verbose}{Should console feedback during download be displayed?}
+\item{datadir}{\code{character} Directory where the downloaded files are kept. Individual entries will be looked up from the directory if this is given, and will be downloaded if they are not found. The default \code{NULL} option will download data to a temporary directory that exists only until the R session ends.}
+
+\item{verbose}{\code{logical} Should console feedback during download be displayed?}
+
+\item{master}{\code{logical} When \code{dat} is \code{NULL}, should the function download the master records file?}
+
+\item{greetings}{\code{logical} When the function is invoked without arguments, it displays a message to keep new users informed about different versions and resolutions (even with \code{verbose=FALSE}). This argument turns this message off on demand.}
 }
 \value{
 A \code{data.frame} class object.
@@ -24,5 +36,6 @@ The function will download a single .csv file and attached it as a \code{data.fr
 \donttest{
 ind <- datasets()
 View(ind)
+oneDat <- datasets("paleomap")
 }
 }

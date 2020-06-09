@@ -4,7 +4,9 @@
 \name{clim}
 \alias{clim}
 \title{Annual mean temperature and precipitation (2001-2010)}
-\format{A \code{\link[chronosphere:RasterArray-class]{RasterArray}} with 20 layers, 10 rows and two columns.}
+\format{
+A \code{\link[chronosphere:RasterArray-class]{RasterArray}} with 20 layers, 10 rows and two columns.
+}
 \source{
 Karger, D.N., Conrad, O., Böhner, J., Kawohl, T., Kreft, H., Soria-Auza, R.W., Zimmermann, N.E., Linder, H.P. & Kessler, M. (2017) Climatologies at high resolution for the earth’s land surface areas. Scientific Data 4, 170122.
 \cr
