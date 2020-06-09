@@ -1,24 +1,18 @@
 # Change log of the R package 'chronosphere'
 
 
-## Preliminary additions to newFetch build (build 70)
+## [pre 0.3.0 (build 70)]
 ### Added
 - datasets() function gained the 'dat', 'master'  and 'greetings' arguments. The default setting of the function only downloads the list of datasets (dat) and variables (var). Setting the 'dat' argument to a character entry will download the list of all archives from that dataset. Setting the master argument to 'master=TRUE' will download a list of all archives, which is expected to be very long in the near future. The argument 'greetings=TRUE' will display a reminder that additional versions and resolutions are available.
 - the downloaded objects now have chronosphere attributes. These record the accession information used previously, which allows the repetition of function call, if necessary - including changes.
 - fetch() can return the function call, using call=TRUE. This can be either an expression or a terminal message, depending on the settings of call.expr=TRUE/FALSE.
 - fetch() can be used with an already downloaded the chronosphere-object to either redownload it, or get its download function call.
 - fetch() can be used to return multiple variables from the same dataset. These will be concatenated into a list, unless they are RasterArrays, in which case fetch() will try to cbind() them
-
 - the extent() method of the RasterArray class
-
-### Internal
-- rename unexported functions to FirstCaps
-- CronoAttributes()
-- is.chronosphere()
+- the server log log.csv is only checked once per session.
 
 ### Removed
 - The dataindex() deprecated placeholder function was removed. Use datasets() instead.
-
 
 
 ## [0.2.2 (build 69)] - 2020-03-11
