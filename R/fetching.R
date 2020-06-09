@@ -1,7 +1,7 @@
 # remote server 
 remote <- "https://www.cnidaria.nat.fau.de/tersane/public/chronosphere/chrono-arch-2/"
 userpwd <- NULL
-
+checklog <- TRUE
 
 #v2
 #' Download a database extract from \code{chronosphere} remote server
@@ -64,16 +64,14 @@ datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greeti
 			} # no? ->download
 		} # no? ->download
 
-		tempLog <- tempfile()
-		
 		# you can set target file, won't change anything if there is nothing to download
 		tempReg<- file.path(datadir, datfile)
-		tempLog <- tempfile()
+		if(checklog) tempLog <- tempfile()
 	# need to download but not saved
 	}else{
 		# temporary files
 		tempReg <- tempfile()
-		tempLog <- tempfile()
+		if(checklog) tempLog <- tempfile()
 
 	}
 
@@ -83,28 +81,38 @@ datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greeti
 		if(!is.null(dat)) datfile <- file.path(dat, datfile)
 		# do the download
 		if(is.null(userpwd)){
-			download.file(paste(remote, "log.csv", sep = ""),tempLog, mode="wb", quiet=TRUE)
+			if(checklog) download.file(paste(remote, "log.csv", sep = ""),tempLog, mode="wb", quiet=TRUE)
 			download.file(paste(remote, datfile, sep = ""),tempReg, mode="wb", quiet=!verbose)
 		}else{
-			download.file(paste("ftp://", userpwd, "@",remote, "log.csv", sep = ""),tempLog, mode="wb", quiet=TRUE)
+			if(checklog) download.file(paste("ftp://", userpwd, "@",remote, "log.csv", sep = ""),tempLog, mode="wb", quiet=TRUE)
 			download.file(paste("ftp://", userpwd, "@",remote, datfile, sep = ""),tempReg, mode="wb", quiet=!verbose)
 		}	
 		
-		# read server log
-		log <- read.csv(tempLog, sep=",", header=TRUE, stringsAsFactors=FALSE)
+	
+		# check the server log.
+		if(checklog){
+			# read server log
+			log <- read.csv(tempLog, sep=",", header=TRUE, stringsAsFactors=FALSE)
 
-		# display message intended for people using this particular version
-		pkgver <- sessionInfo()$otherPkgs$chronosphere$Version
-		bLine <- pkgver==log$version
-		currentMessage <- log$message[bLine]
-		if(length(currentMessage)!=0) if(""!=currentMessage) warning(currentMessage)
-
+			# display message intended for people using this particular version
+			pkgver <- sessionInfo()$otherPkgs$chronosphere$Version
+			bLine <- pkgver==log$version
+			currentMessage <- log$message[bLine]
+			if(length(currentMessage)!=0) if(""!=currentMessage){
+				warning(currentMessage)
+			}else{
+				# assignInNamespace
+				assignInNamespace("checklog", FALSE, ns="chronosphere")
+			}
+			unlink(tempLog)
+		}
+		
 		# and set return value
 		ret <- read.csv(tempReg, sep=";", header=TRUE, stringsAsFactors=FALSE)
 
 		# get rid of the  temporary file
 		if(is.null(datadir)) unlink(tempReg)
-		unlink(tempLog)
+		
 	}
 
 	return(ret)
