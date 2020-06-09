@@ -762,3 +762,30 @@ setMethod(
 		return(x)
 	}
 )
+
+
+#' Extent of a \code{\link[chronosphere:RasterArray-class]{RasterArray}} object
+#' 
+#' The method is inherited from the \code{\link[raster:raster]{RasterStack}} class.
+#' 
+#' @param x a \code{\link[chronosphere:RasterArray-class]{RasterArray}}-class object.
+#' @param ... arguments passed to the \code{\link[raster]{extent}} function.
+#' 
+#' @exportMethod aggregate
+#' @return An aggregated \code{\link[chronosphere:RasterArray-class]{RasterArray}} class object.
+#' @examples
+#' data(dems)
+#' agg <- aggregate(dems, 5)
+#' @rdname aggregate
+#' @name aggregate
+NULL
+
+#' @rdname aggregate
+setMethod(
+	"extent",
+	signature=c("RasterArray"),
+	function(x,...){
+		a <- extent(x@stack,...)
+		return(a)
+	}
+)

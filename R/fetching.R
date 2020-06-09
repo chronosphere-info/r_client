@@ -20,6 +20,7 @@ userpwd <- NULL
 #' \donttest{
 #' ind <- datasets()
 #' View(ind)
+#' oneDat <- datasets("paleomap")
 #' }
 #' @export
 datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greetings=TRUE){
@@ -131,6 +132,7 @@ datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greeti
 #' @export
 #' @return An object that matches the 'type' field of the varibles in the output of the \code{\link{datasets}} function.
 fetch <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=TRUE, call=FALSE, call.expr=FALSE, ...){
+
 	# fetch given an existing chronosphere object
 	if(is.chronosphere(dat)){
 		# force expression output of call reproduction if object should be downlaoded
@@ -197,13 +199,30 @@ ChronoCall <- function(dat, var, ver, res, datadir, verbose=FALSE, expr=FALSE,..
 		'dat="', dat, '"')
 
 	# add the optional arguments
-	if(!is.null(var)) theCall <- paste0(theCall, ", var=\"", var,"\"")
-	if(!is.null(ver)) theCall <- paste0(theCall, ", ver=\"", ver,"\"")
-	if(!is.null(res)) if(is.character(res)){
-		theCall <- paste0(theCall, ", res=\"", res,"\"")
+	if(!is.null(var)){
+		if(length(var)==1){
+			theCall <- paste0(theCall, ", var=\"", var,"\"")
 		}else{
-			theCall <- paste0(theCall, ", res=", res,"")
+			theCall <- paste0(theCall, ", var=c(\"", paste(var, collapse="\", \""),"\")")
 		}
+	}
+	
+	if(!is.null(ver)){
+		if(length(ver)==1){
+			theCall <- paste0(theCall, ", ver=\"", ver,"\"")
+		}else{
+			theCall <- paste0(theCall, ", ver=c(\"", paste(ver, collapse="\", \""),"\")")
+		}
+
+	}
+
+	if(!is.null(res)){
+		if(length(res)==1){
+			theCall <- paste0(theCall, ", res=\"", res,"\"")	
+		}else{
+			theCall <- paste0(theCall, ", res=c(\"", paste(res, collapse="\", \""),"\")")
+		}
+	}
 
 	if(!is.null(datadir)) theCall <- paste0(theCall, ", datadir=\"", datadir,"\"")
 	if(!verbose) theCall <- paste0(theCall, ", verbose=", verbose)
@@ -232,14 +251,19 @@ ChronoCall <- function(dat, var, ver, res, datadir, verbose=FALSE, expr=FALSE,..
 }
 
 
-# Actual fetch v2. -this function connects to the dataset or loads the downloaded variable
-FetchVars <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=TRUE,...){
+
+
+
+# Actual fetch v2. -this function connects to the repo or loads the downloaded variable
+# param citation used to turn of citation display for recursive case
+FetchVars <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=TRUE, register=NULL, citation=TRUE, ...){
 	
+
 	# only one should be allowed
 	if(length(dat)>1) stop("Only one dataset can be accessed in a single download call.")
 
 	# get the remote server data, or read it from hard drive!
-	register <- datasets(dat=dat, datadir=datadir, verbose=verbose)
+	if(is.null(register)) register <- datasets(dat=dat, datadir=datadir, verbose=verbose)
 	
 	# subset registry to dataset
 	bDat <- register$dat==dat
@@ -258,22 +282,22 @@ FetchVars <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=T
 		if(sum(present)>1) stop("The variables do not exist.")
 		
 		# some do, but some are missing
-		warning(paste("The variable(s) '",paste(var[!present],collapse="', '"), "' does/do not exist at and is/are omitted.",  sep=""))
+		warning(paste("The variable(s) '", paste(var[!present],collapse="', '"), "' does/do not exist at and is/are omitted.",  sep=""))
 		var<-var[present]
 	}
 
-	# check whether the types are compatible
-	if(!is.null(var)) bVar <- register$var%in%var else bVar <- rep(T, nrow(register))
-
-	# which variable is which type?
-	varType <- unique(register$type[bVar])
-	
-	# only one variable type is allowed!
-	if(length(varType)>1){
-		ret <- register[bVar, c("var", "type")]
-		print(ret)
-		stop("You can only download one variable type in a single download call.\nRepeat download with one type.")
-	}
+#	# check whether the types are compatible
+#	if(!is.null(var)) bVar <- register$var%in%var else bVar <- rep(T, nrow(register))
+#
+#	# which variable is which type?
+#	varType <- unique(register$type[bVar])
+#	
+#	# only one variable type is allowed!
+#	if(length(varType)>1){
+#		ret <- register[bVar, c("var", "type")]
+#		print(ret)
+#		stop("You can only download one variable type in a single download call.\nRepeat download with one type.")
+#	}
 
 	
 	# variable download has to be repeated for every variable
@@ -283,11 +307,17 @@ FetchVars <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=T
 		register <- register[which(register$var==var),]
 
 		# A. RESOLUTION LIMITING
+	#	if(!is.null(res)) if(is.na(res)) res <- "none"
 		# Default resolution
-		if(is.null(res)) res <- unique(register$res[register$default_res])
+		if(is.null(res)){
+			res <- unique(register$res[register$default_res])
+		}else{
+			if(length(res)>1) warning("Multiple 'res' arguments detected, only the first will be used.")
+			res <- res[1]
+		}
 
-		# only one version
-		if(length(res)>1) stop("Only one resolution can be used in a single download call.")
+		# only one resolution
+		if(length(res)>1) stop("INTERNAL error: Only one resolution can be used in a single download call.")
 		
 		# again, limit registry - now to desired resolution
 		register <- register[register[, "res"]==res, , drop=FALSE]
@@ -297,14 +327,17 @@ FetchVars <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=T
 		# Default version
 		if(is.null(ver)){ 
 			ver <- register$ver[register$default_ver]
+		}else{
+			if(length(ver)>1) warning("Multiple 'ver' arguments detected, only the first will be used.")
+			ver <- ver[1]
 		}
 
 		# only one version
-		if(length(ver)>1) stop("Only one version can be used in a single download call.")
+		if(length(ver)>1) stop("INTERNAL error: Only one version can be used in a single download call.")
 		
 		# again, limit registry - now to desired verson
 		register <- register[register[, "ver"]==ver, , drop=FALSE]
-		if(nrow(register)==0) stop(paste0("Version \'", ver, "\' of variable \'", var, "\' is not available at resolution ", res, "."))
+		if(nrow(register)==0) stop(paste0("Version \'", ver, "\' of variable \'", var, "\' is not available at resolution ", ver, "."))
 
 		# after all this is done, there should be just one row in the table...
 		if(nrow(register)!=1) stop("This should not have happened.")
@@ -312,42 +345,52 @@ FetchVars <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=T
 		# do the actual download of this variable
 		downloaded <- FetchArchive(dat=dat, var=var, ver=ver, res=res, datadir=datadir, 
 			link=register$access_url, archive=register$archive_name, verbose=verbose,...)
+		
+		# write the chronosphere attributes to the downloaded object
 	
+		attributes(downloaded)$chronosphere<- ChronoAttributes(dat=dat, var=var, res=res, ver=ver, reg=register, ...)
+	
+
 	# 2. DOWNLOAD MULTIPLE VARIABLSE - recursive case
 	}else{
 		# subset the register to only look for var-specific part
-		if(!is.null(var)){
-			register <- register[which(register$var%in%var),]
+		register <- register[which(register$var%in%var),]
+		
+		# select the version
+		# if not all versions are default
+		if(!is.null(ver)){
+			# if just one is given, assume it is the same all variables
+			if(length(ver)==1) ver <- rep(ver, length(var))
+			if(length(ver)!=length(var)) stop("You have to provide a single, or as many 'ver' entries, as many variables ('var'). ")
 		}
+
+		# select resolution
+		if(!is.null(res)){
+			# if just one is given, assume it is the same all variables
+			if(length(res)==1) res <- rep(res, length(var))
+			if(length(res)!=length(var)) stop("You have to provide a single, or as many 'res' entries, as many variables ('var'). ")
+		}
+
+		# entity
+		theList <- list()
 		# recursively download archives and bind them to a list.
 		for(i in 1:length(var)){
 			# all variables have to be present at the desired resolution
-			stop(paste("The variable '", var[i], "' does not exist at the desired resolution (", res, "). ", sep=""))
+		#	stop(paste("The variable '", var[i], "' does not exist at the desired resolution (", res, "). ", sep=""))
 
-			stop("Not yet!")
+			# recursive call to FetchVars
+			theList[[i]] <- FetchVars(dat=dat, var=var[i], ver=ver[i], res=res[i], datadir=datadir, 
+				register=register, verbose=verbose,citation=FALSE, ...)
 
 		}
-		# process the recursive download if there is a method for binding it together
+		names(theList) <- var
+		
+		# process the recursive download if there is a method for binding it together, otherwise pass it through.
+		downloaded <- CombineVars(theList)
 	}
 
-	# write the chronosphere attributes to the downloaded object
-	attributes(downloaded)$chronosphere<- ChronoAttributes(dat=dat, var=var, res=res, ver=ver, reg=register, ...)
-	
-
-#	if(varType=="data.frame"){
-#		# check for non-related input
-#		if(!is.null(res)) warning("Argument 'res' is ignored for data.frame fetching.")
-#		combined <- fetchDF(dat=dat, var=var, ver=ver, datadir=datadir, register=register, verbose=verbose)
-#	}
-#
-#	if(varType=="platemodel"){
-#		# check for non-related input
-#		if(!is.null(res)) warning("Argument 'res' is ignored for plate model fetching.")
-#		combined <- fetchModel(dat=dat, var=var, ver=ver, datadir=datadir, register=register, verbose=verbose)
-#	}
-
 	# display citations
-	if(verbose){
+	if(citation & verbose){
 		message("If you use the data in publications, please cite its\nreference, as well as that of the 'chronosphere' package.")
 		for(i in 1:length(attributes(downloaded)$chronosphere$reference)){
 			cat("\n")
@@ -435,7 +478,7 @@ loadVar <- function(dir){
 
 # Function to prepare an attributes list 
 ChronoAttributes <- function(dat=NULL, var=NULL, res=NULL, ver=NULL, reg=NULL,...){
-	if(res=="none") res <- NULL
+
 	# general attributes
 	baseList <- list(dat=dat, var=var, res=res, ver=ver)
 
@@ -461,39 +504,91 @@ ChronoAttributes <- function(dat=NULL, var=NULL, res=NULL, ver=NULL, reg=NULL,..
 	return(baseList)
 }
 
+# function to combine RasterArray variables
+CombineVars <- function(theList){
+	# method 1. RasterArray combination
+	classes <- unique(unlist(lapply(theList, class)))
+	
+	happened <- FALSE
+	if(length(classes)==1){
+		# RasterArray case
+		if(classes=="RasterArray"){
+			# vectors
+			extents <- lapply(theList, extent)
+			combined <-  lapply(theList, extent)
+			xRes <- rep(NA, length(theList))
+			yRes <- rep(NA, length(theList))
+			xmin <- rep(NA, length(theList))
+			xmax <- rep(NA, length(theList))
+			ymin <- rep(NA, length(theList))
+			ymax <- rep(NA, length(theList))
+			crss <- rep(NA, length(theList))
 
+			# iterate for every list item
+			for(j in 1:length(theList)){
+				ex <- extent(theList[[j]])
+				re <- res(theList[[j]])
 
+				xRes[j] <- re[1]
+				yRes[j] <- re[2]
+				xmin[j] <- ex[1]
+				xmax[j] <- ex[2]
+				ymin[j] <- ex[3]
+				ymax[j] <- ex[4]
+				crss[j] <- crs(theList[[j]])
+			}
+			# assume things will happen from now
+			happened <- TRUE
 
+			if(length(unique(xRes))!=1 | length(unique(yRes))!=1){
+				warning("Resolutions mismatch, returning a list. ", call.=FALSE)
+				happened <- FALSE
+			}
 
+			if(length(unique(xmin))!=1 | length(unique(ymin))!=1 | length(unique(xmax))!=1 | length(unique(ymax))!=1){
+				warning("Extents mismatch, returning a list. ", call.=FALSE)
+				happened <- FALSE
+			}
 
+			if(length(unique(crss))!=1){
+				warning("CRSs mismatch, returning a list. ", call.=FALSE)
+				happened <- FALSE
+			}
 
+			# things do happen!!
+			if(happened){
+				# first variable
+				combined <- theList[[1]]
 
+				for(j in 2:length(theList)){
+					combined <- cbind(combined, theList[[j]])
+				}
+				colnames(combined) <- names(theList)
+				
+			}
 
+		}
+	}
 
+	if(!happened){
+		combined <- theList 
+	}
+		
+	# write the chronoattributes - have to be a separate loop!
+	attributes(combined)$chronosphere <- attributes(theList[[1]])$chronosphere
 
+	for(j in 2:length(theList)){
+		attributes(combined)$chronosphere$var <- c(attributes(combined)$chronosphere$var, attributes(theList[[j]])$chronosphere$var)
+		attributes(combined)$chronosphere$res <- c(attributes(combined)$chronosphere$res, attributes(theList[[j]])$chronosphere$res)
+		attributes(combined)$chronosphere$ver <- c(attributes(combined)$chronosphere$ver, attributes(theList[[j]])$chronosphere$ver)
+		attributes(combined)$chronosphere$reference <- c(attributes(combined)$chronosphere$reference, attributes(theList[[j]])$chronosphere$reference)
+		attributes(combined)$chronosphere$accessDate <- c(attributes(combined)$chronosphere$accessDate, attributes(theList[[j]])$chronosphere$accessDate)
+		attributes(combined)$chronosphere$additional <- c(attributes(combined)$chronosphere$additional, attributes(theList[[j]])$chronosphere$additional)
+		attributes(combined)$chronosphere$info <- c(attributes(combined)$chronosphere$info, attributes(theList[[j]])$chronosphere$info)
+	}
 
+	return(combined)
+	
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
 
