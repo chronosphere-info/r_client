@@ -360,7 +360,7 @@ FetchVars <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=T
 }
 
 # function to download and load the contents of an individual archive
-FetchArchive <- function(dat, var, res, ver, archive, link, datadir=NULL, verbose=verbose,...){
+FetchArchive <- function(dat, var, res, ver, archive, link, datadir=NULL, verbose=TRUE,...){
 	# we need a temporary directory to store the extracted files until the end of the session
 	tempd <- tempdir()
 
@@ -417,7 +417,7 @@ FetchArchive <- function(dat, var, res, ver, archive, link, datadir=NULL, verbos
 	source(file.path(varDir, loadScript))
 
 	# run the function that loads in the variable and save it
-	varObj <- chronosphere:::loadVar(dir=varDir, ...)
+	varObj <- chronosphere:::loadVar(dir=varDir, verbose=verbose, ...)
 
 	# 'get rid of' temporary directory
 	unlink(tempd)
