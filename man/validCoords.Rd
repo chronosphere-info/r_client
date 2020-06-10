@@ -9,9 +9,9 @@ validCoords(x, invalid = FALSE, verbose = TRUE)
 \arguments{
 \item{x}{coordinates to be checked. Can be a \code{vector}, \code{matrix} or \code{data.frame}.}
 
-\item{verbose}{(\code{logical}) Should console feedback be printed?}
+\item{invalid}{(\code{logical}) Return vector of indexes of incomplete/invalid coordinates?}
 
-\item{incomplete}{return vector of indexes of incomplete/invalid coordinates.}
+\item{verbose}{(\code{logical}) Should console feedback be printed?}
 }
 \description{
 Utility function to check if provided coordinates are valid

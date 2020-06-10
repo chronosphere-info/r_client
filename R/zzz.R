@@ -16,4 +16,5 @@ NULL
 #' @importFrom graphics par layout mtext
 #' @importFrom grDevices colorRampPalette rgb
 #' @importFrom grDevices devAskNewPage
+#' @importFrom utils assignInNamespace
 NULL

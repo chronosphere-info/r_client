@@ -18,8 +18,9 @@ checklog <- TRUE
 #' @return A \code{data.frame} class object.
 #' @examples
 #' \donttest{
+#' # available datasets and variables
 #' ind <- datasets()
-#' View(ind)
+#' # all available versions and resolutions in dataset 'paleomap'
 #' oneDat <- datasets("paleomap")
 #' }
 #' @export
@@ -474,7 +475,7 @@ FetchArchive <- function(dat, var, res, ver, archive, link, datadir=NULL, verbos
 	source(file.path(varDir, loadScript))
 
 	# run the function that loads in the variable and save it
-	varObj <- chronosphere:::loadVar(dir=varDir, verbose=verbose, ...)
+	varObj <- loadVar(dir=varDir, verbose=verbose, ...)
 
 	# 'get rid of' temporary directory
 	unlink(tempd)

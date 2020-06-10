@@ -2,13 +2,10 @@
 % Please edit documentation in R/RasterArray-base.R
 \name{apply}
 \alias{apply}
-\alias{apply,RasterArray-method}
 \title{Apply-type iterator for RasterArrays}
-\usage{
-apply(X, MARGIN, FUN, ...)
-
-\S4method{apply}{RasterArray}(X, MARGIN, FUN, ...)
-}
+%\usage{
+%apply(X, MARGIN, FUN, ...)
+%}
 \arguments{
 \item{X}{an array, including matrices and RasterArrays.}
 

@@ -34,8 +34,9 @@ The function will download a single .csv file and attached it as a \code{data.fr
 }
 \examples{
 \donttest{
+# available datasets and variables
 ind <- datasets()
-View(ind)
+# all available versions and resolutions in dataset 'paleomap'
 oneDat <- datasets("paleomap")
 }
 }
