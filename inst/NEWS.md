@@ -1,7 +1,7 @@
 # Change log of the R package 'chronosphere'
 
 
-## [pre 0.3.0 (build 70)]
+## [0.3.0 (build 70)]
 ### Added
 - datasets() function gained the 'dat', 'master'  and 'greetings' arguments. The default setting of the function only downloads the list of datasets (dat) and variables (var). Setting the 'dat' argument to a character entry will download the list of all archives from that dataset. Setting the master argument to 'master=TRUE' will download a list of all archives, which is expected to be very long in the near future. The argument 'greetings=TRUE' will display a reminder that additional versions and resolutions are available.
 - the downloaded objects now have chronosphere attributes. These record the accession information used previously, which allows the repetition of function call, if necessary - including changes.
@@ -13,6 +13,7 @@
 
 ### Removed
 - The dataindex() deprecated placeholder function was removed. Use datasets() instead.
+- previous updates to reconstruct()
 
 
 ## [0.2.2 (build 69)] - 2020-03-11

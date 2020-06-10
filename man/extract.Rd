@@ -6,7 +6,9 @@
 \alias{extract,RasterArray,matrix-method}
 \alias{extract,RasterArray,data.frame-method}
 \title{Extraction of values from multiple RasterLayers in a RasterArray object}
-\format{An object of class \code{standardGeneric} of length 1.}
+\format{
+An object of class \code{standardGeneric} of length 1.
+}
 \usage{
 extract
 

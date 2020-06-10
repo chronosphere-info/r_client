@@ -380,6 +380,9 @@ RasterArrayApply <- function(X, MARGIN, FUN,...){
 }
 
 #' @rdname apply-methods
+#' @aliases apply,RasterArray-method
+"apply"
+
 if("simplify" %in% names(formals(base::apply))){
 	setMethod("apply", "RasterArray",function(X, MARGIN, FUN,..., simplify=TRUE) 
 		RasterArrayApply(X, MARGIN, FUN, ...)

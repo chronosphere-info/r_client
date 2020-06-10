@@ -22,8 +22,7 @@ reconstruct(x, ...)
   reverse = FALSE,
   path.gplates = NULL,
   cleanup = TRUE,
-  dir = NULL,
-  plateperiod = FALSE
+  dir = NULL
 )
 
 \S4method{reconstruct}{data.frame}(x, ...)
@@ -36,13 +35,9 @@ reconstruct(x, ...)
   model = "PALEOMAP",
   listout = TRUE,
   verbose = FALSE,
-  enumerate = TRUE,
-  chunk = 200,
-  reverse = FALSE,
   path.gplates = NULL,
   cleanup = TRUE,
-  dir = NULL,
-  plateperiod = FALSE
+  dir = NULL
 )
 
 \S4method{reconstruct}{SpatialPolygonsDataFrame}(
@@ -53,8 +48,7 @@ reconstruct(x, ...)
   verbose = FALSE,
   path.gplates = NULL,
   cleanup = TRUE,
-  dir = NULL,
-  plateperiod = FALSE
+  dir = NULL
 )
 }
 \arguments{
@@ -84,8 +78,6 @@ calculate the present-day coordinates of the given paleo-coordinates.}
 \item{cleanup}{(\code{logical}) Argument of the local reconstruction submodule. Should the temporary files be deleted immediately after reconstructions?}
 
 \item{dir}{(\code{character}) Argument of the local reconstruction submodule. Directory where the temporary files of the reconstruction are stored (defaults to a temporary directory created by R). Remember to toggle \code{cleanup} if you want to see the files.}
-
-\item{plateperiod}{(\code{logical}) Argument of the local reconstruction submodule. Should the durations of the plates be forced on the partitioned feature? If these are set to \code{TRUE} and the plate duration estimates are long, then you might lose some data.}
 }
 \value{
 A \code{numeric} matrix if \code{x} is a \code{numeric}, \code{matrix} or \code{data.frame}, or \code{Spatial*} class objects, depending on input.
@@ -98,13 +90,13 @@ Each location will be assigned a plate id and moved back in time using the chose
 The function implements two reconstruction submodules, which are selected with the \code{model} argument:
 
 If \code{model} is a \code{character} entry, then the \code{reconstruct()} function uses the GPlates Web Service (\url{https://gws.gplates.org/}, remote reconstruction submodule).
-The available reconstruction models and their geologic coverage for this submodule are:
+The available reconstruction models for this submodule are:
 \itemize{
- \item "SETON2012" (Seton et al., 2012) for coastlines and plate polygons (0 - 200 Ma).
- \item "MULLER2016" (Muller et al., 2016) for coastlines and plate polygons(0 - 230 Ma).
- \item "GOLONKA" (Wright et al. 2013) for coastlines only (0 - 550 Ma). 
- \item "PALEOMAP" (Scotese and Wright, 2018) for coastlines and plate polygons (0 - 750 Ma). 
- \item "MATTHEWS2016" (Matthews et al., 2016) for coastlines and plate polygons (0 - 410 Ma). 
+ \item "SETON2012" (Seton et al., 2012) for coastlines and plate polygons.
+ \item "MULLER2016" (Muller et al., 2016) for coastlines and plate polygons.
+ \item "GOLONKA" (Wright et al. 2013) for coastlines only. 
+ \item "PALEOMAP" (Scotese and Wright, 2018) for coastlines and plate polygons. 
+ \item "MATTHEWS2016" (Matthews et al., 2016) for coastlines and plate polygons. 
 }
 
 If \code{model} is a \code{\link{platemodel}} class object, then the function will try to use the GPLates desktop application (\url{http://www.gplates.org/}) to reconstruct the coordinates (local reconstruction submodule).
@@ -113,15 +105,15 @@ The function will try to find the main GPlates executable in its default install
 }
 \section{References}{
 
-Matthews, K. J., Maloney, K. T., Zahirovic, S., Williams, S. E., Seton, M., & Mueller, R. D. (2016). Global plate boundary evolution and kinematics since the late Paleozoic. Global and Planetary Change, 146, 226–250. https://doi.org/10.1016/j.gloplacha.2016.10.002
+Matthews, K. J., Maloney, K. T., Zahirovic, S., Williams, S. E., Seton, M., & Müller, R. D. (2016). Global plate boundary evolution and kinematics since the late Paleozoic. Global and Planetary Change, 146, 226–250. https://doi.org/10.1016/j.gloplacha.2016.10.002
 \cr
-\cr Mueller, R. D., Seton, M., Zahirovic, S., Williams, S. E., Matthews, K. J., Wright, N. M., … Cannon, J. (2016). Ocean Basin Evolution and Global-Scale Plate Reorganization Events Since Pangea Breakup. Annual Review of Earth and Planetary Sciences, 44(1), 107–138. https://doi.org/10.1146/annurev-earth-060115-012211
+\cr Müller, R. D., Seton, M., Zahirovic, S., Williams, S. E., Matthews, K. J., Wright, N. M., … Cannon, J. (2016). Ocean Basin Evolution and Global-Scale Plate Reorganization Events Since Pangea Breakup. Annual Review of Earth and Planetary Sciences, 44(1), 107–138. https://doi.org/10.1146/annurev-earth-060115-012211
 \cr
 \cr Scotese, C., & Wright, N. M. (2018). PALEOMAP Paleodigital Elevation Models (PaleoDEMS) for the Phanerozoic PALEOMAP Project. Retrieved from https://www.earthbyte.org/paleodem-resource-scotese-and-wright-2018/
 \cr
-\cr Seton, M., Mueller, R. D., Zahirovic, S., Gaina, C., Torsvik, T., Shephard, G., … Chandler, M. (2012). Global continental and ocean basin reconstructions since 200Ma. Earth-Science Reviews, 113(3–4), 212–270. https://doi.org/10.1016/j.earscirev.2012.03.002
+\cr Seton, M., Müller, R. D., Zahirovic, S., Gaina, C., Torsvik, T., Shephard, G., … Chandler, M. (2012). Global continental and ocean basin reconstructions since 200Ma. Earth-Science Reviews, 113(3–4), 212–270. https://doi.org/10.1016/j.earscirev.2012.03.002
 \cr
-\cr Wright, N., Zahirovic, S., Mueller, R. D., & Seton, M. (2013). Towards community-driven paleogeographic reconstructions: integrating open-access paleogeographic and paleobiology data with plate tectonics. Biogeosciences, 10(3), 1529–1541. https://doi.org/10.5194/bg-10-1529-2013
+\cr Wright, N., Zahirovic, S., Müller, R. D., & Seton, M. (2013). Towards community-driven paleogeographic reconstructions: integrating open-access paleogeographic and paleobiology data with plate tectonics. Biogeosciences, 10(3), 1529–1541. https://doi.org/10.5194/bg-10-1529-2013
 }
 
 \examples{
@@ -137,9 +129,5 @@ reconstruct(xy, 140)
 # coastlines/plates
 coast <- reconstruct("coastlines", 140)
 plate <- reconstruct("plates", 139)
-
-# With GPlates
- pm <- fetch("paleomap", "model")
- reconstruct(matrix(c(95, 54), nrow=1), 140, model=pm)
  }
 }

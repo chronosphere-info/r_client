@@ -486,7 +486,7 @@ FetchArchive <- function(dat, var, res, ver, archive, link, datadir=NULL, verbos
 }
 
 # placeholder function in package namespace
-loadVar <- function(dir){
+loadVar <- function(dir, verbose){
 	stop("If this method is run and you see this, then you have encountered an error.")
 }
 
