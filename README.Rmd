@@ -32,12 +32,20 @@ https://www.evolv-ed.net/post/chronosphere-paleomap/chronosphere-paleomap/
 
 ## Install method A.
 
-Open R and paste in: 
+The stable version of the package is available from the CRAN repositories, which you can instal with this line, after you open R:
+
+```r
+install.packages("chronosphere")
+```
+
+## Install method B.
+
+The second method to stable version from the source archive deposited on this github repository. Open R and paste in: 
 ```r
 install.packages("https://github.com/adamkocsis/chronosphere/raw/master/_archive/source/chronosphere_0.3.0.tar.gz", repos=NULL, type="source")
 ```
 
-## Install method B. 
+## Install method C. 
 
 Alternatively, you can install the package with the 'devtools' package directly from GitHub:
 ```r
@@ -55,5 +63,5 @@ library(chronosphere)
 Run datasets() to see the publicly available variables. 
 
 # Cite as
-Kocsis, Ádám T. & Raja, Nussaïbah B. (2020). chronosphere: Earth system history variables (pre-release) (Version 0.2.2). Zenodo. http://doi.org/10.5281/zenodo.3525482
+Kocsis, Ádám T. & Raja, Nussaïbah B. (2020). chronosphere: Earth system history variables (pre-release) (Version 0.3.0). Zenodo. http://doi.org/10.5281/zenodo.3525482
 

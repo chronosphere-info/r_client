@@ -2,7 +2,7 @@
 chronosphere
 ============
 
-[![](https://img.shields.io/badge/devel%20version-0.3.0-green.svg)](https://github.com/adamkocsis/chronosphere) [![](https://www.r-pkg.org/badges/version/chronosphere?color=orange)](https://cran.r-project.org/package=chronosphere) [![](http://cranlogs.r-pkg.org/badges/grand-total/chronosphere?color=yellow)](https://cran.r-project.org/package=chronosphere) [![CRAN checks](https://cranchecks.info/badges/summary/chronosphere)](https://cran.r-project.org/web/checks/check_results_chronosphere.html) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3530703.svg)](https://doi.org/10.5281/zenodo.3530703)
+[![](https://img.shields.io/badge/devel%20version-0.2.2-green.svg)](https://github.com/adamkocsis/chronosphere) [![](https://www.r-pkg.org/badges/version/chronosphere?color=orange)](https://cran.r-project.org/package=chronosphere) [![](http://cranlogs.r-pkg.org/badges/grand-total/chronosphere?color=yellow)](https://cran.r-project.org/package=chronosphere) [![CRAN checks](https://cranchecks.info/badges/summary/chronosphere)](https://cran.r-project.org/web/checks/check_results_chronosphere.html) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3530703.svg)](https://doi.org/10.5281/zenodo.3530703)
 
 Earth System History Variables
 
@@ -22,13 +22,22 @@ Installing
 Install method A.
 -----------------
 
-Open R and paste in:
+The stable version of the package is available from the CRAN repositories, which you can instal with this line, after you open R:
+
+``` r
+install.packages("chronosphere")
+```
+
+Install method B.
+-----------------
+
+The second method to stable version from the source archive deposited on this github repository. Open R and paste in:
 
 ``` r
 install.packages("https://github.com/adamkocsis/chronosphere/raw/master/_archive/source/chronosphere_0.3.0.tar.gz", repos=NULL, type="source")
 ```
 
-Install method B.
+Install method C.
 -----------------
 
 Alternatively, you can install the package with the 'devtools' package directly from GitHub:
@@ -54,4 +63,4 @@ Run datasets() to see the publicly available variables.
 Cite as
 =======
 
-Kocsis, Ádám T. & Raja, Nussaïbah B. (2020). chronosphere: Earth system history variables (pre-release) (Version 0.2.2). Zenodo. <http://doi.org/10.5281/zenodo.3525482>
+Kocsis, Ádám T. & Raja, Nussaïbah B. (2020). chronosphere: Earth system history variables (pre-release) (Version 0.3.0). Zenodo. <http://doi.org/10.5281/zenodo.3525482>
