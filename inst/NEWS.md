@@ -1,6 +1,11 @@
 # Change log of the R package 'chronosphere'
 
 
+## [0.3.0 (build 71)]
+### Changed
+- Fixed forced download of registry table when datadir was given and data were already present on disk/storage device
+
+
 ## [0.3.0 (build 70)]
 ### Added
 - datasets() function gained the 'dat', 'master'  and 'greetings' arguments. The default setting of the function only downloads the list of datasets (dat) and variables (var). Setting the 'dat' argument to a character entry will download the list of all archives from that dataset. Setting the master argument to 'master=TRUE' will download a list of all archives, which is expected to be very long in the near future. The argument 'greetings=TRUE' will display a reminder that additional versions and resolutions are available.

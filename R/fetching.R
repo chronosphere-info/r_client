@@ -57,7 +57,7 @@ datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greeti
 		# do any of them match? 
 		if(any(datfile==all)){
 			# read it in
-			ret <- read.csv(file.path(datadir, datfile), sep=",", header=TRUE, stringsAsFactors=FALSE)
+			ret <- read.csv(file.path(datadir, datfile), sep=";", header=TRUE, stringsAsFactors=FALSE)
 
 			# structure is ok
 			if(sum(c("dat", "var", "ver", "res")%in%colnames(ret))==4){
