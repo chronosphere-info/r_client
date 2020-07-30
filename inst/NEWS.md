@@ -1,6 +1,11 @@
 # Change log of the R package 'chronosphere'
 
 
+## [0.3.0 (build 72)]
+### Added
+- The 'plateperiod' argument was accidentally deleted during update to build 69, now it is live again. 
+
+
 ## [0.3.0 (build 71)]
 ### Changed
 - Fixed forced download of registry table when datadir was given and data were already present on disk/storage device

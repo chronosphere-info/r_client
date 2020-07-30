@@ -22,7 +22,8 @@ reconstruct(x, ...)
   reverse = FALSE,
   path.gplates = NULL,
   cleanup = TRUE,
-  dir = NULL
+  dir = NULL,
+  plateperiod = FALSE
 )
 
 \S4method{reconstruct}{data.frame}(x, ...)
@@ -37,7 +38,8 @@ reconstruct(x, ...)
   verbose = FALSE,
   path.gplates = NULL,
   cleanup = TRUE,
-  dir = NULL
+  dir = NULL,
+  plateperiod = FALSE
 )
 
 \S4method{reconstruct}{SpatialPolygonsDataFrame}(
@@ -48,7 +50,8 @@ reconstruct(x, ...)
   verbose = FALSE,
   path.gplates = NULL,
   cleanup = TRUE,
-  dir = NULL
+  dir = NULL,
+  plateperiod = FALSE
 )
 }
 \arguments{
@@ -78,6 +81,8 @@ calculate the present-day coordinates of the given paleo-coordinates.}
 \item{cleanup}{(\code{logical}) Argument of the local reconstruction submodule. Should the temporary files be deleted immediately after reconstructions?}
 
 \item{dir}{(\code{character}) Argument of the local reconstruction submodule. Directory where the temporary files of the reconstruction are stored (defaults to a temporary directory created by R). Remember to toggle \code{cleanup} if you want to see the files.}
+
+\item{plateperiod}{(\code{logical}) Argument of the local reconstruction submodule. Should the durations of the plates be forced on the partitioned feature? If these are set to \code{TRUE} and the plate duration estimates are long, then you might lose some data.}
 }
 \value{
 A \code{numeric} matrix if \code{x} is a \code{numeric}, \code{matrix} or \code{data.frame}, or \code{Spatial*} class objects, depending on input.
@@ -129,5 +134,6 @@ reconstruct(xy, 140)
 # coastlines/plates
 coast <- reconstruct("coastlines", 140)
 plate <- reconstruct("plates", 139)
+
  }
 }
