@@ -1,7 +1,7 @@
 # Change log of the R package 'chronosphere'
 
 
-## [0.3.1 (build 73)]
+## [0.3.1 (build 73)] - 2020-08-07
 ### Added
 - The reference() and info() functions. The new reference() function is now used within fetch().
 
@@ -9,17 +9,17 @@
 - minor bugs.
 
 
-## [0.3.0 (build 72)]
+## [0.3.0 (build 72)] - 2020-07-30
 ### Added
 - The 'plateperiod' argument was accidentally deleted during update to build 69, now it is live again. 
 
 
-## [0.3.0 (build 71)]
+## [0.3.0 (build 71)] - 2020-07-14
 ### Changed
 - Fixed forced download of registry table when datadir was given and data were already present on disk/storage device
 
 
-## [0.3.0 (build 70)]
+## [0.3.0 (build 70)] - 2020-06-11
 ### Added
 - datasets() function gained the 'dat', 'master'  and 'greetings' arguments. The default setting of the function only downloads the list of datasets (dat) and variables (var). Setting the 'dat' argument to a character entry will download the list of all archives from that dataset. Setting the master argument to 'master=TRUE' will download a list of all archives, which is expected to be very long in the near future. The argument 'greetings=TRUE' will display a reminder that additional versions and resolutions are available.
 - the downloaded objects now have chronosphere attributes. These record the accession information used previously, which allows the repetition of function call, if necessary - including changes.

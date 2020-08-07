@@ -2,7 +2,7 @@
 chronosphere
 ============
 
-[![](https://img.shields.io/badge/devel%20version-0.3.0-green.svg)](https://github.com/adamkocsis/chronosphere) [![](https://www.r-pkg.org/badges/version/chronosphere?color=orange)](https://cran.r-project.org/package=chronosphere) [![](http://cranlogs.r-pkg.org/badges/grand-total/chronosphere?color=yellow)](https://cran.r-project.org/package=chronosphere) [![CRAN checks](https://cranchecks.info/badges/summary/chronosphere)](https://cran.r-project.org/web/checks/check_results_chronosphere.html) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3530703.svg)](https://doi.org/10.5281/zenodo.3530703)
+[![](https://img.shields.io/badge/devel%20version-0.3.1-green.svg)](https://github.com/adamkocsis/chronosphere) [![](https://www.r-pkg.org/badges/version/chronosphere?color=orange)](https://cran.r-project.org/package=chronosphere) [![](http://cranlogs.r-pkg.org/badges/grand-total/chronosphere?color=yellow)](https://cran.r-project.org/package=chronosphere) [![CRAN checks](https://cranchecks.info/badges/summary/chronosphere)](https://cran.r-project.org/web/checks/check_results_chronosphere.html) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3530703.svg)](https://doi.org/10.5281/zenodo.3530703)
 
 Earth System History Variables
 
@@ -34,7 +34,7 @@ Install method B.
 The second method to install the stable version from the source archive deposited on this github repository. Open R and paste in:
 
 ``` r
-install.packages("https://github.com/adamkocsis/chronosphere/raw/master/_archive/source/chronosphere_0.3.0.tar.gz", repos=NULL, type="source")
+install.packages("https://github.com/adamkocsis/chronosphere/raw/master/_archive/source/chronosphere_0.3.1.tar.gz", repos=NULL, type="source")
 ```
 
 Install method C.
