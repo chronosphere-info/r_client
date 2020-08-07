@@ -123,17 +123,17 @@ Matthews, K. J., Maloney, K. T., Zahirovic, S., Williams, S. E., Seton, M., & MÃ
 
 \examples{
 \donttest{
-# With the web service
+# With the web service (GPlates Web Service was offline at submission)
 # simple matrices
-reconstruct(matrix(c(95, 54), nrow=1), 140)
+# reconstruct(matrix(c(95, 54), nrow=1), 140)
 
 # points reconstruction
 xy <-cbind(long=c(95,142), lat=c(54, -33))
-reconstruct(xy, 140)
+# reconstruct(xy, 140)
 
 # coastlines/plates
-coast <- reconstruct("coastlines", 140)
-plate <- reconstruct("plates", 139)
+# coast <- reconstruct("coastlines", 140)
+# plate <- reconstruct("plates", 139)
 
  }
 }

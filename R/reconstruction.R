@@ -51,17 +51,17 @@
 #' @return A \code{numeric} matrix if \code{x} is a \code{numeric}, \code{matrix} or \code{data.frame}, or \code{Spatial*} class objects, depending on input.
 #' @examples
 #' \donttest{
-#' # With the web service
+#' # With the web service (GPlates Web Service was offline at submission)
 #' # simple matrices
-#'	reconstruct(matrix(c(95, 54), nrow=1), 140)
+#' # reconstruct(matrix(c(95, 54), nrow=1), 140)
 #'	
 #'	# points reconstruction
 #'	xy <-cbind(long=c(95,142), lat=c(54, -33))
-#'	reconstruct(xy, 140)
+#'	# reconstruct(xy, 140)
 #'
 #' # coastlines/plates
-#'	coast <- reconstruct("coastlines", 140)
-#'	plate <- reconstruct("plates", 139)
+#' # coast <- reconstruct("coastlines", 140)
+#' # plate <- reconstruct("plates", 139)
 #'	
 #'  }
 #' @rdname reconstruct
@@ -105,7 +105,7 @@ setMethod(
                     if(is.character(model)){
 					   fresh <- IteratedPointReconstruction(coords=x, chunk=chunk, age=age[i], model=model, reverse=reverse, verbose=verbose)
                     }else{
-                        fresh <- reconstructGPlates(x=x, age=age[i], model=model, path.gplates=path.gplates, dir=dir, verbose=verbose, cleanup=cleanup, platePeriod=platePeriod)
+                        fresh <- reconstructGPlates(x=x, age=age[i], model=model, path.gplates=path.gplates, dir=dir, verbose=verbose, cleanup=cleanup, plateperiod=plateperiod)
                     }
 					# list
 					if(listout){

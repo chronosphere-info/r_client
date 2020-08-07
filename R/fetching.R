@@ -352,7 +352,7 @@ FetchVars <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=T
 		
 		# again, limit registry - now to desired verson
 		register <- register[register[, "ver"]==ver, , drop=FALSE]
-		if(nrow(register)==0) stop(paste0("Version \'", ver, "\' of variable \'", var, "\' is not available at resolution ", ver, "."))
+		if(nrow(register)==0) stop(paste0("Version \'", ver, "\' of variable \'", var, "\' is not available at resolution ", res, "."))
 
 		# after all this is done, there should be just one row in the table...
 		if(nrow(register)!=1) stop("This should not have happened.")

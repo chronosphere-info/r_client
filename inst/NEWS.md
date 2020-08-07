@@ -1,6 +1,14 @@
 # Change log of the R package 'chronosphere'
 
 
+## [0.3.1 (build 73)]
+### Added
+- The reference() and info() functions. The new reference() function is now used within fetch().
+
+### Fixed
+- minor bugs.
+
+
 ## [0.3.0 (build 72)]
 ### Added
 - The 'plateperiod' argument was accidentally deleted during update to build 69, now it is live again. 
