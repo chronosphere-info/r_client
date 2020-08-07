@@ -406,11 +406,8 @@ FetchVars <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=T
 
 	# display citations
 	if(citation & verbose){
-		message("If you use the data in publications, please cite its\nreference, as well as that of the 'chronosphere' package.")
-		for(i in 1:length(attributes(downloaded)$chronosphere$reference)){
-			cat("\n")
-			message(paste("-", attributes(downloaded)$chronosphere$reference[i]))
-		}
+		message("If you use the data in publications, please cite its\nreference(s), as well as that of the 'chronosphere' package.\n")
+		reference(downloaded, print=TRUE)
 	}
 	
 	return(downloaded)

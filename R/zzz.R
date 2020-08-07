@@ -17,4 +17,5 @@ NULL
 #' @importFrom grDevices colorRampPalette rgb
 #' @importFrom grDevices devAskNewPage
 #' @importFrom utils assignInNamespace
+#' @importFrom utils browseURL
 NULL
