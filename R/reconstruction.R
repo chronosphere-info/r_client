@@ -292,6 +292,62 @@ setMethod(
 
 	}
 )
+
+#' @rdname reconstruct
+setMethod(
+	"reconstruct",
+	"SpatialLinesDataFrame", 
+	function(x, age, model="PALEOMAP", listout=TRUE, verbose=FALSE,path.gplates=NULL, cleanup=TRUE, dir=NULL, plateperiod=FALSE){
+		if(!is.na(x@proj4string)){
+			x <- sp::spTransform(x, sp::CRS("+proj=longlat"))
+		}else{
+			x@proj4string <- sp::CRS("+proj=longlat")
+		}
+
+		# vectorized implementation
+		if(length(age)>1){
+			# list output
+			if(listout){
+				container <- list()
+
+			# SpArray
+			}else{
+				stop("Nooo, not yet!")	
+			}
+
+			# iterate
+			for(i in 1:length(age)){
+				if(is.character(model)){
+					# might not work!!
+					container[[i]] <- gplates_reconstruct_polygon(sp=x, age=age[i], model=model, verbose=verbose)
+				}else{
+					container[[i]] <- reconstructGPlates(x=x, age=age[i], model=model, path.gplates=path.gplates, dir=dir, verbose=verbose, cleanup=cleanup)
+				}
+				# rotate entry back
+				container[[i]] <- sp::spTransform(container[[i]], x@proj4string)
+			}
+
+			# list output
+			if(listout){
+				names(container) <- age
+			}
+
+		# single entry
+		}else{
+			if(is.character(model)){
+				container <- gplates_reconstruct_polygon(sp=x, age, model=model, verbose=verbose)
+			}else{
+				container <- reconstructGPlates(x=x, age=age, model=model, path.gplates=path.gplates, dir=dir, verbose=verbose, cleanup=cleanup)
+			}
+			container <- sp::spTransform(container, x@proj4string)
+			
+		}
+
+		return(container)
+
+	}
+)
+
 ###########################################################################
 # Offline interface to Gplates
 
@@ -425,7 +481,7 @@ reconstructGPlates <- function(x, age, model, path.gplates=NULL,dir=NULL, verbos
 		}
 
 		# if originally a SpatialPointsDataFrame
-		if("SpatialPolygonsDataFrame"%in%class(x)){
+		if("SpatialPolygonsDataFrame"%in%class(x) | "SpatialLinesDataFrame"%in%class(x)){
 			xTransform <- x
 		}
 
@@ -499,6 +555,7 @@ reconstructGPlates <- function(x, age, model, path.gplates=NULL,dir=NULL, verbos
 		if(
 			"SpatialPolygonsDataFrame"%in%class(x) | 
 			"SpatialPointsDataFrame"%in%class(x) |
+			"SpatialLinesDataFrame"%in%class(x) |
 			"character"%in%class(x)){
 				rotated <- somethingDF
 		}

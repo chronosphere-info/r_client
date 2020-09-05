@@ -1,6 +1,12 @@
 # Change log of the R package 'chronosphere'
 
 
+
+## [0.3.1 (build 74)] - 2020-08-20
+### Added
+- The SpatialLinesDataFrame-method of the reconstruct() function.
+
+
 ## [0.3.1 (build 73)] - 2020-08-07
 ### Added
 - The reference() and info() functions. The new reference() function is now used within fetch().
