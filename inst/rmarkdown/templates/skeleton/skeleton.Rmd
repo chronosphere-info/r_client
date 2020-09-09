@@ -1,0 +1,27 @@
+---
+output:
+  pdf_document:
+    citation_package: biblatex
+    keep_tex: yes
+    fig_caption: yes
+    latex_engine: pdflatex
+    template: template.tex
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+geometry: margin=1in
+fontfamily: mathpazo
+fontsize: 11pt
+bibliography: references.bib
+---
+# Overview
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+x <- data.frame(Specifications=c("**Source**", "**URL**", "Data downloaded", "**Taxa**", "**Location**", "**Time Period**", "**Data format**", "**Data accessibility**"),
+                Details=c(params$source,params$url, params$download_date, params$taxa, params$location, params$time, params$dataformat, params$dataaccess))
+
+knitr::kable(x, format="simple", col.names=NULL, caption="Specifications table")
+```
+
+# Methods
+
+# Acknowledgements
+We would like to thank John Alroy and Charles Marshall, in addition to A. Miller, M. Koznik and others for their vision and critical early work in establishing the Paleobiology Database as well as the numerous contributors of data, without all of whom this study would not have been possible. This report was generated using the R package `chronosphere` `r packageVersion("chronosphere")` [@R-pkg-chronosphere].
