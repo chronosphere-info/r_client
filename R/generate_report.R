@@ -38,7 +38,7 @@ generate_report <- function(metadata=list(title="Sample title",
   metadata$corresemail <- NULL
   
   #change encoding to allow special characters
-  metadata <- lapply(metadata, function(x) iconv(x, from="latin1", to="utf8"))
+  metadata <- lapply(metadata, function(x) iconv(x, to="UTF-8"))
   
   metadata$params <- specs
   
@@ -49,8 +49,14 @@ generate_report <- function(metadata=list(title="Sample title",
   
   #data references
   bib <- generate_bib(data_refs)
+  bib <- RefManageR::toBiblatex(bib)
   
-  xfun::write_utf8(RefManageR::toBiblatex(bib), 
+  #dealing with accents
+  n <- grep("author", names(bib))
+  bib[n] <- gsub("\\{\\\\a'", "\\\\'\\{", bib[n]) 
+  bib[n] <- gsub("\\\\i", "i", bib[n])
+
+  xfun::write_utf8(bib, 
                    file.path(output_path, "references.bib"))
   
   #save reference to chronosphere
@@ -71,10 +77,31 @@ generate_report <- function(metadata=list(title="Sample title",
 #'
 #' @export 
 generate_bib <- function (x, type="publication_type"){
-  x$author <- paste(paste(x$author1init, x$author1last), "and",
-                    paste(x$author2init, x$author1last), "and",
-                    gsub(", ", " and ", x$otherauthors)
-  )
+  
+  auth_gen <- function (x){
+  #first author
+  x$author <- paste(x$author1init, x$author1last)
+  
+  #add second author if present
+  if(x$author2last != ""){
+    x$author <- paste(x$author, "and",
+                      paste(x$author2init, x$author2last))
+  }
+  
+  #add author others if present
+  if(x$otherauthors != ""){
+    x$author <-  paste(x$author, "and",
+                       gsub(", ", " and ", x$otherauthors))
+  }
+  
+  return(x$author)
+  }
+  
+  x$author <- NA
+  for(i in 1:nrow(x)){
+    x$author[i] <- auth_gen(x[i,])
+  }
+  
   x$page <- ifelse(x$firstpage == "", NA, paste0(x$firstpage, "-", x$lastpage))
   
   
@@ -129,7 +156,7 @@ article_bib <- function(xx){
   
   suff <- paste(sample(letters, 4), collapse = "")
   bib <- RefManageR::BibEntry(bibtype = "article", 
-                              key = gsub(" ", "", paste0(trimws(unlist(strsplit(xx$author1last, " "))[1]), xx$pubyr, suff)), 
+                              key = gsub(" |[^A-z]", "", paste0(trimws(unlist(strsplit(xx$author1last, " "))[1]), xx$pubyr, suff)), 
                               title = xx$reftitle,
                               author = xx$author, 
                               journaltitle = xx$pubtitle,
@@ -148,8 +175,9 @@ article_bib <- function(xx){
 # books -------------------------------------------------------------------
 book_bib <- function(xx){
   
+  suff <- paste(sample(letters, 4), collapse = "")
   bib <- RefManageR::BibEntry(bibtype = "book", 
-                              key = paste0(trimws(xx$author1last), xx$pubyr), 
+                              key = gsub(" |[^A-z]", "", paste0(trimws(unlist(strsplit(xx$author1last, " "))[1]), xx$pubyr, suff)),  
                               title = xx$pubtitle,
                               author = xx$author,
                               year = xx$pubyr,
@@ -162,9 +190,10 @@ book_bib <- function(xx){
 }
 
 book_ch_bib <- function(xx){
+  suff <- paste(sample(letters, 4), collapse = "")
   
   bib <- RefManageR::BibEntry(bibtype = "inbook", 
-                              key = paste0(trimws(xx$author1last), xx$pubyr), 
+                              key = gsub(" |[^A-z]", "", paste0(trimws(unlist(strsplit(xx$author1last, " "))[1]), xx$pubyr, suff)), 
                               booktitle = xx$pubtitle,
                               title = xx$reftitle,
                               author = xx$author,
@@ -182,9 +211,10 @@ book_ch_bib <- function(xx){
 
 # Thesis ------------------------------------------------------------------
 thesis_bib <- function(xx){
+  suff <- paste(sample(letters, 4), collapse = "")
   
   bib <- RefManageR::BibEntry(bibtype = "thesis", 
-                              key = paste0(trimws(xx$author1last), xx$pubyr),
+                              key =  gsub(" |[^A-z]", "", paste0(trimws(unlist(strsplit(xx$author1last, " "))[1]), xx$pubyr, suff)),
                               title = xx$reftitle,
                               author = paste(xx$author1init, xx$author1last),
                               year = xx$pubyr,
@@ -199,9 +229,10 @@ thesis_bib <- function(xx){
 
 # Misc --------------------------------------------------------------------
 misc_bib <- function(xx){
+  suff <- paste(sample(letters, 4), collapse = "")
   
   bib <- RefManageR::BibEntry(bibtype = "misc", 
-                              key = paste0(trimws(xx$author1last), xx$pubyr),
+                              key =  gsub(" |[^A-z]", "", paste0(trimws(unlist(strsplit(xx$author1last, " "))[1]), xx$pubyr, suff)),
                               title = xx$reftitle,
                               author = paste(xx$author1init, xx$author1last),
                               year = xx$pubyr,
