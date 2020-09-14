@@ -1,23 +1,7 @@
 #' Generate report
 #'
 #' @export 
-generate_report <- function(metadata=list(title="Sample title",
-                                          authors=c("Jane Doe", "John Doe"),
-                                          corresauth=1,
-                                          corresemail="jane.doe@fau.de",
-                                          affiliation=c("Friedrich Alexander Universität", "University of Birmingham"),
-                                          abstract="This is where my abstract goes...",
-                                          keywords="data, paleobiology, fossil"),
-                            specs=list(source = "The Paleobiology Database",
-                                       url = "https://paleobiodb.org/data1.2/occs/list.csv?datainfo&rowcount&interval=
-                            Ediacaran,Holocene&show=class,classext,genus,subgenus,coll,coords,loc,paleoloc,
-                            strat,stratext,lith,env,ref,crmod,timebins,timecompare",
-                                       download_date = "2020-06-04",
-                                       dataformat = "Processed",
-                                       dataaccess = "Available with this report",
-                                       taxa = "Multiple",
-                                       location = "Global",
-                                       time = "Cambrian to Recent"),
+generate_report <- function(inputFile,
                             data_refs,
                             enterer_names=NULL,
                             output_path=".", 
@@ -31,6 +15,28 @@ generate_report <- function(metadata=list(title="Sample title",
     output_path <- file.path(output_path, "report")
     dir.create(output_path)
   }
+  
+  #read metadata from file
+  input <- read.csv(inputFile, header=FALSE)
+  input <- input[input$V1 != "",]
+  
+  #metadata 
+  n <- grep("specs", input[,1])
+  
+  metadata <- input[2:(n-1),]
+
+  metadata <- setNames(split(metadata$V2, seq(nrow(metadata))), metadata$V1)
+  
+  #authors & affiliations
+  metadata[["authors"]] <- strsplit(metadata[["authors"]], ";")[[1]]
+  metadata[["affiliation"]] <- strsplit(metadata[["affiliation"]], ";")[[1]]
+  
+  specs <- input[(n+1):nrow(input),]
+  specs$V2 <- gsub("(.{80})","\\1\n",specs$V2) #wraps text
+  specs <- setNames(split(specs$V2, seq(nrow(specs))), specs$V1)
+
+  #add attributes for corresponding author
+  metadata$corresauth <- as.numeric(metadata$corresauth)
   
   metadata$authors[metadata$corresauth] <- paste0(metadata$authors[metadata$corresauth], "*")
   metadata$corresauth <- paste("*Corresponding author, email:", metadata$corresemail)
@@ -408,7 +414,7 @@ template_pandoc <- function(metadata,
   
   metadata$author <- multi
   
-  metadata$aff <- metadata$authors <- NULL
+  metadata$affiliation <- metadata$authors <- NULL
   
   xfun::write_utf8(yaml::as.yaml(metadata), tmp)
   
@@ -426,8 +432,11 @@ template_pandoc <- function(metadata,
   file.show(output_file)
 }
 
+#' Capitalise string
+#'
+#' @export 
 capitalize <- function(string) {
-  paste0(substr(string, 1, 1),
+  paste0(toupper(substr(string, 1, 1)),
          tolower(substr(string, 2, nchar(string))))
 }
 
