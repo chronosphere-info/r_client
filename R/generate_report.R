@@ -48,16 +48,7 @@ generate_report <- function(metadata=list(title="Sample title",
   }
   
   #data references
-  bib <- generate_bib(data_refs)
-  bib <- RefManageR::toBiblatex(bib)
-  
-  #dealing with accents
-  n <- grep("author", names(bib))
-  bib[n] <- gsub("\\{\\\\a'", "\\\\'\\{", bib[n]) 
-  bib[n] <- gsub("\\\\i", "i", bib[n])
-
-  xfun::write_utf8(bib, 
-                   file.path(output_path, "references.bib"))
+  bib <- generate_bib(data_refs, output_path = output_path)
   
   #save reference to chronosphere
   write(knitr::write_bib("chronosphere", prefix = "R-pkg-")[[1]], 
@@ -76,167 +67,235 @@ generate_report <- function(metadata=list(title="Sample title",
 #' Generate bibliography
 #'
 #' @export 
-generate_bib <- function (x, type="publication_type"){
+generate_bib <- function (x, type="publication_type", output_path){
+  
+  bib.df <- data.frame(matrix(NA, nrow=nrow(x), ncol=28))
+  colnames(bib.df) <- c( "CATEGORY",     "BIBTEXKEY"  ,  "ADDRESS"   ,   "ANNOTE"  ,    
+                         "AUTHOR"   ,    "BOOKTITLE"   , "CHAPTER"    ,  "CROSSREF" ,   
+                         "EDITION"   ,   "EDITOR"       ,"HOWPUBLISHED", "INSTITUTION", 
+                         "JOURNAL"    ,  "KEY"          ,"MONTH"        ,"NOTE"       , 
+                         "NUMBER"      , "ORGANIZATION" ,"PAGES"      ,  "PUBLISHER"   ,
+                         "SCHOOL"     ,  "SERIES"       ,"TITLE"      ,  "TYPE"        ,
+                         "VOLUME"      , "YEAR"   , "DOI", "KEYWORDS")
   
   auth_gen <- function (x){
-  #first author
-  x$author <- paste(x$author1init, x$author1last)
-  
-  #add second author if present
-  if(x$author2last != ""){
-    x$author <- paste(x$author, "and",
-                      paste(x$author2init, x$author2last))
+    #first author
+    x$author <- ifelse(is.na(x$author1init), x$author1last,paste(x$author1init, x$author1last))
+    
+    #add second author if present
+    if(!(x$author2last == ""|is.na(x$author2last))){
+      x$author <- paste(x$author, "and",
+                        ifelse(is.na(x$author2init), x$author2last, paste(x$author2init, x$author2last)))
+    }
+    
+    #add author others if present
+    if(!(x$otherauthors == ""|is.na(x$otherauthors))){
+      x$author <-  paste(x$author, "and",
+                         gsub(", ", " and ", x$otherauthors))
+    }
+    #x$author <- iconv(x$author, to="UTF-8")
+    x$author <-strsplit(x$author, "and")
+    return(x$author)
   }
-  
-  #add author others if present
-  if(x$otherauthors != ""){
-    x$author <-  paste(x$author, "and",
-                       gsub(", ", " and ", x$otherauthors))
-  }
-  
-  return(x$author)
-  }
-  
   x$author <- NA
+  
   for(i in 1:nrow(x)){
     x$author[i] <- auth_gen(x[i,])
   }
   
-  x$page <- ifelse(x$firstpage == "", NA, paste0(x$firstpage, "-", x$lastpage))
-  
+  x$page <- ifelse(is.na(x$firstpage), NA, 
+                   ifelse(is.na(x$lastpage), x$firstpage, 
+                                paste0(x$firstpage, "-", x$lastpage)))
   
   for(i in 1:nrow(x)){
     cat("\r", i, "out of", nrow(x))
     xx <- x[i,]
-    tt <- xx[,type]
+    tt <- as.character(xx[,type])
     
     if (tt == "book/book chapter"){
-      tt <- ifelse(xx$editors != "" & xx$reftitle != "", "book chapter", "book")
+      tt <- ifelse(!((xx$editors == "" & xx$reftitle == "")|
+                      (is.na(xx$editors) & is.na(xx$reftitle))), "book chapter", "book")
     }
     
     if(length(grep("thesis", tt)) > 0) tt <- "thesis"
     
-    if (i == 1){
-      bib <- switch(tt,
-                    "journal article" = article_bib(xx),
-                    "book" = book_bib(xx),
-                    "book chapter" = book_ch_bib(xx),
-                    "serial monograph" = book_bib(xx),
-                    "guidebook" = book_bib(xx),
-                    "thesis" = thesis_bib(xx),
-                    "abstract" = article_bib(xx),
-                    "news article" = article_bib(xx),
-                    "compendium" = misc_bib(xx),
-                    "misc" = misc_bib(xx),
-                    "unpublished" = unpublished_bib(xx)
-      ) 
-      
-    } else {
-      tryCatch({bib[[i]] <- switch(tt,
-                                   "journal article" = article_bib(xx),
-                                   "book" = book_bib(xx),
-                                   "book chapter" = book_ch_bib(xx),
-                                   "serial monograph" = book_bib(xx),
-                                   "guidebook" = book_bib(xx),
-                                   "thesis" = thesis_bib(xx),
-                                   "abstract" = article_bib(xx),
-                                   "news article" = article_bib(xx),
-                                   "compendium" = misc_bib(xx),
-                                   "misc" = misc_bib(xx),
-                                   "unpublished" = unpublished_bib(xx)
-      )
-      }, error = function (e) {message (i, ": Invalid entry -", e); break})
-    }
+    
+    bib.df[i,] <- switch(tt,
+                         "journal article" = article_bib(xx),
+                         "book" = book_bib(xx),
+                         "book chapter" = book_ch_bib(xx),
+                         "book series" = book_se_bib(xx),
+                         "serial monograph" = book_bib(xx),
+                         "guidebook" = book_bib(xx),
+                         "thesis" = thesis_bib(xx),
+                         "abstract" = article_bib(xx),
+                         "news article" = article_bib(xx),
+                         "compendium" = misc_bib(xx),
+                         "misc" = misc_bib(xx),
+                         "unpublished" = unpublished_bib(xx)
+    )
+    
   }
-  return(bib) 
+  
+  
+  bib <- df2bib(bib.df)
+    
+  xfun::write_utf8(bib, file.path(output_path, "references.bib"))
 }
 
 # For articles ------------------------------------------------------------
 article_bib <- function(xx){
   
+  bib.df <- data.frame(matrix(NA, nrow=1, ncol=28))
+  colnames(bib.df) <- c( "CATEGORY",     "BIBTEXKEY"  ,  "ADDRESS"   ,   "ANNOTE"  ,    
+                         "AUTHOR"   ,    "BOOKTITLE"   , "CHAPTER"    ,  "CROSSREF" ,   
+                         "EDITION"   ,   "EDITOR"       ,"HOWPUBLISHED", "INSTITUTION", 
+                         "JOURNAL"    ,  "KEY"          ,"MONTH"        ,"NOTE"       , 
+                         "NUMBER"      , "ORGANIZATION" ,"PAGES"      ,  "PUBLISHER"   ,
+                         "SCHOOL"     ,  "SERIES"       ,"TITLE"      ,  "TYPE"        ,
+                         "VOLUME"      , "YEAR"   , "DOI", "KEYWORDS")
+  
   suff <- paste(sample(letters, 4), collapse = "")
-  bib <- RefManageR::BibEntry(bibtype = "article", 
-                              key = gsub(" |[^A-z]", "", paste0(trimws(unlist(strsplit(xx$author1last, " "))[1]), xx$pubyr, suff)), 
-                              title = xx$reftitle,
-                              author = xx$author, 
-                              journaltitle = xx$pubtitle,
-                              volume=xx$pubvol,
-                              number=xx$pubno,
-                              page=xx$page,
-                              date = xx$pubyr, 
-                              doi=xx$doi,
-                              keywords="data")  
+  bib.df$CATEGORY <- "ARTICLE"
+  bib.df$BIBTEXKEY  <- gsub(" |[^A-z]", "", paste0(trimws(unlist(strsplit(xx$author1last, " "))[1]), xx$pubyr, suff))
+  
+  bib.df$TITLE <- xx$reftitle
+  bib.df$AUTHOR <- xx$author 
+  bib.df$JOURNAL <- xx$pubtitle
+  bib.df$VOLUME=xx$pubvol
+  bib.df$NUMBER=xx$pubno
+  bib.df$PAGES=xx$page
+  bib.df$YEAR = xx$pubyr 
+  bib.df$DOI=xx$doi
+  
+  bib.df$KEYWORDS="data"
   
   
-  return(bib)
+  return(bib.df)
 }
 
 
 # books -------------------------------------------------------------------
 book_bib <- function(xx){
   
+  bib.df <- data.frame(matrix(NA, nrow=1, ncol=28))
+  colnames(bib.df) <- c( "CATEGORY",     "BIBTEXKEY"  ,  "ADDRESS"   ,   "ANNOTE"  ,    
+                         "AUTHOR"   ,    "BOOKTITLE"   , "CHAPTER"    ,  "CROSSREF" ,   
+                         "EDITION"   ,   "EDITOR"       ,"HOWPUBLISHED", "INSTITUTION", 
+                         "JOURNAL"    ,  "KEY"          ,"MONTH"        ,"NOTE"       , 
+                         "NUMBER"      , "ORGANIZATION" ,"PAGES"      ,  "PUBLISHER"   ,
+                         "SCHOOL"     ,  "SERIES"       ,"TITLE"      ,  "TYPE"        ,
+                         "VOLUME"      , "YEAR"   , "DOI", "KEYWORDS")
+  
   suff <- paste(sample(letters, 4), collapse = "")
-  bib <- RefManageR::BibEntry(bibtype = "book", 
-                              key = gsub(" |[^A-z]", "", paste0(trimws(unlist(strsplit(xx$author1last, " "))[1]), xx$pubyr, suff)),  
-                              title = xx$pubtitle,
-                              author = xx$author,
-                              year = xx$pubyr,
-                              publisher = xx$publisher,
-                              place = xx$pubcity,
-                              keywords="data")  
+  bib.df$CATEGORY <- "BOOK"
+  bib.df$KEY = gsub(" |[^A-z]", "", paste0(trimws(unlist(strsplit(xx$author1last, " "))[1]), xx$pubyr, suff))
+  bib.df$TITLE = xx$pubtitle
+  bib.df$AUTHOR = xx$author
+  bib.df$YEAR = xx$pubyr
+  bib.df$PUBLISHER = paste(xx$publisher,xx$pubcity)
+  bib.df$KEYWORDS ="data"
   
   
-  return(bib)
+  return(bib.df)
 }
 
 book_ch_bib <- function(xx){
+  bib.df <- data.frame(matrix(NA, nrow=1, ncol=28))
+  colnames(bib.df) <- c( "CATEGORY",     "BIBTEXKEY"  ,  "ADDRESS"   ,   "ANNOTE"  ,    
+                         "AUTHOR"   ,    "BOOKTITLE"   , "CHAPTER"    ,  "CROSSREF" ,   
+                         "EDITION"   ,   "EDITOR"       ,"HOWPUBLISHED", "INSTITUTION", 
+                         "JOURNAL"    ,  "KEY"          ,"MONTH"        ,"NOTE"       , 
+                         "NUMBER"      , "ORGANIZATION" ,"PAGES"      ,  "PUBLISHER"   ,
+                         "SCHOOL"     ,  "SERIES"       ,"TITLE"      ,  "TYPE"        ,
+                         "VOLUME"      , "YEAR"   , "DOI", "KEYWORDS")
+  
   suff <- paste(sample(letters, 4), collapse = "")
-  
-  bib <- RefManageR::BibEntry(bibtype = "inbook", 
-                              key = gsub(" |[^A-z]", "", paste0(trimws(unlist(strsplit(xx$author1last, " "))[1]), xx$pubyr, suff)), 
-                              booktitle = xx$pubtitle,
-                              title = xx$reftitle,
-                              author = xx$author,
-                              editor=gsub(",", "and", xx$editors),
-                              year = xx$pubyr,
-                              publisher = xx$publisher,
-                              page = xx$page,
-                              place = xx$pubcity,
-                              keywords="data")  
+  bib.df$CATEGORY <- "INBOOK"
+  bib.df$KEY = gsub(" |[^A-z]", "", paste0(trimws(unlist(strsplit(xx$author1last, " "))[1]), xx$pubyr, suff))
+  bib.df$BOOKTITLE = xx$pubtitle
+  bib.df$TITLE = xx$reftitle
+  bib.df$AUTHOR = xx$author
+  bib.df$EDITOR=list(strsplit(xx$editors, " ")[[1]])
+  bib.df$YEAR = xx$pubyr
+  bib.df$PUBLISHER = ifelse(!is.na(xx$publisher) & !is.na(xx$pubcity), paste(xx$publisher,xx$pubcity, sep=", "), NA)
+  bib.df$PAGES = xx$page
+  bib.df$KEYWORDS="data"
   
   
-  return(bib)
+  return(bib.df)
 }
 
+book_se_bib <- function(xx){
+  
+  bib.df <- data.frame(matrix(NA, nrow=1, ncol=28))
+  colnames(bib.df) <- c( "CATEGORY",     "BIBTEXKEY"  ,  "ADDRESS"   ,   "ANNOTE"  ,    
+                         "AUTHOR"   ,    "BOOKTITLE"   , "CHAPTER"    ,  "CROSSREF" ,   
+                         "EDITION"   ,   "EDITOR"       ,"HOWPUBLISHED", "INSTITUTION", 
+                         "JOURNAL"    ,  "KEY"          ,"MONTH"        ,"NOTE"       , 
+                         "NUMBER"      , "ORGANIZATION" ,"PAGES"      ,  "PUBLISHER"   ,
+                         "SCHOOL"     ,  "SERIES"       ,"TITLE"      ,  "TYPE"        ,
+                         "VOLUME"      , "YEAR"   , "DOI", "KEYWORDS")
+  
+  suff <- paste(sample(letters, 4), collapse = "")
+  bib.df$CATEGORY <- "BOOK"
+  bib.df$KEY = gsub(" |[^A-z]", "", paste0(trimws(unlist(strsplit(xx$author1last, " "))[1]), xx$pubyr, suff))
+  bib.df$TITLE = xx$reftitle
+  bib.df$SERIES=xx$pubtitle
+  bib.df$NUMBER=xx$pubno
+  bib.df$AUTHOR = xx$author
+  bib.df$YEAR = xx$pubyr
+  bib.df$PUBLISHER = paste(xx$publisher,xx$pubcity, sep=", ")
+  bib.df$KEYWORDS="data"
+  
+  
+  return(bib.df)
+}
 
 # Thesis ------------------------------------------------------------------
 thesis_bib <- function(xx){
+  bib.df <- data.frame(matrix(NA, nrow=1, ncol=28))
+  colnames(bib.df) <- c( "CATEGORY",     "BIBTEXKEY"  ,  "ADDRESS"   ,   "ANNOTE"  ,    
+                         "AUTHOR"   ,    "BOOKTITLE"   , "CHAPTER"    ,  "CROSSREF" ,   
+                         "EDITION"   ,   "EDITOR"       ,"HOWPUBLISHED", "INSTITUTION", 
+                         "JOURNAL"    ,  "KEY"          ,"MONTH"        ,"NOTE"       , 
+                         "NUMBER"      , "ORGANIZATION" ,"PAGES"      ,  "PUBLISHER"   ,
+                         "SCHOOL"     ,  "SERIES"       ,"TITLE"      ,  "TYPE"        ,
+                         "VOLUME"      , "YEAR"   , "DOI", "KEYWORDS")
+  
   suff <- paste(sample(letters, 4), collapse = "")
+  bib.df$CATEGORY <- "THESIS"
   
-  bib <- RefManageR::BibEntry(bibtype = "thesis", 
-                              key =  gsub(" |[^A-z]", "", paste0(trimws(unlist(strsplit(xx$author1last, " "))[1]), xx$pubyr, suff)),
-                              title = xx$reftitle,
-                              author = paste(xx$author1init, xx$author1last),
-                              year = xx$pubyr,
-                              institution = xx$pubtitle,
-                              type=xx$publication_type,
-                              keywords="data")  
+  bib.df$TITLE = xx$reftitle
+  bib.df$AUTHOR = paste(xx$author1init, xx$author1last)
+  bib.df$AUTHOR = xx$pubyr
+  bib.df$INSTITUTION = xx$pubtitle
+  
+  bib.df$KEYWORDS="data"
   
   
-  return(bib)
+  return(bib.df)
 }
 
 
 # Misc --------------------------------------------------------------------
 misc_bib <- function(xx){
-  suff <- paste(sample(letters, 4), collapse = "")
+  bib.df <- data.frame(matrix(NA, nrow=1, ncol=28))
+  colnames(bib.df) <- c( "CATEGORY",     "BIBTEXKEY"  ,  "ADDRESS"   ,   "ANNOTE"  ,    
+                         "AUTHOR"   ,    "BOOKTITLE"   , "CHAPTER"    ,  "CROSSREF" ,   
+                         "EDITION"   ,   "EDITOR"       ,"HOWPUBLISHED", "INSTITUTION", 
+                         "JOURNAL"    ,  "KEY"          ,"MONTH"        ,"NOTE"       , 
+                         "NUMBER"      , "ORGANIZATION" ,"PAGES"      ,  "PUBLISHER"   ,
+                         "SCHOOL"     ,  "SERIES"       ,"TITLE"      ,  "TYPE"        ,
+                         "VOLUME"      , "YEAR"   , "DOI", "KEYWORDS")
   
-  bib <- RefManageR::BibEntry(bibtype = "misc", 
-                              key =  gsub(" |[^A-z]", "", paste0(trimws(unlist(strsplit(xx$author1last, " "))[1]), xx$pubyr, suff)),
-                              title = xx$reftitle,
-                              author = paste(xx$author1init, xx$author1last),
-                              year = xx$pubyr,
-                              keywords="data")  
+  suff <- paste(sample(letters, 4), collapse = "")
+  bib.df$CATEGORY <- "MISC"
+  
+  bib.df$TITLE = xx$reftitle
+  bib.df$AUTHOR = paste(xx$author1init, xx$author1last)
+  bib.df$YEAR = xx$pubyr
+  bib.df$KEYWORDS="data"
   
   
   return(bib)
@@ -244,16 +303,27 @@ misc_bib <- function(xx){
 
 unpublished_bib <- function(xx){
   
-  bib <- RefManageR::BibEntry(bibtype = "unpublished", 
-                              key = paste0(trimws(xx$author1last), xx$pubyr),
-                              title = xx$reftitle,
-                              author = paste(xx$author1init, xx$author1last),
-                              year = xx$pubyr,
-                              keywords="data")  
+  bib.df <- data.frame(matrix(NA, nrow=1, ncol=28))
+  colnames(bib.df) <- c( "CATEGORY",     "BIBTEXKEY"  ,  "ADDRESS"   ,   "ANNOTE"  ,    
+                         "AUTHOR"   ,    "BOOKTITLE"   , "CHAPTER"    ,  "CROSSREF" ,   
+                         "EDITION"   ,   "EDITOR"       ,"HOWPUBLISHED", "INSTITUTION", 
+                         "JOURNAL"    ,  "KEY"          ,"MONTH"        ,"NOTE"       , 
+                         "NUMBER"      , "ORGANIZATION" ,"PAGES"      ,  "PUBLISHER"   ,
+                         "SCHOOL"     ,  "SERIES"       ,"TITLE"      ,  "TYPE"        ,
+                         "VOLUME"      , "YEAR"   , "DOI", "KEYWORDS")
+  
+  suff <- paste(sample(letters, 4), collapse = "")
+  bib.df$CATEGORY <- "UNPUBLISHED"
+  
+  bib.df$TITLE = xx$reftitle
+  bib.df$AUTHOR = xx$author
+  bib.df$YEAR = xx$pubyr
+  bib.df$KEYWORDS="data" 
   
   
-  return(bib)
+  return(bib.df)
 }
+
 
 append_yaml <- function (inputFile, skeletonFile, encoding, yaml) {   
   # read in the YAML + src file
@@ -305,6 +375,7 @@ template_pandoc <- function(metadata,
   append_yaml(gsub("pdf", "Rmd", output_file),
               skeletonFile = skeletonFile,
               yaml=tmp)
+  
   #copy template as well
   file.copy(from = template, to=file.path(output_path, basename(template)))
   
@@ -314,3 +385,60 @@ template_pandoc <- function(metadata,
   invisible(output_file)
   file.show(output_file)
 }
+
+capitalize <- function(string) {
+  paste0(substr(string, 1, 1),
+         tolower(substr(string, 2, nchar(string))))
+}
+
+na_replace <- function(df) {
+  df[is.na(df)] <- ""
+  return(df)
+}
+
+df2bib <- function (x) 
+{
+  if (any({
+    df_elements <- sapply(x$AUTHOR, inherits, "data.frame")
+  })) {
+    x$AUTHOR[df_elements] <- lapply(x$AUTHOR[df_elements], 
+                                    na_replace)
+    x$AUTHOR[df_elements] <- lapply(x$AUTHOR[df_elements], 
+                                    function(x) {
+                                      paste(x$last_name, ", ", x$first_name, 
+                                            " ", x$middle_name, sep = "")
+                                    })
+    x$AUTHOR[df_elements] <- lapply(x$AUTHOR[df_elements], 
+                                    trimws)
+  }
+  names(x) <- capitalize(names(x))
+  fields <- lapply(seq_len(nrow(x)), function(r) {
+    rowfields <- rep(list(character(0)), ncol(x))
+    names(rowfields) <- names(x)
+    for (i in seq_along(rowfields)) {
+      f <- x[[i]][r]
+      if (is.list(f)) {
+        f <- unlist(f)
+      }
+      rowfields[[i]] <- if (!length(f) || is.na(f)) {
+        character(0L)
+      }
+      else if (names(x)[i] %in% c("Author", "Editor")) {
+        paste(f, collapse = " and ")
+      }
+      else {
+        paste0(f, collapse = ", ")
+      }
+    }
+    rowfields <- rowfields[lengths(rowfields) > 0]
+    rowfields <- rowfields[!names(rowfields) %in% c("Category", 
+                                                    "Bibtexkey")]
+    paste0("  ", names(rowfields), " = {", unname(unlist(rowfields)), 
+           "}", collapse = ",\n")
+  })
+  bib <- paste0("@", capitalize(x$Category), "{", 
+                x$Bibtexkey, ",\n", unlist(fields), "\n}\n", 
+                collapse = "\n\n")
+  return(bib)
+}
+
