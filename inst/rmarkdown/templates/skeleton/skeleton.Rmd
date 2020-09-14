@@ -4,7 +4,7 @@ output:
     citation_package: biblatex
     keep_tex: yes
     fig_caption: yes
-    latex_engine: pdflatex
+    latex_engine: lualatex
     template: template.tex
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 geometry: margin=1in

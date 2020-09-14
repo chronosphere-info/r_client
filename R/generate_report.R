@@ -189,7 +189,7 @@ book_bib <- function(xx){
   
   suff <- paste(sample(letters, 4), collapse = "")
   bib.df$CATEGORY <- "BOOK"
-  bib.df$KEY = gsub(" |[^A-z]", "", paste0(trimws(unlist(strsplit(xx$author1last, " "))[1]), xx$pubyr, suff))
+  bib.df$BIBTEXKEY = gsub(" |[^A-z]", "", paste0(trimws(unlist(strsplit(xx$author1last, " "))[1]), xx$pubyr, suff))
   bib.df$TITLE = xx$pubtitle
   bib.df$AUTHOR = xx$author
   bib.df$YEAR = xx$pubyr
@@ -212,7 +212,7 @@ book_ch_bib <- function(xx){
   
   suff <- paste(sample(letters, 4), collapse = "")
   bib.df$CATEGORY <- "INBOOK"
-  bib.df$KEY = gsub(" |[^A-z]", "", paste0(trimws(unlist(strsplit(xx$author1last, " "))[1]), xx$pubyr, suff))
+  bib.df$BIBTEXKEY = gsub(" |[^A-z]", "", paste0(trimws(unlist(strsplit(xx$author1last, " "))[1]), xx$pubyr, suff))
   bib.df$BOOKTITLE = xx$pubtitle
   bib.df$TITLE = xx$reftitle
   bib.df$AUTHOR = xx$author
@@ -239,7 +239,7 @@ book_se_bib <- function(xx){
   
   suff <- paste(sample(letters, 4), collapse = "")
   bib.df$CATEGORY <- "BOOK"
-  bib.df$KEY = gsub(" |[^A-z]", "", paste0(trimws(unlist(strsplit(xx$author1last, " "))[1]), xx$pubyr, suff))
+  bib.df$BIBTEXKEY = gsub(" |[^A-z]", "", paste0(trimws(unlist(strsplit(xx$author1last, " "))[1]), xx$pubyr, suff))
   bib.df$TITLE = xx$reftitle
   bib.df$SERIES=xx$pubtitle
   bib.df$NUMBER=xx$pubno
@@ -265,10 +265,11 @@ thesis_bib <- function(xx){
   
   suff <- paste(sample(letters, 4), collapse = "")
   bib.df$CATEGORY <- "THESIS"
+  bib.df$BIBTEXKEY = gsub(" |[^A-z]", "", paste0(trimws(unlist(strsplit(xx$author1last, " "))[1]), xx$pubyr, suff))
   
   bib.df$TITLE = xx$reftitle
   bib.df$AUTHOR = paste(xx$author1init, xx$author1last)
-  bib.df$AUTHOR = xx$pubyr
+  bib.df$YEAR = xx$pubyr
   bib.df$INSTITUTION = xx$pubtitle
   
   bib.df$KEYWORDS="data"
@@ -291,7 +292,7 @@ misc_bib <- function(xx){
   
   suff <- paste(sample(letters, 4), collapse = "")
   bib.df$CATEGORY <- "MISC"
-  
+  bib.df$BIBTEXKEY = gsub(" |[^A-z]", "", paste0(trimws(unlist(strsplit(xx$author1last, " "))[1]), xx$pubyr, suff))
   bib.df$TITLE = xx$reftitle
   bib.df$AUTHOR = paste(xx$author1init, xx$author1last)
   bib.df$YEAR = xx$pubyr
@@ -314,7 +315,7 @@ unpublished_bib <- function(xx){
   
   suff <- paste(sample(letters, 4), collapse = "")
   bib.df$CATEGORY <- "UNPUBLISHED"
-  
+  bib.df$BIBTEXKEY = gsub(" |[^A-z]", "", paste0(trimws(unlist(strsplit(xx$author1last, " "))[1]), xx$pubyr, suff))
   bib.df$TITLE = xx$reftitle
   bib.df$AUTHOR = xx$author
   bib.df$YEAR = xx$pubyr
