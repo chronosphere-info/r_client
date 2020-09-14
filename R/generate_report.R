@@ -48,12 +48,22 @@ generate_report <- function(metadata=list(title="Sample title",
   }
   
   #data references
-  bib <- generate_bib(data_refs, output_path = output_path)
+  generate_bib(data_refs, output_path = output_path)
+  
+  bib <- readLines(file.path(output_path, "references.bib"), encoding="UTF-8")
+  file.remove(file.path(output_path, "references.bib"))
   
   #save reference to chronosphere
-  write(knitr::write_bib("chronosphere", prefix = "R-pkg-")[[1]], 
-        file=file.path(output_path,"references.bib"), 
-        append=TRUE)
+  con <- file(file.path(output_path, "references.bib"), "wb")
+  
+  tmp <- knitr::write_bib("chronosphere", prefix = "R-pkg-")[[1]]
+  tmp <- as.character(tmp)
+  
+  bib <- paste(c(bib, tmp), collapse="\n")
+  xfun::write_utf8(bib, con=con)
+  
+  close(con)
+  
   
   output_file <- file.path(output_path, output_file)
   
@@ -139,8 +149,11 @@ generate_bib <- function (x, type="publication_type", output_path){
   
   
   bib <- df2bib(bib.df)
-    
-  xfun::write_utf8(bib, file.path(output_path, "references.bib"))
+  # setup file connection
+  con <- file(file.path(output_path, "references.bib"), "wb")
+  
+  xfun::write_utf8(bib, con=con)
+  close(con)  # close and destroy a connection
 }
 
 # For articles ------------------------------------------------------------
@@ -435,11 +448,21 @@ df2bib <- function (x)
     rowfields <- rowfields[!names(rowfields) %in% c("Category", 
                                                     "Bibtexkey")]
     paste0("  ", names(rowfields), " = {", unname(unlist(rowfields)), 
-           "}", collapse = ",\n")
+           "}", collapse = paste0(",", newLine()))
   })
   bib <- paste0("@", capitalize(x$Category), "{", 
-                x$Bibtexkey, ",\n", unlist(fields), "\n}\n", 
-                collapse = "\n\n")
+                x$Bibtexkey, paste0(",", newLine()), unlist(fields), paste0(newLine(), "}", newLine()), 
+                collapse = newLine())
   return(bib)
 }
 
+newLine <- function(){
+  if(substr(Sys.getenv("OS"),1,7) == "Windows") {
+    # set Windows newline
+    return("\n")
+  }
+  else {
+    # set non-Windows newline
+    return("\n")
+  }  
+}
