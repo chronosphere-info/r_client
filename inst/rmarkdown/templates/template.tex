@@ -7,8 +7,8 @@ $else$
 \usepackage{lmodern}
 $endif$
 
-\usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
 
 \usepackage{abstract}
 \renewcommand{\abstractname}{}    % clear the title
@@ -99,7 +99,10 @@ $if(natbib)$
 $endif$
 
 \usepackage[backend=biber,style=numeric,autocite=plain,sorting=none, maxbibnames=99, bibencoding=utf8]{biblatex}
+
+$for(bibliography)$
 \addbibresource{$bibliography$}
+$endfor$
 
 $if(listings)$
 \usepackage{listings}

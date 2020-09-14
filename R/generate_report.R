@@ -48,13 +48,14 @@ generate_report <- function(metadata=list(title="Sample title",
   }
   
   #data references
-  generate_bib(data_refs, output_path = output_path)
+  fname <- generate_bib(data_refs, output_path = output_path, combine=FALSE)
+  metadata$bibliography <- fname
   
-  bib <- readLines(file.path(output_path, "references.bib"), encoding="UTF-8")
-  file.remove(file.path(output_path, "references.bib"))
+  bib <- readLines(file.path(output_path, fname[[1]]), encoding="UTF-8")
+  file.remove(file.path(output_path, fname[[1]]))
   
   #save reference to chronosphere
-  con <- file(file.path(output_path, "references.bib"), "wb")
+  con <- file(file.path(output_path, fname[[1]]), "wb")
   
   tmp <- knitr::write_bib("chronosphere", prefix = "R-pkg-")[[1]]
   tmp <- as.character(tmp)
@@ -63,7 +64,6 @@ generate_report <- function(metadata=list(title="Sample title",
   xfun::write_utf8(bib, con=con)
   
   close(con)
-  
   
   output_file <- file.path(output_path, output_file)
   
@@ -77,7 +77,7 @@ generate_report <- function(metadata=list(title="Sample title",
 #' Generate bibliography
 #'
 #' @export 
-generate_bib <- function (x, type="publication_type", output_path){
+generate_bib <- function (x, output_path, type="publication_type", combine=TRUE){
   
   bib.df <- data.frame(matrix(NA, nrow=nrow(x), ncol=28))
   colnames(bib.df) <- c( "CATEGORY",     "BIBTEXKEY"  ,  "ADDRESS"   ,   "ANNOTE"  ,    
@@ -148,12 +148,38 @@ generate_bib <- function (x, type="publication_type", output_path){
   }
   
   
-  bib <- df2bib(bib.df)
+  
+  
+  if(combine){
+    bib <- df2bib(bib.df)
   # setup file connection
   con <- file(file.path(output_path, "references.bib"), "wb")
   
   xfun::write_utf8(bib, con=con)
   close(con)  # close and destroy a connection
+  
+  return("references.bib")
+  
+  } else {
+    n <- 1:nrow(bib.df)
+    
+    chunk <- 2000
+    
+    n <- split(n, ceiling(seq_along(n)/chunk))
+    fname <- list()
+    
+    for(i in seq_along(n)){
+      bib <- df2bib(bib.df[n[[i]],])
+      fname[[i]] <- sprintf("references%02d.bib", i)
+      # setup file connection
+      con <- file(file.path(output_path, fname[[i]]), "wb")
+      
+      xfun::write_utf8(bib, con=con)
+      close(con)  # close and destroy a connection
+      
+    }
+    return(fname)
+  }
 }
 
 # For articles ------------------------------------------------------------
@@ -312,7 +338,7 @@ misc_bib <- function(xx){
   bib.df$KEYWORDS="data"
   
   
-  return(bib)
+  return(bib.df)
 }
 
 unpublished_bib <- function(xx){
