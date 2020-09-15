@@ -2,10 +2,10 @@
 #'
 #' @export 
 generate_report <- function(inputFile,
-                            data_refs,
+                            data_refs, combine=TRUE,
                             enterer_names=NULL,
                             output_path=".", 
-                            output_file="test.pdf",
+                            output_file="report.pdf",
                             create_dir =TRUE,
                             template=pkg_file("rmarkdown", "templates", "template.tex"),
                             skeletonFile=pkg_file("rmarkdown", "templates", "skeleton", "skeleton.Rmd"),
@@ -24,7 +24,7 @@ generate_report <- function(inputFile,
   n <- grep("specs", input[,1])
   
   metadata <- input[2:(n-1),]
-
+  
   metadata <- setNames(split(metadata$V2, seq(nrow(metadata))), metadata$V1)
   
   #authors & affiliations
@@ -32,9 +32,8 @@ generate_report <- function(inputFile,
   metadata[["affiliation"]] <- strsplit(metadata[["affiliation"]], ";")[[1]]
   
   specs <- input[(n+1):nrow(input),]
-  specs$V2 <- gsub("(.{80})","\\1\n",specs$V2) #wraps text
   specs <- setNames(split(specs$V2, seq(nrow(specs))), specs$V1)
-
+  
   #add attributes for corresponding author
   metadata$corresauth <- as.numeric(metadata$corresauth)
   
@@ -54,22 +53,12 @@ generate_report <- function(inputFile,
   }
   
   #data references
-  fname <- generate_bib(data_refs, output_path = output_path, combine=FALSE)
+  fname <- generate_bib(data_refs, output_path = output_path, combine=combine)
   metadata$bibliography <- fname
   
-  bib <- readLines(file.path(output_path, fname[[1]]), encoding="UTF-8")
-  file.remove(file.path(output_path, fname[[1]]))
-  
-  #save reference to chronosphere
-  con <- file(file.path(output_path, fname[[1]]), "wb")
-  
-  tmp <- knitr::write_bib("chronosphere", prefix = "R-pkg-")[[1]]
-  tmp <- as.character(tmp)
-  
-  bib <- paste(c(bib, tmp), collapse="\n")
-  xfun::write_utf8(bib, con=con)
-  
-  close(con)
+  #save reference for chronosphere
+  write(knitr::write_bib("chronosphere", prefix = "R-pkg-")[[1]],
+        file=file.path(output_path, fname[[1]]), append=TRUE)
   
   output_file <- file.path(output_path, output_file)
   
@@ -121,7 +110,7 @@ generate_bib <- function (x, output_path, type="publication_type", combine=TRUE)
   
   x$page <- ifelse(is.na(x$firstpage), NA, 
                    ifelse(is.na(x$lastpage), x$firstpage, 
-                                paste0(x$firstpage, "-", x$lastpage)))
+                          paste0(x$firstpage, "-", x$lastpage)))
   
   for(i in 1:nrow(x)){
     cat("\r", i, "out of", nrow(x))
@@ -130,7 +119,7 @@ generate_bib <- function (x, output_path, type="publication_type", combine=TRUE)
     
     if (tt == "book/book chapter"){
       tt <- ifelse(!((xx$editors == "" & xx$reftitle == "")|
-                      (is.na(xx$editors) & is.na(xx$reftitle))), "book chapter", "book")
+                       (is.na(xx$editors) & is.na(xx$reftitle))), "book chapter", "book")
     }
     
     if(length(grep("thesis", tt)) > 0) tt <- "thesis"
@@ -158,14 +147,14 @@ generate_bib <- function (x, output_path, type="publication_type", combine=TRUE)
   
   if(combine){
     bib <- df2bib(bib.df)
-  # setup file connection
-  con <- file(file.path(output_path, "references.bib"), "wb")
-  
-  xfun::write_utf8(bib, con=con)
-  close(con)  # close and destroy a connection
-  
-  return("references.bib")
-  
+    # setup file connection
+    con <- file(file.path(output_path, "references.bib"), "wb")
+    
+    xfun::write_utf8(bib, con=con)
+    close(con)  # close and destroy a connection
+    
+    return(list("references.bib"))
+    
   } else {
     n <- 1:nrow(bib.df)
     
