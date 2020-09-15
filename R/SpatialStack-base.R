@@ -135,7 +135,7 @@ setMethod(
 	    if (nl == 0) {
 	        cat("nlayers     :", nl, "\n")
 	    } else {
-	    	cat("length  : ", nlayers(object), "\n")
+	    	cat("length      : ", nlayers(object), "\n")
 
 	        cat("bbox        : ", 
 	        	object@bbox["x", "min"], ", ",  
