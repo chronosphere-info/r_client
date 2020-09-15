@@ -1,8 +1,3 @@
-
-
-# class declaration
-setClassUnion("arrayORmatrixORvector", c("vector", "matrix", "array"))
-
 #' Virtual Array of RasterLayers
 #' 
 #' Array template for RasterLayers

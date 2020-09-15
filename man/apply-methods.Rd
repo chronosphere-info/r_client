@@ -8,11 +8,11 @@
 \format{
 An object of class \code{standardGeneric} of length 1.
 }
-%\usage{
-%apply(X, MARGIN, FUN, ...)
-%
-%apply
-%}
+\usage{
+apply(X, MARGIN, FUN, ...)
+
+apply
+}
 \arguments{
 \item{X}{an array, including matrices and RasterArrays.}
 

@@ -115,10 +115,10 @@ setReplaceMethod(
 		return(x)
 })
 
-#' Names of one-dimensional RasterArray or SpArray objects.
+#' Names of one-dimensional RasterArray, SpatialStack or SpatialArray objects.
 #' 
 #' Get or set the names of one-dimensional RasterArray or SpArray objects 
-#' @param x \code{RasterArray} or \code{SpArray} object.
+#' @param x \code{RasterArray}, \code{SpatialStack} or \code{SpArray} object.
 #' @param value \code{character} vector.
 #' @return A \code{character} vector of names or \code{NULL}.
 #' 

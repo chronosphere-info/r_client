@@ -7,6 +7,7 @@
 \alias{reconstruct,numeric-method}
 \alias{reconstruct,character-method}
 \alias{reconstruct,SpatialPolygonsDataFrame-method}
+\alias{reconstruct,SpatialLinesDataFrame-method}
 \title{Reconstruct geographic features}
 \usage{
 reconstruct(x, ...)
@@ -43,6 +44,18 @@ reconstruct(x, ...)
 )
 
 \S4method{reconstruct}{SpatialPolygonsDataFrame}(
+  x,
+  age,
+  model = "PALEOMAP",
+  listout = TRUE,
+  verbose = FALSE,
+  path.gplates = NULL,
+  cleanup = TRUE,
+  dir = NULL,
+  plateperiod = FALSE
+)
+
+\S4method{reconstruct}{SpatialLinesDataFrame}(
   x,
   age,
   model = "PALEOMAP",
