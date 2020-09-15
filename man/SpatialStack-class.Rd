@@ -19,7 +19,7 @@ A \code{SpatialStack} class object.
 Vector data in the same CRS organized into a vector.
 }
 \details{
-The class implements a stack of vector data that mimic \code{\link[raster]{RasterStack}}-class objects, only with vector data. 
+The class implements a stack of vector data that mimic \code{\link[raster:Raster-classes]{RasterStack}}-class objects, only with vector data. 
 Classes, such as \code{link[sp]{SpatialPoints}}, \code{link[sp]{SpatialPointsDataFrame}}, \code{link[sp]{SpatialLines}}, \code{link[sp]{SpatialLinesDataFrame}},
 \code{link[sp]{SpatialPolygons}} and \code{link[sp]{SpatialPolygonsDataFrame}} can be concatenated to a vector/list, where elements can be accessed
 using list-type subsetting. The only restriction is that the items must share the same \code{\link[sp]{CRS}}. 

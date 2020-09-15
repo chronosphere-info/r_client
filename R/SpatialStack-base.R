@@ -6,13 +6,14 @@ setMethod("initialize",signature="SpatialStack",
 			# output
 			spatialList <- list()
 
+			
 			for(i in 1:length(Spatials)){
 				# readOGR is suggests!
 				if(! requireNamespace("rgdal", quietly=TRUE)) stop("The 'rgdal' package is required to read Spatials from disk.")
 				spatialList[[i]] <- rgdal::readOGR(Spatials[i], verbose=verbose)
 			}
 			# store the names
-			withExt<- unlist(lapply(strsplit(files, "/"), function(x) x[length(x)]))
+			withExt<- unlist(lapply(strsplit(Spatials, "/"), function(x) x[length(x)]))
 			names(spatialList) <- unlist(lapply(strsplit(withExt, "\\."), function(x) x[1]))
 
 			# should be used in the future
@@ -48,7 +49,7 @@ setMethod("initialize",signature="SpatialStack",
 			}else{
 				for(i in 1:length(Spatials)){
 	
-					.Object@Spatials[[i]] <- SpTransform(.Object@Spatials[[i]], proj4string)
+					.Object@Spatials[[i]] <- sp::spTransform(.Object@Spatials[[i]], proj4string)
 				}
 			}
 			.Object@proj4string <- proj4string
