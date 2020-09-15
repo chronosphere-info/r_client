@@ -92,13 +92,7 @@ $if(anonymous)$$else$\author{$for(author)$\Large $author.name$$if(author.thanks)
 \titleformat*{\subparagraph}{\normalsize\itshape}
 
 
-$if(natbib)$
-\usepackage{natbib}
-\bibliographystyle{$if(biblio-style)$$biblio-style$$else$plainnat$endif$}
-\usepackage[strings]{underscore} % protect underscores in most circumstances
-$endif$
-
-\usepackage[backend=biber,style=numeric,autocite=plain,sorting=none, maxbibnames=99, bibencoding=utf8]{biblatex}
+\usepackage[backend=biber,style=$if(biblio-style)$$biblio-style$$else$numeric$endif$,autocite=plain,sorting=none, maxbibnames=99, bibencoding=utf8, defernumbers=true]{biblatex}
 
 $for(bibliography)$
 \addbibresource{$bibliography$}
@@ -283,6 +277,7 @@ $if(biblatex)$
 $endif$
 
 $if(enterer_names)$
+\newpage
 \begingroup
 \obeylines
 \hypertarget{enterers}{%
