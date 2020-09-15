@@ -1,29 +1,3 @@
-# SpatialArray basics
-setClassUnion("VectorSpatialClasses", c("SpatialPoints", "SpatialPointsDataFrame", "SpatialLines", "SpatialLinesDataFrame", "SpatialPolygons", "SpatialPolygonsDataFrame"))
-
-
-#' Stack of Spatial Objects
-#' 
-#' Vector data in the same CRS organized into a vector.
-#' 
-#' The class implements a stack of vector data that mimic \code{\link[raster]{RasterStack}}-class objects, only with vector data. 
-#' Classes, such as \code{link[sp]{SpatialPoints}}, \code{link[sp]{SpatialPointsDataFrame}}, \code{link[sp]{SpatialLines}}, \code{link[sp]{SpatialLinesDataFrame}},
-#' \code{link[sp]{SpatialPolygons}} and \code{link[sp]{SpatialPolygonsDataFrame}} can be concatenated to a vector/list, where elements can be accessed
-#' using list-type subsetting. The only restriction is that the items must share the same \code{\link[sp]{CRS}}. 
-#' 
-#' The class has two slots:
-#' Spatials: List of Spatial items.
-#' CRS: The coordinate reference system (\code{\link[sp]{CRS}}). 
-#' bbox: The bounding box of all items. 
-#' 
-#' 
-#' @param Spatials A \code{list} of Spatial objects or a \code{character} vector of file names identifying items for readOGR, in case the rgdal package is installed..
-#' @param proj4string A \code{\link[sp]{CRS}}-class object.
-#' @param verbose A \code{logical} value. Same as for \code{array}, creates \code{proxy} procedurally.
-#' @return A \code{SpatialStack} class object.
-#' @exportClass SpatialStack
-SpatialStack <- setClass("SpatialStack", slots=list(Spatials="list", proj4string="CRS", bbox="matrix"))
-
 #' @export SpatialStack
 setMethod("initialize",signature="SpatialStack",
 	definition=function(.Object,Spatials, proj4string=NULL, verbose=TRUE){

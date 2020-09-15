@@ -1,28 +1,3 @@
-#' Virtual Array of RasterLayers
-#' 
-#' Array template for RasterLayers
-#' 
-#' The class implements structures to organize RasterLayers that have the same dimensions. Subsetting rules were defined using the proxy object in the \code{index} slot. See examples for implementations.
-#' 
-#' The class has two slots:
-#' stack: RasterStack, the actual data.
-#' index: A proxy object that represents the organization of the layers. 
-#' 
-#' 
-#' @param stack A \code{RasterStack} class object.
-#' @param index A \code{vector}, \code{matrix} or \code{array} type object. Includes either the indices of layers in the stack, or their names.
-#' @param dim A \code{numeric} vector. Same as for \code{array}, creates \code{proxy} procedurally.
-#' @return A \code{RasterArray} class object.
-#' @examples
-#' # data import
-#'   data(dems)
-#'   st <-dems@stack
-#'   ind <- 1:nlayers(st)
-#'   names(ind) <- letters[1:length(ind)]
-#'   ra<- RasterArray(stack=st, index=ind)
-#'   
-#' @exportClass RasterArray
-RasterArray <- setClass("RasterArray", slots=list(index="arrayORmatrixORvector", stack="RasterStack"))
 
 # build from existing stack with existing index, or dimensions
 #' @export RasterArray
@@ -145,44 +120,6 @@ setMethod(
 )
 
 
-
-
-
-#' The proxy of a RasterArray object
-#' 
-#' This function returns an object that symbolizes the structure of layers in the \code{RasterArray}.
-#'
-#' The \code{proxy} method wraps the names of layers in the stack using the \code{index} slot of the \code{RasterArray}.
-#'  
-#' @param x (\code{RasterArray}  focal object.
-#' @return A \code{vector}, \code{matrix} or \code{array} of characters representing the \code{RasterArray} structure.
-#' @param ... additional arguments passed to class-specific methods.
-#' @examples
-#' data(dems)
-#' proxy(dems)
-#'
-#' data(clim)
-#' proxy(clim)
-#' @exportMethod proxy
-#' @rdname proxy
-setGeneric("proxy", function(x,...) standardGeneric("proxy"))
-
-#' @rdname proxy
-setMethod(
-	"proxy",
-	signature="RasterArray",
-	function(x){
-		ind <- x@index
-		
-		# only NAs are present
-		if(any(!is.na(ind))){
-			if(!is.null(names(x@stack))) ind[]<- names(x@stack)[ind]
-		}
-		
-		return(ind)
-	}
-
-)
 
 
 # function to defragment the matrix
