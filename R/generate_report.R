@@ -1,7 +1,7 @@
 #' Generate report
 #'
 #' @export 
-generate_report <- function(inputFile,
+report <- function(inputFile,
                             data_refs, combine=TRUE,
                             enterer_names=NULL,
                             output_path=".", 
