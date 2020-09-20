@@ -92,7 +92,7 @@ $if(anonymous)$$else$\author{$for(author)$\Large $author.name$$if(author.thanks)
 \titleformat*{\subparagraph}{\normalsize\itshape}
 
 
-\usepackage[backend=biber,style=$if(biblio-style)$$biblio-style$$else$numeric$endif$,autocite=plain,sorting=none, maxbibnames=99, bibencoding=utf8, defernumbers=true]{biblatex}
+\usepackage[backend=biber,style=$if(biblio-style)$$biblio-style$$else$numeric$endif$,autocite=plain,sorting=none, maxbibnames=99, bibencoding=utf8]{biblatex}
 
 $for(bibliography)$
 \addbibresource{$bibliography$}
@@ -272,7 +272,7 @@ $if(biblatex)$
 \BiblatexSplitbibDefernumbersWarningOff %for now until warning is sorted out
 \printbibliography[title=References, notkeyword=data]
 \newrefcontext[labelprefix=D]
-\printbibliography[title=Data Sources, keyword=data, resetnumbers=true]
+\printbibliography[title=Data Sources, keyword=data]
 
 $endif$
 
