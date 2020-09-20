@@ -1,10 +1,11 @@
 # Change log of the R package 'chronosphere'
 
-## [0.3.1 (build 71)]
+## [0.3.1 (build 75)] - 2020-08-20
 ### Added
-- generate_report() to create data report based on the pbdb download
-- generate_bib() to generate bibliography for report
-
+- report() to create data report based on the pbdb download
+- generate_bib() and related functions to generate bibliography for report
+- capitalize() to capitalise strings - for formatting purposes
+- pkg_file() to access files within the package
 
 ## [0.3.1 (build 74)] - 2020-08-20
 ### Added
