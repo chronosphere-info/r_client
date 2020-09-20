@@ -4,6 +4,7 @@ citEntry(entry = "misc",
   title        = "chronosphere: Earth system history variables",
   author       = personList(as.person("Ádám T. Kocsis"),as.person("Nussaibah B. Raja")),
   url          = "https://doi.org/10.5281/zenodo.3530703",
+  year		= 2020,
 
   textVersion  =
   paste("Kocsis, Á.T., Raja, N.B. 2019",
