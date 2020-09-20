@@ -59,7 +59,7 @@ report <- function(inputFile,
   }
   
   #read metadata from file
-  input <- read.csv(inputFile, header=FALSE)
+  input <- read.csv(inputFile, header=FALSE, encoding="UTF-8")
   input <- input[input$V1 != "",]
   
   #metadata 
@@ -72,7 +72,7 @@ report <- function(inputFile,
   
   metadata <- input[2:(n-1),]
   
-  #contains title?
+  #contains title and authors?
   pars <- c("title", "authors")
   
   for(p in pars){
@@ -86,11 +86,14 @@ report <- function(inputFile,
   metadata[["authors"]] <- strsplit(metadata[["authors"]], ";")[[1]]
   metadata[["affiliation"]] <- strsplit(metadata[["affiliation"]], ";")[[1]]
   
+  #add attributes for corresponding author
+  metadata$corresauth <- as.numeric(metadata$corresauth)
+  
+  metadata$authors[metadata$corresauth] <- paste0(metadata$authors[metadata$corresauth], "*")
+  metadata$corresauth <- paste("*Corresponding author, email:", metadata$corresemail)
+  
   authors <- metadata$authors
   affiliation <- metadata$aff
-  
-  #change encoding to allow special characters
-  metadata <- lapply(metadata, function(x) iconv(x, to="UTF-8"))
   
   #multiple authors
   multi <- list()
@@ -103,17 +106,10 @@ report <- function(inputFile,
   metadata$author <- multi
   
   metadata$affiliation <- metadata$authors <- NULL
+  metadata$corresemail <- NULL
   
   specs <- input[(n+1):nrow(input),]
   specs <- setNames(split(specs$V2, seq(nrow(specs))), specs$V1)
-  
-  #add attributes for corresponding author
-  metadata$corresauth <- as.numeric(metadata$corresauth)
-  
-  metadata$authors[metadata$corresauth] <- paste0(metadata$authors[metadata$corresauth], "*")
-  metadata$corresauth <- paste("*Corresponding author, email:", metadata$corresemail)
-  
-  metadata$corresemail <- NULL
   
   metadata$params <- specs
   
@@ -282,6 +278,7 @@ generate_bib <- function (x, output_path=".", type="publication_type", combine=T
 #'
 #' @param path path where to create file
 #' @param edit open file after creation for edits
+#' @param overwrite (\code{logical}) Should the file be overwritten if already exists?
 #' @param return_path (\code{logical}) return the file path of the create file
 #'
 #' @examples 
@@ -290,10 +287,10 @@ generate_bib <- function (x, output_path=".", type="publication_type", combine=T
 #' }
 #' @export
 #'
-create_metadata <- function(path, edit=TRUE, return_path=TRUE){
+create_metadata <- function(path, edit=TRUE, overwrite=FALSE, return_path=TRUE){
   file.copy(pkg_file("rmarkdown", "templates", "sample.csv"), to=file.path(path, "metadata.csv"))
   
-  if (edit) file.show(file.path(path, "metadata.csv"))
+  if (edit) file.show(file.path(path, "metadata.csv"), overwrite=overwrite)
   
   if(return_path) return(file.path(path, "metadata.csv"))
 }

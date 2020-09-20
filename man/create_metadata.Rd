@@ -4,12 +4,14 @@
 \alias{create_metadata}
 \title{Create metadata file to generate report}
 \usage{
-create_metadata(path, edit = TRUE, return_path = TRUE)
+create_metadata(path, edit = TRUE, overwrite = FALSE, return_path = TRUE)
 }
 \arguments{
 \item{path}{path where to create file}
 
 \item{edit}{open file after creation for edits}
+
+\item{overwrite}{(\code{logical}) Should the file be overwritten if already exists?}
 
 \item{return_path}{(\code{logical}) return the file path of the create file}
 }
