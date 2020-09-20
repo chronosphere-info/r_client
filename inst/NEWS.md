@@ -2,7 +2,7 @@
 
 ## [0.3.1 (build 75)] - 2020-08-20
 ### Added
-- report() to create data report based on the pbdb download
+- create_metadata() and report() to create data report based on the pbdb download
 - generate_bib() and related functions to generate bibliography for report
 - capitalize() to capitalise strings - for formatting purposes
 - pkg_file() to access files within the package
