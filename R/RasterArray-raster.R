@@ -304,6 +304,7 @@ setMethod(
 	
 	# fall back to matrix-method
 	if(is.null(by)) {
+		if(any(!c(lng, lat)%in%colnames(y))) stop(paste0(lng, " and/or ", lat, " are not among the column names of y."))		
 		y <- as.matrix(y[, c(lng, lat)])
 		vals <- extract(x, y)
 	
