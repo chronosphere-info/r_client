@@ -57,7 +57,7 @@ datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greeti
 		# do any of them match? 
 		if(any(datfile==all)){
 			# read it in
-			ret <- read.csv(file.path(datadir, datfile), sep=";", header=TRUE, stringsAsFactors=FALSE)
+			ret <- read.csv(file.path(datadir, datfile), sep=";", header=TRUE, stringsAsFactors=FALSE, encoding="UTF-8")
 
 			# structure is ok
 			if(sum(c("dat", "var", "ver", "res")%in%colnames(ret))==4){
@@ -93,7 +93,7 @@ datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greeti
 		# check the server log.
 		if(checklog){
 			# read server log
-			log <- read.csv(tempLog, sep=",", header=TRUE, stringsAsFactors=FALSE)
+			log <- read.csv(tempLog, sep=",", header=TRUE, stringsAsFactors=FALSE, encoding="UTF-8")
 
 			# display message intended for people using this particular version
 			pkgver <- sessionInfo()$otherPkgs$chronosphere$Version
@@ -115,7 +115,7 @@ datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greeti
 		}
 		
 		# and set return value
-		ret <- read.csv(tempReg, sep=";", header=TRUE, stringsAsFactors=FALSE)
+		ret <- read.csv(tempReg, sep=";", header=TRUE, stringsAsFactors=FALSE, encoding="UTF-8")
 
 		# get rid of the  temporary file
 		if(is.null(datadir)) unlink(tempReg)
@@ -506,6 +506,9 @@ ChronoAttributes <- function(dat=NULL, var=NULL, res=NULL, ver=NULL, reg=NULL,..
 	# original version
 	baseList$info <- reg$info
 
+	# API call
+	baseList$API <- reg$API
+
 	baseList$additional <- list(...)
 
 
@@ -597,6 +600,7 @@ CombineVars <- function(theList){
 		attributes(combined)$chronosphere$accessDate <- c(attributes(combined)$chronosphere$accessDate, attributes(theList[[j]])$chronosphere$accessDate)
 		attributes(combined)$chronosphere$additional <- c(attributes(combined)$chronosphere$additional, attributes(theList[[j]])$chronosphere$additional)
 		attributes(combined)$chronosphere$info <- c(attributes(combined)$chronosphere$info, attributes(theList[[j]])$chronosphere$info)
+		attributes(combined)$chronosphere$API <- c(attributes(combined)$chronosphere$API, attributes(theList[[j]])$chronosphere$API)
 	}
 
 	return(combined)

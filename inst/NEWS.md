@@ -1,6 +1,12 @@
 # Change log of the R package 'chronosphere'
 
-## [0.3.1 (build 75)] - 2020-08-20
+
+## [0.3.1 (build 76)] - 2020-09-23
+### Added
+- Forced UTF-8 encoding for the registry tables
+- added API call to chronosphere object attributes.
+
+## [0.3.1 (build 75)] - 2020-09-20
 ### Added
 - create_metadata() and report() to create data report based on the pbdb download
 - generate_bib() and related functions to generate bibliography for report
