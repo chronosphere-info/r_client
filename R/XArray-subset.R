@@ -124,3 +124,77 @@ setMethod(
 		
 	}
 )
+
+
+#' Indexing to extract \code{RasterLayer}s of a \code{\link{RasterArray}} or \code{Spatial*} of a \code{\link{SpatialArray}} object
+#'
+#' Double bracket \code{'[['} refers to layers' name in the \code{RasterStack} of the \code{RasterArray} or the \code{SpatialStack} of the \code{SpatialArray}. Use single brackets to extract elements based on their position in the \code{\link{RasterArray}} or \code{\link{SpatialArray}}
+#' 
+#' @param x \code{\link{RasterArray}} or \code{\link{SpatialArray}} object.
+#' @param i subscript of the first dimension(rows) or vector-like subsetting.
+#' @param drop \code{logical} should the \code{RasterStack} be dropped and the element be reduced to a single \code{RasterLayer}?
+#' @return A \code{RasterLayer} or \code{RasterArray} class object.
+#' @exportMethod "[["
+#' @examples
+#' data(dems)
+#' # finds a layer
+#' dems[["dem_30"]]
+#' # returns a stack
+#' dems[[c("dem_0", "dem_15")]]
+#' # replaces a layervalues, but not the attributes of the layer
+#' dem2 <- dems
+#' dem2[["dem_0"]] <- dem2[["dem_5"]]
+#' # compare every value in the 0 and 5 ma maps, they are all the same
+#' mean(values(dem2[["dem_0"]]==dem2[["dem_5"]]))
+setMethod(
+	"[[", 
+	signature(x="XArray"),
+	function(x,i,drop=TRUE){
+		# where are NAs in the subscrtip
+		bNA <- is.na(i)
+		if(sum(bNA)==length(i)) return(i)
+
+		# logical method
+		if(is.logical(i)){
+			if(length(i)!=length(x)) stop("Invalid subscript length.")
+			
+			# stack subscript
+			usedInd <- i
+			usedInd[bNA] <- FALSE
+			
+			#select appropriate layers
+			newStack<- x@stack[[which(usedInd), drop=FALSE]]
+
+			# index subscript
+			newIndex <- x@index[i]
+			newIndex[!is.na(newIndex)] <- 1:sum(!is.na(newIndex))
+		}
+
+		# either character or numeric
+		if(is.character(i) | is.numeric(i)){
+			#select appropriate layers
+			newStack<- x@stack[[i[!bNA], drop=FALSE]]
+
+			# reindex
+			newIndex <- rep(NA, length(i))
+			newIndex[!bNA] <- 1:nlayers(newStack)
+		}
+
+		# depending on type of object
+		if(class(newStack)=="RasterStack"){
+			final <- RasterArray(index=newIndex, stack=newStack)
+		}
+
+		if(class(newStack)=="SpatialStack"){
+			final <- SpatialArray(index=newIndex, stack=newStack)
+		}
+
+		if(drop){
+			if(length(final)==1){
+				final <- final@stack[[1]]
+			}
+		}
+
+		return(final)
+	}
+)
