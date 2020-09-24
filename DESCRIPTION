@@ -25,6 +25,7 @@ Collate:
     SpatialStack-base.R
     SpatialStack-sp.R
     SpatialArray-base.R
+    SpatialArray-sp.R
     inter.R
     plotting.R   
 Maintainer: Adam T. Kocsis <adam.t.kocsis@gmail.com>

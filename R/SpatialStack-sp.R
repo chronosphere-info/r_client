@@ -22,6 +22,13 @@ setMethod(
 			sp::spTransform(y, CRSobj)
 		})
 
+		# update the CRS of the entire stack
+		if(is.character(CRSobj)){
+			x@proj4string <- sp::CRS(CRSobj)
+		}else{
+			x@proj4string <- CRSobj
+		}
+
 		# final value
 		return(x)
 	}
