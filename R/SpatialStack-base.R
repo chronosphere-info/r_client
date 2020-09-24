@@ -151,6 +151,17 @@ setMethod(
 	}
 )
 
+#' @rdname names
+#' @exportMethod "names<-"
+setReplaceMethod(
+	"names",
+	signature="SpatialStack",
+	definition=function(x,  value){
+		# not defined for matrices or higher
+		names(x@Spatials) <- value
+		return(x)
+})
+
 
 
 #' Return types of objects in a SpatialStack  or SpatialArray object
