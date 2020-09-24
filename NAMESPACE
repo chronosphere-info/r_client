@@ -3,6 +3,7 @@
 S3method(as.data.frame,RasterArray)
 S3method(cbind,RasterArray)
 S3method(is.na,RasterArray)
+S3method(is.na,SpatialArray)
 S3method(rbind,RasterArray)
 export(RasterArray)
 export(SpatialArray)

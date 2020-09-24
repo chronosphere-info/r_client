@@ -138,3 +138,22 @@ setMethod(
 	}
 
 )
+
+
+#' Positions of missing values in a \code{\link{SpatialArray}} object
+#' 
+#' The function behaves similar to the regular \code{is.na()} function applied to the proxy object of a \code{RasterArray}.
+#' 
+#' @param x A \code{RasterArray} class object.
+#' @return A \code{logical} \code{vector}, \code{matrix} or \code{array} matching the structure of the \code{RasterArray}.
+#' 
+#' @examples
+#' data(dems)
+#' dems[2] <- NA
+#' is.na(dems)
+#' 
+#' @export
+is.na.SpatialArray<-function(x){
+	is.na(proxy(x))
+}
+
