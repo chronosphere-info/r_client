@@ -190,53 +190,6 @@ is.na.RasterArray<-function(x){
 }
 
 
-
-#' Transpose a RasterArray object
-#' 
-#' @examples
-#' data(dems)
-#' t(dems)
-#' data(clim)
-#' t(clim)
-#' @param x A \code{RasterArray} class object. 
-#' @return A \code{RasterArray} class object.
-#' 
-#' @exportMethod t
-setMethod(
-	"t", 
-	"RasterArray", 
-	function(x){
-		if(length(dim(x))>2) stop("RasterArray is not a matrix. ")
-
-		# transpose index
-		tIndex<- t(x@index)
-		vIndex <- as.numeric(tIndex)
-
-		# ordering
-		vIndna <- vIndex[!is.na(vIndex)]
-
-		# reorder the stack
-		x@stack <- x@stack[[vIndna]]
-
-		# refill the index
-		tIndex[!is.na(tIndex)] <- 1:raster::nlayers(x@stack)
-
-		# copy names
-		if(!is.null(colnames(x@index))) rownames(tIndex) <- colnames(x@index)
-		if(!is.null(rownames(x@index))) colnames(tIndex) <- rownames(x@index)
-		if(!is.null(names(x@index)))  colnames(tIndex) <- names(x@index)
-
-		# replace the index
-		x@index <- tIndex
-
-
-
-		return(x)
-
-	}
-)
-
-
 #' Apply-type iterator for RasterArrays
 #' 
 #' The function implements the \code{\link[base]{apply}}-type iterators for the RasterArray class. Output values are constrained to RasterArrays, whenever possible. 

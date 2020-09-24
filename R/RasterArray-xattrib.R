@@ -234,27 +234,6 @@ setMethod(
 )
 
 
-#' Dimensions of RasterArray objects
-#' 
-#' The function returns the dimensions of the array in which \code{RasterLayer}s are organized.
-#' @param x A \code{RasterArray} class object.
-#' @return A \code{numeric} vector.
-#' 
-#' @examples
-#' data(dems)
-#' dim(dems)
-#' data(clim)
-#' dim(clim)
-#' @exportMethod dim
-setMethod(
-	"dim", 
-	signature="RasterArray", 
-	function(x){
-		proxyDim <- dim(x@index)
-		if(is.null(proxyDim)) proxyDim <- length(x@index)
-		proxyDim
-	} 
-)
 
 
 #' Dimensions of RasterLayers in a RasterArray object

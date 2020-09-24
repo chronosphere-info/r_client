@@ -34,3 +34,54 @@ setMethod(
 
 )
 
+
+
+
+#' Transpose a \code{\link{RasterArray}} or \code{\link{SpatialArray}} object
+#' 
+#' @examples
+#' data(dems)
+#' t(dems)
+#' data(clim)
+#' t(clim)
+#' @param x A \code{\link{RasterArray}} or \code{\link{SpatialArray}} class object. 
+#' @return A \code{\link{RasterArray}} or \code{\link{SpatialArray}} class object.
+#' @rdname t-methods
+#' 
+#' @exportMethod t
+"t"
+
+#' @rdname t-methods
+setMethod(
+	"t", 
+	"XArray", 
+	function(x){
+		if(length(dim(x))>2) stop("The RasterArray or SpatialArray has too many dimensions. ")
+
+		# transpose index
+		tIndex<- t(x@index)
+		vIndex <- as.numeric(tIndex)
+
+		# ordering
+		vIndna <- vIndex[!is.na(vIndex)]
+
+		# reorder the stack
+		x@stack <- x@stack[[vIndna]]
+
+		# refill the index
+		tIndex[!is.na(tIndex)] <- 1:nlayers(x@stack)
+
+		# copy names
+		if(!is.null(colnames(x@index))) rownames(tIndex) <- colnames(x@index)
+		if(!is.null(rownames(x@index))) colnames(tIndex) <- rownames(x@index)
+		if(!is.null(names(x@index)))  colnames(tIndex) <- names(x@index)
+
+		# replace the index
+		x@index <- tIndex
+
+
+
+		return(x)
+
+	}
+)

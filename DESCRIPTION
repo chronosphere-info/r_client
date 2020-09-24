@@ -14,6 +14,7 @@ Collate:
     fetching.R
     info.R
     XArray-base.R
+    XArray-xattrib.R
     RasterArray-base.R
     RasterArray-cast.R
     RasterArray-combine.R

@@ -13,6 +13,9 @@
 
 \item{...}{Additional arguments.}
 }
+\value{
+A \code{\link{SpatialStack}} or \code{\link{SpatialArray}} object.
+}
 \description{
 Joint reprojection of entire sets of vector data.
 }
