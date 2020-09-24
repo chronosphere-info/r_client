@@ -49,3 +49,92 @@ setMethod("initialize",signature="SpatialArray",
 		return(.Object)
 	}
 )
+
+
+
+setMethod(
+	"show",
+	signature="SpatialArray", 
+	function (object) 
+	{
+	    cat("class          :", class(object), "\n")
+	    mnr <- 15
+	#   if (filename(object) != "") {
+	#       cat("filename    :", filename(object), "\n")
+	#   }
+
+
+	    nl <- nlayers(object)
+	    if (nl == 0) {
+	        cat("nlayers      :", nl, "\n")
+	    } else {
+	   		cat("Spatial* properties: \n")
+	        cat("- types        : ", paste(sort(unique(types(object@stack))), collapse=", "), 
+	            "\n", sep = "")
+
+	        cat("- bbox         : ", 
+	        	object@stack@bbox["x", "min"], ", ",  
+	        	object@stack@bbox["x", "max"], ", ",  
+	        	object@stack@bbox["y", "min"], ", ",  
+	        	object@stack@bbox["y", "max"], 
+	            "  (xmin, xmax, ymin, ymax)\n", sep = "")
+
+	       cat("- coord. ref.  : ", object@stack@proj4string@projargs, "\n")
+  		   cat("Array properties: \n")
+  			adim <- dim(object)
+  			allName <- names(object)
+		   
+	        if(length(adim)==1){
+		        cat("- dimensions   : ", paste(adim, collapse=", "), 
+		            "  (vector)\n", 
+		            sep = "")
+		      
+		    }else{
+		    	allName<- dimnames(object)
+		    	if(length(allName)==2){
+			    	cat("- dimensions  : ", paste(adim, collapse=", "), 
+			            "  (nrow, ncol)\n", 
+			            sep = "")
+			    }else{
+			    	cat("- dimensions  : ", paste(adim, collapse=", "), 
+			            "  (nrow, ncol, ...)\n", 
+			            sep = "")
+			    }
+		#    	for(i in 1:length(allName)){
+		#			if(i==1) cat("- rownames    : ", paste(allName[[i]], collapse=", "), "\n", sep = "")
+		#			if(i==2) cat("- colnames    : ", paste(allName[[i]], collapse=", "), "\n", sep = "")
+		#			if(i>2) cat(paste("- Dim", i, " names", sep=""), "  : ", paste(allName[[i]], collapse=", "), "\n", sep = "")
+		#    	}
+				
+
+		    	  
+		    }
+		    cat("- num. layers  : ", nlayers(object), "\n", 
+		        sep = "")
+		    cat("- proxy:\n ")
+		    print(proxy(object))
+		   
+	    }
+	    cat("\n")
+	}
+)
+
+
+#' @rdname types
+setMethod(
+	"types",
+	signature="SpatialArray",
+	function(x){
+		ind <- x@index
+		prx <- proxy(x)
+		type <- prx
+		
+		# only NAs are present
+		if(any(!is.na(ind))){
+			if(!is.null(types(x@stack))) type[]<- types(x@stack)[ind]
+		}
+
+		return(type)
+	}
+
+)

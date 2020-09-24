@@ -1,29 +1,3 @@
-#' Number of elements or layers in a RasterArray class object
-#' 
-#' Function to return the length of the array in which \code{RasterLayers} are organized.
-#' 
-#' The length() function returns the number elements that should be present based on the array structure itself, and not the total number of values stored in the object (such as the \code{length} method of \code{RasterStack}s). As the object can contain missing values, the number of actual layers can be queried with \code{\link{nlayers}}. 
-#' 
-#' @param x a \code{RasterArray} class object.
-#' @return A \code{numeric} value. 
-#' @examples
-#' data(dems)
-#' # omit third element
-#' dems[3] <- NA
-#' # number of elements in the RasterArray
-#' length(dems)
-#' # remaining number values in the stack 
-#' length(dems@stack)
-#' # the number of remaining layers in the RasterArray
-#' nlayers(dems)
-#' 
-#' @rdname arraylength
-#' @exportMethod length
-setMethod(
-	"length",
-	signature="RasterArray",
-	function(x) length(x@index)
-)
 
 #' Number of cells in a RasterArray object
 #' 
@@ -40,14 +14,6 @@ setMethod(
 	"ncell",
 	signature="RasterArray",
 	function(x) ncell(x@stack)
-)
-
-#' @rdname arraylength
-#' @exportMethod nlayers
-setMethod(
-	"nlayers",
-	signature="RasterArray",
-	function(x) nlayers(x@stack)
 )
 
 
@@ -115,41 +81,6 @@ setReplaceMethod(
 		return(x)
 })
 
-#' Names of one-dimensional RasterArray, SpatialStack or SpatialArray objects.
-#' 
-#' Get or set the names of one-dimensional RasterArray or SpArray objects 
-#' @param x \code{RasterArray}, \code{SpatialStack} or \code{SpArray} object.
-#' @param value \code{character} vector.
-#' @return A \code{character} vector of names or \code{NULL}.
-#' 
-#' @examples
-#' data(dems)
-#' names(dems)
-#' names(dems)[4] <- "weirdo"
-#' # NULL
-#' data(clim)
-#' names(clim)
-#' @rdname names
-#' @exportMethod names
-setMethod(
-	"names",
-	signature="RasterArray",
-	function(x){	
-		names(x@index)
-	}
-)
-
-#' @rdname names
-#' @exportMethod "names<-"
-setReplaceMethod(
-	"names",
-	signature="RasterArray",
-	definition=function(x,  value){
-		# not defined for matrices or higher
-		if(is.null(names(x))) names(x@index) <- rep(NA, length(x@index))
-		names(x@index) <- value 
-		return(x)
-})
 
 #' Names of multidimensional RasterArray or SpArray objects.
 #' 

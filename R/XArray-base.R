@@ -85,3 +85,54 @@ setMethod(
 
 	}
 )
+
+
+
+# function to defragment the matrix
+defragment <- function(x){
+	b <- is.na(x)
+	x[!b] <- 1:sum(!b)
+	return(x)
+}
+
+
+# this utility function will combine the layer specific information
+# 2d matrix (vals2d) layer names are represented as colnames
+extendDim <- function(proxy, vals2d, newdim=1){
+	# the original dimensions of the proxy
+	origDim <- dim(proxy)
+	if(is.null(origDim)) origDim <- length(proxy) 
+
+	# the names of the proxy
+	origNames <- dimnames(proxy)
+	if(is.null(origNames)) origNames <- list(names(proxy))
+
+	# number extended
+	nVals <-dim(vals2d)[newdim]
+	
+	# copy the names properly 
+	addNames <- dimnames(vals2d)[[newdim]]
+
+	# where are the non-na values
+	naMap <- !is.na(proxy)
+
+	# vector shape of the data
+	endObj <- rep(NA, prod(c(origDim,nVals)))
+	
+	# loop through the new dimension
+	for(i in 1:nVals){
+		# what contains the new dimension?
+		if(newdim==1){
+			theseVals<- vals2d[i,]
+		}else{
+			theseVals<- vals2d[,i]
+		}
+		# the final object. 
+		endObj[(1:length(proxy))+(i-1)*length(proxy)] <- theseVals[proxy]
+	}
+	# dimensions and names set right
+	dim(endObj) <- c(origDim,nVals)
+	dimnames(endObj) <- c(origNames, list(addNames))
+	
+	return(endObj)
+}
