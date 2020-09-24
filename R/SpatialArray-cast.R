@@ -63,3 +63,14 @@ setMethod(as.SpatialArray, signature=c("SpatialPolygonsDataFrame"), definition=f
 
 
 
+#' Coerce a \code{\link{SpatialArray}} class object to a list
+#' 
+#' The function will return the items of the \code{\link{SpatialArray}} as a list (conserving the names of the elements in the stack).
+#' @param x A \\code{\link{SpatialArray}} class object.
+#' @return A \code{list} of \code{RasterLayers}.
+#' @param ... arguments passed to or from methods.
+#' 
+#' @exportMethod as.list
+setMethod("as.list","SpatialArray", function(x,...){
+	x@stack@Spatials
+})
