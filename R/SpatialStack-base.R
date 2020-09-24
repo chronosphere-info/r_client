@@ -21,6 +21,9 @@ setMethod("initialize",signature="SpatialStack",
 
 		}
 
+		# for Spatial* input
+		if(inherits(Spatials, "Spatial")) Spatials <- list(Spatials)
+
 		# add the Spatial objects to the final object
 		.Object@Spatials <- Spatials
 
