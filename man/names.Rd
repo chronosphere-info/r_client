@@ -4,6 +4,7 @@
 \alias{names,RasterArray-method}
 \alias{names<-,RasterArray-method}
 \alias{names,SpatialStack-method}
+\alias{names<-,SpatialStack-method}
 \title{Names of one-dimensional RasterArray, SpatialStack or SpatialArray objects.}
 \usage{
 \S4method{names}{RasterArray}(x)
@@ -11,6 +12,8 @@
 \S4method{names}{RasterArray}(x) <- value
 
 \S4method{names}{SpatialStack}(x)
+
+\S4method{names}{SpatialStack}(x) <- value
 }
 \arguments{
 \item{x}{\code{RasterArray}, \code{SpatialStack} or \code{SpArray} object.}
