@@ -96,6 +96,28 @@ newname <- function(x){
 
 
 
+#' Stacking method for the \code{\link{SpatialStack}} objects
+#'
+#' The function alls a \code{\link{RasterArray}}-like stacking of Spatial* objects.
+#' @rdname stack
+#' @param x \code{SpatialPoints},\code{SpatialPointsDataFrame},\code{SpatialLines},\code{SpatialLinesDataFrame},\code{SpatialPolygons},\code{SpatialPolygonsDataFrame}, object.
+#' @return A \code{\link{RasterArray}} class object.
+#' @export 
+setMethod(
+	"stack",
+	"VectorSpatialClasses",
+	function(x, ...){
+		# list the additional files
+		additional <- list(...)
+
+		# just apply constructor to it
+		SpatialStack(c(list(x), additional))
+
+	}
+)
+
+
+
 ## input form should be:
 #- list of Spatial objects
 #- arguments as Spatial objects

@@ -3,7 +3,7 @@
 \name{dimnames,XArray-method}
 \alias{dimnames,XArray-method}
 \alias{dimnames<-,XArray-method}
-\title{Names of multidimensional \code{\link{RasterArray}} or \code{\link{SpatialArray}}objects.}
+\title{Names of multidimensional \code{\link{RasterArray}} or \code{\link{SpatialArray}} objects.}
 \usage{
 \S4method{dimnames}{XArray}(x)
 

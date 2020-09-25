@@ -162,7 +162,7 @@ setReplaceMethod(
 })
 
 
-#' Names of multidimensional \code{\link{RasterArray}} or \code{\link{SpatialArray}}objects.
+#' Names of multidimensional \code{\link{RasterArray}} or \code{\link{SpatialArray}} objects.
 #' 
 #' Get or set the dimnames of multidimensional \code{\link{RasterArray}} or \code{\link{SpatialArray}} objects 
 #' @param x \code{\link{RasterArray}} or \code{\link{SpatialArray}} object.
@@ -197,4 +197,33 @@ setReplaceMethod(
 
 
 
+#' Number of columns and rows of a \code{\link{RasterArray}} or \code{\link{SpatialArray}} 
+#' 
+#' Unlike the \code{ncol} and \code{nrow} functions of the raster package (\code{\link[raster]{ncell}}), this function returns the number of columns and rows of the \code{RasterArray} container, rather than the dimensions of the contained \code{RasterLayer}s. 
+#' 
+#' @param x A \code{\link{RasterArray}} or \code{\link{SpatialArray}}  class object.
+#' @rdname adimatt
+#' @return A \code{numeric} value of the number of columns and rows.
+#' @exportMethod ncol
+#' @examples
+#' data(clim)
+#' ncol(clim)
+#' nrow(clim)
+setMethod(
+	"ncol", 
+	signature="XArray", 
+	function(x){
+		ncol(x@index)
+	} 
+)
+
+#' @rdname adimatt
+#' @exportMethod nrow
+setMethod(
+	"nrow", 
+	signature="XArray", 
+	function(x){
+		nrow(x@index)
+	} 
+)
 
