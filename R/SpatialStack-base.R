@@ -96,13 +96,13 @@ newname <- function(x){
 
 
 
-#' Stacking method for the \code{\link{SpatialStack}} objects
+#' Stacking method for the vector Spatial* \code{\link{SpatialStack}} objects
 #'
-#' The function alls a \code{\link{RasterArray}}-like stacking of Spatial* objects.
+#' The function alls a \code{\link{RasterArray}}-like stacking of Spatial* objects and \code{\link{SpatialStack}}s .
 #' @rdname stack
 #' @param x \code{SpatialPoints},\code{SpatialPointsDataFrame},\code{SpatialLines},\code{SpatialLinesDataFrame},\code{SpatialPolygons},\code{SpatialPolygonsDataFrame}, object.
 #' @return A \code{\link{RasterArray}} class object.
-#' @export 
+#' @exportMethod stack
 setMethod(
 	"stack",
 	"VectorSpatialClasses",
@@ -110,12 +110,65 @@ setMethod(
 		# list the additional files
 		additional <- list(...)
 
-		# just apply constructor to it
-		SpatialStack(c(list(x), additional))
+		# classes used to do this
+		unlist <- lapply(additional, class)
+
+		# initial object
+		full <- SpatialStack(list(x))
+
+		if(length(additional)>0){
+			# bind everything to it
+			for(i in 1:length(additional)){
+				# vector object
+				if(inherits(additional[[i]], "Spatial")){
+					full <- SpatialStack(c(full@Spatials, list(additional[[i]])))
+				}else{
+					if(unlist[i]=="SpatialStack"){
+						full <- SpatialStack(c(full@Spatials, additional[[i]]@Spatials))
+					}else{
+						stop("Incompatible arguments.")
+					}
+				}
+			}
+		}
+
+		return(full)
 
 	}
 )
 
+#' @rdname stack
+#' @param x \code{SpatialPoints},\code{SpatialPointsDataFrame},\code{SpatialLines},\code{SpatialLinesDataFrame},\code{SpatialPolygons},\code{SpatialPolygonsDataFrame}, object.
+#' @return A \code{\link{RasterArray}} class object.
+setMethod(
+	"stack",
+	"SpatialStack",
+	function(x, ...){
+		# list the additional files
+		additional <- list(...)
+
+		# classes used to do this
+		unlist <- lapply(additional, class)
+
+		if(length(additional)>0){
+			# bind everything to it
+			for(i in 1:length(additional)){
+				# vector object
+				if(inherits(additional[[i]], "Spatial")){
+					x <- SpatialStack(c(x@Spatials, list(additional[[i]])))
+				}else{
+					if(unlist[i]=="SpatialStack"){
+						x <- SpatialStack(c(x@Spatials, additional[[i]]@Spatials))
+					}else{
+						stop("Incompatible arguments.")
+					}
+				}
+			}
+		}
+
+		return(x)
+	}
+)
 
 
 ## input form should be:

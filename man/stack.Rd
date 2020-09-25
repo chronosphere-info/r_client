@@ -2,16 +2,21 @@
 % Please edit documentation in R/SpatialStack-base.R
 \name{stack,VectorSpatialClasses-method}
 \alias{stack,VectorSpatialClasses-method}
-\title{Stacking method for the \code{\link{SpatialStack}} objects}
+\alias{stack,SpatialStack-method}
+\title{Stacking method for the vector Spatial* \code{\link{SpatialStack}} objects}
 \usage{
 \S4method{stack}{VectorSpatialClasses}(x, ...)
+
+\S4method{stack}{SpatialStack}(x, ...)
 }
 \arguments{
 \item{x}{\code{SpatialPoints},\code{SpatialPointsDataFrame},\code{SpatialLines},\code{SpatialLinesDataFrame},\code{SpatialPolygons},\code{SpatialPolygonsDataFrame}, object.}
 }
 \value{
 A \code{\link{RasterArray}} class object.
+
+A \code{\link{RasterArray}} class object.
 }
 \description{
-The function alls a \code{\link{RasterArray}}-like stacking of Spatial* objects.
+The function alls a \code{\link{RasterArray}}-like stacking of Spatial* objects and \code{\link{SpatialStack}}s .
 }
