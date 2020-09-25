@@ -14,6 +14,7 @@ Collate:
     fetching.R
     info.R
     XArray-base.R
+    XArray-combine.R
     XArray-xattrib.R
     XArray-subset.R
     RasterArray-base.R
@@ -28,6 +29,7 @@ Collate:
     SpatialArray-base.R
     SpatialArray-sp.R
     SpatialArray-cast.R
+    SpatialArray-combine.R
     inter.R
     plotting.R   
 Maintainer: Adam T. Kocsis <adam.t.kocsis@gmail.com>
