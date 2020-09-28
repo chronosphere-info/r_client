@@ -34,7 +34,7 @@ Install method B.
 The second method to install the stable version from the source archive deposited on this github repository. Open R and paste in:
 
 ``` r
-install.packages("https://github.com/adamkocsis/chronosphere/raw/master/_archive/source/chronosphere_0.3.1.tar.gz", repos=NULL, type="source")
+install.packages("https://github.com/adamkocsis/chronosphere/raw/master/_archive/source/chronosphere_0.3.1-76.tar.gz", repos=NULL, type="source")
 ```
 
 Install method C.
