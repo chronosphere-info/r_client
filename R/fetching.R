@@ -93,7 +93,7 @@ datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greeti
 		# check the server log.
 		if(checklog){
 			# read server log
-			log <- read.csv(tempLog, sep=",", header=TRUE, stringsAsFactors=FALSE)
+			log <- tryCatch(read.csv(tempLog, sep=",", header=TRUE, stringsAsFactors=FALSE), error=function() stop("Invalid log file, remote server cannot be reached."))
 
 			# display message intended for people using this particular version
 			pkgver <- sessionInfo()$otherPkgs$chronosphere$Version
