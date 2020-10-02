@@ -17,30 +17,6 @@ setMethod(
 )
 
 
-#' Names of RasterArray's Layers in the stack
-#' 
-#' @param x A \code{RasterArray} class object.
-#' @param ... additional arguments passed to class-specific methods.
-#' @return A \code{character} vector of names.
-#' @exportMethod layers
-#' 
-#' @examples
-#' # names of layers in the stack
-#' data(dems)
-#' layers(dems)
-#' @rdname layers
-setGeneric("layers", function(x,...) standardGeneric("layers"))
-
-#' @rdname layers
-setMethod(
-	"layers", 
-	signature="RasterArray", 
-	function(x){
-		# returns the layer names
-		names(x@stack)
-
-	} 
-)
 
 #' The total number of values in a RasterArray object
 #' 
