@@ -67,6 +67,7 @@ setMethod(
 	    nl <- nlayers(object)
 	    if (nl == 0) {
 	        cat("nlayers      :", nl, "\n")
+	        cat("Array properties: \n")
 	    } else {
 	   		cat("Spatial* properties: \n")
 	        cat("- types        : ", paste(sort(unique(types(object@stack))), collapse=", "), 
@@ -109,12 +110,13 @@ setMethod(
 
 		    	  
 		    }
-		    cat("- num. layers  : ", nlayers(object), "\n", 
-		        sep = "")
-		    cat("- proxy:\n ")
-		    print(proxy(object))
-		   
-	    }
+		}
+	    cat("- num. layers  : ", nlayers(object), "\n", 
+	        sep = "")
+	    cat("- proxy:\n ")
+	    print(proxy(object))
+	   
+    
 	    cat("\n")
 	}
 )

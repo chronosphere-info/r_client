@@ -30,6 +30,7 @@ Collate:
     SpatialArray-sp.R
     SpatialArray-cast.R
     SpatialArray-combine.R
+    SpatialArray-subset.R
     inter.R
     plotting.R   
 Maintainer: Adam T. Kocsis <adam.t.kocsis@gmail.com>

@@ -69,18 +69,22 @@ setMethod("initialize",signature="SpatialStack",
 
 # function to recalculate bounding box of SpatialStack
 reBBOX <- function(Spatials){
-	allX<- lapply(Spatials, function(a){
-		a@bbox["x",]
-	})
+	if(length(Spatials)>0){
+		allX<- lapply(Spatials, function(a){
+			a@bbox["x",]
+		})
 
-	allY<- lapply(Spatials, function(a){
-		a@bbox["y",]
-	})
+		allY<- lapply(Spatials, function(a){
+			a@bbox["y",]
+		})
 
-	bbox <-  rbind(range(allX), range(allY))
+		bbox <-  rbind(range(allX), range(allY))
+	}else{
+		bbox <- matrix(NA, ncol=2, nrow=2)
+	}
 	colnames(bbox) <- c("min", "max")
 	rownames(bbox) <- c("x", "y")
-
+	
 	return(bbox)
 }
 
