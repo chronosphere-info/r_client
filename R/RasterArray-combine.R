@@ -4,20 +4,6 @@
 # combine()
 
 
-#' Combine RasterLayers and one-dimensional RasterArrays
-#'
-#' Methods sequences that start with an NA do not yet work. 
-#' @rdname combine
-#' @param x \code{RasterLayer} or \code{RasterArray} object to combine.
-#' @return A \code{RasterArray} class object.
-#' @param ... additional objects to combine. 
-#' @examples
-#' data(dems)
-#' a <- combine(dems[1], dems[2])
-#' @export 
-setGeneric("combine", function(x,...) standardGeneric("combine"))
-
-
 #' @rdname combine
 setMethod(
 	"combine",

@@ -1,3 +1,54 @@
+#' Combine RasterLayers and one-dimensional RasterArrays and Spatial* objects with one-dimensinoal SpatialArrays
+#'
+#' Methods sequences that start with an NA do not yet work. 
+#' @rdname combine
+#' @param x \code{RasterLayer} or \code{RasterArray} objects or Spatial* and \code{\link{SpatialArray}} objects to combine.
+#' @return A \code{\link{RasterArray}} or \code{\link{SpatialArray}}class object.
+#' @param ... additional objects to combine. 
+#' @examples
+#' data(dems)
+#' a <- combine(dems[1], dems[2])
+#' @export 
+setGeneric("combine", function(x,...) standardGeneric("combine"))
+
+
+#' @rdname combine
+#' @export 
+setMethod(
+	"combine",
+	"XArray",
+	#c.RasterArray<-
+	function(x, ...){
+		listArg <- list(...)
+		finRA <- x
+		# store the system call
+		callSymb <- sys.call(which=-1)
+	
+		# run loop only if it is more than 1
+		if(length(listArg)!=0){
+			for(i in 1:length(listArg)){
+				elem <- listArg[[i]]
+				# name of the first will be taken care of by c2
+				finRA<-c2(finRA, elem)
+				# try to overwrite the name - necessary for multiple combinations
+				if(class(elem)=="RasterLayer" | inherits(elem, "Spatial")){
+					if(is.symbol(callSymb[[i+2]])){
+						names(finRA)[length(finRA)] <- deparse(callSymb[[i+2]])
+					}else{
+						names(finRA)[length(finRA)] <- NA
+					}
+				}
+			}
+		}
+		return(finRA)
+	}
+)
+
+
+# pairwise generic
+setGeneric("c2", function(x,y,...) standardGeneric("c2"))
+
+
 
 # general cbind2 method 
 setMethod("cbind2", c("XArray","XArray"),
