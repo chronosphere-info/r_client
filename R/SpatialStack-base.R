@@ -343,7 +343,7 @@ setMethod(
 #' @exportMethod "[<-"
 setReplaceMethod(
 	"[", 
-	signature(x="SpatialStack", i="character"),
+	signature(x="SpatialStack", i="character", value="VectorSpatialClasses"),
 	definition=function(x,i,j=NULL,..., value){
 		if(is.character(i)){
 			i <- which(names(x@Spatials)==i)
@@ -361,7 +361,7 @@ setReplaceMethod(
 #' @exportMethod "[<-"
 setReplaceMethod(
 	"[", 
-	signature(x="SpatialStack", i="logical"),
+	signature(x="SpatialStack", i="logical", value="VectorSpatialClasses"),
 	definition=function(x,i,j=NULL,..., value){
 		if(is.logical(i)){
 			i <- which(i)
@@ -401,6 +401,77 @@ setReplaceMethod(
 		
 	}
 )
+
+
+#' @rdname replacementSingle-spatialstack
+#' @exportMethod "[<-"
+setReplaceMethod(
+	"[", 
+	signature(x="SpatialStack", i="character", value="SpatialStack"),
+	definition=function(x,i,j=NULL,..., value){
+		if(is.character(i)){
+			newI <- NULL
+			for(k in 1:length(i)){
+				newI <- c(newI, which(names(x@Spatials)==i[k]))
+			}
+		}
+		# invoke numeric method
+		x[newI] <- value
+
+		# retirm
+		return(x)
+		
+	}
+)
+
+
+#' @rdname replacementSingle-spatialstack
+#' @exportMethod "[<-"
+setReplaceMethod(
+	"[", 
+	signature(x="SpatialStack", i="logical", value="SpatialStack"),
+	definition=function(x,i,j=NULL,..., value){
+		if(is.logical(i)){
+			i <- which(i)
+		}
+
+		# invoke numeric method
+		x[i] <- value
+
+		# retirm
+		return(x)
+		
+	}
+)
+
+#' @rdname replacementSingle-spatialstack
+#' @exportMethod "[<-"
+setReplaceMethod(
+	"[", 
+	signature(x="SpatialStack", i="numeric", value="SpatialStack"),
+	definition=function(x,i,j=NULL,..., value){
+		if(!missing(j)) stop("Multiple dimensions are not allowed for SpatialStacks.")
+		# original number of layers
+		lays <- nlayers(x)
+		# just replace itesm in the list - one by one
+		
+		if(length(i)!=nlayers(value)) stop("Length of replacement value is not the same as the length of subscript.")
+		# is there just one value?
+		
+		for(k in 1L:length(i)){
+			x@Spatials[[i[k]]] <- value[k]
+		}
+		
+		# do not allow extension, 
+		if(nlayers(x)>lays) stop("Out of bounds replacement is not allowed. ")
+
+
+		return(x)
+		
+	}
+)
+
+
 
 # POTENTIALLY NEEDED: value="list"
 
@@ -488,6 +559,4 @@ setReplaceMethod(
 		
 	}
 )
-
-
 
