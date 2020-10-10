@@ -141,79 +141,6 @@ is.na.RasterArray<-function(x){
 }
 
 
-#' Apply-type iterator for RasterArrays
-#' 
-#' The function implements the \code{\link[base]{apply}}-type iterators for the RasterArray class. Output values are constrained to RasterArrays, whenever possible. 
-#' Not yet implemented for multidimensional MARGINs.
-#' @examples
-#' # double of itself
-#' data(dems)
-#' a<- cbind(dems, dems)
-#' same <- apply(a, 1, sum)
-#' @return Depending on the on the output of \code{FUN}, a \code{list}, a \code{vector} or \code{RasterArray} object.
-#' @param X an array, including matrices and RasterArrays.
-#' @param MARGIN a vector giving the subscripts which the function will be applied over. E.g., for a matrix 1 indicates rows, 2 indicates columns, \code{c(1, 2)} indicates rows and columns. Where \code{X} has named dimnames, it can be a character vector selecting dimension names. For \code{RasterArrays} only single dimension margins are implemented.
-#' @param FUN  the function to be applied: see ‘Details’ of \code{\link[base]{apply}}. 
-#' @param ... optional arguments passed to \code{FUN}.
-#' @rdname apply-methods
-#' @exportMethod apply
-setGeneric("apply", def=base::apply)
-
-
-RasterArrayApply <- function(X, MARGIN, FUN,...){
-	if(length(dim(X))==1) stop("The 'apply()'' function is not applicable to vector-like RasterArrays.\nUse 'sapply()'' instead.")
-	if(length(MARGIN)>1) stop("Not yet implemented for multidimensinal margins.")
-
-	# use the proxy instead
-	proxX <- proxy(X)
-
-	ret <-apply(proxX, MARGIN, function(y){
-		# get the columns/rows associated with this subset
-		thislayers <- X[[y]]
-		# if all are empty, force numeric
-		if(sum(is.na(thislayers))==length(thislayers)) thislayers <- as.numeric(thislayers)
-
-		# and plug it into the supplied function
-		FUN(thislayers)
-	})
-
-	# draft of the apply output structure
-	struct <- apply(X@index, MARGIN, function(y) 1)
-
-	# if this output is a rasterlayer make an exception!
-	if(is.list(ret)){
-		classOfItems <- unlist(lapply(ret, function(y){
-				if(class(y)=="RasterLayer"){
-					return(FALSE)
-				}else{
-					if(is.numeric(y) | is.character(y) | is.logical(y)){
-						if(is.na(y)){
-							return(NA)
-						}else{
-							return(TRUE)
-						}
-					}else{
-						return(TRUE)
-					}
-				}
-			} ))
-		if(sum(unique(classOfItems), na.rm=TRUE)==0){
-			bNA <- is.na(classOfItems)
-
-			# transform this to a rasterArray
-			newStack <- raster::stack(ret[!bNA])
-			# index
-			struct[] <- NA
-			struct[!bNA] <- 1:sum(!bNA)
-			names(struct) <- names(ret)
-
-			ret <- RasterArray(newStack, struct)
-
-		}
-	}
-
-	return(ret)
-}
 
 #' @rdname apply-methods
 #' @aliases apply,RasterArray-method
@@ -221,12 +148,20 @@ RasterArrayApply <- function(X, MARGIN, FUN,...){
 
 if("simplify" %in% names(formals(base::apply))){
 	setMethod("apply", "RasterArray",function(X, MARGIN, FUN,..., simplify=TRUE) 
-		RasterArrayApply(X, MARGIN, FUN, ...)
+		if(is.null(MARGIN)){
+			ArrayApplyNULL(X=X, FUN=FUN, ...)
+		}else{
+			ArrayApplyReduce(X, MARGIN, FUN, ...)
+		}
 	)
 
 }else{
 	setMethod("apply", "RasterArray",function(X, MARGIN, FUN,...) 
-		RasterArrayApply(X, MARGIN, FUN, ...)
+		if(is.null(MARGIN)){
+			ArrayApplyNULL(X=X, FUN=FUN, ...)
+		}else{
+			ArrayApplyReduce(X, MARGIN, FUN, ...)
+		}
 	)
 
 }

@@ -7,7 +7,10 @@ setMethod(
 		if(! requireNamespace("rgdal", quietly=TRUE)) stop("This method requires the 'rgdal' package to run.")
 		
 		# fall back to SpatialStack method.
-		x@stack<-spTransform(x@stack, CRSobj)
+		newStack<-spTransform(x@stack, CRSobj)
+
+		# recreate the strucuture
+		x <- SpatialArray(stack=newStack, index=x@index)
 		
 		# final value
 		return(x)

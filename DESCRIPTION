@@ -17,6 +17,7 @@ Collate:
     XArray-combine.R
     XArray-xattrib.R
     XArray-subset.R
+    XArray-apply.R
     RasterArray-base.R
     RasterArray-cast.R
     RasterArray-combine.R

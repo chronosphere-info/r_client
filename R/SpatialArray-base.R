@@ -159,3 +159,24 @@ is.na.SpatialArray<-function(x){
 	is.na(proxy(x))
 }
 
+
+
+if("simplify" %in% names(formals(base::apply))){
+	setMethod("apply", "SpatialArray",function(X, MARGIN=NULL, FUN,..., simplify=TRUE)
+		if(is.null(MARGIN)){
+			ArrayApplyNULL(X, FUN, ...)
+		}else{
+			ArrayApplyReduce(X, MARGIN, FUN, ...)
+		}
+	)
+
+}else{
+	setMethod("apply", "SpatialArray",function(X, MARGIN=NULL, FUN,...) 
+		if(is.null(MARGIN)){
+			ArrayApplyNULL(X, FUN, ...)
+		}else{
+			ArrayApplyReduce(X, MARGIN, FUN, ...)
+		}
+	)
+
+}

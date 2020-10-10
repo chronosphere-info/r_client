@@ -5,7 +5,6 @@
 \alias{combine}
 \alias{combine,XArray-method}
 \alias{combine,RasterLayer-method}
-\alias{combine,RasterArray-method}
 \alias{combine,VectorSpatialClasses-method}
 \title{Combine RasterLayers and one-dimensional RasterArrays and Spatial* objects with one-dimensinoal SpatialArrays}
 \usage{
@@ -14,8 +13,6 @@ combine(x, ...)
 \S4method{combine}{XArray}(x, ...)
 
 \S4method{combine}{RasterLayer}(x, ...)
-
-\S4method{combine}{RasterArray}(x, ...)
 
 \S4method{combine}{VectorSpatialClasses}(x, ...)
 }

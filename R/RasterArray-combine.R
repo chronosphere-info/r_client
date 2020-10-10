@@ -38,44 +38,9 @@ setMethod(
 )
 
 
-#' @rdname combine
-#' @export 
-setMethod(
-	"combine",
-	"RasterArray",
-
-	#c.RasterArray<-
-	function(x, ...){
-		listArg <- list(...)
-		finRA <- x
-		# store the system call
-		callSymb <- sys.call(which=-1)
-	
-		# run loop only if it is more than 1
-		if(length(listArg)!=0){
-			for(i in 1:length(listArg)){
-				elem <- listArg[[i]]
-				# name of the first will be taken care of by c2
-				finRA<-c2(finRA, elem)
-				# try to overwrite the name - necessary for multiple combinations
-				if(class(elem)=="RasterLayer"){
-					if(is.symbol(callSymb[[i+2]])){
-						names(finRA)[length(finRA)] <- deparse(callSymb[[i+2]])
-					}else{
-						names(finRA)[length(finRA)] <- NA
-					}
-				}
-			}
-		}
-		return(finRA)
-	}
-)
-
 ################################################################
 # Internals for c- methods
 
-# pairwise generic
-setGeneric("c2", function(x,y,...) standardGeneric("c2"))
 
 setMethod("c2", signature=c("RasterLayer", "RasterLayer"), 
 	definition=function(x, y){

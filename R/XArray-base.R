@@ -136,3 +136,4 @@ extendDim <- function(proxy, vals2d, newdim=1){
 	
 	return(endObj)
 }
+
