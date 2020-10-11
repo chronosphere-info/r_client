@@ -26,7 +26,7 @@ as.data.frame.SpatialArray <- function(x, row.names=NULL, optional=FALSE,...){
 #' # # convert Spatial* to as.SpatialArray
 #' # sa <- as.SpatialArray(recent)
 #' @rdname asSpatialArray
-#' @return A \code{aSpatialArray} class object.
+#' @return A \code{SpatialArray} class object.
 #' @exportMethod as.SpatialArray
 setGeneric("as.SpatialArray", function(from) standardGeneric("as.SpatialArray"))
 

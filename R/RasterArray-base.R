@@ -144,6 +144,7 @@ is.na.RasterArray<-function(x){
 
 #' @rdname apply-methods
 #' @aliases apply,RasterArray-method
+#' @aliases apply,SpatialArray-method
 "apply"
 
 if("simplify" %in% names(formals(base::apply))){

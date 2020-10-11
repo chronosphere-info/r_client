@@ -11,6 +11,8 @@
 }
 \arguments{
 \item{x}{\code{SpatialPoints},\code{SpatialPointsDataFrame},\code{SpatialLines},\code{SpatialLinesDataFrame},\code{SpatialPolygons},\code{SpatialPolygonsDataFrame}, object.}
+
+\item{...}{Additional Spatial* objects.}
 }
 \value{
 A \code{\link{RasterArray}} class object.

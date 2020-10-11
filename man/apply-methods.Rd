@@ -4,6 +4,7 @@
 \name{apply}
 \alias{apply}
 \alias{apply,RasterArray-method}
+\alias{apply,SpatialArray-method}
 \title{Apply-type iterator for RasterArrays and SpatialArrays}
 \format{
 An object of class \code{standardGeneric} of length 1.

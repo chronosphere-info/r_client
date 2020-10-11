@@ -150,6 +150,7 @@ setMethod(
 
 #' @rdname stack
 #' @param x \code{SpatialPoints},\code{SpatialPointsDataFrame},\code{SpatialLines},\code{SpatialLinesDataFrame},\code{SpatialPolygons},\code{SpatialPolygonsDataFrame}, object.
+#' @param ... Additional Spatial* objects.
 #' @return A \code{\link{RasterArray}} class object.
 setMethod(
 	"stack",

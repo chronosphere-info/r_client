@@ -3,14 +3,14 @@
 \name{as.data.frame.RasterArray}
 \alias{as.data.frame.RasterArray}
 \alias{as.data.frame.SpatialArray}
-\title{S3-type method for \code{\link{RasterArray}} and \code{\link{Spatialarray}}}
+\title{S3-type method for \code{\link{RasterArray}} and \code{\link{SpatialArray}}}
 \usage{
 \method{as.data.frame}{RasterArray}(x, row.names = NULL, optional = FALSE, ...)
 
 \method{as.data.frame}{SpatialArray}(x, row.names = NULL, optional = FALSE, ...)
 }
 \arguments{
-\item{x}{a \code{\link{RasterArray}} and \code{\link{Spatialarray}} class object.}
+\item{x}{a \code{\link{RasterArray}} and \code{\link{SpatialArray}} class object.}
 
 \item{row.names}{Argument to define the rownames of the resulting \code{data.frame}.}
 

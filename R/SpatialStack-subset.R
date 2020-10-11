@@ -77,7 +77,10 @@ setMethod(
 #' @param value A single \code{Spatial} object.
 #' @return None.
 #' @rdname replacementSingle-spatialstack
-
+#' @examples
+#' data(coastlines)
+#' spstack <- coastlines@stack[1:2]
+#' spstack[1] <- mapedge()
 #' @exportMethod "[<-"
 setReplaceMethod(
 	"[", 

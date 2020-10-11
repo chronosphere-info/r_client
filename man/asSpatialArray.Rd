@@ -10,7 +10,7 @@ as.SpatialArray(from)
 \item{from}{Object to be converted.}
 }
 \value{
-A \code{aSpatialArray} class object.
+A \code{SpatialArray} class object.
 }
 \description{
 The function converts \code{Spatial*}objects to \code{\link{SpatialArray}}-class objects.
