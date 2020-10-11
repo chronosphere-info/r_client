@@ -31,6 +31,6 @@ data(dems)
 names(dems)
 names(dems)[4] <- "weirdo"
 # NULL
-data(clim)
-names(clim)
+data(coastlines)
+names(coastlines)
 }

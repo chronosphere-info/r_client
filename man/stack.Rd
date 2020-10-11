@@ -20,3 +20,11 @@ A \code{\link{RasterArray}} class object.
 \description{
 The function alls a \code{\link{RasterArray}}-like stacking of Spatial* objects and \code{\link{SpatialStack}}s .
 }
+\examples{
+data(coastlines)
+one <- coastlines[1]
+two <- coastlines[2]
+three <- coastlines[3]
+# create a SpatialStack similar to a RasterStack
+spStack <- stack(one, two, three)
+}

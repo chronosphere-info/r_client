@@ -16,8 +16,8 @@ A \code{aSpatialArray} class object.
 The function converts \code{Spatial*}objects to \code{\link{SpatialArray}}-class objects.
 }
 \examples{
-# data(dems)
-# recent <- dems[1]
-# # convert RasterLayer to RasterArray
-# ra <- as.RasterArray(recent)
+# data(coastlines)
+# recent <- coastlines[1]
+# # convert Spatial* to as.SpatialArray
+# sa <- as.SpatialArray(recent)
 }

@@ -7,7 +7,12 @@
 #' @param x \code{SpatialStack} object.
 #' @param i subscript ofvector-like subsetting.
 #' @param drop \code{logical} in case the result of subsetting is a single element, should the \code{SpatialStack} wrapper be dropped and the element be reduced to a single \code{RasterLayer}?
-##' @return A \code{Spatial} or \code{SpatialStack} class object.
+#' @return A \code{Spatial} or \code{SpatialStack} class object.
+#' @examples 
+#' # stack of the paleocoast coastlines
+#' data(coastlines)
+#' spstack <- coastlines@stack
+#' subset(spstack, "X5Ma_CS_v7")
 # combined
 ##' @exportMethod subset
 setMethod(
@@ -45,6 +50,11 @@ setMethod(
 #' @param i subscript of vector-like subsetting.
 #' @param drop \code{logical} in case the result of subsetting is a single element, should the \code{SpatialStack} wrapper be dropped and the element be reduced to a single \code{Spatial}?
 #' @return A \code{SpatialStack} or \code{Spatial} class object.
+#' @examples 
+#' # stack of the paleocoast coastlines
+#' data(coastlines)
+#' spstack <- coastlines@stack
+#' spstack[1]
 ##' @exportMethod [
 setMethod(
 	"[",
@@ -67,6 +77,7 @@ setMethod(
 #' @param value A single \code{Spatial} object.
 #' @return None.
 #' @rdname replacementSingle-spatialstack
+
 #' @exportMethod "[<-"
 setReplaceMethod(
 	"[", 

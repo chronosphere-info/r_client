@@ -25,3 +25,8 @@ Joint reprojection of entire sets of vector data.
 \details{
 The function requires the rgdal package to run.
 }
+\examples{
+# load example data
+data(coastlines)
+mollCoast <- spTransform(coastlines, "+proj=moll")
+}

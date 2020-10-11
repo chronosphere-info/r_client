@@ -104,6 +104,13 @@ newname <- function(x){
 #'
 #' The function alls a \code{\link{RasterArray}}-like stacking of Spatial* objects and \code{\link{SpatialStack}}s .
 #' @rdname stack
+#' @examples
+#' data(coastlines)
+#' one <- coastlines[1]
+#' two <- coastlines[2]
+#' three <- coastlines[3]
+#' # create a SpatialStack similar to a RasterStack
+#' spStack <- stack(one, two, three)
 #' @param x \code{SpatialPoints},\code{SpatialPointsDataFrame},\code{SpatialLines},\code{SpatialLinesDataFrame},\code{SpatialPolygons},\code{SpatialPolygonsDataFrame}, object.
 #' @return A \code{\link{RasterArray}} class object.
 #' @exportMethod stack
@@ -246,11 +253,14 @@ setReplaceMethod(
 
 
 
-#' Return types of objects in a SpatialStack  or SpatialArray object
+#' Return types of objects in a \code{\link{SpatialStack}}  or \code{\link{SpatialArray}} object
 #'
 #' Methods sequences that start with an NA do not yet work. 
 #' @rdname types
-#' @param x \code{SpatialStack} object.
+#' @param x \code{\link{SpatialStack}}  or \code{\link{SpatialArray}} object.
+#' @examples 
+#' data(coastlines)
+#' types(coastlines)
 #' @return A \code{character} class object.
 #' @export 
 setGeneric("types", function(x) standardGeneric("types"))
@@ -265,9 +275,4 @@ setMethod(
 		return(all)
 	}
 )
-
-
-# Spatial object chain
-# c and combine methods 
-
 

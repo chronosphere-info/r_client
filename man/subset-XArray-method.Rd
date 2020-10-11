@@ -39,4 +39,6 @@ subs[1] <- FALSE # remove first
 subset(dems, i= subs)
 # no drop
 subset(dems, i=1, drop=FALSE)
+data(coastlines)
+subset(coastlines, i=2, j=1:2)
 }

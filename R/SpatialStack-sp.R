@@ -8,6 +8,10 @@
 #' @param CRSobj A \code{\link[sp]{CRS}} class or \code{character} object defining a coordinate reference system.
 #' @param ... Additional arguments.
 #' @rdname spTransform
+#' @examples
+#' # load example data
+#' data(coastlines)
+#' mollCoast <- spTransform(coastlines, "+proj=moll")
 #' @return A \code{\link{SpatialStack}} or \code{\link{SpatialArray}} object.
 #' @exportMethod spTransform
 setMethod(

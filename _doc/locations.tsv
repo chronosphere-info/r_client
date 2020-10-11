@@ -1,0 +1,56 @@
+---
+- chronosphere 	
+	type: package
+	contains:
+		- classes.R
+		- colours.R
+		- data.R
+		- fetching.R
+		- info.R
+		- inter.R
+		- platemodel.R
+		- plotting.R
+		- RasterArray-base.R
+		- RasterArray-cast.R
+		- RasterArray-combine.R
+		- RasterArray-groupgen.R
+		- RasterArray-raster.R
+		- RasterArray-subset.R
+		- RasterArray-xattrib.R
+		- reconstruction.R
+		- SpatialArray-base.R
+		- SpatialArray-cast.R
+		- SpatialArray-combine.R
+		- SpatialArray-sp.R
+		- SpatialArray-subset.R
+		- SpatialStack-base.R
+		- SpatialStack-sp.R
+		- SpatialStack-subset.R
+		- utility.R
+		- XArray-apply.R
+		- XArray-base.R
+		- XArray-combine.R
+		- XArray-subset.R
+		- XArray-xattrib.R
+		- zzz.R
+		
+- classes.R
+	type: file
+	contains:
+		- VectorSpatialClasses
+		- arrayORmatrixORvector
+		- SpatialStack-class
+		- SpatialArray-class
+		- RasterArray-class
+		- XArray-class
+
+- classes.R
+	type: file
+	contains:
+		- VectorSpatialClasses
+		- arrayORmatrixORvector
+		- SpatialStack-class
+		- SpatialArray-class
+		- RasterArray-class
+		- XArray-class
+

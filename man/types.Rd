@@ -4,7 +4,7 @@
 \alias{types}
 \alias{types,SpatialStack-method}
 \alias{types,SpatialArray-method}
-\title{Return types of objects in a SpatialStack  or SpatialArray object}
+\title{Return types of objects in a \code{\link{SpatialStack}}  or \code{\link{SpatialArray}} object}
 \usage{
 types(x)
 
@@ -13,11 +13,15 @@ types(x)
 \S4method{types}{SpatialArray}(x)
 }
 \arguments{
-\item{x}{\code{SpatialStack} object.}
+\item{x}{\code{\link{SpatialStack}}  or \code{\link{SpatialArray}} object.}
 }
 \value{
 A \code{character} class object.
 }
 \description{
 Methods sequences that start with an NA do not yet work.
+}
+\examples{
+data(coastlines)
+types(coastlines)
 }

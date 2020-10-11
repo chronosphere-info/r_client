@@ -33,5 +33,8 @@ second <- dems["10"]
 subscript <- rep(FALSE, length(dems))
 subscript[2] <- TRUE
 second2 <- dems[subscript]
+data(coastlines)
+present<- coastlines["0", ]
+allMargin <- coastlines[, "margin"]
 
 }

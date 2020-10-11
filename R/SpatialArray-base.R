@@ -97,7 +97,7 @@ setMethod(
 			            "  (nrow, ncol)\n", 
 			            sep = "")
 			    }else{
-			    	cat("- dimensions  : ", paste(adim, collapse=", "), 
+			    	cat("- dimensions   : ", paste(adim, collapse=", "), 
 			            "  (nrow, ncol, ...)\n", 
 			            sep = "")
 			    }
@@ -150,9 +150,9 @@ setMethod(
 #' @return A \code{logical} \code{vector}, \code{matrix} or \code{array} matching the structure of the \code{RasterArray}.
 #' 
 #' @examples
-#' data(dems)
-#' dems[2] <- NA
-#' is.na(dems)
+#' data(coastlines)
+#' coastlines[2,1] <- NA
+#' is.na(coastlines)
 #' 
 #' @export
 is.na.SpatialArray<-function(x){

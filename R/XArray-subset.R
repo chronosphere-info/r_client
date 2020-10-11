@@ -26,6 +26,8 @@
 #' subset(dems, i= subs)
 #' # no drop
 #' subset(dems, i=1, drop=FALSE)
+#' data(coastlines)
+#' subset(coastlines, i=2, j=1:2)
 setMethod(
 	"subset", 
 	signature(x="XArray"), 
@@ -108,6 +110,9 @@ setMethod(
 #' subscript <- rep(FALSE, length(dems))
 #' subscript[2] <- TRUE
 #' second2 <- dems[subscript]
+#' data(coastlines)
+#' present<- coastlines["0", ]
+#' allMargin <- coastlines[, "margin"]
 #' 
 #' @exportMethod [
 setMethod(
@@ -270,6 +275,8 @@ setReplaceMethod(
 	}
 )
 
+
+
 # Generalized layer replacement function for XArray. Method dispatch written explicitly as RasterArray[ <- RasterLayer and SpatialArray [<- Spatial*
 XArrayReplaceLayer <- function(x,i,j,value,...){
 	# fetch the index
@@ -406,9 +413,7 @@ XArrayReplaceLayer <- function(x,i,j,value,...){
 #' @param value \code{character} vector.
 #' @return None.
 #' 
-#' @examples
 #' @rdname doubleBracketReplace
-#' # an example
 #' @exportMethod "[[<-"
 setReplaceMethod(
 	"[[", 

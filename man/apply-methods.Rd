@@ -16,7 +16,7 @@ apply
 \arguments{
 \item{X}{an array, including matrices and RasterArrays.}
 
-\item{MARGIN}{a vector giving the subscripts which the function will be applied over. E.g., for a matrix 1 indicates rows, 2 indicates columns, \code{c(1, 2)} indicates rows and columns. Where \code{X} has named dimnames, it can be a character vector selecting dimension names. For \code{RasterArrays} only single dimension margins are implemented.}
+\item{MARGIN}{a vector giving the subscripts which the function will be applied over. E.g., for a matrix 1 indicates rows, 2 indicates columns, \code{c(1, 2)} indicates rows and columns. Where \code{X} has named dimnames, it can be a character vector selecting dimension names. For \code{RasterArrays} only single dimension margins are implemented. If it is \code{NULL} then the function is applied to every item.}
 
 \item{FUN}{the function to be applied: see ‘Details’ of \code{\link[base]{apply}}.}
 
@@ -30,6 +30,11 @@ The function implements the \code{\link[base]{apply}}-type iterators for the Ras
 Not yet implemented for multidimensional MARGINs.
 }
 \examples{
+# Null dimensional margin
+data(coastlines)
+# apply function to every element manually
+# memory taken by every layer
+apply(coastlines, MARGIN=NULL, object.size)
 # double of itself
 data(dems)
 a<- cbind(dems, dems)

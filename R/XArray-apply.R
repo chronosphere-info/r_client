@@ -4,6 +4,11 @@
 #' The function implements the \code{\link[base]{apply}}-type iterators for the RasterArray class. Output values are constrained to RasterArrays, whenever possible. 
 #' Not yet implemented for multidimensional MARGINs.
 #' @examples
+#' # Null dimensional margin
+#' data(coastlines)
+#' # apply function to every element manually
+#' # memory taken by every layer
+#' apply(coastlines, MARGIN=NULL, object.size)
 #' # double of itself
 #' data(dems)
 #' a<- cbind(dems, dems)

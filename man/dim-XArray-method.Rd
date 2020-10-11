@@ -18,6 +18,6 @@ The function returns the dimensions of the array in which \code{RasterLayer}s or
 \examples{
 data(dems)
 dim(dems)
-data(clim)
-dim(clim)
+data(coastlines)
+dim(coastlines)
 }

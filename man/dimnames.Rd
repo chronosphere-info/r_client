@@ -23,7 +23,7 @@ Get or set the dimnames of multidimensional \code{\link{RasterArray}} or \code{\
 \examples{
 data(dems)
 dimnames(dems)
-data(clim)
-dimnames(clim)
-dimnames(clim)[[2]] <- c("first", "second")
+data(coastlines)
+dimnames(coastlines)
+dimnames(coastlines)[[2]] <- c("first", "second")
 }

@@ -8,8 +8,8 @@
 #' @examples
 #' data(dems)
 #' dim(dems)
-#' data(clim)
-#' dim(clim)
+#' data(coastlines)
+#' dim(coastlines)
 #' @exportMethod dim
 setMethod(
 	"dim", 
@@ -34,8 +34,8 @@ setMethod(
 #' names(dems)
 #' names(dems)[4] <- "weirdo"
 #' # NULL
-#' data(clim)
-#' names(clim)
+#' data(coastlines)
+#' names(coastlines)
 #' @rdname names
 #' @exportMethod names
 setMethod(
@@ -131,9 +131,9 @@ setMethod(
 #' @return A \code{character} vector of column names or \code{NULL}.
 #' 
 #' @examples
-#' data(clim)
-#' colnames(clim)
-#' colnames(clim) <- c("a", "b")
+#' data(coastlines)
+#' colnames(coastlines)
+#' colnames(coastlines) <- c("a", "b")
 #' @rdname colnames
 #' @exportMethod colnames
 setMethod(
@@ -164,9 +164,9 @@ setReplaceMethod(
 #' @return A \code{character} vector of row names or \code{NULL}.
 #' 
 #' @examples
-#' data(clim)
-#' rownames(clim)
-#' rownames(clim) <- paste("year", rownames(clim))
+#' data(coastlines)
+#' rownames(coastlines)
+#' rownames(coastlines) <- paste(rownames(coastlines), "Ma")
 #' @rdname rownames
 #' @exportMethod rownames
 setMethod(
@@ -198,9 +198,9 @@ setReplaceMethod(
 #' @examples
 #' data(dems)
 #' dimnames(dems)
-#' data(clim)
-#' dimnames(clim)
-#' dimnames(clim)[[2]] <- c("first", "second")
+#' data(coastlines)
+#' dimnames(coastlines)
+#' dimnames(coastlines)[[2]] <- c("first", "second")
 #' @rdname dimnames
 #' @exportMethod dimnames
 setMethod(
@@ -232,9 +232,9 @@ setReplaceMethod(
 #' @return A \code{numeric} value of the number of columns and rows.
 #' @exportMethod ncol
 #' @examples
-#' data(clim)
-#' ncol(clim)
-#' nrow(clim)
+#' data(coastlines)
+#' ncol(coastlines)
+#' nrow(coastlines)
 setMethod(
 	"ncol", 
 	signature="XArray", 

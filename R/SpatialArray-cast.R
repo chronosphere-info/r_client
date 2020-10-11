@@ -21,10 +21,10 @@ as.data.frame.SpatialArray <- function(x, row.names=NULL, optional=FALSE,...){
 #' @param from Object to be converted. 
 #' 
 #' @examples
-#' # data(dems)
-#' # recent <- dems[1]
-#' # # convert RasterLayer to RasterArray
-#' # ra <- as.RasterArray(recent)
+#' # data(coastlines)
+#' # recent <- coastlines[1]
+#' # # convert Spatial* to as.SpatialArray
+#' # sa <- as.SpatialArray(recent)
 #' @rdname asSpatialArray
 #' @return A \code{aSpatialArray} class object.
 #' @exportMethod as.SpatialArray

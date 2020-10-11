@@ -468,8 +468,8 @@ setMethod(
 #' 
 #' @exportMethod cellStats
 #' @examples
-#' data(clim)
-#' cellStats(clim, stat=mean, na.rm=TRUE)
+#' data(dems)
+#' cellStats(dems, stat=mean, na.rm=TRUE)
 setMethod("cellStats", signature="RasterArray", 
 	definition=function(x, stat,...){
 		statVect <- raster::cellStats(x@stack, stat=stat,...)

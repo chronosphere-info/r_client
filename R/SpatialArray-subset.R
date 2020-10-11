@@ -60,7 +60,6 @@ setReplaceMethod(
 
 
 #' @rdname doubleBracketReplace
-#' # an example
 #' @exportMethod "[[<-"
 setReplaceMethod(
 	"[[", 
