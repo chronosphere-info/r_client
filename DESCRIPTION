@@ -27,6 +27,7 @@ Collate:
     RasterArray-xattrib.R
     SpatialStack-base.R
     SpatialStack-sp.R
+    SpatialStack-subset.R
     SpatialArray-base.R
     SpatialArray-sp.R
     SpatialArray-cast.R

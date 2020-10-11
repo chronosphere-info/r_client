@@ -57,3 +57,19 @@ setReplaceMethod(
 		return(x)
 	}
 )
+
+
+#' @rdname doubleBracketReplace
+#' # an example
+#' @exportMethod "[[<-"
+setReplaceMethod(
+	"[[", 
+	signature(x="SpatialArray", i="ANY", j="missing", value="SpatialStack"),
+	function(x,i, value){
+		for(j in 1:length(i)){
+			x@stack[[i[j]]] <- value[j]
+		}
+		return(x)
+	}
+)
+

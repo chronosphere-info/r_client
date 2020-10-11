@@ -149,7 +149,7 @@ is.na.RasterArray<-function(x){
 if("simplify" %in% names(formals(base::apply))){
 	setMethod("apply", "RasterArray",function(X, MARGIN, FUN,..., simplify=TRUE) 
 		if(is.null(MARGIN)){
-			ArrayApplyNULL(X=X, FUN=FUN, ...)
+			ArrayApplyNULL(X, FUN, ...)
 		}else{
 			ArrayApplyReduce(X, MARGIN, FUN, ...)
 		}

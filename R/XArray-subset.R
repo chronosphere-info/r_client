@@ -407,6 +407,7 @@ XArrayReplaceLayer <- function(x,i,j,value,...){
 #' @return None.
 #' 
 #' @examples
+#' @rdname doubleBracketReplace
 #' # an example
 #' @exportMethod "[[<-"
 setReplaceMethod(
