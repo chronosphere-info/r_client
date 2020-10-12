@@ -3,16 +3,20 @@
 \docType{data}
 \name{coasts}
 \alias{coasts}
-\title{PaleoMAP PaleoCoastlines (demo)
-This dataset is important.}
+\title{PaleoMAP PaleoCoastlines (demo)}
 \format{
-An object of class \code{SpatialArray} with 5 rows and 2 columns.
+A \code{\link[chronosphere:SpatialArray-class]{SpatialArray}} with 5 continental margin and 5 paleocoastline layers.
+}
+\source{
+Kocsis, A. T., & Scotese, C. R. (2020). PaleoMAP PaleoCoastlines data [Data set]. Zenodo. https://doi.org/10.5281/zenodo.3903164
 }
 \usage{
 data(coasts)
 }
 \description{
-PaleoMAP PaleoCoastlines (demo)
-This dataset is important.
+A dataset containing the coastline reconstructions based on the PaleoMAP PaleoDEMS (\link{dems}) and the Paleobiology Database \url{https://paleobiodb.org} for the time interval 0 - 25 Ma.
+}
+\details{
+This is version v7. The article describing the entire set is under review. Once that is published, the entire dataset will be available.
 }
 \keyword{datasets}

@@ -412,14 +412,15 @@ setMethod("mapplot", signature="SpatialPolygons",
 
 
 
-#' Shorthand for the plotting \code{\link[chronosphere:RasterArray-class]{RasterArray}} objects
+#' Shorthand for the plotting \code{\link[chronosphere:RasterArray-class]{RasterArray}} and \code{\link[chronosphere:SpatialArray-class]{SpatialArray}} objects
 #' 
-#' This \code{plot}, method executes the \code{\link{mapplot}} function on the \code{\link[chronosphere:RasterArray-class]{RasterArray}} object.
+#' This \code{plot}, method executes the \code{\link{mapplot}} function on the \code{\link[chronosphere:RasterArray-class]{RasterArray}} or \code{\link[chronosphere:SpatialArray-class]{SpatialArray}}object.
 #' 
 #' @return None.
-#' @param x A (\code{\link[chronosphere:RasterArray-class]{RasterArray}}) Object to be plotted.
+#' @param x A (\code{\link[chronosphere:RasterArray-class]{RasterArray}} or \code{\link[chronosphere:SpatialArray-class]{SpatialArray}}) Object to be plotted.
 #' @param y Not implemented yet.
 #' @param ... Arguments passed to the \code{\link{mapplot}} function.
+#' @rdname plots
 #' @examples
 #' data(dems)
 #' plot(dems)
@@ -433,45 +434,15 @@ setMethod(
 )
 
 
+#' @rdname plots
+#' @exportMethod plot
+setMethod(
+  "plot",
+  signature=c("SpatialArray", "missing"),
+  function(x,y, ...){
+    mapplot(x,...)
+  }
+)
 
 
-# function used by mapedge
 
-detailedBounds <- function(x,y, xmin=-180, xmax=180, ymin=-90, ymax=90){
-  rbind(
-    cbind(seq(xmin, xmax, length.out=x), rep(ymax, x)),
-    cbind(rep(xmax, y), seq(ymax, ymin, length.out=y)),
-    cbind(seq(xmax, xmin, length.out=x), rep(ymin, x)),
-    cbind(rep(xmin, y), seq(ymin, ymax, length.out=y))
-  )
-}
-
-
-#' Function to quickly draft the edge of the equirectangular projection 
-#' 
-#' Function to plot the edge of a map with different projections.
-#' 
-#' @param x (\code{numeric}) Number of segments in the x (longitude) dimension. 
-#' @param y (\code{numeric}) Number of segments in the y (latitude) dimension. 
-#' @param xmin (\code{numeric}) Minimum value of x (longitude).
-#' @param xmax (\code{numeric}) Minimum value of x (longitude).
-#' @param ymin (\code{numeric}) Maximum value of y (latitude).
-#' @param ymax (\code{numeric}) Maximum value of y (latitude).
-#' 
-#' @return A \code{SpatialPolygons} class object.
-#' @examples
-#' # requires rgdal
-#' edge <- mapedge()
-#' molledge <- spTransform(edge, CRS("+proj=moll"))
-#' 
-#' @export
-mapedge <- function(x=360, y=180, xmin=-180, xmax=180, ymin=-90, ymax=90){
-	# return a rectangle
-  	rectangle <- detailedBounds(x, y, xmin, xmax, ymin, ymax)
-
-  	# now make it a SpatialPolygons
-  	final <- SpatialPolygons(list(Polygons(list(Polygon(rectangle)), ID="0")), proj4string=CRS("+proj=longlat"))
-
-  	# return object
-  	return(final)
-}

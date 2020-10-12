@@ -16,4 +16,7 @@ data(dems)
 \description{
 A dataset containing the paleoDEM reconstructions of Chris Scotese for the time interval 0 - 45 Ma.
 }
+\details{
+This is a subset of the total dataset, use \code{fetch(dat="paleomap", var="dem", res=1, ver="20190719")} to get the whole set.
+}
 \keyword{datasets}
