@@ -37,20 +37,9 @@
 - classes.R
 	type: file
 	contains:
-		- VectorSpatialClasses
-		- arrayORmatrixORvector
+		- VectorSpatialClasses-classUnion
+		- arrayORmatrixORvector-classUnion
 		- SpatialStack-class
 		- SpatialArray-class
 		- RasterArray-class
 		- XArray-class
-
-- classes.R
-	type: file
-	contains:
-		- VectorSpatialClasses
-		- arrayORmatrixORvector
-		- SpatialStack-class
-		- SpatialArray-class
-		- RasterArray-class
-		- XArray-class
-

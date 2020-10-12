@@ -21,8 +21,8 @@ as.data.frame.SpatialArray <- function(x, row.names=NULL, optional=FALSE,...){
 #' @param from Object to be converted. 
 #' 
 #' @examples
-#' # data(coastlines)
-#' # recent <- coastlines[1]
+#' # data(coasts)
+#' # recent <- coasts[1]
 #' # # convert Spatial* to as.SpatialArray
 #' # sa <- as.SpatialArray(recent)
 #' @rdname asSpatialArray

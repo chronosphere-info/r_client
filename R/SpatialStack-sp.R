@@ -10,8 +10,8 @@
 #' @rdname spTransform
 #' @examples
 #' # load example data
-#' data(coastlines)
-#' mollCoast <- spTransform(coastlines, "+proj=moll")
+#' data(coasts)
+#' mollCoast <- spTransform(coasts, "+proj=moll")
 #' @return A \code{\link{SpatialStack}} or \code{\link{SpatialArray}} object.
 #' @exportMethod spTransform
 setMethod(

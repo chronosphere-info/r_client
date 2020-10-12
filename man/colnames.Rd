@@ -21,7 +21,7 @@ A \code{character} vector of column names or \code{NULL}.
 Get or set the column names of two-dimensional code{\link{RasterArray}} or \code{\link{SpatialArray}} objects
 }
 \examples{
-data(coastlines)
-colnames(coastlines)
-colnames(coastlines) <- c("a", "b")
+data(coasts)
+colnames(coasts)
+colnames(coasts) <- c("a", "b")
 }

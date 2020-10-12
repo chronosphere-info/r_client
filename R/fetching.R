@@ -8,9 +8,9 @@ checklog <- TRUE
 #' 
 #' The function will download a list of available data from the data repository
 #' 
-#' The function will download a single .csv file and attached it as a \code{data.frame}.
+#' The function will download a single .csv file and attach it as a \code{data.frame}.
 #' 
-#' @param dat \code{character}. Dataset ID. If this is set to \code{NULL}, then a simplified list of availables variables will be downloaded, including all \code{dat} and \code{var} combinations. If \code{dat} is a valid dataset ID, then all accessible variables of a dataset are downloaded. 
+#' @param dat \code{character}. Database ID. If this is set to \code{NULL}, then a simplified list of availables variables will be downloaded, including all \code{dat} and \code{var} combinations. If \code{dat} is a valid database ID, then all accessible resolutions and version of a dataset are shown. 
 #' @param datadir \code{character} Directory where the downloaded files are kept. Individual entries will be looked up from the directory if this is given, and will be downloaded if they are not found. The default \code{NULL} option will download data to a temporary directory that exists only until the R session ends.
 #' @param verbose \code{logical} Should console feedback during download be displayed?
 #' @param master \code{logical} When \code{dat} is \code{NULL}, should the function download the master records file?
@@ -20,7 +20,7 @@ checklog <- TRUE
 #' \donttest{
 #' # available datasets and variables
 #' ind <- datasets()
-#' # all available versions and resolutions in dataset 'paleomap'
+#' # all available versions and resolutions in database 'paleomap'
 #' oneDat <- datasets("paleomap")
 #' }
 #' @export

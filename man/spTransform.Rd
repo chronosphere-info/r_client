@@ -27,6 +27,6 @@ The function requires the rgdal package to run.
 }
 \examples{
 # load example data
-data(coastlines)
-mollCoast <- spTransform(coastlines, "+proj=moll")
+data(coasts)
+mollCoast <- spTransform(coasts, "+proj=moll")
 }

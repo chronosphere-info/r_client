@@ -27,6 +27,6 @@ The \code{proxy} method wraps the names of layers in the stack using the \code{i
 data(dems)
 proxy(dems)
 
-data(coastlines)
-proxy(coastlines)
+data(coasts)
+proxy(coasts)
 }

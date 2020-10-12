@@ -20,8 +20,8 @@ A \code{Spatial} or \code{SpatialStack} class object.
 Extract subsets of SpatialStack class object similarly to a RasterStack
 }
 \examples{
-# stack of the paleocoast coastlines
-data(coastlines)
-spstack <- coastlines@stack
+# stack of the paleomap paleocoastlines
+data(coasts)
+spstack <- coasts@stack
 subset(spstack, "X5Ma_CS_v7")
 }

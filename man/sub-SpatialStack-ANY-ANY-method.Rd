@@ -20,8 +20,8 @@ A \code{SpatialStack} or \code{Spatial} class object.
 The single and double bracket subsetting is identical in the case of SpatiaStacks.
 }
 \examples{
-# stack of the paleocoast coastlines
-data(coastlines)
-spstack <- coastlines@stack
+# stack of the paleomap paleocoastlines
+data(coasts)
+spstack <- coasts@stack
 spstack[1]
 }

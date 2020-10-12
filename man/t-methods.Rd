@@ -25,7 +25,7 @@ Transpose a \code{\link{RasterArray}} or \code{\link{SpatialArray}} object
 \examples{
 data(dems)
 t(dems)
-data(coastlines)
-t(coastlines)
+data(coasts)
+t(coasts)
 }
 \keyword{datasets}

@@ -11,8 +11,8 @@
 #' data(dems)
 #' proxy(dems)
 #'
-#' data(coastlines)
-#' proxy(coastlines)
+#' data(coasts)
+#' proxy(coasts)
 #' @exportMethod proxy
 #' @rdname proxy
 setGeneric("proxy", function(x,...) standardGeneric("proxy"))
@@ -42,8 +42,8 @@ setMethod(
 #' @examples
 #' data(dems)
 #' t(dems)
-#' data(coastlines)
-#' t(coastlines)
+#' data(coasts)
+#' t(coasts)
 #' @param x A \code{\link{RasterArray}} or \code{\link{SpatialArray}} class object. 
 #' @return A \code{\link{RasterArray}} or \code{\link{SpatialArray}} class object.
 #' @rdname t-methods

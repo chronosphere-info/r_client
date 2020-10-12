@@ -150,9 +150,9 @@ setMethod(
 #' @return A \code{logical} \code{vector}, \code{matrix} or \code{array} matching the structure of the \code{RasterArray}.
 #' 
 #' @examples
-#' data(coastlines)
-#' coastlines[2,1] <- NA
-#' is.na(coastlines)
+#' data(coasts)
+#' coasts[2,1] <- NA
+#' is.na(coasts)
 #' 
 #' @export
 is.na.SpatialArray<-function(x){

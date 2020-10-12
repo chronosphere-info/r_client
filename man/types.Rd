@@ -22,6 +22,6 @@ A \code{character} class object.
 Methods sequences that start with an NA do not yet work.
 }
 \examples{
-data(coastlines)
-types(coastlines)
+data(coasts)
+types(coasts)
 }

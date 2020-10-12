@@ -32,10 +32,10 @@ Not yet implemented for multidimensional MARGINs.
 }
 \examples{
 # Null dimensional margin
-data(coastlines)
+data(coasts)
 # apply function to every element manually
 # memory taken by every layer
-apply(coastlines, MARGIN=NULL, object.size)
+apply(coasts, MARGIN=NULL, object.size)
 # double of itself
 data(dems)
 a<- cbind(dems, dems)

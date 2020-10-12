@@ -16,8 +16,8 @@ A \code{logical} \code{vector}, \code{matrix} or \code{array} matching the struc
 The function behaves similar to the regular \code{is.na()} function applied to the proxy object of a \code{RasterArray}.
 }
 \examples{
-data(coastlines)
-coastlines[2,1] <- NA
-is.na(coastlines)
+data(coasts)
+coasts[2,1] <- NA
+is.na(coasts)
 
 }

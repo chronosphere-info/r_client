@@ -105,10 +105,10 @@ newname <- function(x){
 #' The function alls a \code{\link{RasterArray}}-like stacking of Spatial* objects and \code{\link{SpatialStack}}s .
 #' @rdname stack
 #' @examples
-#' data(coastlines)
-#' one <- coastlines[1]
-#' two <- coastlines[2]
-#' three <- coastlines[3]
+#' data(coasts)
+#' one <- coasts[1]
+#' two <- coasts[2]
+#' three <- coasts[3]
 #' # create a SpatialStack similar to a RasterStack
 #' spStack <- stack(one, two, three)
 #' @param x \code{SpatialPoints},\code{SpatialPointsDataFrame},\code{SpatialLines},\code{SpatialLinesDataFrame},\code{SpatialPolygons},\code{SpatialPolygonsDataFrame}, object.
@@ -260,8 +260,8 @@ setReplaceMethod(
 #' @rdname types
 #' @param x \code{\link{SpatialStack}}  or \code{\link{SpatialArray}} object.
 #' @examples 
-#' data(coastlines)
-#' types(coastlines)
+#' data(coasts)
+#' types(coasts)
 #' @return A \code{character} class object.
 #' @export 
 setGeneric("types", function(x) standardGeneric("types"))

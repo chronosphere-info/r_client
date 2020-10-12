@@ -21,7 +21,7 @@ A \code{character} vector of row names or \code{NULL}.
 Get or set the row names of two-dimensional \code{\link{RasterArray}} or \code{\link{SpatialArray}}objects
 }
 \examples{
-data(coastlines)
-rownames(coastlines)
-rownames(coastlines) <- paste(rownames(coastlines), "Ma")
+data(coasts)
+rownames(coasts)
+rownames(coasts) <- paste(rownames(coasts), "Ma")
 }

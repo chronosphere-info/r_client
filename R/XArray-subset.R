@@ -26,8 +26,8 @@
 #' subset(dems, i= subs)
 #' # no drop
 #' subset(dems, i=1, drop=FALSE)
-#' data(coastlines)
-#' subset(coastlines, i=2, j=1:2)
+#' data(coasts)
+#' subset(coasts, i=2, j=1:2)
 setMethod(
 	"subset", 
 	signature(x="XArray"), 
@@ -110,9 +110,9 @@ setMethod(
 #' subscript <- rep(FALSE, length(dems))
 #' subscript[2] <- TRUE
 #' second2 <- dems[subscript]
-#' data(coastlines)
-#' present<- coastlines["0", ]
-#' allMargin <- coastlines[, "margin"]
+#' data(coasts)
+#' present<- coasts["0", ]
+#' allMargin <- coasts[, "margin"]
 #' 
 #' @exportMethod [
 setMethod(

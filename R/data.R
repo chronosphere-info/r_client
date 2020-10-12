@@ -27,5 +27,5 @@
 
 #' PaleoMAP PaleoCoastlines (demo)
 #' This dataset is important.
-#' @usage data(coastlines)
-"coastlines"
+#' @usage data(coasts)
+"coasts"

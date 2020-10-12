@@ -23,10 +23,10 @@ A \code{\link{RasterArray}} class object.
 The function alls a \code{\link{RasterArray}}-like stacking of Spatial* objects and \code{\link{SpatialStack}}s .
 }
 \examples{
-data(coastlines)
-one <- coastlines[1]
-two <- coastlines[2]
-three <- coastlines[3]
+data(coasts)
+one <- coasts[1]
+two <- coasts[2]
+three <- coasts[3]
 # create a SpatialStack similar to a RasterStack
 spStack <- stack(one, two, three)
 }

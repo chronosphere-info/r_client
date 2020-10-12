@@ -48,7 +48,7 @@ None.
 The single and double bracket subsetting is identical in the case of SpatialStacks.
 }
 \examples{
-data(coastlines)
-spstack <- coastlines@stack[1:2]
+data(coasts)
+spstack <- coasts@stack[1:2]
 spstack[1] <- mapedge()
 }
