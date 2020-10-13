@@ -16,23 +16,21 @@
 #' @param quiet An option to suppress printing of the pandoc command line.
 #'
 #' @examples
-#'\dontrun{
+#' ##Create generic metafile
+#' #inputFile <- create_metadata(path=".", edit=FALSE)
+#' #
+#' ## Download references from the Paleobiology Database
+#' #refs <- read.csv("https://paleobiodb.org/data1.2/occs/refs.csv?base_name=Scleractinia&occs_created_after=2020-01-01&select=occs&all_records",
+#' #  # encoding required to allow reading of special characters such as accented characters
+#' #  encoding="UTF-8")[1:2,]
+#' #
+#' ## Generate report
+#' #report(inputFile=inputFile,
+#' #  data_refs = refs,
+#' #  output_path = file.path("."),
+#' #  output_file = "report.pdf",
+#' #  enterer_names=c("Enterer 1", "Enterer 2"))
 #'
-#'#Create generic metafile
-#'inputFile <- create_metadata(path=".", edit=FALSE)
-#'
-#'# Download references from the Paleobiology Database
-#'refs <- read.csv("https://paleobiodb.org/data1.2/occs/refs.csv?base_name=Scleractinia&occs_created_after=2020-01-01&select=occs&all_records",
-#'  # encoding required to allow reading of special characters such as accented characters
-#'  encoding="UTF-8")[1:2,]
-#'
-#'# Generate report
-#'report(inputFile=inputFile,
-#'  data_refs = refs,
-#'  output_path = file.path("."),
-#'  output_file = "report.pdf",
-#'  enterer_names=c("Enterer 1", "Enterer 2"))
-#'}
 #' 
 #' @export
 #'
@@ -49,7 +47,7 @@ report <- function(inputFile,
                    quiet = FALSE){
 	
 	# manage function dependencies
-	dependencies <- c("xfun", "kableExtra", "knitr", "yaml")
+	dependencies <- c("xfun", "kableExtra", "knitr", "yaml", "rmarkdown")
 	dependencyFound <- sapply(dependencies, function(x) requireNamespace(x, quietly=TRUE))
 
 	# provide feedback if not found
@@ -179,20 +177,20 @@ report <- function(inputFile,
 #' 
 #' @param x (\code{data.frame}) references with specific headers. See details for more information. 
 #' @param output_path folder where to save generated .bib file. 
-#' @param (\code{character}) type column in \code{x} which specifies the publication type. 
+#' @param type (\code{character}) type column in \code{x} which specifies the publication type. 
 #' @param combine (\code{logical}) Should the references be save on one file or separated in several ones. See details for more information.
 #' @param return_fnames (\code{logical}) Should the files names of the generated bib files be returned?
 #' @return
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' refs <- read.csv("https://paleobiodb.org/data1.2/occs/refs.csv?base_name=Scleractinia&occs_created_after=2020-01-01&select=occs&all_records",
-#' # encoding required to allow reading of special characeters, e.g. accents characters such as Ã©, Ã¨
-#' encoding="UTF-8")[1:2,]
 #' 
-#' generate_bib(refs)
-#' }
+#' # refs <- read.csv("https://paleobiodb.org/data1.2/occs/refs.csv?base_name=Scleractinia&occs_created_after=2020-01-01&select=occs&all_records",
+#' # # encoding required to allow reading of special characeters, e.g. accents characters such as Ã©, Ã¨
+#' # encoding="UTF-8")[1:2,]
+#' # 
+#' # generate_bib(refs)
+#' 
 generate_bib <- function (x, output_path=".", type="publication_type", combine=TRUE, return_fnames=TRUE){
   
   bib.df <- data.frame(matrix(NA, nrow=1, ncol=16))
@@ -291,9 +289,7 @@ generate_bib <- function (x, output_path=".", type="publication_type", combine=T
 #' @param return_path (\code{logical}) return the file path of the create file
 #'
 #' @examples 
-#' \dontrun{
-#' create_metadata(path=".", edit=FALSE)
-#' }
+#' # create_metadata(path=".", edit=FALSE)
 #' @export
 #'
 create_metadata <- function(path, edit=TRUE, overwrite=FALSE, return_path=TRUE){
@@ -534,7 +530,7 @@ template_pandoc <- function(metadata,
   if(draft){
     output_file <- gsub("pdf", "Rmd", output_file)
   } else {
-    rmarkdown::render(
+   rmarkdown::render(
       input=gsub("pdf", "Rmd", output_file), quiet=quiet)
     
   }
@@ -543,9 +539,7 @@ template_pandoc <- function(metadata,
   file.show(output_file)
 }
 
-#' Capitalise string
-#'
-#' @export 
+
 capitalize <- function(string) {
   paste0(toupper(substr(string, 1, 1)),
          tolower(substr(string, 2, nchar(string))))

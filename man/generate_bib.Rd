@@ -17,11 +17,11 @@ generate_bib(
 
 \item{output_path}{folder where to save generated .bib file.}
 
+\item{type}{(\code{character}) type column in \code{x} which specifies the publication type.}
+
 \item{combine}{(\code{logical}) Should the references be save on one file or separated in several ones. See details for more information.}
 
 \item{return_fnames}{(\code{logical}) Should the files names of the generated bib files be returned?}
-
-\item{(\code{character})}{type column in \code{x} which specifies the publication type.}
 }
 \value{
 
@@ -54,11 +54,11 @@ Note:
 }
 }
 \examples{
-\donttest{
-refs <- read.csv("https://paleobiodb.org/data1.2/occs/refs.csv?base_name=Scleractinia&occs_created_after=2020-01-01&select=occs&all_records",
-# encoding required to allow reading of special characeters, e.g. accents characters such as Ã©, Ã¨
-encoding="UTF-8")[1:2,]
 
-generate_bib(refs)
-}
+# refs <- read.csv("https://paleobiodb.org/data1.2/occs/refs.csv?base_name=Scleractinia&occs_created_after=2020-01-01&select=occs&all_records",
+# # encoding required to allow reading of special characeters, e.g. accents characters such as Ã©, Ã¨
+# encoding="UTF-8")[1:2,]
+# 
+# generate_bib(refs)
+
 }

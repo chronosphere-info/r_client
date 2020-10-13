@@ -19,7 +19,5 @@ create_metadata(path, edit = TRUE, overwrite = FALSE, return_path = TRUE)
 Create metadata file to generate report
 }
 \examples{
-\donttest{
-create_metadata(path=".", edit=FALSE)
-}
+# create_metadata(path=".", edit=FALSE)
 }

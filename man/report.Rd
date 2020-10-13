@@ -48,22 +48,20 @@ report(
 Generates a report for data documentation from databases and for meta analyses.
 }
 \examples{
-\donttest{
+##Create generic metafile
+#inputFile <- create_metadata(path=".", edit=FALSE)
+#
+## Download references from the Paleobiology Database
+#refs <- read.csv("https://paleobiodb.org/data1.2/occs/refs.csv?base_name=Scleractinia&occs_created_after=2020-01-01&select=occs&all_records",
+#  # encoding required to allow reading of special characters such as accented characters
+#  encoding="UTF-8")[1:2,]
+#
+## Generate report
+#report(inputFile=inputFile,
+#  data_refs = refs,
+#  output_path = file.path("."),
+#  output_file = "report.pdf",
+#  enterer_names=c("Enterer 1", "Enterer 2"))
 
-#Create generic metafile
-inputFile <- create_metadata(path=".", edit=FALSE)
-
-# Download references from the Paleobiology Database
-refs <- read.csv("https://paleobiodb.org/data1.2/occs/refs.csv?base_name=Scleractinia&occs_created_after=2020-01-01&select=occs&all_records",
-# encoding required to allow reading of special characters such as accented characters
-encoding="UTF-8")[1:2,]
-
-# Generate report
-report(inputFile=inputFile,
-data_refs = refs,
-output_path = file.path("."),
-output_file = "report.pdf",
-enterer_names=c("Enterer 1", "Enterer 2"))
-}
 
 }

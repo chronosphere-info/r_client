@@ -21,3 +21,4 @@
 #' Kocsis, A. T., & Scotese, C. R. (2020). PaleoMAP PaleoCoastlines data [Data set]. Zenodo. https://doi.org/10.5281/zenodo.3903164
 #' @usage data(coasts)
 "coasts"
+

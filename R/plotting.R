@@ -22,11 +22,6 @@
 #' 	data(dems)
 #' 	mapplot(dems, ncol=4)
 #' 	
-#' 	#multiple variables
-#' 	data(clim)
-#' 	mapplot(clim, multi=TRUE, legend=TRUE)
-
-
 #' @rdname mapplot
 #' @exportMethod mapplot
 setGeneric("mapplot", function(x,...) standardGeneric("mapplot"))

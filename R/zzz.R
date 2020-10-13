@@ -13,7 +13,6 @@ NULL
 #' @import sp
 #' @importFrom methods new cbind2 rbind2
 #' @importFrom stats setNames
-#' @importFrom rmarkdown render
 #' @importFrom utils read.csv download.file unzip flush.console sessionInfo
 #' @importFrom graphics par layout mtext
 #' @importFrom grDevices colorRampPalette rgb

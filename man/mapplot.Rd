@@ -82,7 +82,4 @@ This function plots Raster and sp-type objects.
 	data(dems)
 	mapplot(dems, ncol=4)
 	
-	#multiple variables
-	data(clim)
-	mapplot(clim, multi=TRUE, legend=TRUE)
 }

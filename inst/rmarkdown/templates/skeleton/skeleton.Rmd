@@ -17,7 +17,7 @@ biblio-style: numeric
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 #create data frame and formats text based on parameters provided
-specs <- gsub("_", " ", chronosphere::capitalize(names(params)))
+specs <- gsub("_", " ", chronosphere:::capitalize(names(params)))
 details <- as.character(unlist(params))
 
 df <- data.frame(Specifications=specs,
