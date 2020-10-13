@@ -51,7 +51,7 @@ newbounds <- function(x, cols=NULL, rows=NULL){
 #' The function returns snippets of code that you can paste in your script after you select points on a plot. Useful for defining areas on a map. The default methods assume that you will first click in the bottom left and then in the bottom right corner.
 #' 
 #' @param round (\code{integer}) Number of digits to round to, can be two values, first is for \code{x} second for \code{y}. 
-#' @param f (\code{character}) A single letter value specifying for which function's arugment format you want to get parameters. \code{"p"} is for \code{\link[base]{plot}}, \code{"r"} is for \code{\link[graphics]{rect}}, \code{"s"} is for \code{\link[graphics]{segments}}. \code{"e"} returns a call to create an \code{\link[raster]{extent}} class object from the package \code{raster}. \code{"m"} will return code to define a 2 column matrix.
+#' @param f (\code{character}) A single letter value specifying for which function's arugment format you want to get parameters. \code{"p"} is for \code{plot}, \code{"r"} is for \code{\link[graphics]{rect}}, \code{"s"} is for \code{\link[graphics]{segments}}. \code{"e"} returns a call to create an \code{\link[raster]{extent}} class object from the package \code{raster}. \code{"m"} will return code to define a 2 column matrix.
 #' @param n (\code{integer}) The number of points to request. 
 #' @param ... arguments passed to the \code{\link[graphics]{locator}} function
 #' @return For certain methods (\code{"m"} and \code{"e"}) the function returns a \code{matrix} or \code{extent} class object if the function output is assigned to a name.
@@ -273,8 +273,54 @@ marginsubset <- function(x, mar, i){
   eval(express)
 }
 
+
 #Accessing file within the package
 #' @export
 pkg_file <- function(...) {
   system.file(..., package = "chronosphere")
+}
+
+
+
+
+
+# function used by mapedge
+
+detailedBounds <- function(x,y, xmin=-180, xmax=180, ymin=-90, ymax=90){
+  rbind(
+    cbind(seq(xmin, xmax, length.out=x), rep(ymax, x)),
+    cbind(rep(xmax, y), seq(ymax, ymin, length.out=y)),
+    cbind(seq(xmax, xmin, length.out=x), rep(ymin, x)),
+    cbind(rep(xmin, y), seq(ymin, ymax, length.out=y))
+  )
+}
+
+
+#' Function to quickly draft the edge of the equirectangular projection 
+#' 
+#' Function to plot the edge of a map with different projections.
+#' 
+#' @param x (\code{numeric}) Number of segments in the x (longitude) dimension. 
+#' @param y (\code{numeric}) Number of segments in the y (latitude) dimension. 
+#' @param xmin (\code{numeric}) Minimum value of x (longitude).
+#' @param xmax (\code{numeric}) Minimum value of x (longitude).
+#' @param ymin (\code{numeric}) Maximum value of y (latitude).
+#' @param ymax (\code{numeric}) Maximum value of y (latitude).
+#' 
+#' @return A \code{SpatialPolygons} class object.
+#' @examples
+#' # requires rgdal
+#' edge <- mapedge()
+#' molledge <- spTransform(edge, CRS("+proj=moll"))
+#' 
+#' @export
+mapedge <- function(x=360, y=180, xmin=-180, xmax=180, ymin=-90, ymax=90){
+	# return a rectangle
+  	rectangle <- detailedBounds(x, y, xmin, xmax, ymin, ymax)
+
+  	# now make it a SpatialPolygons
+  	final <- SpatialPolygons(list(Polygons(list(Polygon(rectangle)), ID="0")), proj4string=CRS("+proj=longlat"))
+
+  	# return object
+  	return(final)
 }

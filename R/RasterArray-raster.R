@@ -304,6 +304,7 @@ setMethod(
 	
 	# fall back to matrix-method
 	if(is.null(by)) {
+		if(any(!c(lng, lat)%in%colnames(y))) stop(paste0(lng, " and/or ", lat, " are not among the column names of y."))		
 		y <- as.matrix(y[, c(lng, lat)])
 		vals <- extract(x, y)
 	
@@ -467,8 +468,8 @@ setMethod(
 #' 
 #' @exportMethod cellStats
 #' @examples
-#' data(clim)
-#' cellStats(clim, stat=mean, na.rm=TRUE)
+#' data(dems)
+#' cellStats(dems, stat=mean, na.rm=TRUE)
 setMethod("cellStats", signature="RasterArray", 
 	definition=function(x, stat,...){
 		statVect <- raster::cellStats(x@stack, stat=stat,...)

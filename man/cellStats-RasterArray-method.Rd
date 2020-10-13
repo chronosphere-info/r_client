@@ -20,6 +20,6 @@ A set of the values matching the output of \code{stat}, organized the same way a
 The method is inherited from the \code{RasterStack} class. Postitions of layers are conserved in the output. (including missing layers)
 }
 \examples{
-data(clim)
-cellStats(clim, stat=mean, na.rm=TRUE)
+data(dems)
+cellStats(dems, stat=mean, na.rm=TRUE)
 }

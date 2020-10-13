@@ -1,9 +1,10 @@
 
-#' S3-type method for RasterArray allowing View(), head() and tail() to work.
-#' Convert RasterArray class objects to data.frames
+#' S3-type method for \code{\link{RasterArray}} and \code{\link{SpatialArray}} 
+#'
+#' Convert RasterArray class objects to data.frames allowing View(), head() and tail() to work.
 #' 
 #' Formal conversion method transforming the proxy object to a data.frame.
-#' @param x a \code{RasterArray} class object.
+#' @param x a \code{\link{RasterArray}} and \code{\link{SpatialArray}} class object.
 #' @param row.names Argument to define the rownames of the resulting \code{data.frame}.
 #' @param optional \code{logical} Flag to reset the rownames and colnaems attributes.
 #' @param ... additional arguments passed to and from methods.
@@ -13,6 +14,7 @@
 #' df <- as.data.frame(dems)
 #' 
 #' @method as.data.frame RasterArray
+#' @rdname as.data.frame-methods
 #' @export 
 as.data.frame.RasterArray <- function(x, row.names=NULL, optional=FALSE,...){
 	df <- as.data.frame(proxy(x))

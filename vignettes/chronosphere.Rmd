@@ -30,22 +30,27 @@ library(chronosphere)
 
 The purpose of the `chronosphere` project is to facilitate, streamline and speed up the finding, acquisition and importing of Earth science data in R. Although the package currently focuses on deep time datasets, the scope of the included datasets will be much larger, spanning from a single variable published as supplementary material in a journal article to GIS data or the entire output of GCM models. `chronosphere` intends to decrease the gap between research hypotheses and the finding, downloading and importing of datasets. 
 
-# 2. RasterArray
+# 2. Implemented classes
 
-Faster data importing and better organization represents a considerable part of this process. Spatially explicit data are excellent candidates to demonstrate how more efficient data organization can speed up research. Although R has an excellent infrastructure for handling raster data (Hijmans & van Etten, 2019), the arrangement of individual layers are rather limited, which can be a problem when a large number of layers are considered. RasterStacks and RasterBricks are very efficient for organizing RasterLayers according to a single dimension (e.g. depth for 3D variables, or time), but multidimensional structures are preferred. 
+Faster data importing and better organization represents a considerable part of this process. Spatially explicit data are excellent candidates to demonstrate how more efficient data organization can speed up research. Although R has an excellent infrastructure for handling raster data (Hijmans & van Etten, 2019), the arrangement of individual layers are rather limited, which can be a problem when a large number of layers are considered. `RasterStack`s and `RasterBrick`s are very efficient for organizing `RasterLayer`s according to a single dimension (e.g. depth for 3D variables, or time), but more complicated structures frequently arise when more of these dimensions are neecessary. To offer a more effective solution, the `chronosphere` package includes the definition of the `RasterArray` and `SpatialArray` S4 classes. 
 
-To offer a more effective solution, the `chronosphere` package includes the definition of the RasterArray S4 class. RasterArrays represent hybrids between RasterStacks and regular R arrays. In short, they are virtual arrays of RasterLayers, and can be thought of as regular arrays that include entire rasters as elements rather than single numeric, logical or character values. As regular R users are familiar with subsetting, combinations and structures of regular arrays (including formal vectors and matrices), the finding, extraction and storage of spatially explicit data is much easier in such containers.
+`RasterArray`s represent hybrids between `RasterStack`s and regular R arrays. In short, they are virtual arrays of `RasterLayer`s, and can be thought of as regular arrays that include entire rasters as elements rather than single `numeric`, `logical` or `character` values. As regular R users are familiar with subsetting, combinations and structures of regular arrays (including formal vectors and matrices), the finding, extraction and storage of spatially explicit data is much easier in such containers.
 
-## 2.1. Structure
+The `SpatialArray` class is analogous to the `RasterArray` only for vector data types implemented in the `sp` package (Pebesma and Bivand, 2005). 
 
-RasterArrays do not directly inherit from Raster* objects of the raster package, as a considerable number of main functions differ, but they rather represent a wrapper object around regular RasterStacks - stacks of individual RasterLayers. This ensures that whenever users are unfamiliar with the methods of RasterArray class objects, they can always reduce their data to stacks or individual layers. 
+## 2.1. Structures
 
-The formal class RasterArray has only two slots: a stack and an index. The stack includes the Raster data in an unfolded manner, similarly to how matrices and arrays are essentially just vectors with additional attributes. The stack slot incorporates a single RasterStack object, which represents the data content of the object. The index slot, on the other hand, describes the structure of the RasterArray. It is a vector/matrix/array of integers each representing an index of the layers in the stack. The configuration (dimensions) of the index represents the entire array.
+### 2.1.1. RasterArray
 
-The `chronosphere` package includes two demo data sets: a set of ancient topographies (Scotese and Wright, 2018) and a time series of bio-climatic variables (annual mean temperature and precipitation) from the CHELSA project (Karger et al, 2017a, 2017b). These datasets can be attached with the data command. 
+`RasterArray`s do not directly inherit from Raster* objects of the raster package, as a considerable number of main functions differ. They rather represent a wrapper object around regular RasterStacks - stacks of individual RasterLayers. This ensures that whenever users are unfamiliar with the methods of RasterArray class objects, they can always reduce their data to stacks or individual layers. 
+
+The formal class `RasterArray` has only two slots: `@stack` and `@index`. The stack includes the raster data in an unfolded manner, similarly to how matrices and arrays are essentially just vectors with additional attributes. The `@stack` slot incorporates a single `RasterStack` object, which represents the data content of the object. Accordingly, rasters in a `RasterArray` must have the same dimensions, extent and CRS. The `@index` slot, on the other hand, describes the structure of the `RasterArray`: it is a vector/matrix/array of integers each representing an index of the layers in the stack. The configuration (dimensions) of the index represents the entire array.
+
+
+The `chronosphere` package includes one demo data sets: a set of ancient topographies (Scotese and Wright, 2018), which can be attached with the data command. 
+
 ```{r dat, echo= TRUE}
 data(dems)
-data(clim)
 ```
 
 The structure of RasterArrays can be inspected if the object's name is typed into the console:
@@ -65,17 +70,7 @@ proxy(dems)
 
 Proxies are displayed as the second parts of the console output when the name of the object is typed into the console (show method). 
 
-```{r clim, echo= TRUE}
-clim
-```
-
-This RasterArray has 10 rows (annual means) and two variables/columns: temperature (`bio1`) and precipitation (`bio12`). With the `proxy()` function it is easy to interact with this object, or to query or analyze it.
-
-```{r climprox, echo= TRUE}
-proxy(clim)
-```
-
-RasterArrays are fairly easy to construct: one only needs a stack of the data and a regular vector/matrix/array including integers. For instance, the dems object can be recreated from scratch without any problem.
+RasterArrays are fairly easy to construct: you only need a stack of the data and a regular vector/matrix/array including integers. For instance, the dems object can be recreated from scratch without any problem.
 
 ```{r constructor, echo= TRUE}
 # a stack of rasters
@@ -88,7 +83,7 @@ nra  <- RasterArray(index=ind, stack=stackOfLayers)
 nra
 ```
 
-The attributes of the index object are defining the structure of the RasterArray. RasterArrays can be created with the combination of individual RasterLayers (or RasterArrays) using the combine() function.
+The attributes of the index object are defining the structure of the `RasterArray`. `RasterArray`s can be created with the combination of individual `RasterLayer`s (or `RasterArray`s) using the `combine()` function.
 
 ```{r comb, echo= TRUE}
 # one raster
@@ -101,7 +96,7 @@ comb <- combine(r1, r2)
 comb
 ```
 
-Matrix-like RasterArrays can also be created easily with the cbind() and rbind() functions.
+Matrix-like RasterArrays can also be created easily with the `cbind()` and `rbind()` functions.
 
 
 ```{r rbind, echo= TRUE}
@@ -110,9 +105,62 @@ cbind(dems, dems)
 ```
 
 
-## 2.2. RasterArray attributes and function to query
+### 2.1.2. SpatialArray
 
-Functions that query and change attributes of the RasterArray resemble general arrays more than Raster* objects. They are connected to the index slot of the RasterArray and return values accordingly. 
+The `SpatialArray`s also do not inherit from the respective `Spatial*` classes. This class has the same structure as the `RasterArray` containing an `@index` and a `@stack` slot. The difference between `SpatialArray`s and `RasterArray`s is that the `@slack` slot includes a class named `SpatialStack`, which is a formalized `list` of `Spatial*` objects, and has a similar interface to a `RasterStack`. `SpatialStack`s can include any of the `SpatialPoints`,`SpatialPointsDataFrame`,`SpatialLines`,`SpatialLinesDataFrame`,`SpatialPolygons` or `SpatialPolygonsDataFrame` classes, as long as they have the same CRS. 
+
+The package includes one demo dataset, the first five entries of the PaleoMAP Paleocoastlines (Kocsis and Scotese, 2020).
+
+```{r coasts, echo= TRUE}
+data(coasts)
+coasts
+```
+
+This is a two dimensional SpatialArray that has five rows (ages) and two columns: the outlines of the continental margins (`margins`) and the coastlines (`coast`). With the `proxy()` function it is easy to interact with this object, or to query or analyze it.
+
+```{r coastprox, echo= TRUE}
+proxy(coasts)
+```
+
+Creating a `SpatialArray` from scratch is as easy as that of a `RasterArray` using the `combine` function that can be applied to a number of `Spatial*` objects.
+
+```{r combSp, echo= TRUE}
+# Individual SP objects
+margin0 <- coasts[1, 1]
+margin5 <- coasts[2, 1]
+combination<- combine(margin0, margin5)
+combination
+```
+
+Alternatively, they can be rebuilt using lower level manipulation, by first creating a `SpatialStack`
+
+
+```{r combre, echo= TRUE}
+coast0 <- coasts[1, 2]
+coast5 <- coasts[1, 2]
+# create SpatialStack
+spStack<- stack(margin0, margin5, coast0, coast5)
+# alternatively: accepts filenames too
+# spStack <- SpatialStack(list(margin0, margin5, coast0, coast5))
+```
+
+and then fold it appropriately with an index
+
+```{r indcomb, echo= TRUE}
+ind <- matrix(1:4, ncol=2)
+colnames(ind) <- c("margin", "coast")
+rownames(ind) <- c("0", "5")
+spArray <- SpatialArray(index=ind, stack=spStack)
+spArray
+
+```
+
+
+
+
+## 2.2. RasterArray and SpatialArray attributes and functions to query
+
+Functions that query and change attributes of the `RasterArray` resemble general arrays more than Raster* objects. They are connected to the `@index` slots, which are shared by the `RasterArray` and `SpatialArray` objects. Therefore, the dimensional organization of the two classes, and accordingly, some methods are shared (written for the `XArray` class-union).
 
 The number of elements represented in the RasterArray can be queried with the `length()` function:
 ```{r le, echo= TRUE}
@@ -122,8 +170,8 @@ length(dems)
 This RasterArray has 10 elements. The number of column and row names can be queried in a similar way:
 
 ```{r cle, echo= TRUE}
-nrow(clim)
-ncol(clim)
+nrow(coasts)
+ncol(coasts)
 ```
 
 These functions are summarized in the dim() function. This, however, unlike the regular `dim()` method of vectors, return the length of the RasterArray vector, rather than just `NULL`. 
@@ -131,7 +179,7 @@ These functions are summarized in the dim() function. This, however, unlike the 
 ```{r dime, echo= TRUE}
 dim(dems)
 
-dim(clim)
+dim(coasts)
 ```
 
 The organization of RasterLayers can be greatly facilitated with names. The `names()`, `colnames()`, `rownames()` and `dimnames()` functions work the same way on RasterArrays as if they were arrays of simple numeric, logical or character values. The `names()` function returns the names of individual elements of a vector-like RasterArray.
@@ -139,36 +187,36 @@ The organization of RasterLayers can be greatly facilitated with names. The `nam
 names(dems)
 ```
 
-The `colnames()` and `rownames()` functions are more relevant for matrix-like RasterArrays, such as `clim`.
+The `colnames()` and `rownames()` functions are more relevant for matrix-like `RasterArray`s or `SpatialArray`s, such as `coast`.
 
-```{r climane, echo= TRUE}
-colnames(clim)
-rownames(clim)
+```{r coastname, echo= TRUE}
+colnames(coasts)
+rownames(coasts)
 ```
 
-All name-related methods can be used for replacement as well. For instance, you can quickly rename the names of the columns of the `clim` object this way:
+All name-related methods can be used for replacement as well. For instance, you can quickly rename the names of the columns of the `coast` object this way:
 
 
-```{r climrename, echo= TRUE}
-clim2 <- clim
-colnames(clim2) <- c("temp", "prec")
-clim2
+```{r coastrename, echo= TRUE}
+coasts2 <- coasts
+colnames(coasts2) <- c("m", "c")
+coasts2
 ```
 
 Just as you would do with normal arrays, you can query/rewrite all names with the `dimnames()` function, which uses a list to store the names in every dimension.
 
-```{r climrenamedim, echo= TRUE}
-dimnames(clim2)[[1]] <- 1:10
-clim2
+```{r caostrenamedim, echo= TRUE}
+dimnames(coasts2)[[1]] <- paste(rownames(coasts), "Ma")
+coasts2
 ```
 
-Besides the names of the elements in the RasterArray, every layer has its own name in the stack. These can be accessed with `layers()` function:
+Besides the names of the elements in the `RasterArray` or `SpatialArray`, every layer has its own name in the stack. These can be accessed with `layers()` function:
 
 ```{r layernames, echo= TRUE}
-layers(clim)
+layers(dems)
 ```
 
-The total number of cells in the RasterLayer or the entire stack can accessed with the `ncell()` and `nvalues()` functions, respectively.
+The total number of cells in the `RasterLayer` or the entire stack can accessed with the `ncell()` and `nvalues()` functions, respectively.
 
 ```{r cells, echo= TRUE}
 ncell(dems)
@@ -176,7 +224,7 @@ nvalues(dems)
 ```
 
 ## 2.3. Subsetting and replacement
-Facilitating the accession of items is the primary purpose of RasterArrays. These either focus on the layers (stack items, double bracket operator "[[") or on the elements of the RasterArray (single bracket operator "["). 
+Facilitating the accession of items is the primary purpose of `RasterArray`s and `SpatialArray`s. These either focus on the layers (stack items, double bracket operator "[[") or on the elements of the RasterArray (single bracket operator "["). 
 
 ### 2.3.1 Layer selection - Double bracket [[
 This form of subsetting and replacement is inherited from the RasterStack class. Individual layers can be accessed directly from the stack using either the position index, the name of the layer, or the logical value pointing to the position. Whichever is used, the RasterArray wrapper is omitted and the output will be a RasterLayer or RasterStack class object.
@@ -242,29 +290,31 @@ demna <- dems
 demna[3] <- NA
 ```
 
-Multidimensional subscripts work in a similar fashion. If a single layer is desired from the RasterArray, that can be accessed using the names of the margins.
+Multidimensional subscripts work in a similar fashion. If a single layer is desired from the `RasterArray` or `SpatialArray`, that can be accessed using the names of the margins.
 
 ```{r cellsbu, echo= TRUE, plot=TRUE, fig.height=5.5}
 # character type is necessary as the rowname is "2003"
-one <- clim["2003", "bio1"]
+one <- coasts["15", "coast"]
 mapplot(one)
 ```
 
 similarly to entire rows,
 
 ```{r entirerow, echo= TRUE}
-clim["2005", ]
+coasts["15", ]
 ```
 
 or columns
 
 ```{r entirecol, echo= TRUE}
-clim[,"bio12"]
+coasts[,"coast"]
 ```
 
-### 2.4 Inherited from Raster*
+## 2.4 Functionality inherited from raster and sp
 
-As the spatial information is contained entirely in the RasterStacks, a number of methods are practically inherited from RasterStack class. For instance, all RasterLayers of the RasterArray can be cropped in a single line of code.
+### 2.4.1. `RasterArray`
+
+As the spatial information is contained entirely in the `RasterStack`s, a number of methods are practically inherited from `RasterStack` class. For instance, all `RasterLayer`s of the `RasterArray` can be cropped in a single line of code.
 
 ```{r crop, echo= TRUE, plot=TRUE, fig.height=5.5}
 # crop to Australia
@@ -294,6 +344,24 @@ coarse <- resample(dems, template)
 
 # plot an element
 mapplot(coarse["45"], col="earth")
+```
+
+### 2.4.2. `SpatialArray`
+
+Similar rules apply to `SpatialArray`s as to `RasterArray`s. For example, projection changes can be implemented for the entire set, if the `rgdal` packgae is installed on the system:
+
+```{r sptran, echo= TRUE, plot=TRUE, fig.height=5.5}
+# Cylindrial equal area projection
+mollCoasts <- spTransform(coasts, CRS("+proj=moll"))
+
+# plot edge of the map
+edge<- spTransform(mapedge(), CRS("+proj=moll"))
+plot(edge, col=ocean(8)[5])
+
+# the entire thing
+plot(mollCoasts["20", "margin"], col=ocean(8)[7], border=NA, add=T)
+plot(mollCoasts["20", "coast"], col=terra(8)[5], add=T, border=NA)
+
 ```
 
 
@@ -366,29 +434,12 @@ data(dems)
 mapplot(dems, multi=TRUE)
 ```
 
-### 3.3.4 Multiple variables in RasterArray
-
-The above described methods can also be applied to RasterArrays containing more than one variable. However, in this instance, the number of columns automatically defaults to the number of variables in the array. Also, plot titles for each individual plot are not printed. Instead, row labels corresponding to the row names of each variable are added, and when `legend=TRUE`, the default legend title defaults to the variables names in the RasterArray. 
-
-```{r rarray_plot_nvar, echo=TRUE, fig.width=8, fig.height=4.5}
-data(clim)
-
-mapplot(clim[1:2,], legend=TRUE)
-```
-
-The row labels and legend titles can be edited using the argument `rowlabels` and `legend.title` respectively. Different colours for each variable can also be provided. The number of provided colour palettes should be either 1 or correspond to the number of variables.  
-```{r rarray_plot_rowlabs, echo=TRUE, fig.width=8, fig.height=4.5}
-data(clim)
-
-mapplot(clim[1:2,], col=c("ipccTemp", "ipccPrec"), 
-        legend=TRUE, legend.title=c("Temperature", "Precipitation"))
-```
-
 # References
 Hijmans, R. J., & van Etten, J. (2019). raster: Geographic Data Analysis and Modeling. Retrieved from https://cran.r-project.org/package=raster
 
-Karger, D. N., Conrad, O., Böhner, J., Kawohl, T., Kreft, H., Soria-Auza, R. W., … Kessler, M. (2017a). Data from: Climatologies at high resolution for the earth’s land surface areas. Dryad Digital Repository. https://doi.org/10.5061/dryad.kd1d4
+Pebesma, E. J., & Bivand, R. S. (2005). Classes and methods for spatial data in R. R News, 5(2), 9–13.
 
-Karger, D. N., Conrad, O., Böhner, J., Kawohl, T., Kreft, H., Soria-Auza, R. W., … Kessler, M. (2017b). Climatologies at high resolution for the earth’s land surface areas. Scientific Data, 4(1), 170122. https://doi.org/10.1038/sdata.2017.122
+Kocsis, A. T., & Scotese, C. R. (2020). PaleoMAP PaleoCoastlines data [Data set]. Zenodo. https://doi.org/10.5281/zenodo.3903164
 
 Scotese, C. R. Wright, N. (2018). PALEOMAP Paleodigital Elevation Models (PaleoDEMS) for the Phanerozoic. URL: https://www.earthbyte.org/paleodem-resource-scotese-and-wright-2018/
+

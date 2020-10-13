@@ -47,6 +47,15 @@ report <- function(inputFile,
                    skeletonFile=pkg_file("rmarkdown", "templates", "skeleton", "skeleton.Rmd"),
                    in_header = NULL, 
                    quiet = FALSE){
+	
+	# manage function dependencies
+	dependencies <- c("xfun", "kableExtra", "knitr", "yaml")
+	dependencyFound <- sapply(dependencies, function(x) requireNamespace(x, quietly=TRUE))
+
+	# provide feedback if not found
+	if(any(!dependencyFound)) stop(paste0("This function requires the '",  paste(dependencies[!dependencyFound], collapse="', '"), "' package(s) to run."))
+	
+
   # checking parameters -----------------------------------------------------
   if(length(grep("\\.pdf$", output_file)) == 0) {
     stop('Please enter a valid output file name, e.g. \"report.pdf\"')

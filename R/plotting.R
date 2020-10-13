@@ -412,14 +412,15 @@ setMethod("mapplot", signature="SpatialPolygons",
 
 
 
-#' Shorthand for the plotting \code{\link[chronosphere:RasterArray-class]{RasterArray}} objects
+#' Shorthand for the plotting \code{\link[chronosphere:RasterArray-class]{RasterArray}} and \code{\link[chronosphere:SpatialArray-class]{SpatialArray}} objects
 #' 
-#' This \code{plot}, method executes the \code{\link{mapplot}} function on the \code{\link[chronosphere:RasterArray-class]{RasterArray}} object.
+#' This \code{plot}, method executes the \code{\link{mapplot}} function on the \code{\link[chronosphere:RasterArray-class]{RasterArray}} or \code{\link[chronosphere:SpatialArray-class]{SpatialArray}}object.
 #' 
 #' @return None.
-#' @param x A (\code{\link[chronosphere:RasterArray-class]{RasterArray}}) Object to be plotted.
+#' @param x A (\code{\link[chronosphere:RasterArray-class]{RasterArray}} or \code{\link[chronosphere:SpatialArray-class]{SpatialArray}}) Object to be plotted.
 #' @param y Not implemented yet.
 #' @param ... Arguments passed to the \code{\link{mapplot}} function.
+#' @rdname plots
 #' @examples
 #' data(dems)
 #' plot(dems)
@@ -431,4 +432,17 @@ setMethod(
     mapplot(x,...)
   }
 )
+
+
+#' @rdname plots
+#' @exportMethod plot
+setMethod(
+  "plot",
+  signature=c("SpatialArray", "missing"),
+  function(x,y, ...){
+    mapplot(x,...)
+  }
+)
+
+
 
