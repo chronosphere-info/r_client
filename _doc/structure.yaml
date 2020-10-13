@@ -1,0 +1,375 @@
+---
+chronosphere:  
+  type: package
+  contains:
+    - classes.R
+    - colours.R
+    - data.R
+    - fetching.R
+    - info.R
+    - inter.R
+    - platemodel.R
+    - plotting.R
+    - RasterArray-base.R
+    - RasterArray-cast.R
+    - RasterArray-combine.R
+    - RasterArray-groupgen.R
+    - RasterArray-raster.R
+    - RasterArray-subset.R
+    - RasterArray-xattrib.R
+    - reconstruction.R
+    - SpatialArray-base.R
+    - SpatialArray-cast.R
+    - SpatialArray-combine.R
+    - SpatialArray-sp.R
+    - SpatialArray-subset.R
+    - SpatialStack-base.R
+    - SpatialStack-sp.R
+    - SpatialStack-subset.R
+    - utility.R
+    - XArray-apply.R
+    - XArray-base.R
+    - XArray-combine.R
+    - XArray-subset.R
+    - XArray-xattrib.R
+    - zzz.R
+    
+classes.R:
+  type: file
+  contains:
+    - VectorSpatialClasses
+    - arrayORmatrixORvector
+    - SpatialStack
+    - SpatialArray
+    - RasterArray
+    - XArray
+
+colours.R:
+  type: file
+  contains:
+    - gradinv()
+    - ocean()
+    - terra()
+    - ipccTemp()
+    - ipccPrec()
+    - wet()
+    - ipccLine()
+    - ipccRCP()
+    - showPal()
+
+data.R:
+  type: file
+
+fethching.R:
+  type: file
+  contains:  
+    - remote
+    - userpwd
+    - checklog
+    - datasets()
+    - fetch()
+    - is.chronosphere()
+    - ChronoCall()
+    - FetchVars()
+    - FetchArchive()
+    - loadVar()
+    - ChronoAttributes()
+    - CombineVars()
+
+info.R:
+  type: file
+  contains:
+    - reference()
+    - info()
+
+inter.R:
+  type: file
+  contains:
+    - matchtime(generic)
+    - matchtime(numeric)
+    - matchtime(character)
+    - matchtime(RasterArray)
+
+platemodel.R:
+  type: file
+  contains:
+    - platemodel
+    - initialize(platemodel)
+    - show(platemodel)
+
+plotting.R:
+  type: file
+  contains:  
+    - mapplot(generic)
+    - mapplot(RasterLayer)
+    - mapplot(RasterStack)
+    - mapplot(RasterArray)
+    - mapplot(SpatialPolygonsDataFrame)
+    - mapplot(SpatialPolygons)
+    - plot(RasterArray, missing)
+    - plot(SpatialArray, missing)
+
+RasterArray-base.R:
+  type: file
+  contains:
+    - initialize(RasterArray)
+    - show(RasterArray)
+    - is.na.RasterArray()
+    - apply(RasterArray, ..., simplify)
+    - apply(RasterArray)
+
+RasterArray-cast.R:
+  type: file
+  contains:  
+    - as.data.frame.RasterArray()
+    - as.RasterArray(generic)
+    - as.RasterArray(RasterLayer)
+    - as.RasterArray(RasterStack)
+    - as.RasterArray(RasterBrick)
+    - setAs(RasterLayer, RasterArray)
+    - setAs(RasterStack, RasterArray)
+    - setAs(RasterBrick, RasterArray)
+    - as.list(RasterArray)
+
+RasterArray-combine.R:
+  type: file
+  contains:
+    - combine(RasterLayer)
+    - c2(RasterLayer, RasterLayer)
+    - c2(RasterLayer, logical)
+    - c2(RasterLayer, list)
+    - c2(RasterArray, list)
+    - c2(RasterArray, logical),
+    - c2(RasterArray, RasterLayer)
+    - c2(RasterLayer, RasterArray)
+    - c2(RaserArray, RasterArray)
+    - cbind.RasterArray()
+    - rbind.RasterArray()
+
+RasterArray-groupgen.R:
+  type: file
+  contains:
+    - Arith(RasterArray, numeric)
+    - Arith(numeric, RasterArray)
+    - Compare(RasterArray, RasterLayer)
+    - Math(RasterArray)
+    - Math2(RasterArray)
+    - Summary(RasterArray)
+
+RasterArray-raster.R:
+  type: file
+  contains:
+    - xres(RasterArray)
+    - yres(RasterArray)
+    - res(RasterArray)
+    - minValue(RasterArray)
+    - maxValue(RasterArray)
+    - resample(RasterArray, ANY)
+    - crop(RasterArray)
+    - aggregate(RasterArray)
+    - disaggregate(RasterArray)
+    - extract(RasterArray, matrix)
+    - extract(RasterArray, data.frame)
+    - cellStats(RasterArray)
+    - projectRaster(generic)
+    - projectRaster(RasterArray)
+    - mask(RasterArray, RasterLayer)
+    - mask(RasterArray, RasterArray)
+    - mask(RasterArray, Spatial)
+    - mask(RasterArray, RasterStackBrick)
+    - mask(RasterLayer, RasterArray)
+    - mask(RasterStackBrick, RasterArray)
+    - calc(RasterArray, function)
+    - rotate(RasterArray)
+    - extent(RasterArray)
+
+RasterArray-subset.R:
+  type: file
+  contains:
+    - RasterArray[<-RasterLayer
+
+RasterArray-xattrib.R:
+  type: file
+  contains:
+    - ncell(RasterArray)
+    - nvalues(generic)
+    - nvalues(RasterArray)
+    - dimlayer(generic)
+    - dimlayer(RasterArray)
+
+reconstruction.R:
+  type: file
+  contains:
+    - reconstruct(generic)
+    - reconstruct(matrix)
+    - reconstruct(data.frame)
+    - reconstruct(numeric)
+    - reconstruct(character)
+    - reconstruct(SpatialPolygonsDataFrame)
+    - reconstruct(SpatialLinesDataFrame)
+    - reconstructGPlates()
+    - winDefaultGPlates()
+    - macDefaultGPlates()
+    - testGPlates()
+    - IteratedPointReconstruction()
+    - gplates_reconstruct_points()
+    - gplates_reconstruct_coastlines()
+    - gplates_reconstruct_static_polygons()
+    - gplates_reconstruct_polygon()
+
+SpatialArray-base.R:
+  type: file
+  contains:
+  - initialize(SpatialArray)
+  - show(SpatialArray)
+  - types(SpatialArray)
+  - is.na.SpatialArray()
+  - apply(SpatialArray, ..., simplify)
+  - apply(SpatialArray)
+
+SpatialArray-cast.R:
+  type: file
+  contains:
+    - as.data.frame.SpatialArray()
+    - as.SpatialArray(generic)
+    - as.SpatialArray(SpatialPoints)
+    - as.SpatialArray(SpatialPointsDataFrame)
+    - as.SpatialArray(SpatialLines)
+    - as.SpatialArray(SpatialLinesDataFrame)
+    - as.SpatialArray(SpatialPolygons)
+    - as.SpatialArray(SpatialPolygonsDataFrame)
+    - as.list(SpatialArray)
+
+SpatialArray-combine.R:
+  type: file
+  contains:
+    - cbind.SpatialArray()
+    - rbind.SpatialArray()
+    - combine(VectorSpatialClasses)
+    - c2(VectorSpatialClasses, VectorSpatialClasses)
+    - c2(VectorSpatialClasses, logical)
+    - c2(VectorSpatialClasses, list)
+    - c2(SpatialArray, logical)
+    - c2(SpatialArray, VectorSpatialClasses)
+    - c2(VectorSpatialClasses, SpatialArray)
+    - c2(SpatialArray, SpatialArray)
+
+SpatialArray-sp.R:
+  type: file
+  contains:
+    - spTransform(SpatialArray, ANY)
+
+SpatialArray-subset.R:
+  type: file
+  contains:
+     - SpatialArray[]<-SpatialPoints
+     - SpatialArray[]<-SpatialPointsDataFrame
+     - SpatialArray[]<-SpatialLinesDataFrame
+     - SpatialArray[]<-SpatialPoints
+     - SpatialArray[]<-SpatialPolygons
+     - SpatialArray[]<-SpatialPolygonsDataFrame
+     - SpatialArray[[ANY,missing]]<-SpatialStack
+
+SpatialStack-base.R:
+  type: file
+  contains:
+    - initilalize(SpatialStack)
+    - reBBOX()
+    - newname()
+    - stack(VectorSpatialClasses)
+    - stack(SpatialStack)
+    - show(SpatialStack)
+    - nlayers(SpatialStack)
+    - names(SpatialStack)
+    - names(SpatialStack)<-
+    - types(generic)
+    - types(SpatialStack)
+
+
+SpatialStack-sp.R:
+  type: file
+  contains:  
+    - spTransform(SpatialStack, ANY)
+
+SpatialStack-subset.R:
+  type: file
+  contains:
+    - subset(SpatialStack)
+    - SpatialStack[]
+    - SpatialStack[character]<-VectorSpatialClasses
+    - SpatialStack[logical]<-VectorSpatialClasses
+    - SpatialStack[numeric]<-VectorSpatialClasses
+    - SpatialStack[character]<-SpatialStack
+    - SpatialStack[logical]<-SpatialStack
+    - SpatialStack[numeric]<-SpatialStack
+    - SpatialStack[[]]
+    - SpatialStack[[logical]]<-
+    - SpatialStack[[numeric]]<-VectorSpatialClasses
+
+utility.R:
+  type: file
+  contains:
+    - newbounds()
+    - shaper()
+    - nums()
+    - colnums()
+    - rownums()
+    - getOS()
+    - dirFromPath()
+    - fileFromPath()
+    - randomString()
+    - marginsubset()
+    - detailedBounds()
+    - mapedge()
+
+XArray-apply.R:
+  type: file
+  contains:
+    - ArrayApplyNULL()
+    - ArrayApplyReduce()
+
+XArray-base.R:
+  type: file
+  contains:    
+    - proxy(XArray)
+    - t(XArray)
+    - defragment()
+    - extendDim()
+
+XArray-combine.R:
+  type: file
+  contains:    
+    - combine(XArray)
+    - c2(generic)
+    - cbind2(XArray, XArray)
+    - rbind(XArray, XArray)
+
+XArray-subset.R:
+  type: file
+  contains:  
+    - subset(XArray)
+    - XArray[ANY, ANY]
+    - XArray[[]]
+    - XArray[]<-logical
+    - XArrayReplaceLayer()
+    - XArray[[]]<-
+
+XArray-xattrib.R:
+  type: file
+  contains:
+    - dim(XArray)
+    - names(XArray)
+    - names(XArray)<-
+    - length(XArray)
+    - nlayers(XArray)
+    - layers(generic)
+    - layers(XArray)
+    - colnames(XArray)
+    - colnames(XArray)<-
+    - rownames(XArray)
+    - rownames(XArray)<-
+    - dimnames(XArray)
+    - dimnames(XArray)<-
+    - ncol(XArray)
+    - nrow(XArray)
+
