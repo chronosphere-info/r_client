@@ -11,8 +11,6 @@
 - The mapedge() function for the quick calculation of map edges in non-equirectangular projections.
 - the 'coasts' data demo object of the PaleoMAP Paleocoastlines
 - types() generic and SpatialArray-method is added.
-- package 'stats' to imports
-- packages 'xfun', 'yaml' to suggests
 
 
 ### Changed
@@ -20,6 +18,7 @@
 - vignette was renamed from chronos.Rmd to chronosphere.Rmd, references to 'clim' were removed and uses 'coasts' now instead
 
 ### Removed
+- the reporting tools added in build 75 are removed as they require further testing
 - the 'clim' demo object was removed to decrease the size of the package
 
 ### Known issues/missing features
