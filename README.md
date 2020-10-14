@@ -19,8 +19,8 @@ See the blog entry below for an example application: <https://www.evolv-ed.net/p
 Installing
 ==========
 
-Install method A.
------------------
+Stable version
+--------------
 
 The stable version of the package is available from the CRAN repositories, which you can instal with this line, after you open R:
 
@@ -28,13 +28,13 @@ The stable version of the package is available from the CRAN repositories, which
 install.packages("chronosphere")
 ```
 
-Install method B.
------------------
+In development version
+----------------------
 
-The second method to stable version from the source archive deposited on this github repository. Open R and paste in:
+The devel-version can be installed from the source archive deposited on this github repository. Open R and paste in:
 
 ``` r
-install.packages("https://github.com/chronosphere/r-package/raw/master/_archive/source/chronosphere_0.4.0-77.tar.gz", repos=NULL, type="source")
+install.packages("https://github.com/chronosphere-portal/r_package/raw/devel/_archive/source/chronosphere_0.4.0-77.tar.gz", repos=NULL, type="source")
 ```
 
 After install
