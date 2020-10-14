@@ -180,7 +180,7 @@ report <- function(inputFile,
 #' @param type (\code{character}) type column in \code{x} which specifies the publication type. 
 #' @param combine (\code{logical}) Should the references be save on one file or separated in several ones. See details for more information.
 #' @param return_fnames (\code{logical}) Should the files names of the generated bib files be returned?
-#' @return
+#' @return A list character strings.
 #' @export
 #'
 #' @examples

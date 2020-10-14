@@ -24,7 +24,7 @@ generate_bib(
 \item{return_fnames}{(\code{logical}) Should the files names of the generated bib files be returned?}
 }
 \value{
-
+A list character strings.
 }
 \description{
 Generate .bib file from \code{data.frame}
