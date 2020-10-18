@@ -1,5 +1,11 @@
 # Change log of the R package 'chronosphere'
 
+
+## [0.4.0 (build 78)] - 2020-10-18 (Initial CRAN submission as 0.4.0)
+### Added 
+- minor fixes
+
+
 ## [0.4.0 (build 77)] - 2020-10-13
 ### Added
 - package collate in DESCRIPTION
@@ -24,7 +30,7 @@
 ### Known issues/missing features
 - SpatialArrays and SpatialStacks do not have a default plotting method yet.
 - The apply() function has limit utility on SpatialArrays.
-
+- rare issues with res/ver defaulting, use explicit ver and res to ensure correct download
 
 ## [0.3.1 (build 76)] - 2020-09-23
 ### Added
