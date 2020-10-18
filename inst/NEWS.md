@@ -1,7 +1,7 @@
 # Change log of the R package 'chronosphere'
 
 
-## [0.4.0 (build 78)] - 2020-10-18 (Initial CRAN submission as 0.4.0)
+## [0.4.0] - 2020-10-18 (build 78 - Initial CRAN submission)
 ### Added 
 - minor fixes
 
