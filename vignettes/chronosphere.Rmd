@@ -18,7 +18,7 @@ library(chronosphere)
 
 ## 1.1. Installation
 
-To install this alpha version of the package, you must download it either from the CRAN servers or its dedicated GitHub repository (http://www.github.com/adamkocsis/chronosphere/). All minor updates will be posted on GitHub as soon as they are finished, so please check this regularly. The version on CRAN will be lagging for some time, as it takes the servers many days to process everything. All questions and bugs can be reported at the GitHub issues board (https://github.com/adamkocsis/chronosphere/issues). Instead of spending it on actual research, a tremendous amount of time was invested in making this piece of software streamlined and user-friendly. If you use a dataset of the package in a publication, please cite both its reference(s) and the `chronosphere` package itself.
+To install this alpha version of the package, you must download it either from the CRAN servers or its dedicated GitHub repository (https://www.github.com/chronosphere-portal/r_package/). All minor updates will be posted on GitHub as soon as they are finished, so please check this regularly. The version on CRAN will be lagging for some time, as it takes the servers many days to process everything. All questions and bugs can be reported at the GitHub issues board (https://www.github.com/chronosphere-portal/r_package/issues). Instead of spending it on actual research, a tremendous amount of time was invested in making this piece of software streamlined and user-friendly. If you use a dataset of the package in a publication, please cite both its reference(s) and the `chronosphere` package itself.
 
 After installing from CRAN, from a source, or with ``devtools::install_github()`` , you can attach the package with:
 

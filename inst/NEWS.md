@@ -1,5 +1,9 @@
 # Change log of the R package 'chronosphere'
 
+## [0.4.0] - 2020-10-18 (build 79 - CRAN submission take 2)
+### Added 
+- vignette url fix
+
 
 ## [0.4.0] - 2020-10-18 (build 78 - Initial CRAN submission)
 ### Added 
