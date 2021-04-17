@@ -17,12 +17,14 @@ checklog <- TRUE
 #' @param greetings \code{logical} When the function is invoked without arguments, it displays a message to keep new users informed about different versions and resolutions (even with \code{verbose=FALSE}). This argument turns this message off on demand.
 #' @return A \code{data.frame} class object.
 #' @examples
-#' \donttest{
+#' # available datasets and variables - proper
+#' # ind <- datasets()
 #' # available datasets and variables
-#' ind <- datasets()
+#' # just one example archive is available locally
+#' ind <- datasets(
+#'   datadir=system.file("extdata", package="chronosphere"))
 #' # all available versions and resolutions in database 'paleomap'
-#' oneDat <- datasets("paleomap")
-#' }
+#' # oneDat <- datasets("paleomap")
 #' @export
 datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greetings=TRUE){
 		
@@ -141,9 +143,13 @@ datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greeti
 #' @param call.expr (\code{logical}) If \code{call} is set to \code{TRUE}, then should the call be returned as an \code{expression} (\code{TRUE}) or a message (\code{FALSE})?
 #' @param ... Arguments passed to variable-specific loading functions.
 #' @examples
-#' \donttest{
-#' 	a <- fetch(dat="paleomap", var="dem")
-#' }
+#' # An actual download call
+#' # a <- fetch(dat="paleomap", var="dem")
+#' # call repetition
+#' fetch(dat="paleomap", var="dem", call=TRUE)
+#' # A locally-present object, in package's directory
+#' a <- fetch(dat="paleomap", var="model", 
+#'   datadir=system.file("extdata", package="chronosphere"))
 #' @export
 #' @return An object that matches the 'type' field of the varibles in the output of the \code{\link{datasets}} function.
 fetch <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=TRUE, call=FALSE, call.expr=FALSE, ...){

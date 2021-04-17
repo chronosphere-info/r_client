@@ -75,6 +75,7 @@ newbounds <- function(x, cols=NULL, rows=NULL){
 #'}
 #' @export
 shaper <- function(f="p",n=2, round=2,...){
+  message("This function will deprecated in the next major version, \n and will be implemented in a separate R package.")
   if(length(round)==1) round <- rep(round,2)
   
   if(n==2){

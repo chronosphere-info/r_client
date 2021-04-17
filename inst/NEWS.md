@@ -1,5 +1,10 @@
 # Change log of the R package 'chronosphere'
 
+## [0.4.1] - 2021-04-16 (build 80)
+### Added 
+- added the platemodel example to the package's files
+- fixed wrong example
+
 ## [0.4.0] - 2020-10-18 (build 79 - CRAN submission take 2)
 ### Added 
 - vignette url fix

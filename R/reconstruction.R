@@ -50,7 +50,6 @@
 #' @param dir (\code{character}) Argument of the local reconstruction submodule. Directory where the temporary files of the reconstruction are stored (defaults to a temporary directory created by R). Remember to toggle \code{cleanup} if you want to see the files.  
 #' @return A \code{numeric} matrix if \code{x} is a \code{numeric}, \code{matrix} or \code{data.frame}, or \code{Spatial*} class objects, depending on input.
 #' @examples
-#' \donttest{
 #' # With the web service (GPlates Web Service was offline at submission)
 #' # simple matrices
 #' # reconstruct(matrix(c(95, 54), nrow=1), 140)
@@ -63,7 +62,6 @@
 #' # coast <- reconstruct("coastlines", 140)
 #' # plate <- reconstruct("plates", 139)
 #'	
-#'  }
 #' @rdname reconstruct
 #' @exportMethod reconstruct
 setGeneric("reconstruct", function(x,...) standardGeneric("reconstruct"))
