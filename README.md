@@ -1,7 +1,7 @@
 
 # chronosphere
 
-[![](https://img.shields.io/badge/devel%20version-0.4.0-green.svg)](https://github.com/adamkocsis/chronosphere)
+[![](https://img.shields.io/badge/devel%20version-0.4.1-green.svg)](https://github.com/adamkocsis/chronosphere)
 [![](https://www.r-pkg.org/badges/version/chronosphere?color=orange)](https://cran.r-project.org/package=chronosphere)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/chronosphere?color=yellow)](https://cran.r-project.org/package=chronosphere)
 [![CRAN
@@ -47,7 +47,7 @@ The devel-version can be installed from the source archive deposited on
 this github repository. Open R and paste in:
 
 ``` r
-install.packages("https://github.com/chronosphere-portal/r_package/raw/devel/_archive/source/chronosphere_0.4.0-77.tar.gz", repos=NULL, type="source")
+install.packages("https://github.com/chronosphere-portal/r_package/raw/devel/_archive/source/chronosphere_0.4.1.tar.gz", repos=NULL, type="source")
 ```
 
 ## After install

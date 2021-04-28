@@ -16,13 +16,13 @@ platemodel <- setClass("platemodel", slots=list(name="character", rotation="char
 #' @return A \code{platemodel} class object.
 #' @export platemodel
 #' @examples
-#' # link to a single .mod file
-#' \donttest{
-#' 	mo <- fetch("paleomap", "model", datadir="~")
-#'  # manually attach model paths
-#' 	model <- platemodel(file.path(tempdir(), 
-#'    "paleomap_model_v3-GPlates/paleomap_model_v3-GPlates.mod"))
-#' }
+#' # extract provided archive
+#' a <- fetch(dat="paleomap", var="model", 
+#'   datadir=system.file("extdata", package="chronosphere"))
+#' # manually attach
+#' model <- platemodel(file.path(tempdir(), 
+#'   "paleomap_model_v19o_r1c/paleomap_model_v19o_r1c.mod"))
+#' model
 setMethod("initialize",signature="platemodel",
 	definition=function(.Object,path=NULL, rotation=NULL, polygons=NULL){
 		if(!is.null(path)){

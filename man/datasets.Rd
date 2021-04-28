@@ -33,10 +33,12 @@ The function will download a list of available data from the data repository
 The function will download a single .csv file and attach it as a \code{data.frame}.
 }
 \examples{
-\donttest{
+# available datasets and variables - proper
+# ind <- datasets()
 # available datasets and variables
-ind <- datasets()
+# just one example archive is available locally
+ind <- datasets(
+  datadir=system.file("extdata", package="chronosphere"))
 # all available versions and resolutions in database 'paleomap'
-oneDat <- datasets("paleomap")
-}
+# oneDat <- datasets("paleomap")
 }

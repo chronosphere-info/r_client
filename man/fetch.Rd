@@ -45,7 +45,11 @@ Function to download and attach variables in the \code{chronosphere} package
 Use the function \code{\link{datasets}} to find available variables.
 }
 \examples{
-\donttest{
-	a <- fetch(dat="paleomap", var="dem")
-}
+# An actual download call
+# a <- fetch(dat="paleomap", var="dem")
+# call repetition
+fetch(dat="paleomap", var="dem", call=TRUE)
+# A locally-present object, in package's directory
+a <- fetch(dat="paleomap", var="model", 
+  datadir=system.file("extdata", package="chronosphere"))
 }
