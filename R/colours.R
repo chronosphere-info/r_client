@@ -6,7 +6,7 @@
 #' \code{showPal} can be used to display the available palettes. You can use \code{pal = "all"} or \code{pal=""} if you want to look at all the available palettes. 
 #' You can also view single palettes individually. The following colour palettes are implemented:
 #' \itemize{
-#' \item \code{gradinv()}: inverse heatmap.
+#' \item \code{gradinv()}: Inverse heatmap.
 #' \item \code{ocean()}: ocean bathymetrical colours.
 #' \item \code{terra()}: terrestrial topographical colours.
 #' \item \code{ipccTemp()}: gradient from blue to red according to the official IPCC AR6 WG2 colour palette.
