@@ -62,7 +62,7 @@ The first part of the console output includes properties of the individual Raste
 
 The second part of the output is a visualization of the structure of the RasterArray itself. In the case of the DEMs, 10 layers are stored in the stack, each layer having its individual name (e.g. `dem_0`). It is a single dimensional array (vector), and each element has its name in the array (`0`). Differentiating between the names of layers and the names of elements allows different subsetting and replacement rules for the two, which can both be handy - depending on the needs of the user.
 
-The structure of the RasterArray can be visualized, analyzed or processed using the the proxy object. Proxies are essentially the same as the index slots of the RasterArray, but instead of including the indices of the layers they represent, proxies include the names of the layers. These can be accessed using the `proxy()` function.
+The structure of the RasterArray can be visualized, analyzed or processed using the proxy object. Proxies are essentially the same as the index slots of the RasterArray, but instead of including the indices of the layers they represent, proxies include the names of the layers. These can be accessed using the `proxy()` function.
 
 ```{r dems2, echo= TRUE}
 proxy(dems)
@@ -210,13 +210,13 @@ dimnames(coasts2)[[1]] <- paste(rownames(coasts), "Ma")
 coasts2
 ```
 
-Besides the names of the elements in the `RasterArray` or `SpatialArray`, every layer has its own name in the stack. These can be accessed with `layers()` function:
+Besides the names of the elements in the `RasterArray` or `SpatialArray`, every layer has its own name in the stack. These can be accessed with the `layers()` function:
 
 ```{r layernames, echo= TRUE}
 layers(dems)
 ```
 
-The total number of cells in the `RasterLayer` or the entire stack can accessed with the `ncell()` and `nvalues()` functions, respectively.
+The total number of cells in the `RasterLayer` or the entire stack can be accessed with the `ncell()` and `nvalues()` functions, respectively.
 
 ```{r cells, echo= TRUE}
 ncell(dems)
@@ -262,7 +262,7 @@ dem2[[2]]
 
 ### 2.3.2 Single bracket
 
-Features offered by the double bracket ("[[") operator are virtually identical with those of RasterStacks. The true utility of RasterArrays become evident with simple array-type subsetting. 
+Features offered by the double bracket ("[[") operator are virtually identical with those of RasterStacks. The true utility of RasterArrays becomes evident with simple array-type subsetting. 
 
 Unlike Raster* objects of the raster package, single brackets will retrieve and replace items from the RasterArray as if they were simple arrays. For example, single elements of the DEMs can be selected with the age of the DEM, passed as a character subscript.
 
