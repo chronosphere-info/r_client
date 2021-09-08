@@ -107,7 +107,7 @@ cbind(dems, dems)
 
 ### 2.1.2. SpatialArray
 
-The `SpatialArray`s also do not inherit from the respective `Spatial*` classes. This class has the same structure as the `RasterArray` containing an `@index` and a `@stack` slot. The difference between `SpatialArray`s and `RasterArray`s is that the `@slack` slot includes a class named `SpatialStack`, which is a formalized `list` of `Spatial*` objects, and has a similar interface to a `RasterStack`. `SpatialStack`s can include any of the `SpatialPoints`,`SpatialPointsDataFrame`,`SpatialLines`,`SpatialLinesDataFrame`,`SpatialPolygons` or `SpatialPolygonsDataFrame` classes, as long as they have the same CRS. 
+The `SpatialArray`s also do not inherit from the respective `Spatial*` classes. This class has the same structure as the `RasterArray` containing an `@index` and a `@stack` slot. The difference between `SpatialArray`s and `RasterArray`s is that the `@stack` slot includes a class named `SpatialStack`, which is a formalized `list` of `Spatial*` objects, and has a similar interface to a `RasterStack`. `SpatialStack`s can include any of the `SpatialPoints`,`SpatialPointsDataFrame`,`SpatialLines`,`SpatialLinesDataFrame`,`SpatialPolygons` or `SpatialPolygonsDataFrame` classes, as long as they have the same CRS. 
 
 The package includes one demo dataset, the first five entries of the PaleoMAP Paleocoastlines (Kocsis and Scotese, 2020).
 
@@ -348,7 +348,7 @@ mapplot(coarse["45"], col="earth")
 
 ### 2.4.2. `SpatialArray`
 
-Similar rules apply to `SpatialArray`s as to `RasterArray`s. For example, projection changes can be implemented for the entire set, if the `rgdal` packgae is installed on the system:
+Similar rules apply to `SpatialArray`s as to `RasterArray`s. For example, projection changes can be implemented for the entire set, if the `rgdal` package is installed on the system:
 
 ```{r sptran, echo= TRUE, plot=TRUE, fig.height=5.5}
 # Cylindrial equal area projection
