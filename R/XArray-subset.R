@@ -98,7 +98,7 @@ setMethod(
 #' @param i subscript of the first dimension(rows) or vector-like subsetting.
 #' @param j subscript of the second dimension (columns).
 #' @param ... subscript of additional dimensions.
-#' @param drop \code{logical} in case the result of subsetting is a single element, should the \code{\link{RasterArray}} or \code{\link{SpatialArray}}  wrapper be dropped and the element be reduced to a single \code{RasterLayer} or \code{Spatial*}?
+#' @param drop \code{logical} in case the result of subsetting is a single element, should the \code{\link{RasterArray}} or \code{\link{SpatialArray}} wrapper be dropped and the element be reduced to a single \code{RasterLayer} or \code{Spatial*}?
 #' @return A \code{RasterLayer}, \code{RasterArray}, \code{Spatial*} or \code{\link{SpatialArray}} class object.
 #' @examples
 #' data(dems)
@@ -155,7 +155,7 @@ setMethod(
 	"[[", 
 	signature(x="XArray"),
 	function(x,i,drop=TRUE){
-		# where are NAs in the subscrtip
+		# where are NAs in the subscript
 		bNA <- is.na(i)
 		if(sum(bNA)==length(i)) return(i)
 
@@ -285,7 +285,7 @@ XArrayReplaceLayer <- function(x,i,j,value,...){
 	if(is.null(indDim) | length(indDim)==1){
 		# pointer to the stack to be replaced
 		theIndex <- x@index[i]
-		# separte the index based on NA
+		# separate the index based on NA
 		bIndNA <- is.na(theIndex)
 		
 		# if at least one layer stack is not there
