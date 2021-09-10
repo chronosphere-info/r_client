@@ -73,7 +73,7 @@ function(x,y, deparse.level=1){
 	origColsY <- colnames(y)
 
 
-	# this needs soxme work
+	# this needs some work
 	if(deparse.level!=0){
 		# get call (symbol)
 		callSymb <- sys.call(which=deparse.level)
@@ -160,7 +160,7 @@ function(x,y, deparse.level=1){
 	newstack<- stack(x@stack, y@stack)
 
 	# the index
-	# stacks of ycontinue after the stacks of x
+	# stacks of y continue after the stacks of x
 		offset <- nlayers(x)
 		y@index<-y@index+offset
 	
@@ -207,7 +207,7 @@ function(x,y, deparse.level=1){
 	origRowsX <- rownames(x)
 	origRowsY <- rownames(y)
 
-	# this needs soxme work
+	# this needs some work
 	if(deparse.level!=0){
 		# get call (symbol)
 		callSymb <- sys.call(which=deparse.level)
@@ -293,7 +293,7 @@ function(x,y, deparse.level=1){
 	newstack<- stack(x@stack, y@stack)
 
 	# the index
-	# stacks of ycontinue after the stacks of x
+	# stacks of y continue after the stacks of x
 		offset <- nlayers(x)
 		y@index<-y@index+offset
 	
