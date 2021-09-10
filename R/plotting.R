@@ -12,7 +12,7 @@
 #' @param ncol \code{numeric}) Set number of columns in a multi-plot for a single variable. For a \code{\link[chronosphere:RasterArray-class]{RasterArray}} with multiple variables, this number is automatically set to the number of variables. 
 #' @param legend.title (\code{character}) Title for the legend, if \code{legend = TRUE}. 
 #' @param plot.title (\code{character}) The title for each individual plot. Only available for a single variable at the moment.
-#' @param rowlabels (\code{character}) label for each row of the overall plot. Uses the rownames of the \code{\link[chronosphere:RasterArray-class]{RasterArray}} by default. Only availble for multivariate \code{\link[chronosphere:RasterArray-class]{RasterArray}}s. 
+#' @param rowlabels (\code{character}) label for each row of the overall plot. Uses the rownames of the \code{\link[chronosphere:RasterArray-class]{RasterArray}} by default. Only available for multivariate \code{\link[chronosphere:RasterArray-class]{RasterArray}}s. 
 #' @param multi (\code{logical}) Should the plots be printed on multiple pages? 
 #' @param ask (\code{logical} or \code{NULL}) If \code{multi.page = TRUE} and \code{ask = TRUE}, then the user will be prompted before a new page of output is started
 #' @param ... arguments passed to class-specific methods.

@@ -67,7 +67,7 @@
 setGeneric("reconstruct", function(x,...) standardGeneric("reconstruct"))
 
 # have to use long function definitions for documentation.
-#' @param enumerate (\code{logical}) Should be all coordinate/age combinations be enumerated and reconstructed (set to \code{TRUE} by default)? \code{FALSE} is applicable only if the number of rows in \code{x} is equal to the number elementes in \code{age}. Then a point will be reconstructed to the age that has the same index in \code{age} as the row of the coordinates in \code{x}. List output is not available in this case. 
+#' @param enumerate (\code{logical}) Should all coordinate/age combinations be enumerated and reconstructed (set to \code{TRUE} by default)? \code{FALSE} is applicable only if the number of rows in \code{x} is equal to the number elementes in \code{age}. Then a point will be reconstructed to the age that has the same index in \code{age} as the row of the coordinates in \code{x}. List output is not available in this case. 
 #' @param chunk (\code{numeric}) Argument of the remote reconstruction submodule. Single integer, the number of coordinates that will be queried from the GPlates in a single go. 
 #' @rdname reconstruct
 setMethod(
@@ -450,7 +450,7 @@ reconstructGPlates <- function(x, age, model, path.gplates=NULL,dir=NULL, verbos
 			
 		}
 
-		# C. one moretest whether gplates was detected or not
+		# C. one more test whether gplates was detected or not
 			gpTest <- testGPlates(gplatesExecutable, verbose=verbose)
 
 			# if gplates is not present:
@@ -661,7 +661,7 @@ testGPlates<- function(gplatesExecutable, verbose){
 ###########################################################################
 # GPlates Web Service internals:
 
-# correcting the point recontstruction problem, wrapper around the point reconstruction funciton
+# correcting the point reconstruction problem, wrapper around the point reconstruction function
 IteratedPointReconstruction <- function(coords,age, chunk=200, model="PALEOMAP", reverse=FALSE, verbose=TRUE){
 	# number of coordinates
 	coordNum <- nrow(coords)

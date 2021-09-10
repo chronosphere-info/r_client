@@ -234,13 +234,13 @@ getOS <- function(){
 }
 
 
-# get directory from a paht
+# get directory from a path
 dirFromPath <- function(x){
   all <- unlist(strsplit(x, "/"))
   paste(all[-length(all)], collapse="/")
 }
 
-# get directory from a paht
+# get directory from a path
 fileFromPath <- function(x){
   all <- unlist(strsplit(x, "/"))
   paste(all[length(all)], collapse="/")

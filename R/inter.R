@@ -77,7 +77,7 @@ setMethod(
 	if(index){
 		return(newIndex)
 	}else{
-		# non-standard evalution to mathc the number of dimensions
+		# non-standard evaluation to match the number of dimensions
 		dl <- length(dimensions)
 		if(dl==1){
 			return(x[newIndex])
@@ -87,7 +87,7 @@ setMethod(
 				empty<-rep("", dl)
 				# where is the time dimension - add subscript
 				empty[time] <- paste("c(", paste(newIndex, collapse=","), ")", sep="")
-				# construct the dimensions matching subscript stirng
+				# construct the dimensions matching subscript string
 				subscript <- paste(empty,collapse=",")
 				# the rest of the call
 				theexp <- paste("x[", subscript, "]", sep="")
