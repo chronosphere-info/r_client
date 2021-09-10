@@ -119,7 +119,7 @@ datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greeti
 		# and set return value
 		ret <- read.csv(tempReg, sep=";", header=TRUE, stringsAsFactors=FALSE, encoding="UTF-8")
 
-		# get rid of the  temporary file
+		# get rid of the temporary file
 		if(is.null(datadir)) unlink(tempReg)
 		
 	}
@@ -151,18 +151,18 @@ datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greeti
 #' a <- fetch(dat="paleomap", var="model", 
 #'   datadir=system.file("extdata", package="chronosphere"))
 #' @export
-#' @return An object that matches the 'type' field of the varibles in the output of the \code{\link{datasets}} function.
+#' @return An object that matches the 'type' field of the variables in the output of the \code{\link{datasets}} function.
 fetch <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=TRUE, call=FALSE, call.expr=FALSE, ...){
 
 	# fetch given an existing chronosphere object
 	if(is.chronosphere(dat)){
-		# force expression output of call reproduction if object should be downlaoded
+		# force expression output of call reproduction if object should be downloaded
 		if(!call) call.expr <- TRUE
 
 		# return call that can be used to replicate download
 		att <- attributes(dat)$chronosphere
 
-		# construct funtcion call
+		# construct function call
 		argList <- list(
 			dat=att$dat,
 			var=att$var,
@@ -356,7 +356,7 @@ FetchVars <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=T
 		# only one version
 		if(length(ver)>1) stop("INTERNAL error: Only one version can be used in a single download call.")
 		
-		# again, limit registry - now to desired verson
+		# again, limit registry - now to desired version
 		register <- register[register[, "ver"]==ver, , drop=FALSE]
 		if(nrow(register)==0) stop(paste0("Version \'", ver, "\' of variable \'", var, "\' is not available at resolution ", res, "."))
 
@@ -372,7 +372,7 @@ FetchVars <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=T
 		attributes(downloaded)$chronosphere<- ChronoAttributes(dat=dat, var=var, res=res, ver=ver, reg=register, ...)
 	
 
-	# 2. DOWNLOAD MULTIPLE VARIABLSE - recursive case
+	# 2. DOWNLOAD MULTIPLE VARIABLES - recursive case
 	}else{
 		# subset the register to only look for var-specific part
 		register <- register[which(register$var%in%var),]

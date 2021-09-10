@@ -18,7 +18,7 @@
 #' 
 #' @return A function producing a colour gradient ramp.
 #' @name ramps
-#' @param n (\code{numeric}) Number of different colors to generate from the palette
+#' @param n (\code{numeric}) Number of different colours to generate from the palette
 #' @param force (\code{logical}) Specify \code{pal} when multiple are available. More details to come. 
 #' @param pal (\code{character}) A palette name from the lists below
 #' 

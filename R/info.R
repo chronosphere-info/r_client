@@ -4,15 +4,15 @@
 #'
 #' The function is intended to be updated to handle BibTEX entries.
 #' 
-#' @param dat (\code{characater}) Object downloaded with \code{\link{fetch}} or the database identifier string.
+#' @param dat (\code{character}) Object downloaded with \code{\link{fetch}} or the database identifier string.
 #' @param var (\code{character}) In case \code{dat} is \code{character}, the variable identifier.
 #' @param ver (\code{character}) In case \code{dat} is \code{character}, the version identifier.
 #' @param print (\code{logical}) Should the citations be printed to the console, or returned as a \code{character} vector.
-#' @param prefix (\code{characater}) In case the output is printed on the console. Use this to include a prefix before every entry.
+#' @param prefix (\code{character}) In case the output is printed on the console. Use this to include a prefix before every entry.
 #' 
 #' @export
 reference <- function(dat, var=NULL, ver=NULL, print=TRUE, prefix=""){
-	# get the appropriate refernce string
+	# get the appropriate reference string
 	if(is.chronosphere(dat)){
 		# get the attributes
 		refString <- attributes(dat)$chronosphere$reference
@@ -47,12 +47,12 @@ reference <- function(dat, var=NULL, ver=NULL, print=TRUE, prefix=""){
 #'
 #'This is a temporary function that takes the user to the Evolv-ED blog.
 #'
-#' @param dat (\code{characater}) Object downloaded with \code{\link{fetch}} or the database identifier string.
+#' @param dat (\code{character}) Object downloaded with \code{\link{fetch}} or the database identifier string.
 #' @param var (\code{character}) In case \code{dat} is \code{character}, the variable identifier.
 #'
 #' @export
 info <- function(dat, var){
-	# get the appropriate refernce string
+	# get the appropriate reference string
 	if(is.chronosphere(dat)){
 		# get the attributes
 		infoURL <- attributes(dat)$chronosphere$info
