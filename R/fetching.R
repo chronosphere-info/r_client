@@ -1,133 +1,3 @@
-# remote server 
-remote <- "https://www.cnidaria.nat.fau.de/tersane/public/chronosphere/chrono-arch-2/"
-userpwd <- NULL
-checklog <- TRUE
-
-#v2
-#' Download a database extract from \code{chronosphere} remote server
-#' 
-#' The function will download a list of available data from the data repository
-#' 
-#' The function will download a single .csv file and attach it as a \code{data.frame}.
-#' 
-#' @param dat \code{character}. Database ID. If this is set to \code{NULL}, then a simplified list of availables variables will be downloaded, including all \code{dat} and \code{var} combinations. If \code{dat} is a valid database ID, then all accessible resolutions and version of a dataset are shown. 
-#' @param datadir \code{character} Directory where the downloaded files are kept. Individual entries will be looked up from the directory if this is given, and will be downloaded if they are not found. The default \code{NULL} option will download data to a temporary directory that exists only until the R session ends.
-#' @param verbose \code{logical} Should console feedback during download be displayed?
-#' @param master \code{logical} When \code{dat} is \code{NULL}, should the function download the master records file?
-#' @param greetings \code{logical} When the function is invoked without arguments, it displays a message to keep new users informed about different versions and resolutions (even with \code{verbose=FALSE}). This argument turns this message off on demand.
-#' @return A \code{data.frame} class object.
-#' @examples
-#' # available datasets and variables - proper
-#' # ind <- datasets()
-#' # available datasets and variables
-#' # just one example archive is available locally
-#' ind <- datasets(
-#'   datadir=system.file("extdata", package="chronosphere"))
-#' # all available versions and resolutions in database 'paleomap'
-#' # oneDat <- datasets("paleomap")
-#' @export
-datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greetings=TRUE){
-		
-	# dat tells you what to look for.
-	if(is.null(dat)){
-		# simple data table with dat/var combinations
-		datfile <- "chronos.csv"
-		if(master){
-			datfile <- "master.csv"
-		}else{
-			if(greetings) message("Use datasets(dat = <dat>) to see available versions and resolutions.") 
-		}
-	}else{
-		# recursive call to see whether the dat entry is available
-		tempdat <- datasets(datadir=datadir, greetings=FALSE)
-	
-		if(!any(dat%in%tempdat$dat)) stop(paste0("The dat entry \'", dat, "\' was not found."))
-
-		# full list of available variables in a given dataset - used by fetch()
-		datfile <- paste0(dat, ".csv")
-	}
-
-	# if it does not exist in datadir, then 
-	# by default, download the file
-	download <- TRUE
-
-	# a data directory is given
-	if(!is.null(datadir)){
-		# list all files
-		all<-list.files(datadir)
-
-		# do any of them match? 
-		if(any(datfile==all)){
-			# read it in
-			ret <- read.csv(file.path(datadir, datfile), sep=";", header=TRUE, stringsAsFactors=FALSE, encoding="UTF-8")
-
-			# structure is ok
-			if(sum(c("dat", "var", "ver", "res")%in%colnames(ret))==4){
-				download <- FALSE
-			} # no? ->download
-		} # no? ->download
-
-		# you can set target file, won't change anything if there is nothing to download
-		tempReg<- file.path(datadir, datfile)
-		if(checklog) tempLog <- tempfile()
-	# need to download but not saved
-	}else{
-		# temporary files
-		tempReg <- tempfile()
-		if(checklog) tempLog <- tempfile()
-
-	}
-
-	# go on with download
-	if(download){
-		# if you have to download and if it is not the simple table
-		if(!is.null(dat)) datfile <- file.path(dat, datfile)
-		# do the download
-		if(is.null(userpwd)){
-			if(checklog) download.file(paste(remote, "log.csv", sep = ""),tempLog, mode="wb", quiet=TRUE)
-			download.file(paste(remote, datfile, sep = ""),tempReg, mode="wb", quiet=!verbose)
-		}else{
-			if(checklog) download.file(paste("ftp://", userpwd, "@",remote, "log.csv", sep = ""),tempLog, mode="wb", quiet=TRUE)
-			download.file(paste("ftp://", userpwd, "@",remote, datfile, sep = ""),tempReg, mode="wb", quiet=!verbose)
-		}	
-		
-	
-		# check the server log.
-		if(checklog){
-			# read server log
-			log <- tryCatch(read.csv(tempLog, sep=",", header=TRUE, stringsAsFactors=FALSE, encoding="UTF-8"), error=function() stop("Invalid log file, remote server cannot be reached."))
-
-			# display message intended for people using this particular version
-			pkgver <- sessionInfo()$otherPkgs$chronosphere$Version
-			bLine <- pkgver==log$version
-			currentMessage <- log$message[bLine]
-
-			logok <- FALSE
-			if(length(currentMessage)!=0){
-				if(""!=currentMessage){
-					warning(currentMessage)
-				}else{
-					logok <- TRUE
-				}
-			}else{
-				logok <- TRUE
-			}
-			if(logok) assignInNamespace("checklog", FALSE, ns="chronosphere")
-			unlink(tempLog)
-		}
-		
-		# and set return value
-		ret <- read.csv(tempReg, sep=";", header=TRUE, stringsAsFactors=FALSE, encoding="UTF-8")
-
-		# get rid of the  temporary file
-		if(is.null(datadir)) unlink(tempReg)
-		
-	}
-
-	return(ret)
-}
-
-
 #' Data fetching
 #' 
 #' Function to download and attach variables in the \code{chronosphere} package
@@ -137,10 +7,14 @@ datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greeti
 #' @param var (\code{character}) Vector of variable names to get.
 #' @param res (\code{character} or \code{numeric}) The resolution of raster layers. This has to be the same for all RasterLayers that make up the variable.
 #' @param ver (\code{character}) The version of the variable. Defaults to \code{NULL}, which will download the latest available version. We have to create a data table, which should be part of the package. This has to be searched for valid argument combinations. Right this is just a folder with a date.
+#' @param class (\code{character}) Class of the returned object, if not the default.
+#' @param ext (\code{character}) File extension of the used data file.
+#' @param item (\code{numeric}) The item ID that is to be downloaded. This setting overrides all other identifiers.
 #' @param datadir (\code{character}) Directory where downloaded files are kept. Individual layers will be looked up from the directory if this is given, and will be downloaded if they are not found. The default \code{NULL} option will download data to a temporary directory that exists only until the R session ends.
 #' @param verbose (\code{logical}) Should console feedback during download be displayed?
 #' @param call (\code{logical}) If set to \code{TRUE} the function call is returned instead of the object. 
 #' @param call.expr (\code{logical}) If \code{call} is set to \code{TRUE}, then should the call be returned as an \code{expression} (\code{TRUE}) or a message (\code{FALSE})?
+#' @param attach (\code{logical}) If the item has required packages, should these be attached?
 #' @param ... Arguments passed to variable-specific loading functions.
 #' @examples
 #' # An actual download call
@@ -152,7 +26,20 @@ datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greeti
 #'   datadir=system.file("extdata", package="chronosphere"))
 #' @export
 #' @return An object that matches the 'type' field of the varibles in the output of the \code{\link{datasets}} function.
-fetch <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=TRUE, call=FALSE, call.expr=FALSE, ...){
+fetch <- function(dat=NULL, var=NULL, ver=NULL, res=NULL, ext=NULL, class=NULL, item=NULL,  datadir=NULL, verbose=TRUE, call=FALSE, call.expr=FALSE, attach=TRUE, ...){
+	## dat="pbdb"
+	## var="baseref"
+	## ver=NULL
+	## res=NULL
+	## ext=NULL
+	## class=NULL
+	## item=NULL
+	## datadir=NULL
+	## verbose=TRUE
+	## call=FALSE
+	## call.expr=FALSE
+	## attach=TRUE
+	
 
 	# fetch given an existing chronosphere object
 	if(is.chronosphere(dat)){
@@ -168,6 +55,9 @@ fetch <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=TRUE,
 			var=att$var,
 			ver=att$ver,
 			res=att$res, 
+			ext=att$ext, 
+			class=att$class, 
+			item=att$item, 
 			datadir=att$datadir,
 			verbose=FALSE,
 			expr=call.expr)
@@ -193,424 +83,485 @@ fetch <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=TRUE,
 		# return a call
 		if(call){
 			# construct function call
-			theCall <- ChronoCall(dat, var, ver, res, datadir, verbose, expr=call.expr,...)
+			theCall <- ChronoCall(dat, var, ver, res, ext, class, item, datadir, verbose, expr=call.expr,...)
 
 			# return if it is an expression
 			if(!is.null(theCall)) return(theCall)
 
 		# do an actual fetch
 		}else{
-			return(FetchVars(dat=dat, var=var, ver=ver, res=res, datadir=datadir, verbose=verbose, ...))
+			# get the register of the dat
+			if(length(dat)>1) stop("Only one dataset can be accessed in a single download call.")
+
+			if(verbose){
+				regs <- paste0(
+"\n------------------------------------------------------------
+Accessing chronos registry tables.
+------------------------------------------------------------\n")
+				message(regs)
+			}
+			# get the remote server data, or read it from hard drive!
+			register <- datasets(dat=dat, datadir=datadir, verbose=verbose)
+
+			# find the item in the register
+			itemDetails <- FindItem(register, var=var, ver=ver, res=res, ext=ext, 
+				class=class, item=item, datadir=datadir, verbose=verbose, ...)
+
+			if(verbose){
+				dets <- paste0(
+"\n------------------------------------------------------------
+Accessing item no. " ,itemDetails$itemID ,  ", dat:", itemDetails$dat, ", var: ", itemDetails$var, ", ver: ", itemDetails$ver, ".
+------------------------------------------------------------\n")
+				message(dets)
+			}
+
+			
+			# execute the download and load the item 
+			item <- DownloadItem(
+				details=itemDetails,
+				datadir = datadir,
+				verbose=verbose,
+				attach=attach, 
+				...
+			)
+
+			# write the chronosphere attributes to the downloaded object
+			attributes(item)$chronosphere <- ChronoAttributes(dat=dat, details=itemDetails, ...)
+
+			# display citations
+			if(verbose){
+				message("
+If you use the data in publications, please cite its
+reference(s), as well as that of the 'chronosphere' project.\n")
+
+				# print the reference
+				reference(item, bibtex=FALSE, print=TRUE)
+			}
+	
+			# return the item
+			return(item)
 		}
 
 	}
 
 }
 
-# function to determine if an object was downloaded from the chronosphere
-is.chronosphere<-function(x){
-	!is.null(attributes(x)$chronosphere)
-}
 
 
-# function to construct a chronosphere call
-ChronoCall <- function(dat, var, ver, res, datadir, verbose=FALSE, expr=FALSE,...){
-	# construct a function call
-	theCall<-paste0('fetch(',
-		'dat="', dat, '"')
 
-	# add the optional arguments
-	if(!is.null(var)){
-		if(length(var)==1){
-			theCall <- paste0(theCall, ", var=\"", var,"\"")
-		}else{
-			theCall <- paste0(theCall, ", var=c(\"", paste(var, collapse="\", \""),"\")")
-		}
-	}
+
+
+
+# Actual fetch v3. -this function connects to the repo or loads the downloaded variable
+# function to look up the item number
+# param citation used to turn of citation display for recursive case
+FindItem <- function(register, var=NULL, ver=NULL, res=NULL, ext=NULL, class=NULL, item=NULL, datadir=NULL, verbose=TRUE, citation=TRUE, ...){
 	
-	if(!is.null(ver)){
-		if(length(ver)==1){
-			theCall <- paste0(theCall, ", ver=\"", ver,"\"")
+	# item-based finding (still needs dat for efficient lookup)
+	if(!is.null(item)){
+		# the item number is given directly
+		if(length(item)>1) stop("Only one item can be accessed in a single download call.")
+
+		# get the necessary details for the item
+		index <- which(register$itemID==item)
+		if(length(index)==0){
+			stop("The selected item does not exist in the subset.")
 		}else{
-			theCall <- paste0(theCall, ", ver=c(\"", paste(ver, collapse="\", \""),"\")")
+			if(length(index)>1) stop("Oops, this should not happen.")
+
+			# the item's information, which will be returned
+			details<- item[index, ]
 		}
 
-	}
+	# coordinate-based lookup
+	}else{
 
-	if(!is.null(res)){
-		if(length(res)==1){
-			theCall <- paste0(theCall, ", res=\"", res,"\"")	
-		}else{
-			theCall <- paste0(theCall, ", res=c(\"", paste(res, collapse="\", \""),"\")")
-		}
-	}
-
-	if(!is.null(datadir)) theCall <- paste0(theCall, ", datadir=\"", datadir,"\"")
-	if(!verbose) theCall <- paste0(theCall, ", verbose=", verbose)
-	
-	# still have to add variable specific arguments
-	other <- list(...)
-	if(length(other)!=0){
-		for(i in 1:length(other)){
-			if(is.character(other[[i]])){
-				theCall <- paste0(theCall, ", ", names(other)[i],"=\"", other[[i]],"\"")
+		########################################
+		# A. Mandatory data
+		# A1. Dat - already done
+		# A2. Variable
+		# Need the the default variable?
+		if(is.null(var)){
+			# make sure that this is available in the framework
+			if(sum(register$defaultVariable)==0){
+				stop("The default variable of the 'dat' is not available in R. ")
+			# else: grab the parts that come from the defautl variable.
 			}else{
-				theCall <- paste0(theCall, ", ", names(other)[i],"=", other[[i]],"")
+				register <- register[register$defaultVariable, ]
+				# save the variable for later
+				var <- unique(register$var) 
+			}
+		}else{
+			if(length(var)>1) stop("Only one variable can be accessed in a single download call.")
+			# the index of the desired variables
+			indVar <- which(register$var==var)
+			if(length(indVar)==0){
+				stop(paste0("The desired var '", var, "' is not available."))
+			}else{
+				# get the var-specific version 
+				register <- register[indVar,]
 			}
 		}
-	}
 
-	theCall <- paste0(theCall,")")
+		# A3. Version
+		# The downloaded data must have a version
+		# Default version: most up to date
+		if(is.null(ver)){
+			# select the most recent 
+			dates <- unique(register$dataDatePublished)
+			# field uses ISO dates, character sorting should be fine.
+			mostRecent <- max(dates)
+			# get the corresponding part
+			register <- register[which(mostRecent==register$dataDatePublished), ]
+		# 
+		}else{
+			if(length(ver)>1) stop("Only one version can be accessed in a single download call.")
+			# the index of the desired variables
+			indVer <- which(register$ver==ver)
+			# is this present? 
+			if(length(indVer)==0){
+				stop(paste0("The desired version '", ver, "' is not available."))
+			}else{
+				# get the var-specific version 
+				register <- register[indVer,]
+			}
+		}
 
-	if(!expr){
-		message(theCall)
-		return(NULL)
-	}else{
-		express <- parse(text=theCall)
-		return(express)
-	}
-}
+		# B. Facultative coordinates
+		# B1. the class
+		# select the variable default
+		if(is.null(class)){
+			# the default class of the variable
+			defClass <- unique(register$defaultClass)
+			if(length(defClass)!=1) stop("Oops. This should not happen:\n more than one default class!")
 
+			# where is the default class present? 
+			bClass <- register$class==defClass
 
+		# select the desired
+		}else{
+			if(length(class)>1) stop("Only one class can be returned in a single download call.")
+			# the desired class is given 
+			bClass <- register$class==class
+			if(sum(bClass)==0) stop(paste0("The variable '", var, "' is not available as class '", class, "'."))
+		}
 
-
-
-# Actual fetch v2. -this function connects to the repo or loads the downloaded variable
-# param citation used to turn of citation display for recursive case
-FetchVars <- function(dat, var=NULL, ver=NULL, res=NULL, datadir=NULL, verbose=TRUE, register=NULL, citation=TRUE, ...){
-	
-
-	# only one should be allowed
-	if(length(dat)>1) stop("Only one dataset can be accessed in a single download call.")
-
-	# get the remote server data, or read it from hard drive!
-	if(is.null(register)) register <- datasets(dat=dat, datadir=datadir, verbose=verbose)
-	
-	# subset registry to dataset
-	bDat <- register$dat==dat
-	
-	# select the default variable
-	if(is.null(var)){
-		var <- unique(register[register$default_var, "var"])
-	}
-	
-	# if one of the variables do not exist, then omit it
-	present <- var%in%register$var
-
-	# stop if not present
-	if(any(!present)){
-		if(length(present)==1) stop(paste("Variable '", var, "' does not exist.", sep=""))
-		if(sum(present)>1) stop("The variables do not exist.")
-		
-		# some do, but some are missing
-		warning(paste("The variable(s) '", paste(var[!present],collapse="', '"), "' does/do not exist at and is/are omitted.",  sep=""))
-		var<-var[present]
-	}
-
-#	# check whether the types are compatible
-#	if(!is.null(var)) bVar <- register$var%in%var else bVar <- rep(T, nrow(register))
-#
-#	# which variable is which type?
-#	varType <- unique(register$type[bVar])
-#	
-#	# only one variable type is allowed!
-#	if(length(varType)>1){
-#		ret <- register[bVar, c("var", "type")]
-#		print(ret)
-#		stop("You can only download one variable type in a single download call.\nRepeat download with one type.")
-#	}
-
-	
-	# variable download has to be repeated for every variable
-	# 1. DOWNLOAD a single variable - base case
-	if(length(var)==1){
-
-		register <- register[which(register$var==var),]
-
-		# A. RESOLUTION LIMITING
-	#	if(!is.null(res)) if(is.na(res)) res <- "none"
-		# Default resolution
+		# B2. the resolution
+		# default or simply NA 
 		if(is.null(res)){
-			res <- unique(register$res[register$default_res])
+			# correct no entry
+			bRes <- is.na(register$resolution)
+			# in case this was simply just not given
+			if(sum(bRes)==0){
+				# look for those that are the default resolution
+				# and overwrite
+				bRes <- as.logical(register$resDefault)
+			}
+		# look for a specific resolution
 		}else{
-			if(length(res)>1) warning("Multiple 'res' arguments detected, only the first will be used.")
-			res <- res[1]
+			if(length(res)>1) stop("Only one resolution can be accessed in a single download call.")
+			# the correc resolution
+			bRes <- res==register$resolution
+
+			# missing values are not what we want
+			bRes[is.na(bRes)] <- FALSE
+			
 		}
 
-		# only one resolution
-		if(length(res)>1) stop("INTERNAL error: Only one resolution can be used in a single download call.")
-		
-		# again, limit registry - now to desired resolution
-		register <- register[register[, "res"]==res, , drop=FALSE]
-		if(nrow(register)==0) stop(paste0("The variable \'", var, "\' is not available at resolution ", res, "."))
+		# B3. the file extension	
+		# no definition
+		if(is.null(ext)){
+			# properly not given - no data file required to run the bit
+			bExt <- is.na(register$ext)
 
-		# B. VERSION LIMITING
-		# Default version
-		if(is.null(ver)){ 
-			ver <- register$ver[register$default_ver]
+			# currently there is no protocol to select the file!
+			# if there is nothing like this
+			if(sum(bExt)==0){
+				# this means that aynthing goes
+				bExt <- rep(TRUE, length(bExt))
+				
+			}
+
 		}else{
-			if(length(ver)>1) warning("Multiple 'ver' arguments detected, only the first will be used.")
-			ver <- ver[1]
-		}
+			if(length(ext)>1) stop("Only one file extensionbe accessed in a single download call.")
 
-		# only one version
-		if(length(ver)>1) stop("INTERNAL error: Only one version can be used in a single download call.")
-		
-		# again, limit registry - now to desired verson
-		register <- register[register[, "ver"]==ver, , drop=FALSE]
-		if(nrow(register)==0) stop(paste0("Version \'", ver, "\' of variable \'", var, "\' is not available at resolution ", res, "."))
+			# the correct file extension
+			bExt <- ext==register$ext
 
-		# after all this is done, there should be just one row in the table...
-		if(nrow(register)!=1) stop("This should not have happened.")
-
-		# do the actual download of this variable
-		downloaded <- FetchArchive(dat=dat, var=var, ver=ver, res=res, datadir=datadir, 
-			link=register$access_url, archive=register$archive_name, verbose=verbose,...)
-		
-		# write the chronosphere attributes to the downloaded object
-	
-		attributes(downloaded)$chronosphere<- ChronoAttributes(dat=dat, var=var, res=res, ver=ver, reg=register, ...)
-	
-
-	# 2. DOWNLOAD MULTIPLE VARIABLSE - recursive case
-	}else{
-		# subset the register to only look for var-specific part
-		register <- register[which(register$var%in%var),]
-		
-		# select the version
-		# if not all versions are default
-		if(!is.null(ver)){
-			# if just one is given, assume it is the same all variables
-			if(length(ver)==1) ver <- rep(ver, length(var))
-			if(length(ver)!=length(var)) stop("You have to provide a single, or as many 'ver' entries, as many variables ('var'). ")
-		}
-
-		# select resolution
-		if(!is.null(res)){
-			# if just one is given, assume it is the same all variables
-			if(length(res)==1) res <- rep(res, length(var))
-			if(length(res)!=length(var)) stop("You have to provide a single, or as many 'res' entries, as many variables ('var'). ")
-		}
-
-		# entity
-		theList <- list()
-		# recursively download archives and bind them to a list.
-		for(i in 1:length(var)){
-			# all variables have to be present at the desired resolution
-		#	stop(paste("The variable '", var[i], "' does not exist at the desired resolution (", res, "). ", sep=""))
-
-			# recursive call to FetchVars
-			theList[[i]] <- FetchVars(dat=dat, var=var[i], ver=ver[i], res=res[i], datadir=datadir, 
-				register=register, verbose=verbose,citation=FALSE, ...)
+			# missing values are not what we want
+			bExt[is.na(bExt)] <- FALSE
 
 		}
-		names(theList) <- var
+
+
+		# Where do these intersect? 
+		match <- bExt & bClass & bRes
+		index <- which(match)
+
+		if(length(index)==0){
+			stop("The specified item does not exist. ")
+		}else{
+			# multiple items with the same details exist
+			if(length(index)>1) {
+				# matching entries
+				register <- register[index, ]
+
+				# if there are multiple data files:
+				native <- register$ext %in% c("rds", "rda", "RData", "Rdata")
+
+				# missing values should not play
+				native[is.na(native)] <- FALSE
+
+				# if any of them are here:
+				# select that!
+				if(sum(native)>0){
+					register <- register[native, ]
+					
+				# otherwise, select the one randomly
+				}else{
+					fileext <- unique(register$ext)[1]
+					register <- register[which(fileext==register$ext), ]
+
+				}
+				# and then look for the itemversion!
+				# look for the must up-to-date item
+				recent <- max(register$itemVersion)
+
+				# subset to the most recnet version
+				index <- which(register$itemVersion==recent)
+
+			}
+			details <- register[index, ]
+		}
 		
-		# process the recursive download if there is a method for binding it together, otherwise pass it through.
-		downloaded <- CombineVars(theList)
 	}
-
-	# display citations
-	if(citation & verbose){
-		message("If you use the data in publications, please cite its\nreference(s), as well as that of the 'chronosphere' package.\n")
-		reference(downloaded, print=TRUE)
-	}
-	
-	return(downloaded)
+	# return the data necessary to downlaod the data
+	return(details)
 	
 }
 
-# function to download and load the contents of an individual archive
-FetchArchive <- function(dat, var, res, ver, archive, link, datadir=NULL, verbose=TRUE,...){
-	# we need a temporary directory to store the extracted files until the end of the session
-	tempd <- tempdir()
 
-	# save the data for later?	 
-	if(!is.null(datadir)){
+DownloadItem <- function(details, datadir=NULL, verbose=TRUE, attach=TRUE, ...){
+#	details <- itemDetails
+	# save timeout parameter from user's global options.
+	original<- options()$timeout
+	# set to chronosphere global 
+	options(timeout=timeout)
+	# ensure return to user's original on exit of function
+	on.exit(expr=options(timeout=original))
 
+	# basic defense
+	if(nrow(details)!=1) stop("Multiple items found!")
+
+	# rename for ease
+	codefile <- details$codeFile
+	datafile <- details$datafile
+	primaryURL <- details$primaryURL	
+	secondaryURL <- details$secondaryURL
+	md5 <- details$fileMD5
+	dat <- details$dat
+	var <- details$var
+	ver <- details$ver
+	item <- details$itemID
+
+
+	# in any case, the downloaded things will land in a specific directory
+	itemDir <- paste(dat, var, ver, item, sep="_")
+	
+	# do we need unzipping?
+	zip <- FALSE
+	# the actual file extension
+	if(!is.null(datafile)){
+		split <- strsplit(datafile, "\\.")[[1]]
+		ext <- split[length(split)]
+		# zipping? 
+		if(ext=="zip"){
+			zip <- TRUE
+		}
+	}
+
+	# 1st case datadir does not exist
+	if(is.null(datadir)){
+
+
+		# create a temporary directory
+		tempd <- tempdir()
+		itemDirPath <- file.path(tempd, itemDir)
+
+		# create a directory there, where everything will be downloaded
+		suppressWarnings(dir.create(itemDirPath))
+	
+		# the link to the code file
+		codeURL <- paste0(remote, code, codefile)
+		codePath <- file.path(itemDirPath, codefile)
+
+
+		if(verbose){
+			codes <- paste0(
+"\n------------------------------------------------------------
+Downloading import code.
+------------------------------------------------------------\n")
+			message(codes)
+		}
+		
+		# download the code
+		if(curl){
+			curl::curl_download(
+				codeURL,
+				codePath, mode="wb", quiet=!verbose)
+		}else{
+			# download the code
+			download.file(codeURL, codePath, mode="wb", quiet=!verbose)
+		}
+
+		# download the archive (if there is any!)
+		if(!is.null(datafile)){
+			# the path to the data file
+			dataPath <- file.path(itemDirPath, datafile)
+
+			if(verbose){
+				codes <- paste0(
+"\n------------------------------------------------------------
+Downloading data file.
+------------------------------------------------------------\n")
+				message(codes)
+			}
+
+			if(curl){
+				curl::curl_download(
+					primaryURL,
+					dataPath, mode="wb", quiet=!verbose)
+			}else{
+				# download the code
+				download.file(primaryURL, dataPath, mode="wb", quiet=!verbose)
+			}
+
+			# do an MD5check
+			dl_md5 <- tools::md5sum(dataPath)
+
+			# compare!
+			if(dl_md5!=md5){
+				stop("MD5 checksum failed. Unexpected downloaded file.")
+			}else{
+				if(verbose) message("MD5 checksum passed.")
+			}
+
+			# is it compressed? - uncompress it!
+			if(zip){
+				unzip(dataPath, exdir=itemDirPath)	
+			}
+
+		}
+
+	# there is a datadir
+	}else{
 		#check whether the data need to be downloaded or not. 
+		# list out the files
 		all<-list.files(datadir)
 		
-		# target
-		pathToArchive<- file.path(datadir, archive)
-			
-		# is the archive not downloaded?
-		# do a download
-		if(!any(all==archive)){
+		# the full path to the directory
+		itemDirPath <- file.path(datadir, itemDir)
+		# is the directory present? - if not, create it! 	
+		if(!any(all==itemDir)){
 
-			# download archive
-			if(is.null(userpwd)){
-				download.file(paste0(remote, link, "/", archive),pathToArchive, mode="wb", quiet=!verbose)
-			}else{
-				download.file(paste("ftp://", userpwd, "@",remote, link,"/", archive, sep = ""),pathToArchive, mode="wb", quiet=!verbose)
+			# create a directory there, where everything will be downloaded
+			suppressWarnings(dir.create(itemDirPath))
+		}
+
+		# check whether the files are actually there!
+		all<- list.files(itemDirPath)
+
+		# the code will be available here!
+		codePath <- file.path(itemDirPath, codefile)
+
+		# the data will be available here!
+		dataPath <- file.path(itemDirPath, datafile)
+
+		# is the codefile already there? No: download!
+		if(!any(all==codefile)){
+			# the link to the code file
+			codeURL <- paste0(remote, code, codefile)
+
+			if(verbose){
+				codes <- paste0(
+"\n------------------------------------------------------------
+Downloading import code.
+------------------------------------------------------------\n")
+				message(codes)
 			}
-		}
-
-		# and unzip to a temporary directory
-		unzip(pathToArchive, exdir=tempd)
-
-	# must download
-	}else{
-		# temporary files
-		temp <- tempfile()
-	
-		# download archive
-		if(is.null(userpwd)){
-			download.file(paste0(remote, link, "/", archive),temp, mode="wb", quiet=!verbose)
-		}else{
-			download.file(paste0("ftp://", userpwd, "@",remote, link,"/", archive,  sep = ""),temp, mode="wb", quiet=!verbose)
-		}
+			# do an actual download
+			if(curl){
+				curl::curl_download(
+					codeURL,
+					codePath, mode="wb", quiet=!verbose)
+			}else{
+				# download the code
+				download.file(codeURL, codePath, mode="wb", quiet=!verbose)
+			}
+		}				
 		
-		# unzip it in temporary directory
-		unzip(temp, exdir=tempd)
-	
-		# get rid of the archive
-		unlink(temp)
+		# is the datafile already there
+		if(!any(all==datafile)){
+
+			if(verbose){
+				codes <- paste0(
+"\n------------------------------------------------------------
+Downloading data file.
+------------------------------------------------------------\n")
+				message(codes)
+			}
+			# execute the download
+			if(curl){
+				curl::curl_download(
+					primaryURL,
+					dataPath, mode="wb", quiet=!verbose)
+			}else{
+				# download the code
+				download.file(primaryURL, dataPath, mode="wb", quiet=!verbose)
+			}
+
+			# do an MD5check
+			dl_md5 <- tools::md5sum(dataPath)
+		}				
+
+		# is it compressed? - uncompress it!
+		if(zip){
+			# create a temporary directory to unzip into
+			tempd <- tempdir()
+			# this will be the operating directory 
+			itemDirPath <- file.path(tempd, itemDir)
+
+			# make sure this is there!
+			suppressWarnings(dir.create(itemDirPath))
+			
+			# unzip to temporary!
+			unzip(dataPath, exdir=itemDirPath)	
+		}
+
 	}
-	
-	# variable directory
-	varDir <- file.path(tempd, gsub(".zip", "", archive))
 
-	# loading script - variable specific
-	loadScript <- gsub(".zip", ".R", archive)
+	# load in the downloaded code
+	source(codePath)
 
-	# source the R file associated with the variable
-	source(file.path(varDir, loadScript))
+	# then invoke replaced function in package namespace
+#	obj <- loadVar(dir=itemDirPath, verbose=verbose, ...)
+	obj <- loadVar(dir=itemDirPath, verbose=verbose, attach=attach, ...)
 
-	# run the function that loads in the variable and save it
-	varObj <- loadVar(dir=varDir, verbose=verbose, ...)
+	# if there was a temporary directory
+	# 1. entire download was there
+	# 2. archive had to be unzipped
+	if(is.null(datadir) | zip ) {
+		unlink(tempd)
+	}
 
-	# 'get rid of' temporary directory
-	unlink(tempd)
-
-	# return object
-	return(varObj)
+	# result
+	return(obj)
 
 }
 
 # placeholder function in package namespace
-loadVar <- function(dir, verbose){
+loadVar <- function(dir, verbose, attach){
 	stop("If this method is run and you see this, then you have encountered an error.")
 }
 
-
-# Function to prepare an attributes list 
-ChronoAttributes <- function(dat=NULL, var=NULL, res=NULL, ver=NULL, reg=NULL,...){
-
-	# general attributes
-	baseList <- list(dat=dat, var=var, res=res, ver=ver)
-
-	# reference of the archive
-	baseList$reference <- unique(reg$citation)
-	
-	# when was the archive downloaded
-	baseList$downloadDate <- Sys.time()
-
-	# when was the archive accessed?
-	baseList$accessDate <- reg$access_date
-
-	# original version
-	baseList$info <- reg$info
-
-	# API call
-	baseList$API <- reg$API
-
-	baseList$additional <- list(...)
-
-
-	if(is.null(baseList$info)){
-		baseList$info <- "https://www.evolv-ed.net/"
-
-	}
-	return(baseList)
-}
-
-# function to combine RasterArray variables
-CombineVars <- function(theList){
-	# method 1. RasterArray combination
-	classes <- unique(unlist(lapply(theList, class)))
-	
-	happened <- FALSE
-	if(length(classes)==1){
-		# RasterArray case
-		if(classes=="RasterArray"){
-			# vectors
-			extents <- lapply(theList, extent)
-			combined <-  lapply(theList, extent)
-			xRes <- rep(NA, length(theList))
-			yRes <- rep(NA, length(theList))
-			xmin <- rep(NA, length(theList))
-			xmax <- rep(NA, length(theList))
-			ymin <- rep(NA, length(theList))
-			ymax <- rep(NA, length(theList))
-			crss <- rep(NA, length(theList))
-
-			# iterate for every list item
-			for(j in 1:length(theList)){
-				ex <- extent(theList[[j]])
-				re <- res(theList[[j]])
-
-				xRes[j] <- re[1]
-				yRes[j] <- re[2]
-				xmin[j] <- ex[1]
-				xmax[j] <- ex[2]
-				ymin[j] <- ex[3]
-				ymax[j] <- ex[4]
-				crss[j] <- crs(theList[[j]])
-			}
-			# assume things will happen from now
-			happened <- TRUE
-
-			if(length(unique(xRes))!=1 | length(unique(yRes))!=1){
-				warning("Resolutions mismatch, returning a list. ", call.=FALSE)
-				happened <- FALSE
-			}
-
-			if(length(unique(xmin))!=1 | length(unique(ymin))!=1 | length(unique(xmax))!=1 | length(unique(ymax))!=1){
-				warning("Extents mismatch, returning a list. ", call.=FALSE)
-				happened <- FALSE
-			}
-
-			if(length(unique(crss))!=1){
-				warning("CRSs mismatch, returning a list. ", call.=FALSE)
-				happened <- FALSE
-			}
-
-			# things do happen!!
-			if(happened){
-				# first variable
-				combined <- theList[[1]]
-
-				for(j in 2:length(theList)){
-					combined <- cbind(combined, theList[[j]])
-				}
-				colnames(combined) <- names(theList)
-				
-			}
-
-		}
-	}
-
-	if(!happened){
-		combined <- theList 
-	}
-		
-	# write the chronoattributes - have to be a separate loop!
-	attributes(combined)$chronosphere <- attributes(theList[[1]])$chronosphere
-
-	for(j in 2:length(theList)){
-		attributes(combined)$chronosphere$var <- c(attributes(combined)$chronosphere$var, attributes(theList[[j]])$chronosphere$var)
-		attributes(combined)$chronosphere$res <- c(attributes(combined)$chronosphere$res, attributes(theList[[j]])$chronosphere$res)
-		attributes(combined)$chronosphere$ver <- c(attributes(combined)$chronosphere$ver, attributes(theList[[j]])$chronosphere$ver)
-		attributes(combined)$chronosphere$reference <- c(attributes(combined)$chronosphere$reference, attributes(theList[[j]])$chronosphere$reference)
-		attributes(combined)$chronosphere$accessDate <- c(attributes(combined)$chronosphere$accessDate, attributes(theList[[j]])$chronosphere$accessDate)
-		attributes(combined)$chronosphere$additional <- c(attributes(combined)$chronosphere$additional, attributes(theList[[j]])$chronosphere$additional)
-		attributes(combined)$chronosphere$info <- c(attributes(combined)$chronosphere$info, attributes(theList[[j]])$chronosphere$info)
-		attributes(combined)$chronosphere$API <- c(attributes(combined)$chronosphere$API, attributes(theList[[j]])$chronosphere$API)
-	}
-
-	return(combined)
-	
-
-}
 

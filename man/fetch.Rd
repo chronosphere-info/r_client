@@ -5,14 +5,18 @@
 \title{Data fetching}
 \usage{
 fetch(
-  dat,
+  dat = NULL,
   var = NULL,
   ver = NULL,
   res = NULL,
+  ext = NULL,
+  class = NULL,
+  item = NULL,
   datadir = NULL,
   verbose = TRUE,
   call = FALSE,
   call.expr = FALSE,
+  attach = TRUE,
   ...
 )
 }
@@ -25,6 +29,12 @@ fetch(
 
 \item{res}{(\code{character} or \code{numeric}) The resolution of raster layers. This has to be the same for all RasterLayers that make up the variable.}
 
+\item{ext}{(\code{character}) File extension of the used data file.}
+
+\item{class}{(\code{character}) Class of the returned object, if not the default.}
+
+\item{item}{(\code{numeric}) The item ID that is to be downloaded. This setting overrides all other identifiers.}
+
 \item{datadir}{(\code{character}) Directory where downloaded files are kept. Individual layers will be looked up from the directory if this is given, and will be downloaded if they are not found. The default \code{NULL} option will download data to a temporary directory that exists only until the R session ends.}
 
 \item{verbose}{(\code{logical}) Should console feedback during download be displayed?}
@@ -32,6 +42,8 @@ fetch(
 \item{call}{(\code{logical}) If set to \code{TRUE} the function call is returned instead of the object.}
 
 \item{call.expr}{(\code{logical}) If \code{call} is set to \code{TRUE}, then should the call be returned as an \code{expression} (\code{TRUE}) or a message (\code{FALSE})?}
+
+\item{attach}{(\code{logical}) If the item has required packages, should these be attached?}
 
 \item{...}{Arguments passed to variable-specific loading functions.}
 }

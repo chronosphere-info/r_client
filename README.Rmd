@@ -15,18 +15,15 @@ library(badger)
 `r badge_cran_checks("chronosphere")`
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3530703.svg)](https://doi.org/10.5281/zenodo.3530703)
 
-Earth System History Variables
+Earth System Variables
 
 (Ádám T. Kocsis and Nussaïbah B. Raja)
 
-The purpose of the 'chronosphere' package is to facilitate spatially explicit analyses of deep time paleoenvironmental/paleoecological research. 
+The purpose of the 'chronosphere' package is to facilitate analyses of deep time paleoenvironmental/paleoecological research. 
 
-The project is developed under the umbrella of the DFG Research Unit TERSANE2 (For 2332) in collaboration with Christopher Scotese and Paul Valdes. The package will serve as a gateway to deep time global climate model results and plate tectonic/paleonvironmental reconstructions. It also implements query functions to the GPlates Web Service allowing users to reconstruct coordinates without leaving the R environment. 
+The project is developed under the umbrella of the DFG Research Unit TERSANE2 (For 2332) in collaboration with Christopher Scotese and Paul Valdes. The package serves as a gateway to the chronos database that includes various data objects, such as deep time global climate model results and plate tectonic/paleonvironmental reconstructions. 
 
 This is a beta version. Much of the functionality is not yet available/perfect and data access is restricted to publicly available datasets only. 
-
-See the blog entry below for an example application:
-https://www.evolv-ed.net/post/chronosphere-paleomap/chronosphere-paleomap/
 
 # Installing
 

@@ -4,10 +4,19 @@
 \alias{reference}
 \title{Retrieve citation of data object}
 \usage{
-reference(dat, var = NULL, ver = NULL, print = TRUE, prefix = "")
+reference(
+  dat,
+  bibtex = FALSE,
+  var = NULL,
+  ver = NULL,
+  print = TRUE,
+  prefix = ""
+)
 }
 \arguments{
 \item{dat}{(\code{characater}) Object downloaded with \code{\link{fetch}} or the database identifier string.}
+
+\item{bibtex}{(\code{logical}) Should a bibtex be printed/returned?}
 
 \item{var}{(\code{character}) In case \code{dat} is \code{character}, the variable identifier.}
 

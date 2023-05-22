@@ -3,13 +3,9 @@
 \docType{package}
 \name{chronosphere}
 \alias{chronosphere}
-\title{Earth System History Variables}
-\description{
-The purpose of the 'chronosphere' project is to facilitate spatially explicit analyses of (paleo)environmental/ecological research. The package serves as a gateway to plate tectonic reconstructions, deep time global climate model results as well as fossil occurrence datasets such as the Paleobiology Database \url{https://paleobiodb.org/} and the PaleoReefs Database \url{https://www.paleo-reefs.pal.uni-erlangen.de/}. Environmental data stored on a remote server can be downloaded and imported directly to the R environment. Query functions to the GPlates (\url{https://www.gplates.org/}) desktop application or the GPlates Web Service (\url{https://gws.gplates.org/}) allow users to reconstruct coordinates, static plates, and Spatial objects. A wrapper class \code{\link{RasterArray}} is implemented around the \code{\link[raster:raster]{RasterLayer}} class, allowing the organization of spatially explicit raster data in \code{n}-dimensional arrays. The project is developed under the umbrella of the DFG (Deutsche Forschungsgemeinschaft) Research Unit TERSANE2 (For 2332, TEmperature Related Stressors in ANcient Extinctions).
-}
-\details{
-This is still the Beta version. As is R, this is free software and comes with ABSOLUTELY NO WARRANTY. Nevertheless, notes about found bugs and suggestions are more than welcome.
-}
+\title{Evolving Earth System Variables
+The purpose of the 'chronosphere' project is to increase reproducibility and establish version tracking of results from(paleo)environmental/ecological research. The inherent database maps data files and import code to programming classes and allows access to these items via files deposited in public repositories.#' 
+This is still the Release Candidate version. As is R, this is free software and comes with ABSOLUTELY NO WARRANTY.  Nevertheless, notes about found bugs and suggestions are more than welcome. The chronosphere links to data and code deposited on public servers, which can be inspected using the code and data URLs of the items (run \code{datasets(master=TRUE)}). By using this package you agree that you take responsibility for the items that you download. Never run \code{fetch()} as a superuser or with administrative privileges, which can open up a security hole to be exploited in case the remote servers get hijacked.}
 \author{
-Adam T. Kocsis (adam.t.kocsis@gmail.com) and Nussaibah B. Raja
+Adam T. Kocsis (adam.t.kocsis@gmail.com)
 }

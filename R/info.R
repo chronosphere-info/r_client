@@ -5,17 +5,23 @@
 #' The function is intended to be updated to handle BibTEX entries.
 #' 
 #' @param dat (\code{characater}) Object downloaded with \code{\link{fetch}} or the database identifier string.
+#' @param bibtex (\code{logical}) Should a bibtex be printed/returned? 
 #' @param var (\code{character}) In case \code{dat} is \code{character}, the variable identifier.
 #' @param ver (\code{character}) In case \code{dat} is \code{character}, the version identifier.
 #' @param print (\code{logical}) Should the citations be printed to the console, or returned as a \code{character} vector.
 #' @param prefix (\code{characater}) In case the output is printed on the console. Use this to include a prefix before every entry.
 #' 
 #' @export
-reference <- function(dat, var=NULL, ver=NULL, print=TRUE, prefix=""){
+reference <- function(dat, bibtex=FALSE, var=NULL, ver=NULL, print=TRUE, prefix=""){
 	# get the appropriate refernce string
 	if(is.chronosphere(dat)){
-		# get the attributes
-		refString <- attributes(dat)$chronosphere$reference
+		if(bibtex){
+
+		}else{
+			# get the attributes
+			refString <- attributes(dat)$chronosphere$reference
+
+		}
 	}else{
 		if("character"%in%class(dat)){
 			# download a copy of the dataset
