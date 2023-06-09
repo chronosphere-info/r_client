@@ -22,7 +22,7 @@
 #' # call repetition
 #' fetch(dat="paleomap", var="dem", call=TRUE)
 #' # A locally-present object, in package's directory
-#' a <- fetch(dat="SOM-zaffos-fragmentation",
+#' a <- fetch(dat="SOM-reddin-sensitivity",
 #'   datadir=system.file("extdata", package="chronosphere"))
 #' @export
 #' @return An object that matches the 'type' field of the varibles in the output of the \code{\link{datasets}} function.

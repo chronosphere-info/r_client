@@ -13,7 +13,7 @@
 #' @return A \code{data.frame} class object.
 #' @examples
 #' # available datasets and variables - proper
-#' # ind <- datasets()
+#' # index <- datasets()
 #' # all available versions and resolutions in database 'pbdb'
 #' # oneDat <- datasets("pbdb")
 #' ###################################
@@ -23,7 +23,7 @@
 #'   datadir=system.file("extdata", package="chronosphere"))
 #' # one available archive
 #' ind <- datasets(
-#'   dat="SOM-zaffos-fragmentation",
+#'   dat="SOM-reddin-sensitivity",
 #'   datadir=system.file("extdata", package="chronosphere"))
 #' @export
 datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greetings=TRUE, all=FALSE){
