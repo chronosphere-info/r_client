@@ -55,8 +55,11 @@ datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greeti
 
 	# a data directory is given
 	if(!is.null(datadir)){
+		# try to create an R directory to store entries
+		dir.create(file.path(datadir, "R"), showWarnings=FALSE)
+
 		# list all files
-		allFiles<-list.files(datadir)
+		allFiles<-file.path("R", list.files(file.path(datadir, "R")))
 
 		# do any of them match? 
 		if(any(datfile==allFiles)){
@@ -69,6 +72,7 @@ datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greeti
 			if(sum(c("dat", "var")%in%colnames(ret))==2){
 				download <- FALSE
 			} # no? ->download
+			if (verbose) message("Found downloaded registry tables.")
 		} # no? ->download
 
 		# you can set target file, won't change anything if there is nothing to download
@@ -84,6 +88,7 @@ datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greeti
 
 	# go on with download
 	if(download){
+		if (verbose) message("Downloading registry tables.")
 		# URL to the registry server
 		regserv <- paste0(remote, registers )
 		#  the public download

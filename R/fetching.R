@@ -366,6 +366,7 @@ DownloadItem <- function(details, datadir=NULL, verbose=TRUE, attach=TRUE, ...){
 
 
 	# in any case, the downloaded things will land in a specific directory
+	# need to put this into an R- specific directory
 	itemDir <- paste(dat, var, ver, item, sep="_")
 	
 	# do we need unzipping?
@@ -389,7 +390,7 @@ DownloadItem <- function(details, datadir=NULL, verbose=TRUE, attach=TRUE, ...){
 		itemDirPath <- file.path(tempd, itemDir)
 
 		# create a directory there, where everything will be downloaded
-		suppressWarnings(dir.create(itemDirPath))
+		dir.create(itemDirPath, showWarnings=FALSE)
 	
 		# the link to the code file
 		codeURL <- paste0(remote, code, codefile)
@@ -455,9 +456,12 @@ Downloading data file.
 
 	# there is a datadir
 	}else{
+		# add an R directory to this
+		itemDir <- file.path("R", itemDir)
+
 		#check whether the data need to be downloaded or not. 
 		# list out the files
-		all<-list.files(datadir)
+		all<-file.path("R", list.files(file.path("R", datadir)))
 		
 		# the full path to the directory
 		itemDirPath <- file.path(datadir, itemDir)
@@ -498,6 +502,16 @@ Downloading import code.
 				# download the code
 				download.file(codeURL, codePath, mode="wb", quiet=!verbose)
 			}
+		}else{
+
+			if(verbose){
+				codes <- paste0(
+"\n------------------------------------------------------------
+Loading downloaded import code.
+------------------------------------------------------------\n")
+				message(codes)
+			}
+			
 		}				
 		
 		# is the datafile already there
@@ -522,6 +536,14 @@ Downloading data file.
 
 			# do an MD5check
 			dl_md5 <- tools::md5sum(dataPath)
+		}else{
+			if(verbose){
+				codes <- paste0(
+"\n------------------------------------------------------------
+Loading downloaded data file.
+------------------------------------------------------------\n")
+				message(codes)
+			}
 		}				
 
 		# is it compressed? - uncompress it!
