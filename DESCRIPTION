@@ -1,7 +1,7 @@
 Package: chronosphere
 Type: Package
 Title: Evolving Earth System Variables
-Version: 1.0.0
+Version: 0.5.0
 Authors@R: c(
 	person(given="Adam T.", family="Kocsis", role=c("cre", "aut"),
 		   email="adam.t.kocsis@gmail.com", comment=c(ORCID="0000-0002-9028-665X")),
