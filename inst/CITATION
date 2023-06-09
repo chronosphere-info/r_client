@@ -1,13 +1,12 @@
 citHeader("To cite chronosphere in publications, use the following citation:")
 
 citEntry(entry = "misc",
-  title        = "chronosphere: Earth system history variables",
+  title        = "chronosphere: Evolving Earth System Variables",
   author       = personList(as.person("Ádám T. Kocsis"),as.person("Nussaibah B. Raja")),
   url          = "https://doi.org/10.5281/zenodo.3530703",
-  year		= 2020,
-
+  year		= 2023,
   textVersion  =
-  paste("Kocsis, Á.T., Raja, N.B. 2019",
-        "chronosphere: Earth system history variables. ",
+  paste("Kocsis, Á.T., Raja, N.B. 2013",
+        "chronosphere: Evolving Earth System Variables. ",
         "https://doi.org/10.1111/2041-210X.13161")
 )

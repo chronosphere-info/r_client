@@ -22,7 +22,7 @@
 #' # call repetition
 #' fetch(dat="paleomap", var="dem", call=TRUE)
 #' # A locally-present object, in package's directory
-#' a <- fetch(dat="paleomap", var="model", 
+#' a <- fetch(dat="SOM-zaffos-fragmentation",
 #'   datadir=system.file("extdata", package="chronosphere"))
 #' @export
 #' @return An object that matches the 'type' field of the varibles in the output of the \code{\link{datasets}} function.
@@ -57,7 +57,7 @@ fetch <- function(dat=NULL, var=NULL, ver=NULL, res=NULL, ext=NULL, class=NULL, 
 			res=att$res, 
 			ext=att$ext, 
 			class=att$class, 
-			item=att$item, 
+#			item=att$item, 
 			datadir=att$datadir,
 			verbose=FALSE,
 			expr=call.expr)
@@ -83,7 +83,7 @@ fetch <- function(dat=NULL, var=NULL, ver=NULL, res=NULL, ext=NULL, class=NULL, 
 		# return a call
 		if(call){
 			# construct function call
-			theCall <- ChronoCall(dat, var, ver, res, ext, class, item, datadir, verbose, expr=call.expr,...)
+			theCall <- ChronoCall(dat, var, ver, res, ext, class, datadir, verbose, expr=call.expr,...)
 
 			# return if it is an expression
 			if(!is.null(theCall)) return(theCall)

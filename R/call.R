@@ -1,5 +1,5 @@
 # function to construct a chronosphere call
-ChronoCall <- function(dat, var, ver, res, datadir, verbose=FALSE, expr=FALSE,...){
+ChronoCall <- function(dat, var, ver, res, ext,class, datadir, verbose=FALSE, expr=FALSE,...){
 	# construct a function call
 	theCall<-paste0('fetch(',
 		'dat="', dat, '"')
@@ -27,6 +27,22 @@ ChronoCall <- function(dat, var, ver, res, datadir, verbose=FALSE, expr=FALSE,..
 			theCall <- paste0(theCall, ", res=\"", res,"\"")	
 		}else{
 			theCall <- paste0(theCall, ", res=c(\"", paste(res, collapse="\", \""),"\")")
+		}
+	}
+
+	if(!is.null(ext)){
+		if(length(ext)==1){
+			theCall <- paste0(theCall, ", ext=\"", ext,"\"")	
+		}else{
+			theCall <- paste0(theCall, ", ext=c(\"", paste(ext, collapse="\", \""),"\")")
+		}
+	}
+
+	if(!is.null(class)){
+		if(length(class)==1){
+			theCall <- paste0(theCall, ", class=\"", class,"\"")	
+		}else{
+			theCall <- paste0(theCall, ", class=c(\"", paste(class, collapse="\", \""),"\")")
 		}
 	}
 

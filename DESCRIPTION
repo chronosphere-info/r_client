@@ -9,7 +9,7 @@ Authors@R: c(
 	person(given="Deutsche Forschungsgemeinschaft", role="fnd"),
 	person(given="FAU GeoZentrum Nordbayern", role="fnd"))
 Maintainer: Adam T. Kocsis <adam.t.kocsis@gmail.com>
-Description: The purpose of the 'chronosphere' project is to increase reproducibility and establish version tracking of results from(paleo)environmental/ecological research. The inherent database maps data files and import code to programming classes and allows access to these items via files deposited in public repositories.  
+Description: The purpose of the 'chronosphere' project is to increase reproducibility and establish version tracking of results from (paleo)environmental/ecological research. The inherent database maps data files and import code to programming classes and allows access to these items via files deposited in public repositories.  
 License: CC BY 4.0
 Collate:
 	global.R

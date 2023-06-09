@@ -14,12 +14,17 @@
 #' @examples
 #' # available datasets and variables - proper
 #' # ind <- datasets()
-#' # available datasets and variables
-#' # just one example archive is available locally
+#' # all available versions and resolutions in database 'pbdb'
+#' # oneDat <- datasets("pbdb")
+#' ###################################
+#' # local example INCOMPLETE - does not connect to the internet
+#  # available datasets
 #' ind <- datasets(
 #'   datadir=system.file("extdata", package="chronosphere"))
-#' # all available versions and resolutions in database 'paleomap'
-#' # oneDat <- datasets("pbdb")
+#' # one available archive
+#' ind <- datasets(
+#'   dat="SOM-zaffos-fragmentation",
+#'   datadir=system.file("extdata", package="chronosphere"))
 #' @export
 datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greetings=TRUE, all=FALSE){
 
