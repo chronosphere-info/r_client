@@ -1,15 +1,16 @@
 # Change log of the R package 'chronosphere'
 
-# chronosphere 1.0.0 - 2023-05-23
+# chronosphere 0.5.0 - 2023-05-23
 ### Added
 - the configure() function to support setting of global variables: curl, timeout and remote (debugging)
 - tinytest - dependencies
-- curl as suggest, curl support for datasets()
+- curl as suggest, curl support for datasets() and fetch()
+- new  Example data to show the use of datadir
 
 ### Removed
 - plate tectonic reconstruction related functionality to package 'rgplates'
 - Spatial and RasterArrays refactored into package 'via'
-- shaper() function, color palettes() to restools (not yet)
+- shaper() function, color palettes() to 'restools' (to be published soon)
 
 # [0.4.1] - 2021-04-16 (build 80)
 ### Added 

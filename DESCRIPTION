@@ -9,7 +9,7 @@ Authors@R: c(
 	person(given="Deutsche Forschungsgemeinschaft", role="fnd"),
 	person(given="FAU GeoZentrum Nordbayern", role="fnd"))
 Maintainer: Adam T. Kocsis <adam.t.kocsis@gmail.com>
-Description: The purpose of the 'chronosphere' project is to increase reproducibility and establish version tracking of results from (paleo)environmental/ecological research. The inherent database maps data files and import code to programming classes and allows access to these items via files deposited in public repositories.  
+Description: The implemented functions allow the query, download, and import of remotely-stored and version-controlled data items. The inherent meta-database maps data files and import code to programming classes and allows access to these items via files deposited in public repositories. The purpose of the project is to increase reproducibility and establish version tracking of results from (paleo)environmental/ecological research.
 License: CC BY 4.0
 Collate:
 	global.R
@@ -20,22 +20,16 @@ Collate:
 	info.R
 	utility.R
 	zzz.R
-Date: 2023-05-22
+Date: 2023-06-13
 BugReports: https://github.com/chronosphere-portal/r_package/issues
 Encoding: UTF-8
-LazyData: false
 Depends:
     R (>= 3.5.0) 
 Imports: 
-	methods,
-	grDevices,
 	utils,
 	tools
 NeedsCompilation: no
-RoxygenNote: 7.1.2
-VignetteBuilder: knitr
+RoxygenNote: 7.2.3
 Suggests:
 	curl,
-	tinytest,
-    knitr,
-    rmarkdown
+	tinytest

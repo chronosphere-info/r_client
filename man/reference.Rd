@@ -26,9 +26,19 @@ reference(
 
 \item{prefix}{(\code{characater}) In case the output is printed on the console. Use this to include a prefix before every entry.}
 }
+\value{
+By default the function has no return value. If \code{print=FALSE}, the function will return a reference character string.
+}
 \description{
 The function prints or returns the citation string of a chosen object/item.
 }
 \details{
 The function is intended to be updated to handle BibTEX entries.
+}
+\examples{
+# A locally-present object, in package's directory
+one <- fetch(dat="SOM-zaffos-fragmentation",
+  datadir=system.file("extdata", package="chronosphere"))
+# its reference
+reference(one)
 }

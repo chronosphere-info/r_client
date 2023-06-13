@@ -21,6 +21,7 @@ timeout <- 300
 #' @param curl Logical value of the 'curl' package variable.
 #' @examples
 #' configure(curl=FALSE)
+#' @return The function has no return value.
 #' @export
 configure<- function(timeout=NULL, remote=NULL, curl=NULL){
 	if(!is.null(curl)){

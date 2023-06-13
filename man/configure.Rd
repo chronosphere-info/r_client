@@ -13,6 +13,9 @@ configure(timeout = NULL, remote = NULL, curl = NULL)
 
 \item{curl}{Logical value of the 'curl' package variable.}
 }
+\value{
+The function has no return value.
+}
 \description{
 This function will allow you to set package variables.
 }

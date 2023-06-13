@@ -19,13 +19,14 @@
 #' @examples
 #' # An actual download call
 #' # a <- fetch(dat="paleomap", var="dem")
-#' # call repetition
-#' fetch(dat="paleomap", var="dem", call=TRUE)
 #' # A locally-present object, in package's directory
-#' a <- fetch(dat="SOM-reddin-sensitivity",
+#' a <- fetch(dat="SOM-zaffos-fragmentation",
 #'   datadir=system.file("extdata", package="chronosphere"))
+#' # call repetition
+#' fetch(a, call=TRUE)
+
 #' @export
-#' @return An object that matches the 'type' field of the varibles in the output of the \code{\link{datasets}} function.
+#' @return An object from a class that matches the 'class' coordinate of the item.
 fetch <- function(dat=NULL, var=NULL, ver=NULL, res=NULL, ext=NULL, class=NULL, item=NULL,  datadir=NULL, verbose=TRUE, call=FALSE, call.expr=FALSE, attach=TRUE, ...){
 	## dat="pbdb"
 	## var="baseref"
@@ -110,7 +111,7 @@ Accessing chronos registry tables.
 			if(verbose){
 				dets <- paste0(
 "\n------------------------------------------------------------
-Accessing item no. " ,itemDetails$itemID ,  ", dat:", itemDetails$dat, ", var: ", itemDetails$var, ", ver: ", itemDetails$ver, ".
+Item no. " ,itemDetails$itemID ,  ", dat:", itemDetails$dat, ", var: ", itemDetails$var, ", ver: ", itemDetails$ver, ", res: ", itemDetails$resolution, ".
 ------------------------------------------------------------\n")
 				message(dets)
 			}

@@ -48,7 +48,7 @@ fetch(
 \item{...}{Arguments passed to variable-specific loading functions.}
 }
 \value{
-An object that matches the 'type' field of the varibles in the output of the \code{\link{datasets}} function.
+An object from a class that matches the 'class' coordinate of the item.
 }
 \description{
 Function to download and attach variables in the \code{chronosphere} package
@@ -59,9 +59,9 @@ Use the function \code{\link{datasets}} to find available variables.
 \examples{
 # An actual download call
 # a <- fetch(dat="paleomap", var="dem")
-# call repetition
-fetch(dat="paleomap", var="dem", call=TRUE)
 # A locally-present object, in package's directory
-a <- fetch(dat="paleomap", var="model", 
+a <- fetch(dat="SOM-zaffos-fragmentation",
   datadir=system.file("extdata", package="chronosphere"))
+# call repetition
+fetch(a, call=TRUE)
 }

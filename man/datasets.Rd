@@ -37,11 +37,15 @@ The function will download a single .csv file and attach it as a \code{data.fram
 }
 \examples{
 # available datasets and variables - proper
-# ind <- datasets()
-# available datasets and variables
-# just one example archive is available locally
+# index <- datasets()
+# all available versions and resolutions in database 'pbdb'
+# oneDat <- datasets("pbdb")
+###################################
+# local example INCOMPLETE - does not connect to the internet
 ind <- datasets(
   datadir=system.file("extdata", package="chronosphere"))
-# all available versions and resolutions in database 'paleomap'
-# oneDat <- datasets("pbdb")
+# one available archive
+ind <- datasets(
+  dat="SOM-zaffos-fragmentation",
+  datadir=system.file("extdata", package="chronosphere"))
 }

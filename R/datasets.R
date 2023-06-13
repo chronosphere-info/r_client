@@ -23,7 +23,7 @@
 #'   datadir=system.file("extdata", package="chronosphere"))
 #' # one available archive
 #' ind <- datasets(
-#'   dat="SOM-reddin-sensitivity",
+#'   dat="SOM-zaffos-fragmentation",
 #'   datadir=system.file("extdata", package="chronosphere"))
 #' @export
 datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greetings=TRUE, all=FALSE){
@@ -189,6 +189,9 @@ datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greeti
 		# get rid of the  temporary file
 		if(is.null(datadir)) unlink(tempReg)
 		
+	}
+	if(master){
+		ret$codeURL <- file.path(remote,"code/R",ret$codeFile)
 	}
 
 	return(ret)

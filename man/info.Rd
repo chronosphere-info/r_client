@@ -2,7 +2,7 @@
 % Please edit documentation in R/info.R
 \name{info}
 \alias{info}
-\title{Documentation page of a variable}
+\title{Documentation page of a variable (Remote server under constructions)}
 \usage{
 info(dat, var)
 }
@@ -10,6 +10,9 @@ info(dat, var)
 \item{dat}{(\code{characater}) Object downloaded with \code{\link{fetch}} or the database identifier string.}
 
 \item{var}{(\code{character}) In case \code{dat} is \code{character}, the variable identifier.}
+}
+\value{
+The function has no return value.
 }
 \description{
 This is a temporary function that takes the user to the Evolv-ED blog.

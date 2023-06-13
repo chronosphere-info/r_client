@@ -12,6 +12,13 @@
 #' @param prefix (\code{characater}) In case the output is printed on the console. Use this to include a prefix before every entry.
 #' 
 #' @export
+#' @return By default the function has no return value. If \code{print=FALSE}, the function will return a reference character string.
+#' @examples
+#' # A locally-present object, in package's directory
+#' one <- fetch(dat="SOM-zaffos-fragmentation",
+#'   datadir=system.file("extdata", package="chronosphere"))
+#' # its reference
+#' reference(one)
 reference <- function(dat, bibtex=FALSE, var=NULL, ver=NULL, print=TRUE, prefix=""){
 	# get the appropriate refernce string
 	if(is.chronosphere(dat)){
@@ -49,7 +56,7 @@ reference <- function(dat, bibtex=FALSE, var=NULL, ver=NULL, print=TRUE, prefix=
 	}
 }
 
-#'Documentation page of a variable
+#'Documentation page of a variable (Remote server under constructions)
 #'
 #'This is a temporary function that takes the user to the Evolv-ED blog.
 #'
@@ -57,6 +64,7 @@ reference <- function(dat, bibtex=FALSE, var=NULL, ver=NULL, print=TRUE, prefix=
 #' @param var (\code{character}) In case \code{dat} is \code{character}, the variable identifier.
 #'
 #' @export
+#' @return The function has no return value.
 info <- function(dat, var){
 	# get the appropriate refernce string
 	if(is.chronosphere(dat)){

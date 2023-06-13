@@ -6,7 +6,7 @@ expect_error(configure(curl=c(TRUE, FALSE)))
 # check whether it work
 if(requireNamespace("curl", quietly=TRUE)){
 	configure(curl=TRUE)
-	expect_true(chronosphere2:::curl)
+	expect_true(chronosphere:::curl)
 }
 # this should give an error
 if(!requireNamespace("curl", quietly=FALSE)){
@@ -14,4 +14,4 @@ if(!requireNamespace("curl", quietly=FALSE)){
 }
 # reverting should work all the time
 configure(curl=FALSE)
-expect_false(chronosphere2:::curl)
+expect_false(chronosphere:::curl)
