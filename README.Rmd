@@ -39,7 +39,7 @@ install.packages("chronosphere")
 
 The devel-version can be installed from the source archive deposited on this github repository. Open R and paste in: 
 ```r
-install.packages("https://github.com/chronosphere-portal/assets/raw/master/archive/r_client/chronosphere_0.5.0.tar.gz", repos=NULL, type="source")
+install.packages("https://github.com/chronosphere-portal/assets/raw/main/archive/r_client/chronosphere_0.5.0.tar.gz", repos=NULL, type="source")
 ```
 
 ## After install
