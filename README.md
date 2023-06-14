@@ -6,7 +6,7 @@
 [![](http://cranlogs.r-pkg.org/badges/grand-total/chronosphere?color=yellow)](https://cran.r-project.org/package=chronosphere)
 [![CRAN
 checks](https://badges.cranchecks.info/summary/chronosphere.svg)](https://cran.r-project.org/web/checks/check_results_chronosphere.html)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8039513.svg)](https://doi.org/10.5281/zenodo.8039513)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3525481.svg)](https://doi.org/10.5281/zenodo.3525481)
 
 Evolving Earth System Variables
 
@@ -59,6 +59,6 @@ Run datasets() to see the publicly available variables.
 
 # Cite as
 
-Kocsis, Ádám T. & Raja, Nussaïbah B. (2020). chronosphere: Earth system
-history variables (pre-release) (Version 0.3.0). Zenodo.
-<http://doi.org/10.5281/zenodo.3525482>
+Kocsis, Ádám T. & Raja, Nussaïbah B. (2023). chronosphere: Evolving
+Earth System History Variables (Version 0.5.0). Zenodo.
+<https://doi.org/10.5281/zenodo.3525481>
