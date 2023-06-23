@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   1_installation: 1_installation.html
   internals: internals.html
-last_built: 2023-06-23T13:25Z
+last_built: 2023-06-23T13:42Z
 urls:
   reference: https://chronosphere-portal.github.io/r_client/reference
   article: https://chronosphere-portal.github.io/r_client/articles
