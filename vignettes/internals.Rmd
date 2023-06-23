@@ -1,0 +1,37 @@
+---
+title: "Internals"
+description: >
+  Technial details of the package interals.
+---
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+</script>
+
+
+# Requirements
+
+## Imports
+
+Functions reused from other packages (necessary in all cases). These are part of the base R distribution.
+
+#### `utils`
+- `utils::read.csv()`: Used to read in registry tables.
+- `utils::download.file()`: Used for downloading with the default sockets.
+- `utils::unzip()`: Used for extracting zip archives during fetching.
+- `utils::flush.console()`: Used for console-feedback.
+- `utils::sessionInfo()`: Used to get the chronosphere version to display appropriate logs.
+- `utils::assignInNamespace()`: Used to replace variables in the package namespace, for instance by `configure()` and during fetching.
+- `utils::broweURL()`: Used to access the information on data items with `info()`.
+
+#### `tools`
+
+- `tools::md5sum()`: Used to check integrity of downloaded files.
+
+## Suggests
+
+Functions from some packages that are used by some functions only (optional):
+
+- [tinytest](https://cran.r-project.org/package=tinytest): Used to execute minimalstic testing on CRAN, and complete tests locally.
+- [curl](https://cran.r-project.org/package=curl): As an alternative to downloading with the default R sockets, CURL can be used as the main engine, which can be set by `configure()`.
+
+
