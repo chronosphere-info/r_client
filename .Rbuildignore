@@ -4,3 +4,5 @@ README.Rmd
 README.md
 README.html
 vignettes/
+_pkgdown
+pkgdown/
