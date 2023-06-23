@@ -11,7 +11,7 @@ library(badger)
 # chronosphere <img src="man/figures/logo.png" align="right" />
 
 
-`r badge_devel("chronosphere/r_client", "green")`
+`r badge_devel("chronosphere-portal/r_client", "green")`
 `r badge_cran_release("chronosphere", "blue")`
 `r badge_cran_download("chronosphere", "grand-total", "yellow")`
 `r badge_cran_checks("chronosphere")`  

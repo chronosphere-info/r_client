@@ -1,7 +1,7 @@
 
 # chronosphere <img src="man/figures/logo.png" align="right" />
 
-[![](https://img.shields.io/badge/devel%20version-0.5.0-green.svg)](https://github.com/chronosphere/r_client)
+[![](https://img.shields.io/badge/devel%20version-0.5.0-green.svg)](https://github.com/chronosphere-portal/r_client)
 [![](https://www.r-pkg.org/badges/version/chronosphere?color=blue)](https://cran.r-project.org/package=chronosphere)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/chronosphere?color=yellow)](https://cran.r-project.org/package=chronosphere)
 [![CRAN
@@ -22,6 +22,8 @@ allows access to these items via files deposited in public repositories.
 The purpose of the project is to increase reproducibility and establish
 version tracking of results from (paleo)environmental/ecological
 research.
+
+<br>
 
 ## Example
 
