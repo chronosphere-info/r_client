@@ -3,8 +3,10 @@ pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   1_installation: 1_installation.html
+  2_datasets: 2_datasets.html
+  3_fetching: 3_fetching.html
   internals: internals.html
-last_built: 2023-06-23T13:47Z
+last_built: 2023-06-26T12:39Z
 urls:
   reference: https://chronosphere-portal.github.io/r_client/reference
   article: https://chronosphere-portal.github.io/r_client/articles

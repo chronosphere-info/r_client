@@ -5,8 +5,9 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="Technial details of the package interals.">
-<title>Internals • chronosphere</title>
+<meta name="description" content="Options to download data items. 
+">
+<title>3. Fetching data items • chronosphere</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -19,8 +20,9 @@
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="Internals">
-<meta property="og:description" content="Technial details of the package interals.">
+<meta property="og:title" content="3. Fetching data items">
+<meta property="og:description" content="Options to download data items. 
+">
 <meta property="og:image" content="https://chronosphere-portal.github.io/r_client/reference/figures/logo.png">
 <meta property="og:image:alt" content="The chronosphere R package sticker.">
 <meta name="twitter:card" content="summary_large_image">
@@ -48,7 +50,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item dropdown">
+<li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-tutorials">Tutorials</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-tutorials">
     <a class="dropdown-item" href="../articles/1_installation.html">1. Installation</a>
@@ -59,7 +61,7 @@
 <li class="nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
-<li class="active nav-item dropdown">
+<li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-internals">Internals</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-internals">
     <a class="dropdown-item" href="../news/index.html">Changelog</a>
@@ -90,69 +92,30 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Internals</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>3. Fetching data items</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/chronosphere-portal/r_client/blob/HEAD/vignettes/internals.Rmd" class="external-link"><code>vignettes/internals.Rmd</code></a></small>
-      <div class="d-none name"><code>internals.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/chronosphere-portal/r_client/blob/HEAD/vignettes/3_fetching.Rmd" class="external-link"><code>vignettes/3_fetching.Rmd</code></a></small>
+      <div class="d-none name"><code>3_fetching.Rmd</code></div>
     </div>
 
     
     
-<script type="module">
-  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-</script><div class="section level2">
-<h2 id="requirements">Requirements<a class="anchor" aria-label="anchor" href="#requirements"></a>
+<p><br></p>
+<div class="section level2">
+<h2 id="stable-version-from-the-cran">Stable version from the CRAN<a class="anchor" aria-label="anchor" href="#stable-version-from-the-cran"></a>
 </h2>
-<div class="section level3">
-<h3 id="imports">Imports<a class="anchor" aria-label="anchor" href="#imports"></a>
-</h3>
-<p>Functions reused from other packages (necessary in all cases). These are part of the base R distribution.</p>
-<div class="section level5">
-<h5 id="utils">
-<code>utils</code><a class="anchor" aria-label="anchor" href="#utils"></a>
-</h5>
-<ul>
-<li>
-<code><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">utils::read.csv()</a></code>: Used to read in registry tables.</li>
-<li>
-<code><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">utils::download.file()</a></code>: Used for downloading with the default sockets.</li>
-<li>
-<code><a href="https://rdrr.io/r/utils/unzip.html" class="external-link">utils::unzip()</a></code>: Used for extracting zip archives during fetching.</li>
-<li>
-<code><a href="https://rdrr.io/r/utils/flush.console.html" class="external-link">utils::flush.console()</a></code>: Used for console-feedback.</li>
-<li>
-<code><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">utils::sessionInfo()</a></code>: Used to get the chronosphere version to display appropriate logs.</li>
-<li>
-<code><a href="https://rdrr.io/r/utils/getFromNamespace.html" class="external-link">utils::assignInNamespace()</a></code>: Used to replace variables in the package namespace, for instance by <code><a href="../reference/configure.html">configure()</a></code> and during fetching.</li>
-<li>
-<code>utils::broweURL()</code>: Used to access the information on data items with <code><a href="../reference/info.html">info()</a></code>.</li>
-</ul>
+<hr>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">chronosphere</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Chronosphere - Evolving Earth System Variables</span></span>
+<span><span class="co">#&gt; Important: never fetch data as a superuser / with admin. privileges!</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note that the package was split for efficient maintenance and development:</span></span>
+<span><span class="co">#&gt;  - Plate tectonic calculations -&gt; package 'rgplates'</span></span>
+<span><span class="co">#&gt;  - Arrays of raster and vector spatials -&gt; package 'via'</span></span></code></pre></div>
 </div>
-<div class="section level5">
-<h5 id="tools">
-<code>tools</code><a class="anchor" aria-label="anchor" href="#tools"></a>
-</h5>
-<ul>
-<li>
-<code><a href="https://rdrr.io/r/tools/md5sum.html" class="external-link">tools::md5sum()</a></code>: Used to check integrity of downloaded files.</li>
-</ul>
-</div>
-</div>
-<div class="section level3">
-<h3 id="suggests">Suggests<a class="anchor" aria-label="anchor" href="#suggests"></a>
-</h3>
-<p>Functions from some packages that are used by some functions only (optional):</p>
-<ul>
-<li>
-<a href="https://cran.r-project.org/package=tinytest" class="external-link">tinytest</a>: Used to execute minimalstic testing on CRAN, and complete tests locally.</li>
-<li>
-<a href="https://cran.r-project.org/package=curl" class="external-link">curl</a>: As an alternative to downloading with the default R sockets, CURL can be used as the main engine, which can be set by <code><a href="../reference/configure.html">configure()</a></code>.</li>
-</ul>
-</div>
-</div>
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
-    </nav></aside>
+  </main>
 </div>
 
 
