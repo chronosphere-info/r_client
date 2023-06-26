@@ -1,0 +1,27 @@
+---
+title: "3. Fetching data items"
+description: >
+  Options to download data items. 
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{3. Fetching data items}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+<br>
+
+## Stable version from the CRAN
+* * *
+
+
+```{r}
+library(chronosphere)
+```

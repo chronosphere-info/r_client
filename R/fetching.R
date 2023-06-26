@@ -5,7 +5,7 @@
 #' Use the function \code{\link{datasets}} to find available variables.
 #' @param dat (\code{character}) The dataset to get variables from.
 #' @param var (\code{character}) Vector of variable names to get.
-#' @param res (\code{character} or \code{numeric}) The resolution of raster layers. This has to be the same for all RasterLayers that make up the variable.
+#' @param res (\code{character} or \code{numeric}) The resolution strong of the data layers.
 #' @param ver (\code{character}) The version of the variable. Defaults to \code{NULL}, which will download the latest available version. We have to create a data table, which should be part of the package. This has to be searched for valid argument combinations. Right this is just a folder with a date.
 #' @param class (\code{character}) Class of the returned object, if not the default.
 #' @param ext (\code{character}) File extension of the used data file.

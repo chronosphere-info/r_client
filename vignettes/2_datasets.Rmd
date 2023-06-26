@@ -1,0 +1,52 @@
+---
+title: "2. Available data"
+description: >
+  Exploring available data items to download. 
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{2. Available data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+<br>
+
+
+
+## Accessing registry tables
+* * *
+
+To make 
+
+```{r}
+library(chronosphere)
+```
+
+Available database - variable combinations can be inspected with the `datasets()` funciton:
+
+```{r}
+dats <- datasets()
+str(dats)
+```
+
+
+## Database-specific variables
+
+The `datasets()` function in its default argumentation does not give information on what exact items are available. As these can be quite numerous. 
+
+To see what kind of data are available in the `paleomap` entries
+
+```{r}
+pm <- datasets('paleomap')
+str(pm)
+```
+
+
+If you want to explore all available data, you can inspect 

@@ -2,8 +2,6 @@
 #' 
 #' The function prints or returns the citation string of a chosen object/item.
 #'
-#' The function is intended to be updated to handle BibTEX entries.
-#' 
 #' @param dat (\code{characater}) Object downloaded with \code{\link{fetch}} or the database identifier string.
 #' @param bibtex (\code{logical}) Should a bibtex be printed/returned? 
 #' @param var (\code{character}) In case \code{dat} is \code{character}, the variable identifier.

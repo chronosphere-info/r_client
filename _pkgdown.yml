@@ -24,6 +24,10 @@ navbar:
       menu:
         - text: "1. Installation"
           href: articles/1_installation.html
+        - text: "2. Available data"
+          href: articles/2_datasets.html
+        - text: "3. Fetching data items"
+          href: articles/3_fetching.html
     internals:
       text: Internals
       menu: 

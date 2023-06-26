@@ -11,12 +11,12 @@ library(badger)
 # chronosphere <img src="man/figures/logo.png" align="right" />
 
 
-`r badge_devel("chronosphere-portal/r_client", "green")`
+`r badge_devel("chronosphere-info/r_client", "green")`
 `r badge_cran_release("chronosphere", "blue")`
 `r badge_cran_download("chronosphere", "grand-total", "yellow")`
 `r badge_cran_checks("chronosphere")`  
 
-### Evolving Earth System Variables for <a href="https://www.r-project.org/"><img style="position: relative; top: -3px;" src="man/figures/R_logo.png" width="40px"></a>
+### Evolving Earth System Data for <a href="https://www.r-project.org/"><img style="position: relative; top: -3px;" src="man/figures/R_logo.png" width="40px"></a>
 
 <br>
 
@@ -94,7 +94,7 @@ points(colls$lng, colls$lat, cex=0.3, pch=16, col="#54121212")
 
 The original chronosphere was a true **monolith** that included lots of additional functionality to manipulate paleoenvironmental data. For better compliance with [UNIX philosophy](https://en.wikipedia.org/wiki/Unix_philosophy) and more efficient distribution/development, the original package has been broken up to three R packages:
 
-- `chronosphere`: version-controlled data distribution.
+- [`chronosphere`](https://chronosphere.info/r_client/): version-controlled data distribution.
 - [`rgplates`](https://adamkocsis.github.io/rgplates/): functions related to tectonic reconstructions.
 - [`via`](https://adamkocsis.github.io/via/): Virtual Arrays for efficient organisation of high-dimensional data.
 

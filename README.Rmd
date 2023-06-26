@@ -17,7 +17,7 @@ library(badger)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3525481.svg)](https://doi.org/10.5281/zenodo.3525481)
 
 
-Evolving Earth System Variables
+Evolving Earth System Data
 
 The purpose of the 'chronosphere' project is to facilitate reproducible analyses of deep time paleoenvironmental/paleoecological research. 
 

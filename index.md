@@ -1,13 +1,13 @@
 
 # chronosphere <img src="man/figures/logo.png" align="right" />
 
-[![](https://img.shields.io/badge/devel%20version-0.5.0-green.svg)](https://github.com/chronosphere-portal/r_client)
+[![](https://img.shields.io/badge/devel%20version-0.5.0-green.svg)](https://github.com/chronosphere-info/r_client)
 [![](https://www.r-pkg.org/badges/version/chronosphere?color=blue)](https://cran.r-project.org/package=chronosphere)
-[![](http://cranlogs.r-pkg.org/badges/grand-total/chronosphere?color=yellow)](https://cran.r-project.org/package=chronosphere)
+[![](https://cranlogs.r-pkg.org/badges/grand-total/chronosphere?color=yellow)](https://cran.r-project.org/package=chronosphere)
 [![CRAN
 checks](https://badges.cranchecks.info/summary/chronosphere.svg)](https://cran.r-project.org/web/checks/check_results_chronosphere.html)
 
-### Evolving Earth System Variables for <a href="https://www.r-project.org/"><img style="position: relative; top: -3px;" src="man/figures/R_logo.png" width="40px"></a>
+### Evolving Earth System Data for <a href="https://www.r-project.org/"><img style="position: relative; top: -3px;" src="man/figures/R_logo.png" width="40px"></a>
 
 <br>
 
@@ -69,7 +69,8 @@ philosophy](https://en.wikipedia.org/wiki/Unix_philosophy) and more
 efficient distribution/development, the original package has been broken
 up to three R packages:
 
-  - `chronosphere`: version-controlled data distribution.
+  - [`chronosphere`](https://chronosphere.info/r_client/):
+    version-controlled data distribution.
   - [`rgplates`](https://adamkocsis.github.io/rgplates/): functions
     related to tectonic reconstructions.
   - [`via`](https://adamkocsis.github.io/via/): Virtual Arrays for
