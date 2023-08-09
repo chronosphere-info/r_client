@@ -2,11 +2,11 @@
 % Please edit documentation in R/fetching.R
 \name{fetch}
 \alias{fetch}
-\title{Data fetching}
+\title{Fetching items}
 \usage{
 fetch(
-  dat = NULL,
-  var = NULL,
+  src = NULL,
+  ser = NULL,
   ver = NULL,
   res = NULL,
   ext = NULL,
@@ -21,13 +21,13 @@ fetch(
 )
 }
 \arguments{
-\item{dat}{(\code{character}) The dataset to get variables from.}
+\item{src}{(\code{character}) The source group of series.}
 
-\item{var}{(\code{character}) Vector of variable names to get.}
+\item{ser}{(\code{character}) The series to get.}
 
-\item{ver}{(\code{character}) The version of the variable. Defaults to \code{NULL}, which will download the latest available version. We have to create a data table, which should be part of the package. This has to be searched for valid argument combinations. Right this is just a folder with a date.}
+\item{ver}{(\code{character}) The version of the product to download. Defaults to \code{NULL}, which will download the latest available version.}
 
-\item{res}{(\code{character} or \code{numeric}) The resolution of raster layers. This has to be the same for all RasterLayers that make up the variable.}
+\item{res}{(\code{character} or \code{numeric}) The resolution string of the data layers.}
 
 \item{ext}{(\code{character}) File extension of the used data file.}
 
@@ -35,7 +35,7 @@ fetch(
 
 \item{item}{(\code{numeric}) The item ID that is to be downloaded. This setting overrides all other identifiers.}
 
-\item{datadir}{(\code{character}) Directory where downloaded files are kept. Individual layers will be looked up from the directory if this is given, and will be downloaded if they are not found. The default \code{NULL} option will download data to a temporary directory that exists only until the R session ends.}
+\item{datadir}{(\code{character}) Directory where downloaded files are kept. Individual items will be looked up from the directory if this is given, and will be downloaded if they are not found. The default \code{NULL} option will download data to a temporary directory that exists only until the R session ends.}
 
 \item{verbose}{(\code{logical}) Should console feedback during download be displayed?}
 
@@ -45,22 +45,22 @@ fetch(
 
 \item{attach}{(\code{logical}) If the item has required packages, should these be attached?}
 
-\item{...}{Arguments passed to variable-specific loading functions.}
+\item{...}{Arguments passed to item-specific loading functions.}
 }
 \value{
 An object from a class that matches the 'class' coordinate of the item.
 }
 \description{
-Function to download and attach variables in the \code{chronosphere} package
+Function to download and attach items from the \code{chronosphere} archives
 }
 \details{
-Use the function \code{\link{datasets}} to find available variables.
+Use the function \code{\link{datasets}} to find available series.
 }
 \examples{
 # An actual download call
-# a <- fetch(dat="paleomap", var="dem")
+# a <- fetch(src="paleomap", ser="dem")
 # A locally-present object, in package's directory
-a <- fetch(dat="SOM-zaffos-fragmentation",
+a <- fetch(src="SOM-zaffos-fragmentation",
   datadir=system.file("extdata", package="chronosphere"))
 # call repetition
 fetch(a, call=TRUE)

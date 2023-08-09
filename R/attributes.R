@@ -1,8 +1,8 @@
 # Function to prepare an attributes list 
-ChronoAttributes <- function(dat, details,...){
+ChronoAttributes <- function(src, details,...){
 
 	# general attributes
-	baseList <- list(dat=details$dat, var=details$var, res=details$resolution, ver=details$ver, datafile=details$datafile, item=details$itemID)
+	baseList <- list(dat=details$src, var=details$ser, res=details$resolution, ver=details$ver, datafile=details$datafile, item=details$itemID)
 
 	# reference of the archive
 	baseList$reference <- unlist(strsplit(details$text, "\\|&\\|"))
@@ -21,7 +21,7 @@ ChronoAttributes <- function(dat, details,...){
 	baseList$downloadDate <- Sys.time()
 
 	# when was the archive accessed?
-	baseList$publishDate <- details$dataDatePublished
+	baseList$productDate <- details$productDate
 
 	# original version
 	baseList$infoURL <- details$infoURL
@@ -33,7 +33,7 @@ ChronoAttributes <- function(dat, details,...){
 
 
 	if(is.null(baseList$info)){
-		baseList$info <- "https://www.chronosphere-portal.org/"
+		baseList$info <- "https://www.chronosphere.info/"
 
 	}
 	return(baseList)

@@ -1,14 +1,14 @@
 
 # chronosphere <img src="man/figures/logo.png" align="right" width="120"/>
 
-[![](https://img.shields.io/badge/devel%20version-0.5.0-green.svg)](https://github.com/adamkocsis/chronosphere)
+[![](https://img.shields.io/badge/devel%20version-0.6.0-green.svg)](https://github.com/adamkocsis/chronosphere)
 [![](https://www.r-pkg.org/badges/version/chronosphere?color=orange)](https://cran.r-project.org/package=chronosphere)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/chronosphere?color=yellow)](https://cran.r-project.org/package=chronosphere)
 [![CRAN
 checks](https://badges.cranchecks.info/summary/chronosphere.svg)](https://cran.r-project.org/web/checks/check_results_chronosphere.html)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3525481.svg)](https://doi.org/10.5281/zenodo.3525481)
 
-Evolving Earth System Variables
+Evolving Earth System Data
 
 The purpose of the ‘chronosphere’ project is to facilitate reproducible
 analyses of deep time paleoenvironmental/paleoecological research.

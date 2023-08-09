@@ -1,4 +1,4 @@
-"topic","databaseName","dat","variableName","var","defaultVariable","defaultClass","infoURL","defaultVer"
+"topic","sourceName","src","seriesName","ser","defaultSeries","defaultClass","infoURL","defaultVer"
 NA,"Code, used data and supplementary items for the articled Increase in marine provinciality over the last 250 million years governed more by climate change than plate tectonics","SOM-kocsis-provinciality","S6. Interpolated  temperature  reconstructions  based  on  the  HadCM3L  climate  models  and  the PaleoMAP Paleocoastlines","sstinter",TRUE,"RasterArray","http://www.chronosphere-portal.org/","v1.0"
 NA,"Repository for: Reddin et al. 2020. Marine clade sensitivities to climate change conform across time scales","SOM-reddin-sensitivity","Modern metaanalysis support data","modern",TRUE,"data.frame","http://www.chronosphere-portal.org/","Version 1"
 "Paleogeography","The PALEOMAP project","paleomap","PaleoMAP Paleodigital Elevation Models","dem",TRUE,"RasterArray","wwww.chronosphere-portal.org/placeholder","20180801"

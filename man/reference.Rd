@@ -5,22 +5,22 @@
 \title{Retrieve citation of data object}
 \usage{
 reference(
-  dat,
+  src,
   bibtex = FALSE,
-  var = NULL,
+  ser = NULL,
   ver = NULL,
   print = TRUE,
   prefix = ""
 )
 }
 \arguments{
-\item{dat}{(\code{characater}) Object downloaded with \code{\link{fetch}} or the database identifier string.}
+\item{src}{(\code{characater}) Object downloaded with \code{\link{fetch}} or the source identifier string.}
 
 \item{bibtex}{(\code{logical}) Should a bibtex be printed/returned?}
 
-\item{var}{(\code{character}) In case \code{dat} is \code{character}, the variable identifier.}
+\item{ser}{(\code{character}) In case \code{src} is \code{character}, the series identifier.}
 
-\item{ver}{(\code{character}) In case \code{dat} is \code{character}, the version identifier.}
+\item{ver}{(\code{character}) In case \code{src} is \code{character}, the version identifier.}
 
 \item{print}{(\code{logical}) Should the citations be printed to the console, or returned as a \code{character} vector.}
 
@@ -32,12 +32,9 @@ By default the function has no return value. If \code{print=FALSE}, the function
 \description{
 The function prints or returns the citation string of a chosen object/item.
 }
-\details{
-The function is intended to be updated to handle BibTEX entries.
-}
 \examples{
 # A locally-present object, in package's directory
-one <- fetch(dat="SOM-zaffos-fragmentation",
+one <- fetch(src="SOM-zaffos-fragmentation",
   datadir=system.file("extdata", package="chronosphere"))
 # its reference
 reference(one)

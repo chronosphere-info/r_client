@@ -1,35 +1,35 @@
-#' Data fetching
+#' Fetching data items
 #' 
-#' Function to download and attach variables in the \code{chronosphere} package
+#' Function to download and attach items from the \code{chronosphere} archives
 #' 
-#' Use the function \code{\link{datasets}} to find available variables.
-#' @param dat (\code{character}) The dataset to get variables from.
-#' @param var (\code{character}) Vector of variable names to get.
-#' @param res (\code{character} or \code{numeric}) The resolution strong of the data layers.
-#' @param ver (\code{character}) The version of the variable. Defaults to \code{NULL}, which will download the latest available version. We have to create a data table, which should be part of the package. This has to be searched for valid argument combinations. Right this is just a folder with a date.
+#' Use the function \code{\link{datasets}} to find available series.
+#' @param src (\code{character}) The source group of series.
+#' @param ser (\code{character}) The series to get.
+#' @param res (\code{character} or \code{numeric}) The resolution string of the data layers.
+#' @param ver (\code{character}) The version of the product to download. Defaults to \code{NULL}, which will download the latest available version. 
 #' @param class (\code{character}) Class of the returned object, if not the default.
 #' @param ext (\code{character}) File extension of the used data file.
 #' @param item (\code{numeric}) The item ID that is to be downloaded. This setting overrides all other identifiers.
-#' @param datadir (\code{character}) Directory where downloaded files are kept. Individual layers will be looked up from the directory if this is given, and will be downloaded if they are not found. The default \code{NULL} option will download data to a temporary directory that exists only until the R session ends.
+#' @param datadir (\code{character}) Directory where downloaded files are kept. Individual items will be looked up from the directory if this is given, and will be downloaded if they are not found. The default \code{NULL} option will download data to a temporary directory that exists only until the R session ends.
 #' @param verbose (\code{logical}) Should console feedback during download be displayed?
 #' @param call (\code{logical}) If set to \code{TRUE} the function call is returned instead of the object. 
 #' @param call.expr (\code{logical}) If \code{call} is set to \code{TRUE}, then should the call be returned as an \code{expression} (\code{TRUE}) or a message (\code{FALSE})?
 #' @param attach (\code{logical}) If the item has required packages, should these be attached?
-#' @param ... Arguments passed to variable-specific loading functions.
+#' @param ... Arguments passed to item-specific loading functions.
 #' @examples
 #' # An actual download call
-#' # a <- fetch(dat="paleomap", var="dem")
+#' # a <- fetch(src="paleomap", ser="dem")
 #' # A locally-present object, in package's directory
-#' a <- fetch(dat="SOM-zaffos-fragmentation",
+#' a <- fetch(src="SOM-zaffos-fragmentation",
 #'   datadir=system.file("extdata", package="chronosphere"))
 #' # call repetition
 #' fetch(a, call=TRUE)
 
 #' @export
 #' @return An object from a class that matches the 'class' coordinate of the item.
-fetch <- function(dat=NULL, var=NULL, ver=NULL, res=NULL, ext=NULL, class=NULL, item=NULL,  datadir=NULL, verbose=TRUE, call=FALSE, call.expr=FALSE, attach=TRUE, ...){
-	## dat="pbdb"
-	## var="baseref"
+fetch <- function(src=NULL, ser=NULL, ver=NULL, res=NULL, ext=NULL, class=NULL, item=NULL,  datadir=NULL, verbose=TRUE, call=FALSE, call.expr=FALSE, attach=TRUE, ...){
+	## src="pbdb"
+	## ser="baseref"
 	## ver=NULL
 	## res=NULL
 	## ext=NULL
@@ -43,17 +43,17 @@ fetch <- function(dat=NULL, var=NULL, ver=NULL, res=NULL, ext=NULL, class=NULL, 
 	
 
 	# fetch given an existing chronosphere object
-	if(is.chronosphere(dat)){
+	if(is.chronosphere(src)){
 		# force expression output of call reproduction if object should be downlaoded
 		if(!call) call.expr <- TRUE
 
 		# return call that can be used to replicate download
-		att <- attributes(dat)$chronosphere
+		att <- attributes(src)$chronosphere
 
 		# construct funtcion call
 		argList <- list(
-			dat=att$dat,
-			var=att$var,
+			src=att$src,
+			ser=att$ser,
 			ver=att$ver,
 			res=att$res, 
 			ext=att$ext, 
@@ -80,11 +80,11 @@ fetch <- function(dat=NULL, var=NULL, ver=NULL, res=NULL, ext=NULL, class=NULL, 
 
 	# regular fetch given dataset character identifiers
 	}else{
-		if(!is.character(dat)) stop("Invalid 'dat' argument.")
+		if(!is.character(src)) stop("Invalid 'src' argument.")
 		# return a call
 		if(call){
 			# construct function call
-			theCall <- ChronoCall(dat, var, ver, res, ext, class, datadir, verbose, expr=call.expr,...)
+			theCall <- ChronoCall(src, ser, ver, res, ext, class, datadir, verbose, expr=call.expr,...)
 
 			# return if it is an expression
 			if(!is.null(theCall)) return(theCall)
@@ -92,26 +92,26 @@ fetch <- function(dat=NULL, var=NULL, ver=NULL, res=NULL, ext=NULL, class=NULL, 
 		# do an actual fetch
 		}else{
 			# get the register of the dat
-			if(length(dat)>1) stop("Only one dataset can be accessed in a single download call.")
+			if(length(src)>1) stop("Only one item can be accessed in a single download call.")
 
 			if(verbose){
 				regs <- paste0(
 "\n------------------------------------------------------------
-Accessing chronos registry tables.
+Accessing chronosphere registry tables.
 ------------------------------------------------------------\n")
 				message(regs)
 			}
 			# get the remote server data, or read it from hard drive!
-			register <- datasets(dat=dat, datadir=datadir, verbose=verbose)
+			register <- datasets(src=src, datadir=datadir, verbose=verbose)
 
 			# find the item in the register
-			itemDetails <- FindItem(register, var=var, ver=ver, res=res, ext=ext, 
+			itemDetails <- FindItem(register, ser=ser, ver=ver, res=res, ext=ext, 
 				class=class, item=item, datadir=datadir, verbose=verbose, ...)
 
 			if(verbose){
 				dets <- paste0(
 "\n------------------------------------------------------------
-Item no. " ,itemDetails$itemID ,  ", dat:", itemDetails$dat, ", var: ", itemDetails$var, ", ver: ", itemDetails$ver, ", res: ", itemDetails$resolution, ".
+Item no. " ,itemDetails$itemID ,  ", src:", itemDetails$src, ", ser: ", itemDetails$ser, ", ver: ", itemDetails$ver, ", res: ", itemDetails$resolution, ".
 ------------------------------------------------------------\n")
 				message(dets)
 			}
@@ -127,7 +127,7 @@ Item no. " ,itemDetails$itemID ,  ", dat:", itemDetails$dat, ", var: ", itemDeta
 			)
 
 			# write the chronosphere attributes to the downloaded object
-			attributes(item)$chronosphere <- ChronoAttributes(dat=dat, details=itemDetails, ...)
+			attributes(item)$chronosphere <- ChronoAttributes(src=src, details=itemDetails, ...)
 
 			# display citations
 			if(verbose){
@@ -156,7 +156,7 @@ reference(s), as well as that of the 'chronosphere' project.\n")
 # Actual fetch v3. -this function connects to the repo or loads the downloaded variable
 # function to look up the item number
 # param citation used to turn of citation display for recursive case
-FindItem <- function(register, var=NULL, ver=NULL, res=NULL, ext=NULL, class=NULL, item=NULL, datadir=NULL, verbose=TRUE, citation=TRUE, ...){
+FindItem <- function(register, ser=NULL, ver=NULL, res=NULL, ext=NULL, class=NULL, item=NULL, datadir=NULL, verbose=TRUE, citation=TRUE, ...){
 	
 	# item-based finding (still needs dat for efficient lookup)
 	if(!is.null(item)){
@@ -179,28 +179,28 @@ FindItem <- function(register, var=NULL, ver=NULL, res=NULL, ext=NULL, class=NUL
 
 		########################################
 		# A. Mandatory data
-		# A1. Dat - already done
-		# A2. Variable
+		# A1. Src - already done
+		# A2. Series
 		# Need the the default variable?
-		if(is.null(var)){
+		if(is.null(ser)){
 			# make sure that this is available in the framework
-			if(sum(register$defaultVariable)==0){
-				stop("The default variable of the 'dat' is not available in R. ")
+			if(sum(register$defaultSeries)==0){
+				stop("The default series of the 'src' is not available in R. ")
 			# else: grab the parts that come from the defautl variable.
 			}else{
-				register <- register[register$defaultVariable, ]
+				register <- register[register$defaultSeries, ]
 				# save the variable for later
-				var <- unique(register$var) 
+				ser <- unique(register$ser) 
 			}
 		}else{
-			if(length(var)>1) stop("Only one variable can be accessed in a single download call.")
+			if(length(ser)>1) stop("Only one series can be accessed in a single download call.")
 			# the index of the desired variables
-			indVar <- which(register$var==var)
-			if(length(indVar)==0){
-				stop(paste0("The desired var '", var, "' is not available."))
+			indSer <- which(register$ser==ser)
+			if(length(indSer)==0){
+				stop(paste0("The desired ser '", ser, "' is not available."))
 			}else{
 				# get the var-specific version 
-				register <- register[indVar,]
+				register <- register[indSer,]
 			}
 		}
 
@@ -209,11 +209,11 @@ FindItem <- function(register, var=NULL, ver=NULL, res=NULL, ext=NULL, class=NUL
 		# Default version: most up to date
 		if(is.null(ver)){
 			# select the most recent 
-			dates <- unique(register$dataDatePublished)
+			dates <- unique(register$productDate)
 			# field uses ISO dates, character sorting should be fine.
 			mostRecent <- max(dates)
 			# get the corresponding part
-			register <- register[which(mostRecent==register$dataDatePublished), ]
+			register <- register[which(mostRecent==register$productDate), ]
 		# 
 		}else{
 			if(length(ver)>1) stop("Only one version can be accessed in a single download call.")
@@ -244,7 +244,7 @@ FindItem <- function(register, var=NULL, ver=NULL, res=NULL, ext=NULL, class=NUL
 			if(length(class)>1) stop("Only one class can be returned in a single download call.")
 			# the desired class is given 
 			bClass <- register$class==class
-			if(sum(bClass)==0) stop(paste0("The variable '", var, "' is not available as class '", class, "'."))
+			if(sum(bClass)==0) stop(paste0("The series '", ser, "' is not available as class '", class, "'."))
 		}
 
 		# B2. the resolution
@@ -284,7 +284,7 @@ FindItem <- function(register, var=NULL, ver=NULL, res=NULL, ext=NULL, class=NUL
 			}
 
 		}else{
-			if(length(ext)>1) stop("Only one file extensionbe accessed in a single download call.")
+			if(length(ext)>1) stop("Only one file extension accessed in a single download call.")
 
 			# the correct file extension
 			bExt <- ext==register$ext
@@ -360,15 +360,15 @@ DownloadItem <- function(details, datadir=NULL, verbose=TRUE, attach=TRUE, ...){
 	primaryURL <- details$primaryURL	
 	secondaryURL <- details$secondaryURL
 	md5 <- details$fileMD5
-	dat <- details$dat
-	var <- details$var
+	src <- details$src
+	ser <- details$ser
 	ver <- details$ver
 	item <- details$itemID
 
 
 	# in any case, the downloaded things will land in a specific directory
 	# need to put this into an R- specific directory
-	itemDir <- paste(dat, var, ver, item, sep="_")
+	itemDir <- paste(src, ser, ver, item, sep="_")
 	
 	# do we need unzipping?
 	zip <- FALSE
@@ -384,7 +384,6 @@ DownloadItem <- function(details, datadir=NULL, verbose=TRUE, attach=TRUE, ...){
 
 	# 1st case datadir does not exist
 	if(is.null(datadir)){
-
 
 		# create a temporary directory
 		tempd <- tempdir()
@@ -567,7 +566,6 @@ Loading downloaded data file.
 	source(codePath)
 
 	# then invoke replaced function in package namespace
-#	obj <- loadVar(dir=itemDirPath, verbose=verbose, ...)
 	obj <- loadVar(dir=itemDirPath, verbose=verbose, attach=attach, ...)
 
 	# if there was a temporary directory

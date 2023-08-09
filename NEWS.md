@@ -1,5 +1,9 @@
 # Change log of the R package 'chronosphere'
 
+# chronosphere 0.6.0 - 2023-07-12
+### Changed
+- Dataset identifier coordinates: dat -> src, var -> ser
+
 # chronosphere 0.5.0 - 2023-05-23
 ### Added
 - the configure() function to support setting of global variables: curl, timeout and remote (debugging)

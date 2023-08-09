@@ -1,9 +1,9 @@
 
 # chronosphere <img src="man/figures/logo.png" align="right" />
 
-[![](https://img.shields.io/badge/devel%20version-0.5.0-green.svg)](https://github.com/chronosphere-info/r_client)
+[![](https://img.shields.io/badge/devel%20version-0.6.0-green.svg)](https://github.com/chronosphere-info/r_client)
 [![](https://www.r-pkg.org/badges/version/chronosphere?color=blue)](https://cran.r-project.org/package=chronosphere)
-[![](https://cranlogs.r-pkg.org/badges/grand-total/chronosphere?color=yellow)](https://cran.r-project.org/package=chronosphere)
+[![](http://cranlogs.r-pkg.org/badges/grand-total/chronosphere?color=yellow)](https://cran.r-project.org/package=chronosphere)
 [![CRAN
 checks](https://badges.cranchecks.info/summary/chronosphere.svg)](https://cran.r-project.org/web/checks/check_results_chronosphere.html)
 

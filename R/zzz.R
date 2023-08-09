@@ -1,4 +1,4 @@
-#' Evolving Earth System Data
+#' Evolving Earth System Variables
 #' 
 #' The implemented functions allow the query, download, and import of remotely-stored and version-controlled data items. The inherent meta-database maps data files and import code to programming classes and allows access to these items via files deposited in public repositories. The purpose of the project is to increase reproducibility and establish version tracking of results from (paleo)environmental/ecological research.
 #'  

@@ -1,5 +1,5 @@
 # remote server 
-remote <- "https://github.com/chronosphere-portal/chrono_arch/raw/main/"
+remote <- "https://github.com/chronosphere-portal/chrono_arch_2/raw/main/"
 code <- "code/R/"
 user <- "public"
 registers <- paste0("users/", user, "/")

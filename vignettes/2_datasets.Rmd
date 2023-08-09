@@ -9,13 +9,6 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-```
-
 <br>
 
 
@@ -25,28 +18,8 @@ knitr::opts_chunk$set(
 
 To make 
 
-```{r}
-library(chronosphere)
-```
-
 Available database - variable combinations can be inspected with the `datasets()` funciton:
-
-```{r}
-dats <- datasets()
-str(dats)
+```{r something}
+library("chronosphere")
 ```
 
-
-## Database-specific variables
-
-The `datasets()` function in its default argumentation does not give information on what exact items are available. As these can be quite numerous. 
-
-To see what kind of data are available in the `paleomap` entries
-
-```{r}
-pm <- datasets('paleomap')
-str(pm)
-```
-
-
-If you want to explore all available data, you can inspect 

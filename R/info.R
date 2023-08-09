@@ -2,10 +2,10 @@
 #' 
 #' The function prints or returns the citation string of a chosen object/item.
 #'
-#' @param dat (\code{characater}) Object downloaded with \code{\link{fetch}} or the database identifier string.
+#' @param src (\code{characater}) Object downloaded with \code{\link{fetch}} or the source identifier string.
 #' @param bibtex (\code{logical}) Should a bibtex be printed/returned? 
-#' @param var (\code{character}) In case \code{dat} is \code{character}, the variable identifier.
-#' @param ver (\code{character}) In case \code{dat} is \code{character}, the version identifier.
+#' @param ser (\code{character}) In case \code{src} is \code{character}, the series identifier.
+#' @param ver (\code{character}) In case \code{src} is \code{character}, the version identifier.
 #' @param print (\code{logical}) Should the citations be printed to the console, or returned as a \code{character} vector.
 #' @param prefix (\code{characater}) In case the output is printed on the console. Use this to include a prefix before every entry.
 #' 
@@ -13,27 +13,26 @@
 #' @return By default the function has no return value. If \code{print=FALSE}, the function will return a reference character string.
 #' @examples
 #' # A locally-present object, in package's directory
-#' one <- fetch(dat="SOM-zaffos-fragmentation",
+#' one <- fetch(src="SOM-zaffos-fragmentation",
 #'   datadir=system.file("extdata", package="chronosphere"))
 #' # its reference
 #' reference(one)
-reference <- function(dat, bibtex=FALSE, var=NULL, ver=NULL, print=TRUE, prefix=""){
+reference <- function(src, bibtex=FALSE, ser=NULL, ver=NULL, print=TRUE, prefix=""){
 	# get the appropriate refernce string
-	if(is.chronosphere(dat)){
+	if(is.chronosphere(src)){
 		if(bibtex){
 
 		}else{
 			# get the attributes
-			refString <- attributes(dat)$chronosphere$reference
-
+			refString <- attributes(src)$chronosphere$reference
 		}
 	}else{
-		if("character"%in%class(dat)){
+		if("character"%in%class(src)){
 			# download a copy of the dataset
-			download <- datasets(dat)
+			download <- datasets(src)
 
-			if(!is.null(var)){
-				download <- download[download$var%in%var, ]
+			if(!is.null(ser)){
+				download <- download[download$ser%in%ser, ]
 			}
 			if(!is.null(ver)){
 				download <- download[download$ver%in%ver, ]
@@ -54,27 +53,25 @@ reference <- function(dat, bibtex=FALSE, var=NULL, ver=NULL, print=TRUE, prefix=
 	}
 }
 
-#'Documentation page of a variable (Remote server under constructions)
+#'Documentation page of a series (Remote server under constructions)
 #'
-#'This is a temporary function that takes the user to the Evolv-ED blog.
-#'
-#' @param dat (\code{characater}) Object downloaded with \code{\link{fetch}} or the database identifier string.
-#' @param var (\code{character}) In case \code{dat} is \code{character}, the variable identifier.
+#' @param src (\code{character}) Object downloaded with \code{\link{fetch}} or the source identifier string.
+#' @param ser (\code{character}) In case \code{src} is \code{character}, the series identifier.
 #'
 #' @export
 #' @return The function has no return value.
-info <- function(dat, var){
+info <- function(src, ser=NULL){
 	# get the appropriate refernce string
-	if(is.chronosphere(dat)){
+	if(is.chronosphere(src)){
 		# get the attributes
-		infoURL <- attributes(dat)$chronosphere$info
+		infoURL <- attributes(src)$chronosphere$info
 	}else{
-		if("character"%in%class(dat)){
+		if("character"%in%class(src)){
 			# download a copy of the dataset
-			download <- datasets(dat)
+			download <- datasets(src)
 
 			if(!is.null(var)){
-				download <- download[download$var%in%var, ]
+				download <- download[download$ser%in%ser, ]
 			}
 			
 			# the reference string

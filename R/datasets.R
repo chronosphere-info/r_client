@@ -1,13 +1,13 @@
 #' Download a database extract from \code{chronosphere} remote server
 #' 
-#' The function will download a list of available data from the data repository
+#' The function will download a list of available series from the data repository
 #' 
 #' The function will download a single .csv file and attach it as a \code{data.frame}.
 #' 
-#' @param dat \code{character}. Database ID. If this is set to \code{NULL}, then a simplified list of availables variables will be downloaded, including all \code{dat} and \code{var} combinations. If \code{dat} is a valid database ID, then all accessible resolutions and version of a dataset are shown. 
+#' @param src \code{character}. Source identifier. If this is set to \code{NULL}, then a simplified list of availables series will be downloaded, including all unique \code{src} and \code{ser} combinations. If \code{src} is a valid source identifier, then all accessible products (resolutions and versions) of a series are shown. 
 #' @param datadir \code{character} Directory where the downloaded files are kept. Individual entries will be looked up from the directory if this is given, and will be downloaded if they are not found. The default \code{NULL} option will download data to a temporary directory that exists only until the R session ends.
 #' @param verbose \code{logical} Should console feedback during download be displayed?
-#' @param master \code{logical} When \code{dat} is \code{NULL}, should the function download the master records file?
+#' @param master \code{logical} When \code{src} is \code{NULL}, should the function download the master records file?
 #' @param greetings \code{logical} When the function is invoked without arguments, it displays a message to keep new users informed about different versions and resolutions (even with \code{verbose=FALSE}). This argument turns this message off on demand.
 #' @param all \code{logical} When set to \code{FALSE} (default), only those items are shown that are available for the R environment. Set to \code{TRUE} to see all items.
 #' @return A \code{data.frame} class object.
@@ -15,7 +15,7 @@
 #' # available datasets and variables - proper
 #' # index <- datasets()
 #' # all available versions and resolutions in database 'pbdb'
-#' # oneDat <- datasets("pbdb")
+#' # oneDat <- datasets(src="pbdb")
 #' ###################################
 #' # local example INCOMPLETE - does not connect to the internet
 #  # available datasets
@@ -26,7 +26,7 @@
 #'   dat="SOM-zaffos-fragmentation",
 #'   datadir=system.file("extdata", package="chronosphere"))
 #' @export
-datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greetings=TRUE, all=FALSE){
+datasets <- function(src=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greetings=TRUE, all=FALSE){
 
 	# save timeout parameter from user's global options.
 	original<- options()$timeout
@@ -36,22 +36,22 @@ datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greeti
 	on.exit(expr=options(timeout=original))
 		
 	# default case, return the table of variables	
-	if(is.null(dat)){
+	if(is.null(src)){
 		# simple data table with dat/var combinations
 		datfile <- "R/subguide.csv"
 		if(master){
 			datfile <- "R/submaster.csv"
 		}else{
-			if(greetings) message("Use datasets(dat = <dat>) to see available versions and resolutions.") 
+			if(greetings) message("Use datasets(src = <src>) to see available versions and resolutions.") 
 		}
 	}else{
 		# recursive call to see whether the dat entry is available
 		tempdat <- datasets(datadir=datadir, greetings=FALSE)
 	
-		if(!any(dat%in%tempdat$dat)) stop(paste0("The dat entry \'", dat, "\' was not found."))
+		if(!any(src%in%tempdat$src)) stop(paste0("The src entry \'", src, "\' was not found."))
 
 		# full list of available variables in a given dataset - used by fetch()
-		datfile <- paste0("R/", dat, ".csv")
+		datfile <- paste0("R/", src, ".csv")
 	}
 
 	# if it does not exist in datadir, then 
@@ -74,7 +74,7 @@ datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greeti
 				header=TRUE, stringsAsFactors=FALSE, encoding="UTF-8")
 
 			# structure is ok
-			if(sum(c("dat", "var")%in%colnames(ret))==2){
+			if(sum(c("src", "ser")%in%colnames(ret))==2){
 				download <- FALSE
 			} # no? ->download
 			if (verbose) message("Found downloaded registry tables.")
@@ -185,7 +185,7 @@ datasets <- function(dat=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greeti
 			stringsAsFactors=FALSE, encoding="UTF-8")
 
 		# show only the R-items
-		if(!is.null(dat) & !all) ret <- ret[ret$language=="R", ]
+		if(!is.null(src) & !all) ret <- ret[ret$language=="R", ]
 		# get rid of the  temporary file
 		if(is.null(datadir)) unlink(tempReg)
 		
