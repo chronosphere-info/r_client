@@ -8,11 +8,9 @@
 
     <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary"><div class="container">
     
-    <a class="navbar-brand me-2" href="https://chronosphere.info/" style="padding-right:8px">
-		  <img style="margin-right:8px;margin-top:-2px" src="../images/chronosphere_luminosity_500_hover.png" width="30px" height="30px">chronosphere</a> ›  
-		<a style="margin-left:16px" class="navbar-brand" href="../index.html"> <img style="margin-right:6px;position: relative; top: -4px;" src="../images/r_luminosity_hover.png" width="25px" height="25px">client </a>
+    <a class="navbar-brand me-2" href="../index.html">chronosphere</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +43,7 @@
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
       <ul class="navbar-nav"><li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/chronosphere-portal/r_client/" aria-label="github">
+  <a class="external-link nav-link" href="https://github.com/chronosphere-info/r_client/" aria-label="github">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -58,7 +56,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Retrieve citation of data object</h1>
-      <small class="dont-index">Source: <a href="https://github.com/chronosphere-portal/r_client/blob/HEAD/R/info.R" class="external-link"><code>R/info.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/chronosphere-info/r_client/blob/HEAD/R/info.R" class="external-link"><code>R/info.R</code></a></small>
       <div class="d-none name"><code>reference.Rd</code></div>
     </div>
 
@@ -69,9 +67,9 @@
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">reference</span><span class="op">(</span></span>
-<span>  <span class="va">dat</span>,</span>
+<span>  <span class="va">src</span>,</span>
 <span>  bibtex <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  var <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ser <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ver <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  print <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  prefix <span class="op">=</span> <span class="st">""</span></span>
@@ -80,20 +78,20 @@
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>dat</dt>
-<dd><p>(<code>characater</code>) Object downloaded with <code><a href="fetch.html">fetch</a></code> or the database identifier string.</p></dd>
+    <dl><dt>src</dt>
+<dd><p>(<code>characater</code>) Object downloaded with <code><a href="fetch.html">fetch</a></code> or the source identifier string.</p></dd>
 
 
 <dt>bibtex</dt>
 <dd><p>(<code>logical</code>) Should a bibtex be printed/returned?</p></dd>
 
 
-<dt>var</dt>
-<dd><p>(<code>character</code>) In case <code>dat</code> is <code>character</code>, the variable identifier.</p></dd>
+<dt>ser</dt>
+<dd><p>(<code>character</code>) In case <code>src</code> is <code>character</code>, the series identifier.</p></dd>
 
 
 <dt>ver</dt>
-<dd><p>(<code>character</code>) In case <code>dat</code> is <code>character</code>, the version identifier.</p></dd>
+<dd><p>(<code>character</code>) In case <code>src</code> is <code>character</code>, the version identifier.</p></dd>
 
 
 <dt>print</dt>
@@ -110,40 +108,16 @@
 
 <p>By default the function has no return value. If <code>print=FALSE</code>, the function will return a reference character string.</p>
     </div>
-    <div class="section level2">
-    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The function is intended to be updated to handle BibTEX entries.</p>
-    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># A locally-present object, in package's directory</span></span></span>
-<span class="r-in"><span><span class="va">one</span> <span class="op">&lt;-</span> <span class="fu"><a href="fetch.html">fetch</a></span><span class="op">(</span>dat<span class="op">=</span><span class="st">"SOM-zaffos-fragmentation"</span>,</span></span>
+<span class="r-in"><span><span class="va">one</span> <span class="op">&lt;-</span> <span class="fu"><a href="fetch.html">fetch</a></span><span class="op">(</span>src<span class="op">=</span><span class="st">"SOM-zaffos-fragmentation"</span>,</span></span>
 <span class="r-in"><span>  datadir<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package<span class="op">=</span><span class="st">"chronosphere"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Accessing chronos registry tables.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Found downloaded registry tables.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Item no. 23, dat:SOM-zaffos-fragmentation, var: fragment, ver: 20170424, res: 1my.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading downloaded import code.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading downloaded data file.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> If you use the data in publications, please cite its</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> reference(s), as well as that of the 'chronosphere' project.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Zaffos, A., Finnegan, S., &amp; Peters, S. E. (2017). Plate tectonic regulation of global marine animal diversity. Proceedings of the National Academy of Sciences, 114(22), Article 22. https://doi.org/10.1073/pnas.1702297114</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in fetch(src = "SOM-zaffos-fragmentation", datadir = system.file("extdata",     package = "chronosphere")):</span> Invalid 'dat' argument.</span>
 <span class="r-in"><span><span class="co"># its reference</span></span></span>
 <span class="r-in"><span><span class="fu">reference</span><span class="op">(</span><span class="va">one</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Zaffos, A., Finnegan, S., &amp; Peters, S. E. (2017). Plate tectonic regulation of global marine animal diversity. Proceedings of the National Academy of Sciences, 114(22), Article 22. https://doi.org/10.1073/pnas.1702297114</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in is.chronosphere(dat):</span> object 'one' not found</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

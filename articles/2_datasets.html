@@ -39,11 +39,9 @@
 
     <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary"><div class="container">
     
-    <a class="navbar-brand me-2" href="https://chronosphere.info/" style="padding-right:8px">
-		  <img style="margin-right:8px;margin-top:-2px" src="../images/chronosphere_luminosity_500_hover.png" width="30px" height="30px">chronosphere</a> ›  
-		<a style="margin-left:16px" class="navbar-brand" href="../index.html"> <img style="margin-right:6px;position: relative; top: -4px;" src="../images/r_luminosity_hover.png" width="25px" height="25px">client </a>
+    <a class="navbar-brand me-2" href="../index.html">chronosphere</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,7 +78,7 @@
 
       <ul class="navbar-nav">
 <li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/chronosphere-portal/r_client/" aria-label="github">
+  <a class="external-link nav-link" href="https://github.com/chronosphere-info/r_client/" aria-label="github">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -97,7 +95,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>2. Available data</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/chronosphere-portal/r_client/blob/HEAD/vignettes/2_datasets.Rmd" class="external-link"><code>vignettes/2_datasets.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/chronosphere-info/r_client/blob/HEAD/vignettes/2_datasets.Rmd" class="external-link"><code>vignettes/2_datasets.Rmd</code></a></small>
       <div class="d-none name"><code>2_datasets.Rmd</code></div>
     </div>
 
@@ -109,85 +107,17 @@
 </h2>
 <hr>
 <p>To make</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">chronosphere</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Chronosphere - Evolving Earth System Variables</span></span>
-<span><span class="co">#&gt; Important: never fetch data as a superuser / with admin. privileges!</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Note that the package was split for efficient maintenance and development:</span></span>
-<span><span class="co">#&gt;  - Plate tectonic calculations -&gt; package 'rgplates'</span></span>
-<span><span class="co">#&gt;  - Arrays of raster and vector spatials -&gt; package 'via'</span></span></code></pre></div>
 <p>Available database - variable combinations can be inspected with the <code><a href="../reference/datasets.html">datasets()</a></code> funciton:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/datasets.html">datasets</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Use datasets(dat = &lt;dat&gt;) to see available versions and resolutions.</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">dats</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 'data.frame':    20 obs. of  9 variables:</span></span>
-<span><span class="co">#&gt;  $ topic          : chr  NA NA "Paleogeography" "Paleogeography" ...</span></span>
-<span><span class="co">#&gt;  $ databaseName   : chr  "Code, used data and supplementary items for the articled Increase in marine provinciality over the last 250 mil"| __truncated__ "Repository for: Reddin et al. 2020. Marine clade sensitivities to climate change conform across time scales" "The PALEOMAP project" "The PALEOMAP project" ...</span></span>
-<span><span class="co">#&gt;  $ dat            : chr  "SOM-kocsis-provinciality" "SOM-reddin-sensitivity" "paleomap" "paleomap" ...</span></span>
-<span><span class="co">#&gt;  $ variableName   : chr  "S6. Interpolated  temperature  reconstructions  based  on  the  HadCM3L  climate  models  and  the PaleoMAP Paleocoastlines" "Modern metaanalysis support data" "PaleoMAP Paleodigital Elevation Models" "Plate tectonic reconstruction" ...</span></span>
-<span><span class="co">#&gt;  $ var            : chr  "sstinter" "modern" "dem" "model" ...</span></span>
-<span><span class="co">#&gt;  $ defaultVariable: logi  TRUE TRUE TRUE FALSE FALSE TRUE ...</span></span>
-<span><span class="co">#&gt;  $ defaultClass   : chr  "RasterArray" "data.frame" "RasterArray" "platemodel" ...</span></span>
-<span><span class="co">#&gt;  $ infoURL        : chr  "http://www.chronosphere-portal.org/" "http://www.chronosphere-portal.org/" "wwww.chronosphere-portal.org/placeholder" "wwww.chronosphere-portal.org/placeholder" ...</span></span>
-<span><span class="co">#&gt;  $ defaultVer     : chr  "v1.0" "Version 1" "20180801" "v19o_r1c" ...</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st">"chronosphere"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Chronosphere - Evolving Earth System Variables</span></span>
+<span><span class="co">## Important: never fetch data as a superuser / with admin. privileges!</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Note that the package was split for efficient maintenance and development:</span></span>
+<span><span class="co">##  - Plate tectonic calculations -&gt; package 'rgplates'</span></span>
+<span><span class="co">##  - Arrays of raster and vector spatials -&gt; package 'via'</span></span></code></pre>
 </div>
-<div class="section level2">
-<h2 id="database-specific-variables">Database-specific variables<a class="anchor" aria-label="anchor" href="#database-specific-variables"></a>
-</h2>
-<p>The <code><a href="../reference/datasets.html">datasets()</a></code> function in its default argumentation does not give information on what exact items are available. As these can be quite numerous.</p>
-<p>To see what kind of data are available in the <code>paleomap</code> entries</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">pm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/datasets.html">datasets</a></span><span class="op">(</span><span class="st">'paleomap'</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">pm</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 'data.frame':    5 obs. of  42 variables:</span></span>
-<span><span class="co">#&gt;  $ dataID           : int  3 4 5 6 27</span></span>
-<span><span class="co">#&gt;  $ topic            : chr  "Paleogeography" "Paleogeography" "Paleogeography" "Paleogeography" ...</span></span>
-<span><span class="co">#&gt;  $ dat              : chr  "paleomap" "paleomap" "paleomap" "paleomap" ...</span></span>
-<span><span class="co">#&gt;  $ databaseName     : chr  "The PALEOMAP project" "The PALEOMAP project" "The PALEOMAP project" "The PALEOMAP project" ...</span></span>
-<span><span class="co">#&gt;  $ sourceURL        : chr  "www.scotese.com" "www.scotese.com" "www.scotese.com" "www.scotese.com" ...</span></span>
-<span><span class="co">#&gt;  $ variableID       : int  3 4 3 4 19</span></span>
-<span><span class="co">#&gt;  $ var              : chr  "dem" "model" "dem" "model" ...</span></span>
-<span><span class="co">#&gt;  $ variableName     : chr  "PaleoMAP Paleodigital Elevation Models" "Plate tectonic reconstruction" "PaleoMAP Paleodigital Elevation Models" "Plate tectonic reconstruction" ...</span></span>
-<span><span class="co">#&gt;  $ infoURL          : chr  "wwww.chronosphere-portal.org/placeholder" "wwww.chronosphere-portal.org/placeholder" "wwww.chronosphere-portal.org/placeholder" "wwww.chronosphere-portal.org/placeholder" ...</span></span>
-<span><span class="co">#&gt;  $ API              : logi  NA NA NA NA NA</span></span>
-<span><span class="co">#&gt;  $ ver              : chr  "20180801" "v3-GPlates" "20180801" "v19o_r1c" ...</span></span>
-<span><span class="co">#&gt;  $ resDefault       : int  1 1 0 1 1</span></span>
-<span><span class="co">#&gt;  $ dataDatePublished: chr  "2018-08-01" "2016-02-16" "2018-08-01" "2020-11-30" ...</span></span>
-<span><span class="co">#&gt;  $ public           : int  1 1 1 1 1</span></span>
-<span><span class="co">#&gt;  $ licenseName      : chr  "CC BY 4.0" "CC BY 4.0" "CC BY 4.0" "CC BY 4.0" ...</span></span>
-<span><span class="co">#&gt;  $ resolution       : num  1 NA 0.1 NA NA</span></span>
-<span><span class="co">#&gt;  $ bibtex           : chr  "@article{scotese2018paleomap,|-&amp;-| author = {Scotese, Christopher R and Wright, Nicky},|-&amp;-| title = {{PALEOMAP"| __truncated__ "@misc{scotese2016tutorial,|-&amp;-| author = {Scotese, Christopher R},|-&amp;-| title = {{PALEOMAP} {PaleoAtlas} for {G"| __truncated__ "@article{scotese2018paleomap,|-&amp;-| author = {Scotese, Christopher R and Wright, Nicky},|-&amp;-| title = {{PALEOMAP"| __truncated__ "@misc{scotese_christopher_r_2018_5460860,|-&amp;-| author = {Scotese, Christopher R and|-&amp;-|Wright, Nicky M},|-&amp;-| "| __truncated__ ...</span></span>
-<span><span class="co">#&gt;  $ text             : chr  "Scotese, C. R., &amp; Wright, N. (2018). PALEOMAP Paleodigital Elevation Models (PaleoDEMS) for the Phanerozoic. ht"| __truncated__ "Scotese, C. R. (2016). PALEOMAP PaleoAtlas for GPlates and the PaleoData Plotter Program. http://www.earthbyte."| __truncated__ "Scotese, C. R., &amp; Wright, N. (2018). PALEOMAP Paleodigital Elevation Models (PaleoDEMS) for the Phanerozoic. ht"| __truncated__ "Scotese, Christopher R, &amp; Wright, Nicky M. (2018). PALEOMAP Paleodigital Elevation Models (PaleoDEMS) for the P"| __truncated__ ...</span></span>
-<span><span class="co">#&gt;  $ tags             : chr  "global,paleo,topography,raster" "global,paleo,tectonic model,GPlates" "global,paleo,topography,raster" "global,paleo,tectonic model,GPlates" ...</span></span>
-<span><span class="co">#&gt;  $ defaultVariable  : logi  TRUE FALSE TRUE FALSE FALSE</span></span>
-<span><span class="co">#&gt;  $ itemID           : int  3 4 5 6 27</span></span>
-<span><span class="co">#&gt;  $ dateAdded        : chr  "2023-04-07" "2023-04-17" "2023-04-17" "2023-04-17" ...</span></span>
-<span><span class="co">#&gt;  $ itemSucceeds     : logi  NA NA NA NA NA</span></span>
-<span><span class="co">#&gt;  $ itemVersion      : int  1 1 1 1 1</span></span>
-<span><span class="co">#&gt;  $ codeDate         : chr  "2023-04-07" "2023-04-17" "2023-04-17" "2023-04-17" ...</span></span>
-<span><span class="co">#&gt;  $ codeFile         : chr  "3_paleomap_dem_1.R" "4_paleomap_model_v3-GPlates.R" "5_paleomap_dem_0.1.R" "6_paleomap_model_v19o_r1c.R" ...</span></span>
-<span><span class="co">#&gt;  $ primitive        : int  1 1 1 1 1</span></span>
-<span><span class="co">#&gt;  $ email            : chr  "adam.kocsis@fau.de" "adam.kocsis@fau.de" "adam.kocsis@fau.de" "adam.kocsis@fau.de" ...</span></span>
-<span><span class="co">#&gt;  $ coder            : chr  "Adam Tibor Kocsis" "Adam Tibor Kocsis" "Adam Tibor Kocsis" "Adam Tibor Kocsis" ...</span></span>
-<span><span class="co">#&gt;  $ class            : chr  "RasterArray" "platemodel" "RasterArray" "platemodel" ...</span></span>
-<span><span class="co">#&gt;  $ language         : chr  "R" "R" "R" "R" ...</span></span>
-<span><span class="co">#&gt;  $ dependencies     : chr  "R 4.0.0|&amp;|via 0.1|&amp;|terra 1.7-0|&amp;|ncdf4 1.17" "rgplates 0.1.0" "R 4.0.0|&amp;|via 0.1|&amp;|terra 1.7-0|&amp;|ncdf4 1.17" "rgplates 0.1.0" ...</span></span>
-<span><span class="co">#&gt;  $ depURL           : chr  "https://www.r-project.org/|&amp;|https://cran.r-project.org/package=via|&amp;|https://cran.r-project.org/package=terra|"| __truncated__ "https://cran.r-project.org/package=rgplates" "https://www.r-project.org/|&amp;|https://cran.r-project.org/package=via|&amp;|https://cran.r-project.org/package=terra|"| __truncated__ "https://cran.r-project.org/package=rgplates" ...</span></span>
-<span><span class="co">#&gt;  $ datafileName     : chr  "Scotese_Wright_2018_Maps_1-88_1degX1deg_PaleoDEMS_nc.zip" "paleomap_global_plate_model_v3.zip" "Scotese_Wright_2018_Maps_1-88_6minX6min_PaleoDEMS_nc.zip" "paleomap_global_plate_model_v19o_r1c.zip" ...</span></span>
-<span><span class="co">#&gt;  $ dataDOI          : chr  "10.5281/zenodo.5460860" "10.5281/zenodo.7828387" "10.5281/zenodo.5460860" "10.5281/zenodo.3903163" ...</span></span>
-<span><span class="co">#&gt;  $ primaryURL       : chr  "https://zenodo.org/record/5460860/files/Scotese_Wright_2018_Maps_1-88_1degX1deg_PaleoDEMS_nc.zip?download=1" "https://zenodo.org/record/7828387/files/paleomap_global_plate_model_v3.zip?download=1" "https://zenodo.org/record/5460860/files/Scotese_Wright_2018_Maps_1-88_6minX6min_PaleoDEMS_nc.zip?download=1" "https://zenodo.org/record/7828387/files/paleomap_global_plate_model_v19o_r1c.zip?download=1" ...</span></span>
-<span><span class="co">#&gt;  $ secondaryURL     : logi  NA NA NA NA NA</span></span>
-<span><span class="co">#&gt;  $ fileMD5          : chr  "77147998623ab039d86ff3e0b5e40344" "e0575812ef742679b5a41049118a7d14" "89eb50d8645707ab221b023078535bda" "990e3cbb9d6941fee1c6dffc2d22b820" ...</span></span>
-<span><span class="co">#&gt;  $ chronos          : int  0 1 0 1 1</span></span>
-<span><span class="co">#&gt;  $ ext              : chr  "nc" "rot" "nc" "rot" ...</span></span>
-<span><span class="co">#&gt;  $ repoName         : chr  "Zenodo" "Zenodo" "Zenodo" "Zenodo" ...</span></span>
-<span><span class="co">#&gt;  $ defaultClass     : chr  "RasterArray" "platemodel" "RasterArray" "platemodel" ...</span></span></code></pre></div>
-<p>If you want to explore all available data, you can inspect</p>
-</div>
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
-    </nav></aside>
+  </main>
 </div>
 
 
