@@ -22,7 +22,7 @@ This function will allow you to set package variables.
 \details{
 The following package-wide variables can be set.
 \code{timeout}: Positive integer. Timeout of connections in seconds when the default R sockets are used. The global setting by default is `300`. 
-#' \code{remote}: Character string. URL of the chronosphere repositories, the default value is \code{"https://github.com/chronosphere-portal/chrono_arch/raw/main/"}.
+#' \code{remote}: Character string. URL of the chronosphere repositories, the default value is \code{"https://github.com/chronosphere-info/chrono_arch/raw/main/"}.
 \code{curl}: Logical value. If set to \code{TRUE} (default), the curl libraries are used to download files. If set to \code{FALSE} (default) the default R sockets are used, which can result in timeout issues that need to be resolved manually.
 }
 \examples{

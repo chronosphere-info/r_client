@@ -1,20 +1,24 @@
 # Change log of the R package 'chronosphere'
 
-# chronosphere 0.6.0 - 2023-07-12
+# chronosphere 0.6.0 - 2023-08-14
+
 ### Changed
-- Dataset identifier coordinates: dat -> src, var -> ser
+- **IMPORTANT**: Dataset identifier coordinates were changed: `dat` -> `src`, `var` -> `ser`. This reflects changes of the database that were necessary so formal variables can be introduced. 
+
+* * *
 
 # chronosphere 0.5.0 - 2023-05-23
+
 ### Added
-- the configure() function to support setting of global variables: curl, timeout and remote (debugging)
-- tinytest - dependencies
-- curl as suggest, curl support for datasets() and fetch()
-- new  Example data to show the use of datadir
+- the `configure()` function to support setting of global variables: curl, timeout and remote (debugging)
+- `'tinytest'` - dependencies
+- `'curl'` as suggest, curl support for `datasets()` and `fetch()`
+- new example data to show the use of `datadir`
 
 ### Removed
-- plate tectonic reconstruction related functionality to package 'rgplates'
-- Spatial and RasterArrays refactored into package 'via'
-- shaper() function, color palettes() to 'restools' (to be published soon)
+- plate tectonic reconstruction-related functionality to package `'rgplates'`
+- Spatial and RasterArrays refactored into package `'via'`
+- `shaper()` function, color `palettes()` to `'restools'` (to be published soon)
 
 * * *
 

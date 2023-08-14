@@ -21,6 +21,7 @@ reference <- function(src, bibtex=FALSE, ser=NULL, ver=NULL, print=TRUE, prefix=
 	# get the appropriate refernce string
 	if(is.chronosphere(src)){
 		if(bibtex){
+			refString <- attributes(src)$chronosphere$bibtex
 
 		}else{
 			# get the attributes
@@ -53,7 +54,7 @@ reference <- function(src, bibtex=FALSE, ser=NULL, ver=NULL, print=TRUE, prefix=
 	}
 }
 
-#'Documentation page of a series (Remote server under constructions)
+#'Documentation page of a series (Remote server under construction)
 #'
 #' @param src (\code{character}) Object downloaded with \code{\link{fetch}} or the source identifier string.
 #' @param ser (\code{character}) In case \code{src} is \code{character}, the series identifier.
@@ -70,7 +71,7 @@ info <- function(src, ser=NULL){
 			# download a copy of the dataset
 			download <- datasets(src)
 
-			if(!is.null(var)){
+			if(!is.null(ser)){
 				download <- download[download$ser%in%ser, ]
 			}
 			

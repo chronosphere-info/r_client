@@ -2,7 +2,7 @@
 % Please edit documentation in R/info.R
 \name{info}
 \alias{info}
-\title{Documentation page of a series (Remote server under constructions)}
+\title{Documentation page of a series (Remote server under construction)}
 \usage{
 info(src, ser = NULL)
 }
@@ -15,5 +15,5 @@ info(src, ser = NULL)
 The function has no return value.
 }
 \description{
-Documentation page of a series (Remote server under constructions)
+Documentation page of a series (Remote server under construction)
 }

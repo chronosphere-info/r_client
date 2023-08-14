@@ -3,9 +3,9 @@
 #' Function to download and attach items from the \code{chronosphere} archives
 #' 
 #' Use the function \code{\link{datasets}} to find available series.
-#' @param src (\code{character}) The source group of series.
+#' @param src (\code{character}) The source of the series.
 #' @param ser (\code{character}) The series to get.
-#' @param res (\code{character} or \code{numeric}) The resolution string of the data layers.
+#' @param res (\code{character} or \code{numeric}) The resolution string of the data.
 #' @param ver (\code{character}) The version of the product to download. Defaults to \code{NULL}, which will download the latest available version. 
 #' @param class (\code{character}) Class of the returned object, if not the default.
 #' @param ext (\code{character}) File extension of the used data file.
@@ -91,7 +91,7 @@ fetch <- function(src=NULL, ser=NULL, ver=NULL, res=NULL, ext=NULL, class=NULL, 
 
 		# do an actual fetch
 		}else{
-			# get the register of the dat
+			# get the register of the src 
 			if(length(src)>1) stop("Only one item can be accessed in a single download call.")
 
 			if(verbose){
@@ -153,12 +153,12 @@ reference(s), as well as that of the 'chronosphere' project.\n")
 
 
 
-# Actual fetch v3. -this function connects to the repo or loads the downloaded variable
+# Actual fetch v3. -this function connects to the repo or loads the downloaded series
 # function to look up the item number
 # param citation used to turn of citation display for recursive case
 FindItem <- function(register, ser=NULL, ver=NULL, res=NULL, ext=NULL, class=NULL, item=NULL, datadir=NULL, verbose=TRUE, citation=TRUE, ...){
 	
-	# item-based finding (still needs dat for efficient lookup)
+	# item-based finding (still needs src for efficient lookup)
 	if(!is.null(item)){
 		# the item number is given directly
 		if(length(item)>1) stop("Only one item can be accessed in a single download call.")
@@ -181,25 +181,25 @@ FindItem <- function(register, ser=NULL, ver=NULL, res=NULL, ext=NULL, class=NUL
 		# A. Mandatory data
 		# A1. Src - already done
 		# A2. Series
-		# Need the the default variable?
+		# Need the the default series?
 		if(is.null(ser)){
 			# make sure that this is available in the framework
 			if(sum(register$defaultSeries)==0){
 				stop("The default series of the 'src' is not available in R. ")
-			# else: grab the parts that come from the defautl variable.
+			# else: grab the parts that come from the defautl series.
 			}else{
 				register <- register[register$defaultSeries, ]
-				# save the variable for later
+				# save the series for later
 				ser <- unique(register$ser) 
 			}
 		}else{
 			if(length(ser)>1) stop("Only one series can be accessed in a single download call.")
-			# the index of the desired variables
+			# the index of the desired series
 			indSer <- which(register$ser==ser)
 			if(length(indSer)==0){
 				stop(paste0("The desired ser '", ser, "' is not available."))
 			}else{
-				# get the var-specific version 
+				# get the ser-specific version 
 				register <- register[indSer,]
 			}
 		}
@@ -217,22 +217,22 @@ FindItem <- function(register, ser=NULL, ver=NULL, res=NULL, ext=NULL, class=NUL
 		# 
 		}else{
 			if(length(ver)>1) stop("Only one version can be accessed in a single download call.")
-			# the index of the desired variables
+			# the index of the desired series
 			indVer <- which(register$ver==ver)
 			# is this present? 
 			if(length(indVer)==0){
 				stop(paste0("The desired version '", ver, "' is not available."))
 			}else{
-				# get the var-specific version 
+				# get the series-specific version 
 				register <- register[indVer,]
 			}
 		}
 
 		# B. Facultative coordinates
 		# B1. the class
-		# select the variable default
+		# select the series default
 		if(is.null(class)){
-			# the default class of the variable
+			# the default class of the series
 			defClass <- unique(register$defaultClass)
 			if(length(defClass)!=1) stop("Oops. This should not happen:\n more than one default class!")
 

@@ -36,7 +36,7 @@ The function will download a list of available series from the data repository
 The function will download a single .csv file and attach it as a \code{data.frame}.
 }
 \examples{
-# available datasets and variables - proper
+# available datasets (sources and series) - proper
 # index <- datasets()
 # all available versions and resolutions in database 'pbdb'
 # oneDat <- datasets(src="pbdb")
@@ -46,6 +46,6 @@ ind <- datasets(
   datadir=system.file("extdata", package="chronosphere"))
 # one available archive
 ind <- datasets(
-  dat="SOM-zaffos-fragmentation",
+  src="SOM-zaffos-fragmentation",
   datadir=system.file("extdata", package="chronosphere"))
 }

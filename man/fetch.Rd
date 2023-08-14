@@ -2,7 +2,7 @@
 % Please edit documentation in R/fetching.R
 \name{fetch}
 \alias{fetch}
-\title{Fetching items}
+\title{Fetching data items}
 \usage{
 fetch(
   src = NULL,
@@ -21,13 +21,13 @@ fetch(
 )
 }
 \arguments{
-\item{src}{(\code{character}) The source group of series.}
+\item{src}{(\code{character}) The source of the series.}
 
 \item{ser}{(\code{character}) The series to get.}
 
 \item{ver}{(\code{character}) The version of the product to download. Defaults to \code{NULL}, which will download the latest available version.}
 
-\item{res}{(\code{character} or \code{numeric}) The resolution string of the data layers.}
+\item{res}{(\code{character} or \code{numeric}) The resolution string of the data.}
 
 \item{ext}{(\code{character}) File extension of the used data file.}
 

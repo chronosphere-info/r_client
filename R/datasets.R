@@ -12,7 +12,7 @@
 #' @param all \code{logical} When set to \code{FALSE} (default), only those items are shown that are available for the R environment. Set to \code{TRUE} to see all items.
 #' @return A \code{data.frame} class object.
 #' @examples
-#' # available datasets and variables - proper
+#' # available datasets (sources and series) - proper
 #' # index <- datasets()
 #' # all available versions and resolutions in database 'pbdb'
 #' # oneDat <- datasets(src="pbdb")
@@ -23,7 +23,7 @@
 #'   datadir=system.file("extdata", package="chronosphere"))
 #' # one available archive
 #' ind <- datasets(
-#'   dat="SOM-zaffos-fragmentation",
+#'   src="SOM-zaffos-fragmentation",
 #'   datadir=system.file("extdata", package="chronosphere"))
 #' @export
 datasets <- function(src=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greetings=TRUE, all=FALSE){
@@ -35,9 +35,9 @@ datasets <- function(src=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greeti
 	# ensure return to user's original on exit of function
 	on.exit(expr=options(timeout=original))
 		
-	# default case, return the table of variables	
+	# default case, return the table of series	
 	if(is.null(src)){
-		# simple data table with dat/var combinations
+		# simple data table with src/ser combinations
 		datfile <- "R/subguide.csv"
 		if(master){
 			datfile <- "R/submaster.csv"
@@ -45,12 +45,12 @@ datasets <- function(src=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greeti
 			if(greetings) message("Use datasets(src = <src>) to see available versions and resolutions.") 
 		}
 	}else{
-		# recursive call to see whether the dat entry is available
+		# recursive call to see whether the src entry is available
 		tempdat <- datasets(datadir=datadir, greetings=FALSE)
 	
 		if(!any(src%in%tempdat$src)) stop(paste0("The src entry \'", src, "\' was not found."))
 
-		# full list of available variables in a given dataset - used by fetch()
+		# full list of available series in a given dataset - used by fetch()
 		datfile <- paste0("R/", src, ".csv")
 	}
 

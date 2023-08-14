@@ -6,3 +6,7 @@ README.html
 vignettes/
 _pkgdown
 pkgdown/
+docs/
+index.html
+index.Rmd
+index.md

@@ -2,7 +2,7 @@
 ChronoAttributes <- function(src, details,...){
 
 	# general attributes
-	baseList <- list(dat=details$src, var=details$ser, res=details$resolution, ver=details$ver, datafile=details$datafile, item=details$itemID)
+	baseList <- list(src=details$src, ser=details$ser, res=details$resolution, ver=details$ver, datafile=details$datafile, item=details$itemID)
 
 	# reference of the archive
 	baseList$reference <- unlist(strsplit(details$text, "\\|&\\|"))

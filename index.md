@@ -7,7 +7,7 @@
 [![CRAN
 checks](https://badges.cranchecks.info/summary/chronosphere.svg)](https://cran.r-project.org/web/checks/check_results_chronosphere.html)
 
-### Evolving Earth System Data for <a href="https://www.r-project.org/"><img style="position: relative; top: -3px;" src="man/figures/R_logo.png" width="40px"></a>
+### Evolving Earth System Variables for <a href="https://www.r-project.org/"><img style="position: relative; top: -3px;" src="man/figures/R_logo.png" width="40px"></a>
 
 <br>
 
@@ -22,6 +22,51 @@ allows access to these items via files deposited in public repositories.
 The purpose of the project is to increase reproducibility and establish
 version tracking of results from (paleo)environmental/ecological
 research.
+
+<div class="alert alert-warning">
+
+<strong style="font-size: 25px">Important\!</strong>
+
+<hr>
+
+<p>
+
+Please note that the primary entities were renamed as part of the update
+to **v0.6.0**. The changes are:
+
+</p>
+
+<ul>
+
+<li>
+
+database ⮕ source (<strong>dat</strong> ⮕ <strong>src</strong>)
+
+</li>
+
+<li>
+
+variable ⮕ series (<strong>var</strong> ⮕ <strong>ser</strong>)
+
+</li>
+
+<li>
+
+‘data’ ⮕ product
+
+</li>
+
+</ul>
+
+<p>
+
+These changes were necessary so formal variables can be introduced,
+which will allow the connection of data products that come from
+different sources.
+
+</p>
+
+</div>
 
 <br>
 
@@ -39,10 +84,10 @@ available <- datasets()
 
 # download some data
 # NaturalEarth land polygons
-ne <- chronosphere::fetch("NaturalEarth", var="land", ver="4.1.0")
+ne <- chronosphere::fetch("NaturalEarth", ser="land", ver="4.1.0")
 
 # The entire Paleobiology Database
-pbdb <- chronosphere::fetch("pbdb", ver="20230621")
+pbdb <- chronosphere::fetch("pbdb", ver="20230814")
 
 # collections
 colls <- unique(pbdb[, c("collection_no","lng", "lat")])
@@ -60,14 +105,24 @@ points(colls$lng, colls$lat, cex=0.3, pch=16, col="#54121212")
 
 -----
 
+#### Planned updates
+
+The following updates are currently scheduled:  
+\- Access to variables: grouping entites that link data series
+together.  
+\- Access to datafiles via a secondary URL.  
+\- Using `datafiles` for the offline structuring of the downloaded
+files.  
+\- Webpages for individual data series.
+
 #### History
 
 The original chronosphere was a true **monolith** that included lots of
 additional functionality to manipulate paleoenvironmental data. For
 better compliance with [UNIX
 philosophy](https://en.wikipedia.org/wiki/Unix_philosophy) and more
-efficient distribution/development, the original package has been broken
-up to three R packages:
+efficient distribution/development, the original package has been split
+to multiple R packages:
 
   - [`chronosphere`](https://chronosphere.info/r_client/):
     version-controlled data distribution.
