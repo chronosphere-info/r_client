@@ -2,12 +2,16 @@
 
 # chronosphere 0.6.0 - 2023-08-14
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8246561.svg)](https://doi.org/10.5281/zenodo.8246561)
+
 ### Changed
 - **IMPORTANT**: Dataset identifier coordinates were changed: `dat` -> `src`, `var` -> `ser`. This reflects changes of the database that were necessary so formal variables can be introduced. 
 
 * * *
 
 # chronosphere 0.5.0 - 2023-05-23
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8039513.svg)](https://doi.org/10.5281/zenodo.8039513)
 
 ### Added
 - the `configure()` function to support setting of global variables: curl, timeout and remote (debugging)
@@ -23,6 +27,9 @@
 * * *
 
 # chronosphere 0.4.1 - 2021-04-16 (build 80)
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4746300.svg)](https://doi.org/10.5281/zenodo.4746300)
+
 ### Added 
 - added the platemodel example to the package's files
 - fixed wrong example

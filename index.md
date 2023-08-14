@@ -62,7 +62,8 @@ variable ⮕ series (<strong>var</strong> ⮕ <strong>ser</strong>)
 
 These changes were necessary so formal variables can be introduced,
 which will allow the connection of data products that come from
-different sources.
+different sources. <strong>These are not intentended to be changed in
+the future. </strong>
 
 </p>
 
