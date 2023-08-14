@@ -8,9 +8,7 @@
 
     <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary"><div class="container">
     
-    <a class="navbar-brand me-2" href="https://chronosphere.info/" style="padding-right:8px">
-		  <img style="margin-right:8px;margin-top:-2px" src="../images/chronosphere_luminosity_500_hover.png" width="30px" height="30px">chronosphere</a> ›  
-		<a style="margin-left:16px" class="navbar-brand" href="../index.html"> <img style="margin-right:6px;position: relative; top: -4px;" src="../images/r_luminosity_hover.png" width="25px" height="25px">client </a>
+    <a class="navbar-brand me-2" href="../index.html">chronosphere</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
 
@@ -62,29 +60,40 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.6.0" id="chronosphere-060---2023-07-12">chronosphere 0.6.0 - 2023-07-12<a class="anchor" aria-label="anchor" href="#chronosphere-060---2023-07-12"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.6.0" id="chronosphere-060---2023-08-14">chronosphere 0.6.0 - 2023-08-14<a class="anchor" aria-label="anchor" href="#chronosphere-060---2023-08-14"></a></h2><p class="text-muted">CRAN release: 2023-08-14</p>
+<p><a href="https://doi.org/10.5281/zenodo.8246561" class="external-link"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.8246561.svg" alt="DOI"></a></p>
 <div class="section level4">
 <h4 id="changed-0-6-0">Changed<a class="anchor" aria-label="anchor" href="#changed-0-6-0"></a></h4>
-<ul><li>Dataset identifier coordinates: dat -&gt; src, var -&gt; ser</li></ul></div>
+<ul><li>
+<strong>IMPORTANT</strong>: Dataset identifier coordinates were changed: <code>dat</code> -&gt; <code>src</code>, <code>var</code> -&gt; <code>ser</code>. This reflects changes of the database that were necessary so formal variables can be introduced.</li></ul><hr></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.0" id="chronosphere-050---2023-05-23">chronosphere 0.5.0 - 2023-05-23<a class="anchor" aria-label="anchor" href="#chronosphere-050---2023-05-23"></a></h2><p class="text-muted">CRAN release: 2023-06-13</p>
+<p><a href="https://doi.org/10.5281/zenodo.8039513" class="external-link"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.8039513.svg" alt="DOI"></a></p>
 <div class="section level4">
 <h4 id="added-0-5-0">Added<a class="anchor" aria-label="anchor" href="#added-0-5-0"></a></h4>
-<ul><li>the configure() function to support setting of global variables: curl, timeout and remote (debugging)</li>
-<li>tinytest - dependencies</li>
-<li>curl as suggest, curl support for datasets() and fetch()</li>
-<li>new Example data to show the use of datadir</li>
+<ul><li>the <code><a href="../reference/configure.html">configure()</a></code> function to support setting of global variables: curl, timeout and remote (debugging)</li>
+<li>
+<code>'tinytest'</code> - dependencies</li>
+<li>
+<code>'curl'</code> as suggest, curl support for <code><a href="../reference/datasets.html">datasets()</a></code> and <code><a href="../reference/fetch.html">fetch()</a></code>
+</li>
+<li>new example data to show the use of <code>datadir</code>
+</li>
 </ul></div>
 <div class="section level4">
 <h4 id="removed-0-5-0">Removed<a class="anchor" aria-label="anchor" href="#removed-0-5-0"></a></h4>
-<ul><li>plate tectonic reconstruction related functionality to package ‘rgplates’</li>
-<li>Spatial and RasterArrays refactored into package ‘via’</li>
-<li>shaper() function, color palettes() to ‘restools’ (to be published soon)</li>
+<ul><li>plate tectonic reconstruction-related functionality to package <code>'rgplates'</code>
+</li>
+<li>Spatial and RasterArrays refactored into package <code>'via'</code>
+</li>
+<li>
+<code>shaper()</code> function, color <code>palettes()</code> to <code>'restools'</code> (to be published soon)</li>
 </ul><hr></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.1" id="chronosphere-041---2021-04-16-build-80">chronosphere 0.4.1 - 2021-04-16 (build 80)<a class="anchor" aria-label="anchor" href="#chronosphere-041---2021-04-16-build-80"></a></h2><p class="text-muted">CRAN release: 2021-04-18</p>
+<p><a href="https://doi.org/10.5281/zenodo.4746300" class="external-link"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.4746300.svg" alt="DOI"></a></p>
 <div class="section level4">
 <h4 id="added-0-4-1">Added<a class="anchor" aria-label="anchor" href="#added-0-4-1"></a></h4>
 <ul><li>added the platemodel example to the package’s files</li>

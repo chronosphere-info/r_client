@@ -8,9 +8,7 @@
 
     <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary"><div class="container">
     
-    <a class="navbar-brand me-2" href="https://chronosphere.info/" style="padding-right:8px">
-		  <img style="margin-right:8px;margin-top:-2px" src="../images/chronosphere_luminosity_500_hover.png" width="30px" height="30px">chronosphere</a> ›  
-		<a style="margin-left:16px" class="navbar-brand" href="../index.html"> <img style="margin-right:6px;position: relative; top: -4px;" src="../images/r_luminosity_hover.png" width="25px" height="25px">client </a>
+    <a class="navbar-brand me-2" href="../index.html">chronosphere</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
 
@@ -117,7 +115,7 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># available datasets and variables - proper</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># available datasets (sources and series) - proper</span></span></span>
 <span class="r-in"><span><span class="co"># index &lt;- datasets()</span></span></span>
 <span class="r-in"><span><span class="co"># all available versions and resolutions in database 'pbdb'</span></span></span>
 <span class="r-in"><span><span class="co"># oneDat &lt;- datasets(src="pbdb")</span></span></span>
@@ -125,11 +123,16 @@
 <span class="r-in"><span><span class="co"># local example INCOMPLETE - does not connect to the internet</span></span></span>
 <span class="r-in"><span><span class="va">ind</span> <span class="op">&lt;-</span> <span class="fu">datasets</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  datadir<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package<span class="op">=</span><span class="st">"chronosphere"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Use datasets(dat = &lt;dat&gt;) to see available versions and resolutions.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Use datasets(src = &lt;src&gt;) to see available versions and resolutions.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>URL https://github.com/chronosphere-info/chrono_arch_2/raw/main/users/public/R/subguide.csv: cannot open destfile '/usr/local/lib/R/site-library/chronosphere/extdata/R/subguide.csv', reason 'Permission denied'</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>download had nonzero exit status</span>
 <span class="r-in"><span><span class="co"># one available archive</span></span></span>
 <span class="r-in"><span><span class="va">ind</span> <span class="op">&lt;-</span> <span class="fu">datasets</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  dat<span class="op">=</span><span class="st">"SOM-zaffos-fragmentation"</span>,</span></span>
+<span class="r-in"><span>  src<span class="op">=</span><span class="st">"SOM-zaffos-fragmentation"</span>,</span></span>
 <span class="r-in"><span>  datadir<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package<span class="op">=</span><span class="st">"chronosphere"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>URL https://github.com/chronosphere-info/chrono_arch_2/raw/main/users/public/R/subguide.csv: cannot open destfile '/usr/local/lib/R/site-library/chronosphere/extdata/R/subguide.csv', reason 'Permission denied'</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>download had nonzero exit status</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in datasets(src = "SOM-zaffos-fragmentation", datadir = system.file("extdata",     package = "chronosphere")):</span> The src entry 'SOM-zaffos-fragmentation' was not found.</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
