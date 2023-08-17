@@ -41,7 +41,7 @@ For the sake of completeness and simplicity, the sources of the stable version i
 
 ```{r stable, eval=FALSE}
 install.packages(
-	"https://zenodo.org/record/8246561/files/chronosphere_0.6.0.tar.gz?download=1", 
+	"https://zenodo.org/record/8256285/files/chronosphere_0.6.1.tar.gz?download=1", 
 	repos=NULL, type="source")
 ```
 

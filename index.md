@@ -1,7 +1,7 @@
 
 # chronosphere <img src="man/figures/logo.png" align="right" />
 
-[![](https://img.shields.io/badge/devel%20version-0.6.0-green.svg)](https://github.com/chronosphere-info/r_client)
+[![](https://img.shields.io/badge/devel%20version-0.6.1-green.svg)](https://github.com/chronosphere-info/r_client)
 [![](https://www.r-pkg.org/badges/version/chronosphere?color=blue)](https://cran.r-project.org/package=chronosphere)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/chronosphere?color=yellow)](https://cran.r-project.org/package=chronosphere)
 [![CRAN
@@ -32,7 +32,7 @@ research.
 <p>
 
 Please note that the primary entities were renamed as part of the update
-to **v0.6.0**. The changes are:
+to **v0.6**. The changes are:
 
 </p>
 
@@ -62,8 +62,8 @@ variable ⮕ series (<strong>var</strong> ⮕ <strong>ser</strong>)
 
 These changes were necessary so formal variables can be introduced,
 which will allow the connection of data products that come from
-different sources. <strong>These are not intentended to be changed in
-the future. </strong>
+different sources. <strong>These are not intended to be changed in the
+future. </strong>
 
 </p>
 

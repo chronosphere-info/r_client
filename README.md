@@ -1,7 +1,7 @@
 
 # chronosphere <img src="man/figures/logo.png" align="right" width="120"/>
 
-[![](https://img.shields.io/badge/devel%20version-0.6.0-green.svg)](https://github.com/adamkocsis/chronosphere)
+[![](https://img.shields.io/badge/devel%20version-0.6.1-green.svg)](https://github.com/adamkocsis/chronosphere)
 [![](https://www.r-pkg.org/badges/version/chronosphere?color=orange)](https://cran.r-project.org/package=chronosphere)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/chronosphere?color=yellow)](https://cran.r-project.org/package=chronosphere)
 [![CRAN
