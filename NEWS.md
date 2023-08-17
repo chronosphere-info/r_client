@@ -1,5 +1,12 @@
 # Change log of the R package 'chronosphere'
 
+# chronosphere 0.6.1 - 2023-08-17
+
+### Changed
+- The examples included in the package were malformatted. The examples were corrected.  
+
+* * *
+
 # chronosphere 0.6.0 - 2023-08-14
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8246561.svg)](https://doi.org/10.5281/zenodo.8246561)
