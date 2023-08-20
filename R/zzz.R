@@ -7,7 +7,7 @@
 #' @author Adam T. Kocsis (adam.t.kocsis@gmail.com)
 #' @docType package
 #' @name chronosphere
-NULL
+"_PACKAGE"
 
 #' @importFrom utils read.csv download.file unzip flush.console sessionInfo
 #' @importFrom utils assignInNamespace
