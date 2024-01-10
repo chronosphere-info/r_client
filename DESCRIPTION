@@ -21,6 +21,7 @@ Collate:
 	utility.R
 	zzz.R
 Date: 2023-08-14
+URL: https://chronosphere.info/r_client/
 BugReports: https://github.com/chronosphere-info/r_client/issues
 Encoding: UTF-8
 Depends:
