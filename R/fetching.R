@@ -111,7 +111,7 @@ Accessing chronosphere registry tables.
 			if(verbose){
 				dets <- paste0(
 "\n------------------------------------------------------------
-Item no. " ,itemDetails$itemID ,  ", src:", itemDetails$src, ", ser: ", itemDetails$ser, ", ver: ", itemDetails$ver, ", res: ", itemDetails$resolution, ".
+Item no. " ,itemDetails$itemID ,  ", src: ", itemDetails$src, ", ser: ", itemDetails$ser, ", ver: ", itemDetails$ver, ", res: ", itemDetails$resolution, ".
 ------------------------------------------------------------\n")
 				message(dets)
 			}
