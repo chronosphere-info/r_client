@@ -18,6 +18,9 @@ NULL
 
 .onAttach<-function(libpath, pkgname){
 	packageStartupMessage(
-	"Chronosphere - Evolving Earth System Variables\nImportant: never fetch data as a superuser / with admin. privileges!\n
-Note that the package was split for efficient maintenance and development:\n - Plate tectonic calculations -> package 'rgplates'\n - Arrays of raster and vector spatials -> package 'via'")
+	"Chronosphere - Evolving Earth System Variables.\nIMPORTANT: never fetch data as a superuser / with admin. privileges!")
+	# and set it to default check the presence of curl
+	if(requireNamespace("curl", quietly=TRUE)){
+		configure(curl=TRUE)
+	}
 }

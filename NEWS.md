@@ -1,5 +1,11 @@
 # Change log of the R package 'chronosphere'
 
+# chronosphere 0.7.0-1 - 2026-09-15
+
+### Changed
+- The default download engine is now with `curl`, unless it is not available
+- Increased default timeout value to `600` seconds
+
 # chronosphere 0.6.1 - 2023-08-17
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8256285.svg)](https://doi.org/10.5281/zenodo.8256285)

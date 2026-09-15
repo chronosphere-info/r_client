@@ -6,7 +6,7 @@ registers <- paste0("users/", user, "/")
 pwd <- NULL
 checklog <- TRUE
 curl <- FALSE
-timeout <- 300
+timeout <- 600
 
 #' Function to configure the behavior of the chronosphere package.
 #'
