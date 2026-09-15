@@ -95,7 +95,7 @@ datasets <- function(src=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greeti
 	if(download){
 		if (verbose) message("Downloading registry tables.")
 		# URL to the registry server
-		regserv <- paste0(remote, registers )
+		regserv <- paste0(remote1, registers )
 		#  the public download
 		if(user=="public"){
 			if(checklog){
@@ -191,7 +191,7 @@ datasets <- function(src=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greeti
 		
 	}
 	if(master){
-		ret$codeURL <- file.path(remote,"code/R",ret$codeFile)
+		ret$codeURL <- file.path(remote1,"code/R",ret$codeFile)
 	}
 
 	return(ret)

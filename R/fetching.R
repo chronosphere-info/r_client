@@ -393,7 +393,7 @@ DownloadItem <- function(details, datadir=NULL, verbose=TRUE, attach=TRUE, ...){
 		dir.create(itemDirPath, showWarnings=FALSE)
 	
 		# the link to the code file
-		codeURL <- paste0(remote, code, codefile)
+		codeURL <- paste0(remote1, code, codefile)
 		codePath <- file.path(itemDirPath, codefile)
 
 
@@ -484,7 +484,7 @@ Downloading data file.
 		# is the codefile already there? No: download!
 		if(!any(all==codefile)){
 			# the link to the code file
-			codeURL <- paste0(remote, code, codefile)
+			codeURL <- paste0(remote1, code, codefile)
 
 			if(verbose){
 				codes <- paste0(
