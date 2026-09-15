@@ -61,7 +61,7 @@ datasets <- function(src=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greeti
 	# a data directory is given
 	if(!is.null(datadir)){
 		# try to create an R directory to store entries
-		dir.create(file.path(datadir, "R"), showWarnings=FALSE)
+		dir.create(file.path(datadir, "R"), showWarnings=FALSE, recursive=TRUE)
 
 		# list all files
 		allFiles<-file.path("R", list.files(file.path(datadir, "R")))
