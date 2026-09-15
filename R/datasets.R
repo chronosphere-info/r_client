@@ -10,6 +10,7 @@
 #' @param master \code{logical} When \code{src} is \code{NULL}, should the function download the master records file?
 #' @param greetings \code{logical} When the function is invoked without arguments, it displays a message to keep new users informed about different versions and resolutions (even with \code{verbose=FALSE}). This argument turns this message off on demand.
 #' @param all \code{logical} When set to \code{FALSE} (default), only those items are shown that are available for the R environment. Set to \code{TRUE} to see all items.
+#' @param refresh \code{logical} When set to \code{FALSE} (default), data downloaded to the \code{datadir} will be loaded. If set to \code{TRUE} the data will re-downloaded.
 #' @return A \code{data.frame} class object.
 #' @examples
 #' # available datasets (sources and series) - proper
@@ -26,7 +27,7 @@
 #'   src="SOM-zaffos-fragmentation",
 #'   datadir=system.file("extdata", package="chronosphere"))
 #' @export
-datasets <- function(src=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greetings=TRUE, all=FALSE){
+datasets <- function(src=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greetings=TRUE, all=FALSE, refresh=FALSE){
 
 	# save timeout parameter from user's global options.
 	original<- options()$timeout
@@ -46,7 +47,7 @@ datasets <- function(src=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greeti
 		}
 	}else{
 		# recursive call to see whether the src entry is available
-		tempdat <- datasets(datadir=datadir, greetings=FALSE)
+		tempdat <- datasets(datadir=datadir, greetings=FALSE, refresh=refresh)
 	
 		if(!any(src%in%tempdat$src)) stop(paste0("The src entry \'", src, "\' was not found."))
 
@@ -66,8 +67,8 @@ datasets <- function(src=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greeti
 		# list all files
 		allFiles<-file.path("R", list.files(file.path(datadir, "R")))
 
-		# do any of them match? 
-		if(any(datfile==allFiles)){
+		# do any of them match? or do we need a download?
+		if(any(datfile==allFiles) & !refresh){
 			# read it in
 			ret <- read.csv(
 				file.path(datadir, datfile), sep=",", 
@@ -90,6 +91,7 @@ datasets <- function(src=NULL, datadir=NULL, verbose=FALSE, master=FALSE, greeti
 		if(checklog) tempLog <- tempfile()
 
 	}
+
 
 	# go on with download
 	if(download){

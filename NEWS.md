@@ -2,6 +2,9 @@
 
 # chronosphere 0.7.0-1 - 2026-09-15
 
+### Added
+- The `refresh` argument to `datasets` to enforce the re-download of data.
+
 ### Changed
 - If given `datadir` is now created recursively before fetching.
 - The default download engine is now with `curl`, unless it is not available
