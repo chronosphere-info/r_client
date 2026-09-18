@@ -15,6 +15,7 @@
 #' @param call (\code{logical}) If set to \code{TRUE} the function call is returned instead of the object. 
 #' @param call.expr (\code{logical}) If \code{call} is set to \code{TRUE}, then should the call be returned as an \code{expression} (\code{TRUE}) or a message (\code{FALSE})?
 #' @param attach (\code{logical}) If the item has required packages, should these be attached?
+#' @param refresh \code{logical} When set to \code{FALSE} (default), data downloaded to the \code{datadir} will be loaded. If set to \code{TRUE} the data will re-downloaded.
 #' @param ... Arguments passed to item-specific loading functions.
 #' @examples
 #' # An actual download call
@@ -27,7 +28,7 @@
 
 #' @export
 #' @return An object from a class that matches the 'class' coordinate of the item.
-fetch <- function(src=NULL, ser=NULL, ver=NULL, res=NULL, ext=NULL, class=NULL, item=NULL,  datadir=NULL, verbose=TRUE, call=FALSE, call.expr=FALSE, attach=TRUE, ...){
+fetch <- function(src=NULL, ser=NULL, ver=NULL, res=NULL, ext=NULL, class=NULL, item=NULL, datadir=NULL, verbose=TRUE, call=FALSE, call.expr=FALSE, attach=TRUE, refresh=FALSE, ...){
 	## src="pbdb"
 	## ser="baseref"
 	## ver=NULL
@@ -40,6 +41,7 @@ fetch <- function(src=NULL, ser=NULL, ver=NULL, res=NULL, ext=NULL, class=NULL, 
 	## call=FALSE
 	## call.expr=FALSE
 	## attach=TRUE
+	## refresh=FALSE
 	
 
 	# fetch given an existing chronosphere object
@@ -102,7 +104,7 @@ Accessing chronosphere registry tables.
 				message(regs)
 			}
 			# get the remote server data, or read it from hard drive!
-			register <- datasets(src=src, datadir=datadir, verbose=verbose)
+			register <- datasets(src=src, datadir=datadir, verbose=verbose, refresh=refresh)
 
 			# find the item in the register
 			itemDetails <- FindItem(register, ser=ser, ver=ver, res=res, ext=ext, 
@@ -123,6 +125,7 @@ Item no. " ,itemDetails$itemID ,  ", src: ", itemDetails$src, ", ser: ", itemDet
 				datadir = datadir,
 				verbose=verbose,
 				attach=attach, 
+				refresh=refresh,
 				...
 			)
 
@@ -342,7 +345,7 @@ FindItem <- function(register, ser=NULL, ver=NULL, res=NULL, ext=NULL, class=NUL
 }
 
 
-DownloadItem <- function(details, datadir=NULL, verbose=TRUE, attach=TRUE, ...){
+DownloadItem <- function(details, datadir=NULL, verbose=TRUE, attach=TRUE, refresh=FALSE, ...){
 #	details <- itemDetails
 	# save timeout parameter from user's global options.
 	original<- options()$timeout
@@ -469,7 +472,7 @@ Downloading data file.
 		if(!any(all==itemDir)){
 
 			# create a directory there, where everything will be downloaded
-			suppressWarnings(dir.create(itemDirPath))
+			dir.create(itemDirPath, showWarnings=FALSE)
 		}
 
 		# check whether the files are actually there!
@@ -481,8 +484,8 @@ Downloading data file.
 		# the data will be available here!
 		dataPath <- file.path(itemDirPath, datafile)
 
-		# is the codefile already there? No: download!
-		if(!any(all==codefile)){
+		# is the codefile already there? No: download! - unless refresh!
+		if(!any(all==codefile) | refresh){
 			# the link to the code file
 			codeURL <- paste0(remote1, code, codefile)
 
@@ -515,7 +518,7 @@ Loading downloaded import code.
 		}				
 		
 		# is the datafile already there
-		if(!any(all==datafile)){
+		if(!any(all==datafile) | refresh){
 
 			if(verbose){
 				codes <- paste0(
@@ -554,7 +557,7 @@ Loading downloaded data file.
 			itemDirPath <- file.path(tempd, itemDir)
 
 			# make sure this is there!
-			suppressWarnings(dir.create(itemDirPath))
+			dir.create(itemDirPath, showWarnings=FALSE)
 			
 			# unzip to temporary!
 			unzip(dataPath, exdir=itemDirPath)	

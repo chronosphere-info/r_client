@@ -3,7 +3,7 @@
 # chronosphere 0.7.0-1 - 2026-09-15
 
 ### Added
-- The `refresh` argument to `datasets` to enforce the re-download of data.
+- The `refresh` argument to `datasets` and `fetch` to enforce the re-download of data.
 
 ### Changed
 - If given `datadir` is now created recursively before fetching.
