@@ -133,7 +133,7 @@ Item no. " ,itemDetails$itemID ,  ", src: ", itemDetails$src, ", ser: ", itemDet
 			if(verbose){
 				message("
 If you use the data in publications, please cite its
-reference(s), as well as that of the 'chronosphere' project.\n")
+reference(s), and acknowledge the 'chronosphere' project.\n")
 
 				# print the reference
 				reference(item, bibtex=FALSE, print=TRUE)

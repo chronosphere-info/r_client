@@ -9,6 +9,7 @@
 - If given `datadir` is now created recursively before fetching.
 - The default download engine is now with `curl`, unless it is not available
 - Increased default timeout value to `600` seconds
+- Imperative to cite the project to acknowledgement
 
 # chronosphere 0.6.1 - 2023-08-17
 
